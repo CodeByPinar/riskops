@@ -1,0 +1,22 @@
+# RiskOps - root güvenlik ayarları
+
+Options -Indexes
+ServerSignature Off
+
+DirectoryIndex index.php
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Gizli / yedek / versiyon dosyalarını engelle
+<FilesMatch "(^\.|\.(sql|log|md|bak|old|ini|sh|yml|json)$)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
+
+# composer.json gibi dosyalar da kapalı olsun ama assets/vendor JSON'ları gerekirse
+# ileride istisna tanımlanacak.

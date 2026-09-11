@@ -1,0 +1,48 @@
+# =====================================================================
+#  RiskOps - .gitignore
+#
+#  KURAL: Depoya giren her dosya herkese açıktır. Bir parolayı bir kez
+#  push ettiyseniz, sonraki commit'te silmek YETMEZ - git geçmişinde
+#  durmaya devam eder. Bu dosya, o hatayı baştan engellemek içindir.
+# =====================================================================
+
+# ---------------------------------------------------------------------
+#  GİZLİ BİLGİ - asla commit edilmez
+# ---------------------------------------------------------------------
+/config/database.php
+/config/*.local.php
+.env
+*.pem
+*.key
+
+# ---------------------------------------------------------------------
+#  ÇALIŞMA ZAMANI VERİSİ
+#  storage/ uygulamanın yazdığı yerdir: log, yükleme, önbellek.
+#  Dizinin kendisi lazım, içeriği değil - bkz. storage/.gitkeep
+# ---------------------------------------------------------------------
+/storage/*
+!/storage/.gitkeep
+!/storage/brand/
+/storage/brand/*
+!/storage/brand/.gitkeep
+
+# ---------------------------------------------------------------------
+#  YEDEKLER VE GEÇİCİ DOSYALAR
+# ---------------------------------------------------------------------
+*.bak
+*.old
+*.orig
+*.log
+*.sql.gz
+/backups/
+
+# ---------------------------------------------------------------------
+#  İŞLETİM SİSTEMİ / EDİTÖR
+# ---------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*~

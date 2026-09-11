@@ -1,0 +1,454 @@
+/* =====================================================================
+   RiskOps - Yazdırma stil sayfası
+   /var/www/riskops/assets/css/print.css
+
+   <link media="print"> ile yüklenir; ekran CSS'ini şişirmez.
+
+   TASARIM HEDEFİ
+   --------------
+   Çıktı bir web sayfasının kâğıda basılmış hâli değil, kurumsal bir
+   BELGE gibi görünmeli: antetli başlık, her sayfada tekrar eden üst ve
+   alt şerit, gizlilik ibaresi, belge numarası, imza bloğu.
+
+   RENK NOTU
+   ---------
+   Tarayıcılar yazdırırken arka planları varsayılan olarak atar. Severity
+   renkleri bu raporun anlamının parçası olduğu için 'print-color-adjust:
+   exact' ile zorlanır. Yine de renk TEK BAŞINA anlam taşımaz: her rozet
+   metnini ve kenarlığını da taşır, gri tonlamalı yazıcıda da okunur.
+   ===================================================================== */
+
+@page {
+    size: A4 portrait;
+    /* Üst ve alt kenar boşlukları tekrar eden şeritlere yer açar */
+    margin: 26mm 14mm 20mm 14mm;
+}
+
+/* ---------------------------------------------------------- Temel */
+
+html, body { height: auto; }
+
+body.rk-body {
+    background: #fff !important;
+    color: #000;
+    font-size: 9.5pt;
+    line-height: 1.42;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* Ekranda gizli, yazdırmada görünür */
+.rk-print-only { display: block !important; }
+
+/* Arayüz parçaları çıktıya girmez */
+.rk-sidebar,
+.rk-topbar,
+.rk-backdrop,
+.rk-page-actions,
+.rk-filters,
+.rk-pagination,
+.rk-report-actions,
+.rk-report-go,
+.rk-tab-toolbar,
+.rk-row-actions,
+.rk-danger-zone,
+.rk-form-actions,
+.rk-alert-info,
+.rk-alert .btn-close,
+.rk-main > footer {
+    display: none !important;
+}
+
+.rk-main { margin-left: 0 !important; }
+.rk-content { padding: 0 !important; max-width: none !important; }
+
+a { color: #000 !important; text-decoration: none !important; }
+
+/* ------------------------------------------ Sınıflandırma bandı
+
+   NOT: Daha önce üst/alt şeritler 'position: fixed' ile sayfa kenar
+   boşluğuna yerleştiriliyordu. Chrome'un yazdırma penceresinde
+   "Kenar boşlukları: Varsayılan" seçildiğinde @page boşlukları yok
+   sayılıyor ve şerit içeriğin üzerine biniyordu. Sabit konumlandırma
+   sayfalı ortamda güvenilir değil; bantlar artık akışın içinde.
+
+   Her sayfada tekrar eden üstbilgi/altbilgi ve sayfa numarası isteyen
+   kullanıcı tarayıcının "Üstbilgi ve altbilgi" seçeneğini açar.
+   ------------------------------------------------------------------ */
+
+.rk-class-band {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 7.6pt;
+    color: #55677d;
+    letter-spacing: .2px;
+    padding-bottom: 1.5mm;
+    margin-bottom: 3mm;
+    border-bottom: .4pt solid #b9c6d6;
+}
+
+.rk-class-tag {
+    font-weight: 700;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: #8a1f1f;
+    border: .6pt solid #8a1f1f;
+    padding: .4mm 1.8mm;
+    border-radius: 1mm;
+    white-space: nowrap;
+}
+
+/* ------------------------------------------------------- Antet */
+
+.rk-letterhead {
+    margin-bottom: 7mm;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+.rk-lh-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 3mm;
+    border-bottom: 1.6pt solid #041f3c;
+}
+
+.rk-lh-brand img.rk-wordmark { height: 11mm; width: auto; }
+.rk-lh-brand strong { font-size: 16pt; color: #041f3c; }
+
+.rk-lh-class {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #8a1f1f;
+    border: .8pt solid #8a1f1f;
+    padding: 1mm 2.5mm;
+    border-radius: 1mm;
+    white-space: nowrap;
+}
+
+.rk-lh-title { margin: 5mm 0 4mm; }
+.rk-lh-title h1 {
+    font-size: 17pt;
+    font-weight: 650;
+    letter-spacing: -.3pt;
+    color: #041f3c;
+    margin: 0;
+}
+.rk-lh-company { font-size: 10.5pt; color: #334; margin-top: 1mm; }
+
+.rk-lh-meta {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5pt;
+}
+.rk-lh-meta th,
+.rk-lh-meta td {
+    border: .4pt solid #c9d4e2;
+    padding: 1.4mm 2.2mm;
+    text-align: left;
+    vertical-align: top;
+}
+.rk-lh-meta th {
+    width: 22mm;
+    background: #eef2f7;
+    color: #33506f;
+    font-weight: 650;
+    font-size: 8pt;
+    text-transform: none;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
+/* --------------------------------------------- Sayfa başlığı (ekran) */
+
+/* Antet zaten başlığı taşıyor; ekrandaki başlık bloğu çıktıda gereksiz */
+.rk-page-head { display: none !important; }
+
+/* ------------------------------------------------------ Bölümler */
+
+.rk-card {
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    margin: 0 0 5mm !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.rk-card-head {
+    border-bottom: .8pt solid #041f3c !important;
+    background: none !important;
+    padding: 0 0 1.4mm !important;
+    margin-bottom: 2.5mm;
+}
+.rk-card-head .bi { display: none; }
+.rk-card-title {
+    font-size: 11pt !important;
+    font-weight: 650;
+    color: #041f3c;
+    text-transform: uppercase;
+    letter-spacing: .3pt;
+}
+.rk-card-tools { font-size: 8pt; color: #55677d; }
+
+.rk-card-body { padding: 0 !important; }
+
+/* -------------------------------------------------- Özet kutuları */
+
+.rk-stats {
+    display: flex !important;
+    flex-wrap: nowrap;
+    gap: 0 !important;
+    margin-bottom: 6mm !important;
+    border: .6pt solid #c9d4e2;
+    break-inside: avoid;
+}
+
+.rk-stat {
+    flex: 1 1 0;
+    border: none !important;
+    border-right: .4pt solid #c9d4e2 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 2.5mm 2mm !important;
+    display: block !important;
+    text-align: center;
+}
+.rk-stat:last-child { border-right: none !important; }
+.rk-stat::before { display: none; }
+.rk-stat-icon { display: none !important; }
+
+.rk-stat-value {
+    font-size: 15pt !important;
+    font-weight: 700;
+    color: #041f3c;
+    line-height: 1.1;
+}
+.rk-stat-label {
+    font-size: 6.8pt !important;
+    letter-spacing: .3pt;
+    color: #55677d;
+    margin-top: .8mm;
+}
+
+/* ----------------------------------------------------- Tablolar */
+
+.rk-table-wrap { overflow: visible !important; }
+
+.rk-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.2pt;
+}
+
+/* Başlık satırı her sayfada tekrar etsin */
+.rk-table thead { display: table-header-group; }
+.rk-table tfoot { display: table-footer-group; }
+.rk-table tr { break-inside: avoid; page-break-inside: avoid; }
+
+.rk-table thead th {
+    background: #eef2f7 !important;
+    border: .4pt solid #c9d4e2 !important;
+    color: #33506f;
+    font-size: 7.4pt;
+    font-weight: 700;
+    padding: 1.3mm 1.8mm !important;
+    text-transform: uppercase;
+    letter-spacing: .2pt;
+}
+.rk-table thead th a { color: #33506f !important; }
+.rk-table thead th .bi { display: none; }
+
+.rk-table tbody td {
+    border: .4pt solid #d8e1ec !important;
+    padding: 1.2mm 1.8mm !important;
+    vertical-align: top;
+}
+.rk-table tbody tr:hover { background: none !important; }
+.rk-table tbody tr:nth-child(even) td { background: #f8fafc !important; }
+
+.rk-total-row th {
+    background: #dfe7f1 !important;
+    border: .4pt solid #b9c6d6 !important;
+    font-size: 8pt;
+    padding: 1.4mm 1.8mm !important;
+}
+
+.rk-code { font-size: 7.6pt; white-space: nowrap; }
+.rk-cell-sub { font-size: 7pt; color: #55677d; }
+
+/* Uzun metinler hücre içinde kırılsın.
+   'anywhere' KULLANILMAZ: düzen motoruna "bu kolon 1 karaktere kadar
+   daralabilir" demek olur ve isim gibi kısa alanlar ortadan bölünür
+   ("Administrato / r"). 'break-word' yalnızca gerçekten sığmayan
+   sözcüğü böler. Uzun serbest metin taşıyan hücreler ise .rk-cell-wrap
+   ile açıkça işaretlenir; daralma yükünü onlar üstlenir. */
+.rk-table td { overflow-wrap: break-word; }
+.rk-table td .rk-cell-wrap,
+.rk-table td.rk-cell-wrap { overflow-wrap: anywhere; }
+
+/* ÇOK KOLONLU TABLOLAR
+   A4'te 14mm kenar boşluğuyla kullanılabilir genişlik ~182mm'dir.
+   9+ kolonlu tablolar bu genişliği aşıp son kolonu kâğıt dışında
+   bırakıyordu; bu tablolar için punto ve iç boşluk kısılır. */
+.rk-table:has(thead th:nth-child(9)) { font-size: 7.1pt; }
+.rk-table:has(thead th:nth-child(9)) thead th { font-size: 6.6pt; padding: 1mm 1.1mm !important; }
+.rk-table:has(thead th:nth-child(9)) tbody td { padding: .9mm 1.1mm !important; }
+.rk-table:has(thead th:nth-child(9)) .rk-code { font-size: 6.6pt; }
+.rk-table:has(thead th:nth-child(9)) .rk-badge { font-size: 6.4pt !important; padding: .1mm 1mm !important; }
+.rk-table:has(thead th:nth-child(9)) .rk-score { font-size: 7pt !important; padding: .2mm .9mm; }
+.rk-table:has(thead th:nth-child(9)) .rk-cell-sub { font-size: 6.2pt; }
+
+/* 11+ kolon (ör. Kritik ve Yüksek Riskler raporu) bir kademe daha */
+.rk-table:has(thead th:nth-child(11)) { font-size: 6.7pt; }
+.rk-table:has(thead th:nth-child(11)) thead th { font-size: 6.2pt; }
+
+/* :has() desteklemeyen tarayıcıda son çare: tablo asla taşmasın */
+.rk-table-wrap { max-width: 100%; }
+.rk-table { max-width: 100%; }
+
+/* ------------------------------------------------------ Rozetler */
+
+.rk-badge {
+    border-width: .5pt !important;
+    border-style: solid !important;
+    font-size: 7.2pt !important;
+    padding: .2mm 1.4mm !important;
+    border-radius: 1mm;
+}
+.rk-badge .bi { display: none; }
+
+.rk-score {
+    border: .5pt solid #b9c6d6;
+    font-size: 8pt !important;
+    min-width: 6mm;
+    height: auto;
+    padding: .3mm 1.2mm;
+}
+
+.rk-dot { border: .3pt solid #99a; }
+
+.rk-overdue { font-weight: 700; }
+
+/* --------------------------------------------------- Risk matrisi */
+
+.rk-matrix { break-inside: avoid; }
+.rk-mx-cell {
+    height: 11mm !important;
+    font-size: 10pt !important;
+    border-width: .4pt !important;
+    border-style: solid !important;
+}
+.rk-mx-score { font-size: 6pt; }
+.rk-matrix-legend { border-top: .4pt solid #d8e1ec; padding-top: 2mm; }
+.rk-legend-swatch { border: .3pt solid #99a; }
+
+/* ---------------------------------------------------- Bar listesi */
+
+.rk-barrow { padding: 1mm 0; }
+.rk-barrow-track { border: .3pt solid #c9d4e2; height: 2.6mm; }
+
+/* -------------------------------------------------------- Uyarı */
+
+.rk-alert {
+    border-width: .5pt !important;
+    border-style: solid !important;
+    border-radius: 1mm;
+    padding: 2mm 2.5mm !important;
+    font-size: 8.4pt;
+    break-inside: avoid;
+    margin-bottom: 4mm;
+}
+.rk-alert .bi { display: none; }
+
+/* Rapor açıklama şeridi */
+.rk-report-meta {
+    border: none !important;
+    border-left: 1.6pt solid #041f3c !important;
+    border-radius: 0;
+    padding: 1.5mm 0 1.5mm 3mm !important;
+    margin-bottom: 5mm !important;
+    font-size: 8.6pt;
+    background: none !important;
+}
+.rk-report-meta > i { display: none; }
+
+/* Grafikler çıktıya girmez: tarayıcılar canvas'ı güvenilir basmaz */
+.rk-chart, .rk-chart-fallback { display: none !important; }
+
+/* ----------------------------------------------------- İmza bloğu */
+
+.rk-signatures {
+    margin-top: 9mm;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+.rk-sig-title {
+    font-size: 10pt;
+    font-weight: 650;
+    color: #041f3c;
+    text-transform: uppercase;
+    letter-spacing: .3pt;
+    border-bottom: .8pt solid #041f3c;
+    padding-bottom: 1.2mm;
+    margin-bottom: 3mm;
+}
+.rk-sig-table { width: 100%; border-collapse: collapse; }
+.rk-sig-table th {
+    font-size: 8pt;
+    font-weight: 650;
+    color: #33506f;
+    text-align: left;
+    padding: 0 3mm 2mm 0;
+    width: 33.33%;
+}
+.rk-sig-table td { padding: 0 3mm 0 0; vertical-align: bottom; }
+
+.rk-sig-name { font-size: 9pt; font-weight: 600; color: #041f3c; }
+.rk-sig-sub  { font-size: 7.6pt; color: #55677d; }
+.rk-sig-line { border-bottom: .6pt solid #33506f; margin: 12mm 0 1.2mm; }
+.rk-sig-hint { font-size: 7pt; color: #77889c; }
+
+/* --------------------------------------------------- Kapanış notu */
+
+.rk-print-closing {
+    margin-top: 6mm;
+    padding-top: 2.5mm;
+    border-top: .4pt solid #c9d4e2;
+    font-size: 7.6pt;
+    color: #55677d;
+    break-inside: avoid;
+}
+.rk-print-closing p { margin: 0 0 1mm; }
+.rk-closing-id { font-weight: 600; color: #33506f; }
+.rk-print-classline strong { color: #8a1f1f; }
+
+/* ------------------------------------------------ Sayfa kırılımı */
+
+.rk-break-before { break-before: page; page-break-before: always; }
+
+/* Bootstrap kırılım noktaları A4 genişliğinde (~794px) devreye girmez;
+   yan yana duran kartlar çıktıda alt alta düşer ve rapor gereksiz uzar.
+   Sütun genişliklerini yazdırma için elle veriyoruz.
+   Sıra önemli: col-12 önce, lg/xl sonra (sonraki kazanır). */
+.row {
+    display: flex !important;
+    flex-wrap: wrap;
+    margin: 0 -2mm !important;
+}
+.row > [class*="col-"] { padding: 0 2mm !important; }
+
+.row > .col-12   { width: 100%; }
+.row > .col-lg-6 { width: 50%; }
+.row > .col-xl-4 { width: 33.333%; }
+.row > .col-xl-5 { width: 42%; }
+.row > .col-xl-6 { width: 50%; }
+.row > .col-xl-7 { width: 58%; }
+
+/* İçinde yalnızca grafik olan kart çıktıda boş bir kutu bırakmasın */
+.rk-card:has(.rk-chart) { display: none !important; }
