@@ -6,7 +6,9 @@
 --
 --  NOTLAR:
 --    * Bu dosya tekrar calistirilabilir (idempotent).
---    * Mevcut `users` tablosu SILINMEZ, yalnizca ALTER edilir.
+--    * users tablosu 0. bolumde temel kolonlarla yaratilir, 10. bolumde
+--      departments bagimli kolonlarla genisletilir (dongusel FK).
+--      Mevcut kurulumlarda users SILINMEZ; CREATE IF NOT EXISTS no-op olur.
 --    * inherent_score / residual_score / score kolonlari GENERATED STORED'dir.
 --      Uygulama kodunda bu kolonlara ASLA INSERT/UPDATE yapilmaz.
 --    * severity kolonlari GENERATED DEGILDIR; esikler settings tablosundan
@@ -16,6 +18,48 @@
 SET NAMES utf8mb4;
 SET SESSION sql_mode = 'STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION';
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+-- ---------------------------------------------------------------------
+-- 0. users  -> TEMEL TABLO
+--
+--    DONGUSEL BAGIMLILIK
+--    -------------------
+--    users.department_id  ->  departments.id
+--    departments.manager_id  ->  users.id
+--
+--    Iki tablo birbirine FK veriyor; hangisi once yaratilirsa yaratilsin
+--    digerinin FK'si olmayan tabloya isaret eder ve MariaDB ERROR 1005
+--    (errno 150) dondurur. Cozum uc adimlidir:
+--
+--      0. users  -> departments FK'si OLMADAN yaratilir   (bu bolum)
+--      1. departments -> manager_id FK'si ile yaratilir    (users artik var)
+--     10. ALTER users -> department_id + FK eklenir        (departments artik var)
+--
+--    Bu yuzden asagidaki tabloda department_id, title, phone,
+--    must_change_password, password_changed_at ve created_by KOLONLARI
+--    YOKTUR - hepsini 10. bolum ekler. Kolonlari buraya tasimayin;
+--    department_id'nin FK'si departments olmadan kurulamaz.
+--
+--    IF NOT EXISTS: mevcut kurulumlarda bu ifade no-op'tur, tablo
+--    oldugu gibi kalir. Dosyanin idempotentligi korunur.
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS users (
+    id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name          VARCHAR(100) NOT NULL,
+    email         VARCHAR(150) NOT NULL,
+    password      VARCHAR(255) NOT NULL,
+    -- En az yetki ilkesi: rol acikca verilmediyse kullanici yalnizca okur.
+    role          ENUM('admin','manager','analyst','viewer')
+                  NOT NULL DEFAULT 'viewer',
+    status        TINYINT(1)   NOT NULL DEFAULT 1,
+    last_login_at DATETIME     NULL DEFAULT NULL,
+    created_at    TIMESTAMP    NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP    NULL DEFAULT CURRENT_TIMESTAMP
+                  ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- ---------------------------------------------------------------------

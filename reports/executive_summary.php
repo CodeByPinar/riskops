@@ -86,11 +86,16 @@ $byCat = db()->query(
 )->fetchAll();
 
 /* Son 6 ay: açılan ve kapanan */
+/* Ayni gun-tasmasi hatasi burada da vardi: 6 aylik tablo ayin
+   29-31'inde 3 satira kadar dusuyordu. Bkz. includes/functions.php. */
+$monthKeys = recent_months(6);
+
 $trend = [];
-for ($i = 5; $i >= 0; $i--) {
-    $trend[date('Y-m', strtotime("-{$i} month"))] = ['acilan' => 0, 'kapanan' => 0];
+foreach ($monthKeys as $key) {
+    $trend[$key] = ['acilan' => 0, 'kapanan' => 0];
 }
-$since = date('Y-m-01', strtotime('-5 month'));
+
+$since = $monthKeys[0] . '-01';
 
 $q = db()->prepare("SELECT DATE_FORMAT(created_at,'%Y-%m') AS ay, COUNT(*) AS n
                     FROM risks WHERE deleted_at IS NULL AND created_at >= :s GROUP BY ay");

@@ -41,7 +41,7 @@ function assessment_find_risk(?int $riskId): ?array
     }
     $stmt = db()->prepare(
         'SELECT id, risk_code, title, status, likelihood, impact, inherent_score,
-                residual_likelihood, residual_impact
+                residual_likelihood, residual_impact, residual_score
          FROM risks WHERE id = :id AND deleted_at IS NULL LIMIT 1'
     );
     $stmt->execute([':id' => $riskId]);
@@ -85,6 +85,35 @@ function assessment_collect_input(): array
                 'Residual skor (%d) inherent skordan (%d) büyük olamaz. '
                 . 'Risk gerçekten arttıysa "Gözden geçirme" türünü kullanın.',
                 $likelihood * $impact, $inherent
+            );
+        }
+    }
+
+    /* Review degerlendirme, inherent skoru mevcut residual skorun ALTINA
+       indiremez.
+
+       NEDEN: residual "kontrollerden sonra kalan risk"tir; tanimi geregi
+       riskin kendisinden buyuk olamaz. Bu koruma 'residual' tipinde zaten
+       vardi (yukaridaki dal), ama 'review' tipi de likelihood/impact'i -
+       dolayisiyla uretilen inherent_score'u - degistirdigi icin ayni
+       invarianti kirabiliyordu.
+
+       ETKISI: tum "etkin skor" hesaplari COALESCE(residual_score,
+       inherent_score) kullanir (risks/index.php filtreleri,
+       reports/_reports.php, api/dashboard_charts.php,
+       reports/executive_summary.php). Invariant kirilinca bu hesaplar
+       riskin kendisinden BUYUK bir deger gosterir; register ile matris
+       birbiriyle celisir.
+
+       Kullaniciya ne yapacagi soylenir: once residual guncellenmelidir. */
+    if ($type === 'review' && $risk !== null && $likelihood !== null && $impact !== null
+        && $risk['residual_score'] !== null) {
+        $residual = (int)$risk['residual_score'];
+        if (($likelihood * $impact) < $residual) {
+            $errors['impact'] = sprintf(
+                'Inherent skor (%d) mevcut residual skordan (%d) kucuk olamaz. '
+                . 'Once "Residual (kalan risk)" degerlendirmesini guncelleyin.',
+                $likelihood * $impact, $residual
             );
         }
     }

@@ -44,6 +44,38 @@ $pdo = db();
 try {
     $pdo->beginTransaction();
 
+    /* OTORITER INVARIANT KONTROLU - kilitli, transaction icinde.
+       ------------------------------------------------------------------
+       _validate.php icindeki ayni kontrol kilitsiz okur ve yalnizca
+       kullaniciya forma hata basmak icindir. Aradaki pencerede baska bir
+       istek residual'i yukseltip commit edebilir; o zaman bu review
+       inherent'i yeni residual'in altina indirir ve
+       COALESCE(residual_score, inherent_score) riskin kendisinden buyuk
+       cikar. FOR UPDATE ile risk satirini kilitleyip guncel degeri
+       okumak bu pencereyi kapatir. */
+    if ($isReview) {
+        $lock = $pdo->prepare(
+            'SELECT residual_score FROM risks
+              WHERE id = :id AND deleted_at IS NULL
+              FOR UPDATE'
+        );
+        $lock->execute([':id' => $data['risk_id']]);
+        $lockedResidual = $lock->fetchColumn();
+
+        if ($lockedResidual !== false && $lockedResidual !== null
+            && ($data['likelihood'] * $data['impact']) < (int)$lockedResidual) {
+            $pdo->rollBack();
+            errors_set(['impact' => sprintf(
+                'Inherent skor (%d) mevcut residual skordan (%d) kucuk olamaz. '
+                . 'Once "Residual (kalan risk)" degerlendirmesini guncelleyin.',
+                $data['likelihood'] * $data['impact'], (int)$lockedResidual
+            )]);
+            old_set($_POST);
+            flash('error', 'Degerlendirme kaydedilemedi. Isaretli alani duzeltin.');
+            redirect('/assessments/create.php?risk_id=' . (int)$data['risk_id']);
+        }
+    }
+
     $pdo->prepare(
         'INSERT INTO risk_assessments
             (risk_id, assessment_type, likelihood, impact, severity, notes, assessed_by, assessed_at)

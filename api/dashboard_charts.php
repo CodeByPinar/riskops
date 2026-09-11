@@ -37,11 +37,20 @@ $pdo = db();
 /*    tek eksende gosterilebilir).                                      */
 /* ------------------------------------------------------------------ */
 
+/* Pencere recent_months() ile kurulur: strtotime("-N month") ayin
+   29-31'inde gun tasmasi yapip ayni Y-m anahtarini iki kez uretiyor ve
+   12 aylik pencere 7 aya kadar dusuyordu. Bkz. includes/functions.php. */
+$monthKeys = recent_months(12);
+
 $months = [];
-for ($i = 11; $i >= 0; $i--) {
-    $months[date('Y-m', strtotime("-{$i} month"))] = ['opened' => 0, 'closed' => 0];
+foreach ($monthKeys as $key) {
+    $months[$key] = ['opened' => 0, 'closed' => 0];
 }
-$since = date('Y-m-01', strtotime('-11 month'));
+
+/* SQL alt siniri pencerenin EN ESKI ayindan turetilir - ayri bir
+   strtotime cagrisindan degil. Iki kaynak ayri olursa biri duzeltilip
+   digeri unutulabilir. */
+$since = $monthKeys[0] . '-01';
 
 $rows = $pdo->prepare(
     "SELECT DATE_FORMAT(created_at, '%Y-%m') AS ay, COUNT(*) AS adet

@@ -181,6 +181,42 @@ function is_post(): bool
  * TARIH / METIN FORMATLAMA
  * ===================================================================*/
 
+/**
+ * Son N takvim ayini eskiden yeniye "Y-m" anahtari olarak dondurur.
+ *
+ * NEDEN VAR: strtotime("-N month") GUN TASMASINI KIRMAZ.
+ * Ayin 29-31'inde, hedef ayda o gun yoksa sonuc bir sonraki aya tasar:
+ *
+ *     2026-05-31 -1 month  ->  "31 Nisan" yok  ->  2026-05-01
+ *
+ * Ayni Y-m anahtari iki kez uretilir, dizi anahtari cakisir ve pencere
+ * kisalir. Olculen etki: 2026-05-31 tabaninda 12 aylik pencere 7 aya,
+ * 6 aylik pencere 4 aya duser; kaybolan aylarin riskleri hicbir
+ * sayacta gorunmez. Ayin yalnizca 3 gununde, sessizce yanlis rakam.
+ *
+ * COZUM: ay aritmetigi her zaman ayin 1'ine sabitlenir. 1. gunden
+ * cikarilan ay asla tasmaz.
+ *
+ * @param int      $count  kac ay (1-120 arasina kirpilir)
+ * @param int|null $baseTs taban zaman damgasi; null ise simdi
+ * @return string[] ornek: ['2025-06', '2025-07', ... , '2026-05']
+ */
+function recent_months(int $count, ?int $baseTs = null): array
+{
+    $count = max(1, min(120, $count));
+    $base  = $baseTs ?? time();
+
+    // Ayin 1'ine, gece yarisina sabitle: tasma buradan sonra imkansiz.
+    $anchor = new DateTimeImmutable(date('Y-m-01 00:00:00', $base));
+
+    $months = [];
+    for ($i = $count - 1; $i >= 0; $i--) {
+        $months[] = $anchor->sub(new DateInterval('P' . $i . 'M'))->format('Y-m');
+    }
+
+    return $months;
+}
+
 function format_date(?string $value, string $empty = '-'): string
 {
     if ($value === null || $value === '' || str_starts_with($value, '0000')) {

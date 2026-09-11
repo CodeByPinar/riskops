@@ -33,8 +33,27 @@ if ($errors !== []) {
     user_fail_back($errors, '/admin/users/edit.php?id=' . $id);
 }
 
+/* Bu istek kullaniciyi aktif admin olmaktan cikariyor mu?
+   Cikarmiyorsa atomik korumayi calistirmaya gerek yok - gereksiz
+   satir kilidi almak es zamanli kullanici duzenlemelerini yavaslatir. */
+$dropsAdminRights = !($data['role'] === ROLE_ADMIN && (int)$data['status'] === 1);
+
+$pdo = db();
+$pdo->beginTransaction();
+
 try {
-    db()->prepare(
+    /* user_collect_input() icindeki kontrol kilitsizdir ve yalnizca
+       forma hata basmak icindir. Otoriter kontrol burada, UPDATE ile
+       ayni transaction icinde yapilir. */
+    if ($dropsAdminRights && !last_admin_atomic_guard($pdo, $id)) {
+        $pdo->rollBack();
+        user_fail_back(
+            ['role' => 'Bu, sistemdeki tek aktif admin hesabı. Önce başka bir admin tanımlayın.'],
+            '/admin/users/edit.php?id=' . $id
+        );
+    }
+
+    $pdo->prepare(
         'UPDATE users SET
             name = :n, email = :e, role = :r, department_id = :d,
             title = :t, phone = :ph, status = :s
@@ -49,7 +68,12 @@ try {
         ':s'  => $data['status'],
         ':id' => $id,
     ]);
+
+    $pdo->commit();
 } catch (Throwable $ex) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     app_log('error', 'User update failed: ' . $ex->getMessage(), ['user' => $id]);
     old_set($_POST);
     flash('error', 'Değişiklikler kaydedilemedi.');

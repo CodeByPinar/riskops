@@ -28,7 +28,16 @@ function generate_temp_password(int $length = 14): string
     return $out;
 }
 
-/** Sistemde başka aktif admin var mı? (kendini kilitleme koruması) */
+/**
+ * Sistemde başka aktif admin var mı?
+ *
+ * DİKKAT - bu fonksiyon TEK BAŞINA bir koruma DEĞİLDİR.
+ * Kilitsiz okur; çağrıldığı an ile yazma anı arasında başka bir istek
+ * araya girebilir. Yalnızca kullanıcıya erken geri bildirim vermek
+ * (form doğrulaması) için kullanılır.
+ *
+ * Yazmadan önceki otoriter kontrol last_admin_atomic_guard()'dır.
+ */
 function other_active_admin_exists(int $excludeUserId): bool
 {
     $stmt = db()->prepare(
@@ -37,6 +46,65 @@ function other_active_admin_exists(int $excludeUserId): bool
     );
     $stmt->execute([':id' => $excludeUserId]);
     return (int)$stmt->fetchColumn() > 0;
+}
+
+/**
+ * "Sistemde en az bir aktif admin kalmalı" invariantını ATOMİK doğrular.
+ *
+ * SORUN
+ * -----
+ * Eski koruma bir check-then-act yarışıydı: kilitsiz bir SELECT COUNT(*),
+ * ardından ayrı bir UPDATE. Tam iki aktif admin varken birbirini aynı
+ * anda pasifleştiren iki istek, HER İKİSİ de "başka admin var" görür,
+ * her ikisi de korumadan geçer ve sistemde sıfır aktif admin kalır.
+ * Kurtarma doğrudan veritabanı müdahalesi gerektirir.
+ *
+ * ÇÖZÜM
+ * -----
+ * Çağıranın transaction'ı içinde, hem hedef satır hem de tüm aktif
+ * admin satırları FOR UPDATE ile kilitlenir. İki eşzamanlı işlem aynı
+ * satır kümesini AYNI SIRADA (ORDER BY id) kilitlediği için serileşir:
+ * ikincisi, birincisi commit edene kadar bloklanır, sonra commit
+ * edilmiş güncel durumu okur ve reddedilir.
+ *
+ * NEDEN ORDER BY id: kilit sırası sabit olmazsa iki işlem satırları
+ * ters sırada kilitleyip birbirini bekleyebilir (deadlock).
+ *
+ * NEDEN hedefin durumunu da BURADA okuyoruz: çağıranın transaction
+ * ÖNCESİ okuduğu "hedef aktif admin miydi" bilgisine güvenilemez.
+ * Hedef bu arada admin'e yükseltilmiş olabilir; o bilgiyle erken
+ * dönmek korumayı tamamen atlatırdı. Kilitli okuma, REPEATABLE READ
+ * altında bile güncel veriyi (current read) görür.
+ *
+ * @param PDO $pdo          Çağıranın AÇIK transaction'ındaki bağlantı
+ * @param int $targetUserId Admin'likten çıkarılacak/pasifleştirilecek kullanıcı
+ * @return bool true = işleme devam edilebilir, false = reddet
+ */
+function last_admin_atomic_guard(PDO $pdo, int $targetUserId): bool
+{
+    $stmt = $pdo->prepare(
+        "SELECT id, role, status FROM users
+          WHERE id = :target OR (role = 'admin' AND status = 1)
+          ORDER BY id
+          FOR UPDATE"
+    );
+    $stmt->execute([':target' => $targetUserId]);
+
+    $targetIsActiveAdmin = false;
+    $otherActiveAdmin    = false;
+
+    foreach ($stmt->fetchAll() as $row) {
+        $isActiveAdmin = $row['role'] === ROLE_ADMIN && (int)$row['status'] === 1;
+
+        if ((int)$row['id'] === $targetUserId) {
+            $targetIsActiveAdmin = $isActiveAdmin;
+        } elseif ($isActiveAdmin) {
+            $otherActiveAdmin = true;
+        }
+    }
+
+    // Hedef zaten aktif admin degilse bu invariant onu ilgilendirmez.
+    return !$targetIsActiveAdmin || $otherActiveAdmin;
 }
 
 /**

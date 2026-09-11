@@ -94,7 +94,37 @@ VALUES
 
 
 -- ---------------------------------------------------------------------
--- MEVCUT ADMIN KULLANICISINI IT departmanina bagla
+-- ILK ADMIN HESABI
+--
+--   README'nin vaat ettigi ilk giris hesabi budur. Bu INSERT olmadan
+--   bos bir kurulumun sonunda sisteme girilebilecek hicbir hesap
+--   olmuyordu.
+--
+--   Parola: Admin123456  (asagidaki bcrypt ozetinin acik hali)
+--   must_change_password = 1 -> bootstrap ilk giriste parola
+--   degistirmeye zorlar, kullanici baska sayfaya gecemez.
+--
+--   NEDEN "INSERT ... SELECT ... WHERE NOT EXISTS" ve INSERT IGNORE
+--   DEGIL: INSERT IGNORE her hatayi uyariya cevirir - yanlis kolon
+--   tipi, kisilan veri, FK ihlali de sessizce yutulur. Burada
+--   istedigimiz tek sey "kayit varsa tekrar ekleme"; onu kosul
+--   acikca soyluyor ve diger hatalar hata olarak kaliyor.
+-- ---------------------------------------------------------------------
+INSERT INTO users (name, email, password, role, status, must_change_password)
+SELECT 'RiskOps Administrator',
+       'admin@riskops.local',
+       '$2y$10$FBsnyLI06L/sQdWcsDqKzOULZVSbOPNke47htmgcF39R5ZE5C723W',
+       'admin',
+       1,
+       1
+  FROM DUAL
+ WHERE NOT EXISTS (
+     SELECT 1 FROM users WHERE email = 'admin@riskops.local'
+ );
+
+
+-- ---------------------------------------------------------------------
+-- ADMIN KULLANICISINI IT departmanina bagla
 --   (yalnizca departmani bos ise - kullanici secimini ezmez)
 -- ---------------------------------------------------------------------
 UPDATE users u
