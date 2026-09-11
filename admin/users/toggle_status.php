@@ -33,19 +33,39 @@ if ($user === false) {
 
 $newStatus = (int)$user['status'] === 1 ? 0 : 1;
 
-if ($newStatus === 0) {
-    if ($id === auth_id()) {
-        flash('error', 'Kendi hesabınızı devre dışı bırakamazsınız.');
-        redirect('/admin/users/');
-    }
-    if ($user['role'] === ROLE_ADMIN && !other_active_admin_exists($id)) {
+if ($newStatus === 0 && $id === auth_id()) {
+    flash('error', 'Kendi hesabınızı devre dışı bırakamazsınız.');
+    redirect('/admin/users/');
+}
+
+/* --- Son aktif admin koruması: ATOMİK -------------------------------
+   Kontrol ve UPDATE aynı transaction içinde; tüm aktif admin satırları
+   FOR UPDATE ile kilitlenir (bkz. last_admin_atomic_guard). Ayrı bir
+   SELECT COUNT(...) + ayrı UPDATE klasik check-then-act yarışıydı: iki
+   admin birbirini aynı anda pasifleştirdiğinde her iki istek de
+   "başka admin var" görüyor ve sistem yönetimsiz kalıyordu. */
+$pdo = db();
+$pdo->beginTransaction();
+try {
+    $wasActiveAdmin = $user['role'] === ROLE_ADMIN && (int)$user['status'] === 1;
+
+    if ($newStatus === 0 && !last_admin_atomic_guard($pdo, $id, $wasActiveAdmin)) {
+        $pdo->rollBack();
         flash('error', 'Bu, sistemdeki tek aktif admin hesabı. Önce başka bir admin tanımlayın.');
         redirect('/admin/users/');
     }
-}
 
-db()->prepare('UPDATE users SET status = :s WHERE id = :id')
-    ->execute([':s' => $newStatus, ':id' => $id]);
+    $pdo->prepare('UPDATE users SET status = :s WHERE id = :id')
+        ->execute([':s' => $newStatus, ':id' => $id]);
+    $pdo->commit();
+} catch (Throwable $ex) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+    app_log('error', 'User status toggle failed: ' . $ex->getMessage(), ['user' => $id]);
+    flash('error', 'Durum değiştirilemedi.');
+    redirect('/admin/users/');
+}
 
 audit('user_status_changed', 'user', $id,
     ['status' => (int)$user['status']],

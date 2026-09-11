@@ -34,7 +34,26 @@ if ($errors !== []) {
 }
 
 try {
-    db()->prepare(
+    $pdo = db();
+    $pdo->beginTransaction();
+
+    /* --- Son aktif admin koruması: ATOMİK ---------------------------
+       Doğrulamadaki kontrol (user_collect_input) yalnızca UX; yarış
+       penceresini kapatamaz. Yetkiyi düşüren veya hesabı kapatan
+       UPDATE'ten önce aynı transaction içinde kilitli kontrol. */
+    $wasActiveAdmin   = $before['role'] === ROLE_ADMIN && (int)$before['status'] === 1;
+    $staysActiveAdmin = $data['role'] === ROLE_ADMIN && (int)$data['status'] === 1;
+
+    if ($wasActiveAdmin && !$staysActiveAdmin
+        && !last_admin_atomic_guard($pdo, $id, true)) {
+        $pdo->rollBack();
+        user_fail_back(
+            ['role' => 'Bu, sistemdeki tek aktif admin hesabı. Önce başka bir admin tanımlayın.'],
+            '/admin/users/edit.php?id=' . $id
+        );
+    }
+
+    $pdo->prepare(
         'UPDATE users SET
             name = :n, email = :e, role = :r, department_id = :d,
             title = :t, phone = :ph, status = :s
@@ -49,7 +68,12 @@ try {
         ':s'  => $data['status'],
         ':id' => $id,
     ]);
+
+    $pdo->commit();
 } catch (Throwable $ex) {
+    if (isset($pdo) && $pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     app_log('error', 'User update failed: ' . $ex->getMessage(), ['user' => $id]);
     old_set($_POST);
     flash('error', 'Değişiklikler kaydedilemedi.');

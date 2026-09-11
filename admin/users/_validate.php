@@ -40,6 +40,47 @@ function other_active_admin_exists(int $excludeUserId): bool
 }
 
 /**
+ * Son aktif admin korumasini ISLEM (transaction) ICINDE atomik uygular.
+ *
+ * NEDEN GEREKLI: other_active_admin_exists() + ayri bir UPDATE klasik
+ * check-then-act yarisir. Iki aktif admin ayni anda birbirini
+ * pasiflestirirse/dusurse her iki istek de "baska admin var" gorup
+ * gecebilir ve sistem sifir aktif adminle kalir (olculdu: round-6
+ * proof'u, zorlanmis kesisme ile 0 admin).
+ *
+ * COZUM: cagiranin actigi transaction icinde TUM aktif admin satirlari
+ * FOR UPDATE ile kilitlenir. Es zamanli iki islem ayni satir kumesini
+ * ayni sirada kilitledigi icin serilesirler: ilki commit edene kadar
+ * ikincisi bloklanir; sonra guncel (commit edilmis) durumu okur ve
+ * artik tek admin kaldiysa REDDEDILIR. Kilitli okuma (FOR UPDATE)
+ * REPEATABLE READ altinda bile guncel surumu gorur.
+ *
+ * KULLANIM: cagiran beginTransaction() yapmis olmali; bu fonksiyon
+ * kilitleri tutar ve KARAR verir; UPDATE ve commit cagirana aittir.
+ *
+ * @param PDO  $pdo                 Cagiranin transaction baglantisi.
+ * @param int  $targetUserId        Degistirilmek istenen kullanici.
+ * @param bool $targetWasActiveAdmin Hedef su an aktif bir admin mi?
+ * @return bool true = isleme devam edilebilir; false = hedef son aktif
+ *              admin, islem geri cevrilmeli.
+ */
+function last_admin_atomic_guard(PDO $pdo, int $targetUserId, bool $targetWasActiveAdmin): bool
+{
+    if (!$targetWasActiveAdmin) {
+        return true;
+    }
+    $ids = $pdo->query(
+        "SELECT id FROM users WHERE role = 'admin' AND status = 1 FOR UPDATE"
+    )->fetchAll(PDO::FETCH_COLUMN);
+    foreach ($ids as $id) {
+        if ((int)$id !== $targetUserId) {
+            return true; // kilide alinmis kumede baska bir aktif admin var
+        }
+    }
+    return false;
+}
+
+/**
  * POST verisini okur ve doğrular.
  *
  * @param int|null $selfId düzenlenen kullanıcının id'si (e-posta benzersizliği için)
