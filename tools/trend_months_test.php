@@ -2,18 +2,23 @@
 declare(strict_types=1);
 
 /**
- * RiskOps - Dashboard trend ay penceresi regresyon testi
+ * RiskOps - Ay bazli trend pencereleri regresyon testi
  * Calistirma:  php tools/trend_months_test.php
  *
  * Bagimlilik YOK: veritabani ve bootstrap gerekmez, yalnizca
  * includes/functions.php icindeki recent_months() test edilir.
  *
- * REGRESYON ARKAPLANI: pencere bir zamanlar
+ * Kapsanan tuketiciler:
+ *   api/dashboard_charts.php      (12 aylik trend penceresi)
+ *   reports/executive_summary.php (6 aylik "Son 6 Ay" penceresi)
+ *
+ * REGRESYON ARKAPLANI: pencereler bir zamanlar
  *     date('Y-m', strtotime("-{$i} month"))
  * ile kuruluyordu. strtotime ay aritmetiginde gun tasmasini kirmaz;
  * ayin 29-31'inde hedef ayda o gun yoksa sonuc bir SONRAKI aya tasiyor,
- * ayni 'Y-m' anahtari iki kez uretiliyor ve 12 aylik pencere 7-11 aya
- * dusuyordu (kayip aylarin riskleri trend grafiginde hic sayilmiyordu).
+ * ayni 'Y-m' anahtari iki kez uretiliyor ve pencere kuculuyordu
+ * (dashboard 7-11 aya, yonetici ozeti 3-5 aya dusuyordu; kayip
+ * aylarin riskleri hic sayilmiyordu).
  */
 
 if (PHP_SAPI !== 'cli') {
@@ -96,6 +101,9 @@ check('count negatif bos liste', recent_months(-3, $now) === []);
 check('count=13 yil sinirini asar',
     recent_months(13, strtotime('2026-01-15 12:00:00'))
         === expected_months(strtotime('2026-01-15 12:00:00'), 13));
+check('count=6 yonetici ozeti penceresi (2026-05-31 taban)',
+    recent_months(6, strtotime('2026-05-31 12:00:00'))
+        === expected_months(strtotime('2026-05-31 12:00:00'), 6));
 check('anahtarlar eskiden yeniye sirali',
     recent_months(12, $now) === array_values(array_sort(recent_months(12, $now))));
 
@@ -111,8 +119,14 @@ section('3. Uc nokta baglantisi');
 $src = (string)file_get_contents(__DIR__ . '/../api/dashboard_charts.php');
 check('api/dashboard_charts.php recent_months() kullaniyor',
     str_contains($src, 'recent_months(12)'));
-check('bozuk strtotime("-N month") ifadesi kaldirildi',
+check('dashboard bozuk strtotime("-N month") ifadesi kaldirildi',
     !str_contains($src, 'strtotime("-{'));
+
+$srcExec = (string)file_get_contents(__DIR__ . '/../reports/executive_summary.php');
+check('reports/executive_summary.php recent_months() kullaniyor',
+    str_contains($srcExec, 'recent_months(6)'));
+check('yonetici ozeti bozuk strtotime ay ifadeleri kaldirildi',
+    !str_contains($srcExec, 'strtotime("-{') && !str_contains($srcExec, "strtotime('-5 month')"));
 
 /* ------------------------------------------------------------------ */
 
