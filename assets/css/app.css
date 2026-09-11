@@ -691,29 +691,6 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     color: var(--rk-text);
 }
 
-/* Zemin dokusu: çok soluk geometrik alan. Ayrı bir katman olduğu için
-   içeriğin z-index'iyle uğraşmak gerekmiyor. */
-.rk-lg-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-        radial-gradient(820px 520px at 88% 6%,  #e3edfb 0%, transparent 62%),
-        radial-gradient(700px 480px at 4% 92%,  #e8f0fc 0%, transparent 60%),
-        linear-gradient(180deg, #fbfdff 0%, #eef4fc 100%);
-}
-.rk-lg-bg::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: .5;
-    background-image:
-        linear-gradient(115deg, rgba(147,197,253,.16) 1px, transparent 1px),
-        linear-gradient(65deg,  rgba(147,197,253,.12) 1px, transparent 1px);
-    background-size: 132px 132px, 96px 96px;
-}
-
 .rk-lg {
     position: relative;
     z-index: 1;
@@ -1918,4 +1895,175 @@ a.rk-logout-btn:hover { background: var(--rk-side-bg-alt); color: #fff; text-dec
     font-size: 11.5px;
     line-height: 1.5;
     color: var(--rk-muted);
+}
+
+/* ---------------------------------------------------------------------
+   GİRİŞ EKRANI - HAREKET
+   ---------------------------------------------------------------------
+   KURALLAR
+   1. Yalnızca transform ve opacity animate edilir. background-position,
+      width, top gibi özellikler her karede yeniden yerleşim (layout) ya
+      da boyama (paint) tetikler; transform/opacity ise doğrudan derleyici
+      katmanında çalışır ve sayfayı yavaşlatmaz.
+   2. Süreler uzun ve birbirine bölünemez (23s / 31s / 71s). Eşit süreler
+      seçilseydi katmanlar periyodik olarak aynı noktada buluşur ve
+      "nefes alan" değil "atan" bir arka plan oluşurdu.
+   3. Genlik düşük. Bir risk yönetimi ürününün giriş ekranı dikkat
+      çekmemeli; hareket fark edilmeden hissedilmeli.
+   4. prefers-reduced-motion açıksa HEPSİ durur. Bu bir tercih değil,
+      erişilebilirlik gereği: hareket vestibüler rahatsızlığı tetikler.
+   --------------------------------------------------------------------- */
+
+/* Zemin artık yalnızca düz renk taşır; hareketli katmanlar çocuk
+   elemanlardır (bkz. auth/login.php). */
+.rk-lg-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background: linear-gradient(180deg, #fbfdff 0%, #eef4fc 100%);
+}
+
+/* ------------------------------------------------------------ küreler */
+
+.rk-lg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(6px);
+    will-change: transform;
+}
+
+.rk-lg-orb-1 {
+    width: 820px; height: 560px;
+    right: -140px; top: -180px;
+    background: radial-gradient(closest-side, #e0eafc 0%, rgba(224,234,252,0) 72%);
+    animation: rkOrbDrift1 23s ease-in-out infinite alternate;
+}
+
+.rk-lg-orb-2 {
+    width: 760px; height: 520px;
+    left: -180px; bottom: -160px;
+    background: radial-gradient(closest-side, #e6eefb 0%, rgba(230,238,251,0) 70%);
+    animation: rkOrbDrift2 31s ease-in-out infinite alternate;
+}
+
+@keyframes rkOrbDrift1 {
+    from { transform: translate3d(0, 0, 0)          scale(1); }
+    to   { transform: translate3d(-90px, 70px, 0)   scale(1.14); }
+}
+@keyframes rkOrbDrift2 {
+    from { transform: translate3d(0, 0, 0)          scale(1.08); }
+    to   { transform: translate3d(110px, -60px, 0)  scale(1); }
+}
+
+/* ------------------------------------------------------------- ızgara */
+
+/*
+   Desen 120x120 döşenir ve katman tam 120px kaydırılır: bir döngü
+   sonunda görüntü başlangıçtakiyle birebir aynı olur, dolayısıyla
+   dikiş yeri görünmez. inset negatif - kayma sırasında kenar açılmasın.
+*/
+.rk-lg-grid {
+    position: absolute;
+    inset: -160px;
+    opacity: .5;
+    will-change: transform;
+    background-image:
+        linear-gradient(115deg, rgba(147,197,253,.16) 1px, transparent 1px),
+        linear-gradient(65deg,  rgba(147,197,253,.12) 1px, transparent 1px);
+    background-size: 120px 120px, 120px 120px;
+    animation: rkGridPan 71s linear infinite;
+}
+
+@keyframes rkGridPan {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(120px, 120px, 0); }
+}
+
+/* -------------------------------------------------------- kalkan ve düğümler */
+
+/* transform-box/transform-origin olmadan SVG içinde dönüşümler
+   viewBox'ın köşesine göre uygulanır ve öge yerinden fırlar. */
+.rk-lg-shield {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: rkFloat 7s ease-in-out infinite alternate;
+    will-change: transform;
+}
+@keyframes rkFloat {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-9px); }
+}
+
+.rk-lg-node { animation: rkNodePulse 3.4s ease-in-out infinite; }
+.rk-lg-node.n1 { animation-duration: 3.4s; animation-delay: 0s; }
+.rk-lg-node.n2 { animation-duration: 4.3s; animation-delay: .7s; }
+.rk-lg-node.n3 { animation-duration: 2.9s; animation-delay: 1.4s; }
+
+@keyframes rkNodePulse {
+    0%, 100% { opacity: .35; }
+    50%      { opacity: .95; }
+}
+
+/* Çağrı kartı kalkanla aynı ritimde ama ters yönde: ikisi birlikte
+   "yüzüyor" izlenimi verir, birbirine yapışık durmaz. */
+.rk-lg-callout {
+    animation: rkFloatSoft 9s ease-in-out infinite alternate;
+    will-change: transform;
+}
+@keyframes rkFloatSoft {
+    from { transform: translateY(4px); }
+    to   { transform: translateY(-4px); }
+}
+
+/* ------------------------------------------------------------- giriş */
+
+/* Sayfa açılışında tek seferlik. forwards: bitince son karede kalır,
+   yoksa öge başlangıç durumuna (saydam) geri döner. */
+.rk-lg-in {
+    opacity: 0;
+    animation: rkRise .62s cubic-bezier(.22, .68, .36, 1) forwards;
+}
+.rk-lg-left  { animation-delay: .04s; }
+.rk-lg-card  { animation-delay: .14s; }
+.rk-lg-right { animation-delay: .26s; }
+
+@keyframes rkRise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Giriş düğmesi: sadece etkileşimde, kendiliğinden hareket etmez. */
+.rk-lg-card .rk-btn {
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.rk-lg-card .rk-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(1, 108, 204, .30);
+}
+.rk-lg-card .rk-btn:active { transform: translateY(0); }
+
+/* --------------------------------------------------- hareket azaltma */
+
+/*
+   Kullanıcı işletim sisteminde "hareketi azalt" seçtiyse hepsi durur.
+   animation: none demek yerine süreyi kısaltıp iteration'ı 1 yapmak,
+   .rk-lg-in gibi opacity:0 ile başlayan ögelerin görünür KALMASINI da
+   garanti eder - animasyonu tamamen kapatmak onları gizlerdi.
+*/
+@media (prefers-reduced-motion: reduce) {
+    .rk-lg-orb,
+    .rk-lg-grid,
+    .rk-lg-shield,
+    .rk-lg-node,
+    .rk-lg-callout,
+    .rk-lg-in {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0s !important;
+        transition-duration: .01ms !important;
+    }
+    .rk-lg-in { opacity: 1; }
+    .rk-lg-node { opacity: .7; }
 }

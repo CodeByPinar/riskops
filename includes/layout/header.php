@@ -24,7 +24,7 @@ $pageTitle    = $pageTitle    ?? '';
 $pageSubtitle = $pageSubtitle ?? '';
 $activeMenu   = $activeMenu   ?? '';
 $pageActions  = $pageActions  ?? '';   // HAM HTML - sayfa kendisi kacislamakla yukumlu
-$assetVersion = '20260911q';
+$assetVersion = '20260911r';
 ?>
 <!doctype html>
 <html lang="tr">
