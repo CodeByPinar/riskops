@@ -721,6 +721,17 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     display: flex;
     flex-direction: column;
     padding: 26px clamp(20px, 4vw, 56px) 22px;
+
+    /* UST SINIR ZORUNLU.
+       Sinirsiz birakildiginda 2560px+ ekranlarda icerik kenardan
+       kenara yayiliyor: logo en solda, ust not en sagda, kart ise
+       ortada kaybolmus gibi duruyordu. Ayrica sol sutun 1fr oldugu
+       icin fazla genisligin TAMAMINI o yutuyor ve kart pencere
+       buyudukce saga kayiyordu - yani konumu "sabit" degildi.
+       Sabit bir olcu kutusu ikisini de cozer. */
+    width: 100%;
+    max-width: 1520px;
+    margin: 0 auto;
 }
 
 /* İnce yatay çizgi - üst not, çağrı kartı ve slogan altında tekrar eder */
@@ -763,9 +774,12 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-lg-main {
     flex: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(360px, 460px) 180px;
+    /* Sol sutun da ustten sinirli: kalan bosluk gap'e ve kenarlara
+       dagilir, tek bir sutun sismez. */
+    grid-template-columns: minmax(0, 620px) minmax(380px, 480px) 190px;
+    justify-content: center;
     align-items: center;
-    gap: clamp(24px, 4vw, 64px);
+    gap: clamp(24px, 3.5vw, 72px);
     padding: 18px 0;
 }
 
@@ -855,7 +869,7 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     background: #fff;
     border: 1px solid #e6eefa;
     border-radius: 20px;
-    padding: 30px 34px 26px;
+    padding: 34px 38px 28px;
     box-shadow:
         0 2px 4px rgba(6, 32, 63, .03),
         0 22px 48px rgba(6, 32, 63, .10);
@@ -872,7 +886,7 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-lg-welcome {
     margin: 0;
     text-align: center;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 680;
     letter-spacing: -.5px;
     color: #06203f;
@@ -887,8 +901,8 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-lg-card .rk-btn {
     width: 100%;
     justify-content: center;
-    height: 44px;
-    font-size: 14.5px;
+    height: 46px;
+    font-size: 15px;
     border-radius: 11px;
     background: linear-gradient(180deg, #2b83e8 0%, var(--rk-primary) 100%);
     border-color: var(--rk-primary-dark);
@@ -963,7 +977,7 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 }
 .rk-input-icon .rk-input {
     padding-left: 38px;
-    height: 44px;
+    height: 46px;
     border-radius: 11px;
     background: #f8fbff;
 }
@@ -1048,7 +1062,7 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 /* --------------------------------------------------------- dar ekran */
 
 @media (max-width: 1240px) {
-    .rk-lg-main { grid-template-columns: minmax(0, 1fr) minmax(360px, 440px); }
+    .rk-lg-main { grid-template-columns: minmax(0, 620px) minmax(380px, 460px); }
     .rk-lg-right { display: none; }
 }
 
