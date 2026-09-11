@@ -37,11 +37,11 @@ $pdo = db();
 /*    tek eksende gosterilebilir).                                      */
 /* ------------------------------------------------------------------ */
 
-$months = [];
-for ($i = 11; $i >= 0; $i--) {
-    $months[date('Y-m', strtotime("-{$i} month"))] = ['opened' => 0, 'closed' => 0];
-}
-$since = date('Y-m-01', strtotime('-11 month'));
+// Takvim ayi penceresi ayin 1'ine sabitlenerek kurulur (bkz. recent_months):
+// strtotime('-N month') ay sonu gunlerinde bir sonraki aya tasiyordu.
+$monthKeys = recent_months(12);
+$months = array_fill_keys($monthKeys, ['opened' => 0, 'closed' => 0]);
+$since = $monthKeys[0] . '-01';
 
 $rows = $pdo->prepare(
     "SELECT DATE_FORMAT(created_at, '%Y-%m') AS ay, COUNT(*) AS adet
