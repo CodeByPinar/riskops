@@ -216,6 +216,36 @@ function days_until(?string $date): ?int
     return (int)floor(($t - strtotime(date('Y-m-d'))) / 86400);
 }
 
+/**
+ * Son $count takvim ayinin 'Y-m' anahtarlarini eskiden yeniye sirali dondurur.
+ * Pencerenin alt siniri (SQL :since degeri) ilk anahtarin '-01' ekidir.
+ *
+ * NEDEN AYRI BIR FONKSIYON: strtotime('-N month') gun tasmasini kirmaz;
+ * ayin 29-31'inde hedef ayda o gun yoksa sonuc bir SONRAKI aya taser.
+ * Dashboard trend penceresi (api/dashboard_charts.php) bu yuzden ay sonu
+ * isteklerinde 12 yerine 7-11 ay uretiyor, kayip aylarin riskleri hic
+ * sayilmiyordu. Burada ay aritmetigi her zaman ayin 1'ine sabitlenir;
+ * 1. gunden cikarilan ay asla tasmaz.
+ *
+ * @param int $count Kac ay dondurecek (1 = yalnizca bulunulan ay).
+ * @param int|null $baseTs Pencerenin bittigi an (null = simdi).
+ * @return list<string> 'YYYY-MM' anahtarlari, eskiden yeniye.
+ */
+function recent_months(int $count, ?int $baseTs = null): array
+{
+    if ($count < 1) {
+        return [];
+    }
+    $anchor = (new DateTimeImmutable(date('Y-m-d H:i:s', $baseTs ?? time())))
+        ->modify('first day of this month midnight');
+
+    $out = [];
+    for ($i = $count - 1; $i >= 0; $i--) {
+        $out[] = $anchor->modify("-{$i} months")->format('Y-m');
+    }
+    return $out;
+}
+
 function str_limit(?string $text, int $limit = 80): string
 {
     $text = trim((string)$text);
