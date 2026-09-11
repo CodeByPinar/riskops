@@ -185,7 +185,7 @@ Ubuntu Server 24.04 · PHP 8.3 · MariaDB 10.11 · Apache 2.4
 
 ```bash
 # 1. Kodu yerleştirin
-sudo git clone https://github.com/<kullanici>/riskops.git /var/www/riskops
+sudo git clone https://github.com/CodeByPinar/riskops.git /var/www/riskops
 sudo chown -R www-data:www-data /var/www/riskops
 
 # 2. Veritabanını oluşturun
