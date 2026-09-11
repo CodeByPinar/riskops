@@ -56,13 +56,29 @@ $flashIcons = [
             </div>
         <?php endforeach; ?>
 
+        <?php if (APP_DEMO): ?>
+        <div class="rk-demo-box">
+            <div class="rk-demo-title">
+                <i class="bi bi-play-circle-fill"></i> Deneme kurulumu
+            </div>
+            <dl class="rk-demo-creds">
+                <dt>E-posta</dt><dd><code><?= e(DEMO_EMAIL) ?></code></dd>
+                <dt>Parola</dt><dd><code><?= e(DEMO_PASSWORD) ?></code></dd>
+            </dl>
+            <p class="rk-demo-note">
+                Hesap <strong>salt okunur</strong>dur. Veriler örnektir ve
+                her gece 04:00'te sıfırlanır.
+            </p>
+        </div>
+        <?php endif; ?>
+
         <form method="post" action="<?= e(url('/auth/authenticate.php')) ?>" novalidate>
             <?= csrf_field() ?>
 
             <div class="rk-field">
                 <label class="rk-label" for="email">E-posta</label>
                 <input class="rk-input" type="email" id="email" name="email"
-                       value="<?= e(old('email')) ?>"
+                       value="<?= e(APP_DEMO && old('email') === '' ? DEMO_EMAIL : old('email')) ?>"
                        autocomplete="username" required autofocus
                        placeholder="örnek@kurum.local">
             </div>

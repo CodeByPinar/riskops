@@ -16,6 +16,23 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 
 require_login();
 
+/**
+ * DEMO KİPİ - paylaşılan hesabın parolası değiştirilemez.
+ *
+ * Deneme hesabının bilgileri giriş ekranında herkese açıktır. Bir
+ * ziyaretçi parolayı değiştirirse, tanıtım bağlantısına tıklayan
+ * HERKES gece sıfırlamasına kadar içeri giremez. Rol kontrolü bunu
+ * yakalamaz: parola değiştirmek bir yetki değil, kendi hesabı üzerinde
+ * yapılan bir işlemdir - viewer da yapabilir.
+ *
+ * Kısıt YALNIZCA demo hesabına ve YALNIZCA demo kipinde uygulanır;
+ * gerçek kullanıcılar her koşulda parolasını değiştirebilir.
+ */
+if (APP_DEMO && strcasecmp((string)(auth_user()['email'] ?? ''), DEMO_EMAIL) === 0) {
+    flash('info', 'Deneme hesabının parolası değiştirilemez.');
+    redirect('/dashboard/');
+}
+
 $minLength = max(8, (int)setting('password_min_length', 10));
 $forced    = !empty($_SESSION['must_change_password']);
 

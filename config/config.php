@@ -26,6 +26,23 @@ define('APP_ENV', in_array($riskopsEnv, ['development', 'production'], true)
     : 'development');
 unset($riskopsEnv);
 
+// --- Demo kipi --------------------------------------------------------
+// Herkese açık tanıtım kurulumunda 1 yapılır:
+//     SetEnv RISKOPS_DEMO 1
+//
+// Etkisi YALNIZCA giriş ekranındadır: ziyaretçiye deneme hesabının
+// bilgilerini gösterir ve verinin her gece sıfırlandığını bildirir.
+// Yetkilendirmeye HİÇBİR etkisi yoktur - demo hesabının ne yapabileceğini
+// rolü belirler (bkz. includes/auth.php), bu bayrak değil.
+//
+// Varsayılan 0: bir kurum kurulumu yanlışlıkla demo bilgisi gösteremez.
+define('APP_DEMO', ($_SERVER['RISKOPS_DEMO'] ?? getenv('RISKOPS_DEMO') ?: '') === '1');
+
+// Giriş ekranında gösterilecek deneme hesabı. Parola BURADA durur ve
+// zaten herkese açıktır; bu hesabın rolü 'viewer' olmalıdır.
+define('DEMO_EMAIL',    'demo@riskops.local');
+define('DEMO_PASSWORD', 'RiskOpsDemo2026');
+
 // --- Dizin sabitleri --------------------------------------------------
 define('APP_ROOT',      dirname(__DIR__));
 define('CONFIG_PATH',   APP_ROOT . '/config');

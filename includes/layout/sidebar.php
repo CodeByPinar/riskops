@@ -71,10 +71,15 @@ $user = auth_user();
             <div class="rk-side-user-name"><?= e($user['name']) ?></div>
             <div class="rk-side-user-role"><?= e(role_label($user['role'])) ?></div>
         </div>
+        <?php /* Demo hesabı parolasını değiştiremez; bağlantıyı da gösterme.
+                 Asıl engel change_password.php içindedir - bu yalnızca
+                 kullanıcıyı çalışmayan bir düğmeye tıklatmamak için. */ ?>
+        <?php if (!(APP_DEMO && strcasecmp((string)($user['email'] ?? ''), DEMO_EMAIL) === 0)): ?>
         <a class="rk-logout-btn" href="<?= e(url('/auth/change_password.php')) ?>"
            title="Parola değiştir" aria-label="Parola değiştir">
             <i class="bi bi-key"></i>
         </a>
+        <?php endif; ?>
         <form method="post" action="<?= e(url('/auth/logout.php')) ?>" class="m-0">
             <?= csrf_field() ?>
             <button type="submit" class="rk-logout-btn" title="Çıkış yap" aria-label="Çıkış yap">

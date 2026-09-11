@@ -185,7 +185,7 @@ Ubuntu Server 24.04 · PHP 8.3 · MariaDB 10.11 · Apache 2.4
 
 ```bash
 # 1. Kodu yerleştirin
-sudo git clone https://github.com/CodeByPinar/riskops.git /var/www/riskops
+sudo git clone https://github.com/<kullanici>/riskops.git /var/www/riskops
 sudo chown -R www-data:www-data /var/www/riskops
 
 # 2. Veritabanını oluşturun
@@ -233,6 +233,23 @@ sudo -u www-data php /var/www/riskops/tools/go_live_check.php
 Veri değiştirmeyen bir ön kontroldür: dizin izinleri, güvenlik başlıkları,
 ortam değişkeni, varsayılan parola, saat dilimi hizası gibi 31 maddeyi
 denetler ve eksikleri listeler.
+
+### İnternete açık kurulum
+
+Adım adım yordam: **[deploy/DEPLOY.md](deploy/DEPLOY.md)** — VPS hazırlığı,
+HTTPS, güvenlik duvarı, gece sıfırlaması ve son kontrol listesi.
+
+Uygulamanın bir **demo kipi** vardır; ortam değişkeniyle açılır:
+
+```apache
+SetEnv RISKOPS_DEMO 1
+```
+
+Etkisi yalnızca giriş ekranındadır — ziyaretçiye deneme hesabının
+bilgilerini gösterir ve o hesabın parolasını değiştirmesini engeller
+(yoksa bir ziyaretçi demoyu herkese kapatabilirdi). **Yetkilendirmeye
+hiçbir etkisi yoktur**: ziyaretçinin ne yapabileceğini `viewer` rolü
+belirler, bu bayrak değil.
 
 ---
 
