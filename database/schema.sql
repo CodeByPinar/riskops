@@ -19,6 +19,32 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 
 -- ---------------------------------------------------------------------
+-- 0. users  (kimlik dogrulama)
+--
+--     BOS veritabaninda calisan kurulum icin BURADA olusturulur:
+--     asagidaki ilk tablo (departments) manager_id uzerinden users(id)'ye
+--     FK icerir; tablo yoksa kurulum ERROR 1005 (errno 150) ile kirilir.
+--     Bolum 10'daki ALTER'lar yukseltmeler icin aynen kalir (IF NOT EXISTS
+--     ile idempotent) ve bu tabloyu departman/title/phone/
+--     must_change_password/password_changed_at/created_by kolonlariyle
+--     zenginlestirir.
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS users (
+    id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name          VARCHAR(100) NOT NULL,
+    email         VARCHAR(150) NOT NULL,
+    password      VARCHAR(255) NOT NULL,
+    role          ENUM('admin','manager','analyst','viewer') NOT NULL DEFAULT 'viewer',
+    status        TINYINT(1)   NOT NULL DEFAULT 1,
+    last_login_at DATETIME     NULL DEFAULT NULL,
+    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_users_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- ---------------------------------------------------------------------
 -- 1. departments
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS departments (
@@ -311,8 +337,9 @@ CREATE TABLE IF NOT EXISTS login_attempts (
 
 
 -- ---------------------------------------------------------------------
--- 10. users  -> MEVCUT TABLO ALTER EDILIYOR (SILINMIYOR)
---     departments tablosu olustuktan SONRA calismali.
+-- 10. users  -> bolum 0'da olusturulan tablo burada ALTER edilir
+--     (mevcut kurulumlar korunur; departments tablosu olustuktan
+--     SONRA calismali - fk_users_department ona baglidir).
 -- ---------------------------------------------------------------------
 ALTER TABLE users
     ADD COLUMN IF NOT EXISTS department_id         INT UNSIGNED NULL DEFAULT NULL AFTER role,

@@ -94,6 +94,20 @@ VALUES
 
 
 -- ---------------------------------------------------------------------
+-- ILK ADMIN KULLANICISI
+--   README: "Ilk giris: admin@riskops.local / Admin123456 - uygulama
+--   ilk giriste parola degistirmeye zorlar." Bu satir olmazsa belgelenmis
+--   kurulum sonunda sisteme giris yapilabilecek hicbir hesap olusmaz
+--   (asagidaki UPDATE yalnizca mevcut admin kaydini departmana baglar).
+--   Parola bcrypt ile hashlenmistir; ilk giriste degisim zorunludur.
+-- ---------------------------------------------------------------------
+INSERT IGNORE INTO users (name, email, password, role, status, must_change_password)
+VALUES ('System Administrator', 'admin@riskops.local',
+        '$2y$12$YOWfKRyFQrinKDSIU50zHOQww8udcyN6zQm7BmKuWcp41NkLv8SBS',
+        'admin', 1, 1);
+
+
+-- ---------------------------------------------------------------------
 -- MEVCUT ADMIN KULLANICISINI IT departmanina bagla
 --   (yalnizca departmani bos ise - kullanici secimini ezmez)
 -- ---------------------------------------------------------------------
