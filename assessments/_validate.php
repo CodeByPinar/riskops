@@ -89,6 +89,21 @@ function assessment_collect_input(): array
         }
     }
 
+    /* Bir 'review', inherent skoru mevcut residual skorun ALTINA
+       indiremez: kalıcı tabloda residual > inherent kalır ve tüm etkin
+       skor hesapları (COALESCE(residual, inherent)) riskin kendisinden
+       büyük çıkar. Önce residual güncellenmelidir. */
+    if ($type === 'review' && $risk !== null && $likelihood !== null && $impact !== null
+        && $risk['residual_likelihood'] !== null && $risk['residual_impact'] !== null
+        && ($likelihood * $impact) < ((int)$risk['residual_likelihood'] * (int)$risk['residual_impact'])) {
+        $errors['impact'] = sprintf(
+            'Inherent skor (%d) mevcut residual skordan (%d) küçük olamaz: kontroller riski artırmaz. '
+            . 'Residual skor da düşmeli; önce residual değerlendirmesini güncelleyin.',
+            $likelihood * $impact,
+            (int)$risk['residual_likelihood'] * (int)$risk['residual_impact']
+        );
+    }
+
     $notes = input('notes');
     if ($notes !== null && mb_strlen($notes) > 2000) {
         $errors['notes'] = 'Not en fazla 2000 karakter olabilir.';
