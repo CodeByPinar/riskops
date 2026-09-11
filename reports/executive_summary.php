@@ -85,12 +85,12 @@ $byCat = db()->query(
      LIMIT 8"
 )->fetchAll();
 
-/* Son 6 ay: açılan ve kapanan */
-$trend = [];
-for ($i = 5; $i >= 0; $i--) {
-    $trend[date('Y-m', strtotime("-{$i} month"))] = ['acilan' => 0, 'kapanan' => 0];
-}
-$since = date('Y-m-01', strtotime('-5 month'));
+/* Son 6 ay: açılan ve kapanan — takvim ayı penceresi ayın 1'ine
+   sabitlenerek kurulur (bkz. recent_months): strtotime('-N month')
+   ay sonu günlerinde bir sonraki aya taşıyordu. */
+$monthKeys = recent_months(6);
+$trend = array_fill_keys($monthKeys, ['acilan' => 0, 'kapanan' => 0]);
+$since = $monthKeys[0] . '-01';
 
 $q = db()->prepare("SELECT DATE_FORMAT(created_at,'%Y-%m') AS ay, COUNT(*) AS n
                     FROM risks WHERE deleted_at IS NULL AND created_at >= :s GROUP BY ay");
