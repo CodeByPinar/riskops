@@ -677,46 +677,194 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 
 /* ------------------------------------------------------------ Login */
 
+/* ---------------------------------------------------------------------
+   GIRIS EKRANI
+   Iki panelli duzen: solda marka, sagda form. 900px altinda dikey
+   yiginlanir; sol panel gizlenir ve yerine formun ustunde kompakt bir
+   logo cikar (rk-login-mobile-brand).
+   --------------------------------------------------------------------- */
+
 .rk-login-page {
     min-height: 100vh;
+    margin: 0;
+    background: var(--rk-side-bg);
+}
+
+.rk-login-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+}
+
+/* ------------------------------------------------------- sol: marka */
+
+.rk-login-brand {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 44px 48px;
+    color: var(--rk-side-fg);
+    background:
+        radial-gradient(900px 520px at 12% -10%, var(--rk-side-bg-alt) 0%, transparent 62%),
+        linear-gradient(160deg, #052a52 0%, var(--rk-side-bg) 55%, #001535 100%);
+}
+
+.rk-login-brand-top { flex: none; }
+.rk-login-brand-top .rk-wordmark-light { height: 34px; }
+
+/* Orta blok kalan alani kaplar ve icerigini DIKEY ORTALAR.
+   space-between kullanildiginda metin panelin dibine yapisiyor ve
+   logoyla arasinda 600px bosluk kaliyordu. */
+.rk-login-brand-mid {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rk-login-pitch {
+    font-size: 30px;
+    line-height: 1.28;
+    font-weight: 620;
+    letter-spacing: -.6px;
+    color: #fff;
+    margin: 0 0 22px;
+}
+
+.rk-login-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 11px;
+}
+.rk-login-points li {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-size: 13.5px;
+    color: var(--rk-side-fg);
+}
+.rk-login-points i {
+    flex: none;
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--rk-side-accent);
+    background: rgba(35, 176, 248, .12);
+    border: 1px solid rgba(35, 176, 248, .22);
+}
+
+/* Dekoratif 5x5 matris: urunun kendi gorseli.
+   Kosede duruyor, tasan kisim kirpiliyor - dolayisiyla "arka plan
+   deseni" gibi degil, ekrana devam eden bir nesne gibi okunuyor. */
+.rk-login-matrix {
+    position: absolute;
+    right: -74px;
+    bottom: -74px;
+    display: grid;
+    grid-template-columns: repeat(5, 58px);
+    gap: 8px;
+    transform: rotate(-8deg);
+    pointer-events: none;
+    /* Metnin ustune binmesin: sola dogru soluklasip kaybolur. */
+    -webkit-mask-image: linear-gradient(115deg, transparent 8%, #000 52%);
+            mask-image: linear-gradient(115deg, transparent 8%, #000 52%);
+}
+.rk-login-mx {
+    display: block;
+    height: 58px;
+    border-radius: 10px;
+}
+
+/* Koyu lacivert uzerinde --sev-*-fg tonlari (#166534, #991b1b gibi)
+   neredeyse siyaha dusuyor ve matris camur gibi gorunuyordu. Acik
+   pastel --sev-*-bd tonlari zeminden ayrisiyor. Alfa seviyeye gore
+   artar: sicak kose daha belirgin, desen anlamli okunur. */
+.rk-login-mx.sev-low      { background: var(--sev-low-bd);      opacity: .16; }
+.rk-login-mx.sev-medium   { background: var(--sev-medium-bd);   opacity: .26; }
+.rk-login-mx.sev-high     { background: var(--sev-high-bd);     opacity: .36; }
+.rk-login-mx.sev-critical { background: var(--sev-critical-bd); opacity: .48; }
+
+/* -------------------------------------------------------- sag: form */
+
+.rk-login-panel {
     display: grid;
     place-items: center;
-    padding: 24px;
-    background:
-        radial-gradient(1100px 560px at 50% -18%, #0b356d 0%, #041f3c 60%, #001535 100%);
+    padding: 40px 24px;
+    background: var(--rk-surface);
 }
 
-.rk-login-card {
+.rk-login-form {
     width: 100%;
-    max-width: 396px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 20px 46px rgba(0, 21, 53, .46);
-    overflow: hidden;
+    max-width: 372px;
 }
 
-.rk-login-head {
-    padding: 26px 28px 18px;
-    text-align: center;
-    border-bottom: 1px solid var(--rk-border);
+.rk-login-mobile-brand { display: none; margin-bottom: 26px; }
+.rk-login-mobile-brand .rk-wordmark { height: 34px; }
+
+.rk-login-title {
+    font-size: 25px;
+    font-weight: 660;
+    letter-spacing: -.5px;
+    margin: 0;
+    color: var(--rk-text);
 }
-.rk-login-head .rk-brand-mark,
-.rk-login-head .rk-brand-logo { width: 56px; height: 56px; margin: 0 auto 14px; font-size: 26px; border-radius: 14px; }
+.rk-login-sub {
+    font-size: 13.5px;
+    color: var(--rk-muted);
+    margin: 5px 0 26px;
+}
 
-.rk-login-logo { margin: 0 0 6px; display: flex; justify-content: center; }
-.rk-login-logo .rk-wordmark { height: 40px; }
+.rk-login-form .rk-btn {
+    width: 100%;
+    justify-content: center;
+    height: 42px;
+    margin-top: 4px;
+}
 
-.rk-login-title { font-size: 20px; font-weight: 660; margin: 0; letter-spacing: -.4px; }
-.rk-login-sub { font-size: 12.5px; color: var(--rk-muted); margin: 4px 0 0; }
-
-.rk-login-body { padding: 22px 28px 26px; }
-.rk-login-body .rk-btn { width: 100%; justify-content: center; height: 38px; }
+/* Alan ici ikon: input'un sol dolgusu ikona yer acacak kadar artar. */
+.rk-input-icon { position: relative; }
+.rk-input-icon > i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: var(--rk-muted-light);
+    pointer-events: none;
+}
+.rk-input-icon .rk-input { padding-left: 36px; }
+.rk-input-icon:focus-within > i { color: var(--rk-primary); }
 
 .rk-login-foot {
-    padding: 12px 28px 20px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin: 26px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid var(--rk-border);
     font-size: 11.5px;
     color: var(--rk-muted-light);
+}
+
+/* ------------------------------------------------------------ dar ekran */
+
+@media (max-width: 900px) {
+    .rk-login-shell { grid-template-columns: 1fr; }
+    .rk-login-brand { display: none; }
+    .rk-login-mobile-brand { display: block; }
+    .rk-login-panel { min-height: 100vh; align-content: center; }
+}
+
+/* Cok kisa ekranda dikey ortalama yerine ustten akis */
+@media (max-height: 620px) {
+    .rk-login-panel { place-items: start center; }
 }
 
 /* ------------------------------------------------------ Duyarli (responsive) */
