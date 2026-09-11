@@ -678,193 +678,398 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 /* ------------------------------------------------------------ Login */
 
 /* ---------------------------------------------------------------------
-   GIRIS EKRANI
-   Iki panelli duzen: solda marka, sagda form. 900px altinda dikey
-   yiginlanir; sol panel gizlenir ve yerine formun ustunde kompakt bir
-   logo cikar (rk-login-mobile-brand).
+   GİRİŞ EKRANI
+   Üç bölgeli açık tema: solda anlatı, ortada kart, sağda şerit.
+   1240px altında sağ şerit, 980px altında sol anlatı gizlenir; kart
+   ortada tek başına kalır ve okunurluk bozulmaz.
    --------------------------------------------------------------------- */
 
 .rk-login-page {
-    min-height: 100vh;
     margin: 0;
-    background: var(--rk-side-bg);
-}
-
-.rk-login-shell {
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1.05fr 1fr;
+    background: #f4f8fd;
+    color: var(--rk-text);
 }
 
-/* ------------------------------------------------------- sol: marka */
-
-.rk-login-brand {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    padding: 44px 48px;
-    color: var(--rk-side-fg);
+/* Zemin dokusu: çok soluk geometrik alan. Ayrı bir katman olduğu için
+   içeriğin z-index'iyle uğraşmak gerekmiyor. */
+.rk-lg-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
     background:
-        radial-gradient(900px 520px at 12% -10%, var(--rk-side-bg-alt) 0%, transparent 62%),
-        linear-gradient(160deg, #052a52 0%, var(--rk-side-bg) 55%, #001535 100%);
+        radial-gradient(820px 520px at 88% 6%,  #e3edfb 0%, transparent 62%),
+        radial-gradient(700px 480px at 4% 92%,  #e8f0fc 0%, transparent 60%),
+        linear-gradient(180deg, #fbfdff 0%, #eef4fc 100%);
+}
+.rk-lg-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .5;
+    background-image:
+        linear-gradient(115deg, rgba(147,197,253,.16) 1px, transparent 1px),
+        linear-gradient(65deg,  rgba(147,197,253,.12) 1px, transparent 1px);
+    background-size: 132px 132px, 96px 96px;
 }
 
-.rk-login-brand-top { flex: none; }
-.rk-login-brand-top .rk-wordmark-light { height: 34px; }
-
-/* Orta blok kalan alani kaplar ve icerigini DIKEY ORTALAR.
-   space-between kullanildiginda metin panelin dibine yapisiyor ve
-   logoyla arasinda 600px bosluk kaliyordu. */
-.rk-login-brand-mid {
+.rk-lg {
     position: relative;
     z-index: 1;
-    flex: 1;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    padding: 26px clamp(20px, 4vw, 56px) 22px;
 }
 
-.rk-login-pitch {
-    font-size: 30px;
-    line-height: 1.28;
-    font-weight: 620;
-    letter-spacing: -.6px;
-    color: #fff;
-    margin: 0 0 22px;
+/* İnce yatay çizgi - üst not, çağrı kartı ve slogan altında tekrar eder */
+.rk-lg-rule {
+    display: inline-block;
+    width: 54px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--rk-primary), transparent);
+    vertical-align: middle;
 }
 
-.rk-login-points {
+/* ------------------------------------------------------------- üst */
+
+.rk-lg-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    flex: none;
+}
+.rk-lg-top-brand .rk-wordmark { height: 34px; }
+.rk-lg-top-brand p {
+    margin: 7px 0 0;
+    font-size: 12px;
+    letter-spacing: .1px;
+    color: var(--rk-muted);
+}
+.rk-lg-top-note {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12.5px;
+    color: var(--rk-muted);
+    padding-top: 6px;
+}
+
+/* ------------------------------------------------------------ orta */
+
+.rk-lg-main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 460px) 180px;
+    align-items: center;
+    gap: clamp(24px, 4vw, 64px);
+    padding: 18px 0;
+}
+
+/* ------------------------------------------------------ sol: anlatı */
+
+.rk-lg-eyebrow {
+    margin: 0 0 14px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--rk-primary);
+}
+.rk-lg-head {
+    margin: 0 0 16px;
+    font-size: clamp(30px, 3.4vw, 46px);
+    line-height: 1.14;
+    font-weight: 720;
+    letter-spacing: -1.2px;
+    color: #06203f;
+}
+.rk-lg-lede {
+    margin: 0 0 26px;
+    max-width: 42ch;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--rk-muted);
+}
+
+.rk-lg-chips {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
-    gap: 11px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 26px;
 }
-.rk-login-points li {
+.rk-lg-chips li {
     display: flex;
     align-items: center;
-    gap: 11px;
-    font-size: 13.5px;
-    color: var(--rk-side-fg);
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 500;
+    color: var(--rk-text-soft);
 }
-.rk-login-points i {
+.rk-lg-chip-ic {
     flex: none;
-    width: 28px; height: 28px;
+    width: 42px; height: 42px;
     display: grid; place-items: center;
-    border-radius: 8px;
-    font-size: 14px;
-    color: var(--rk-side-accent);
-    background: rgba(35, 176, 248, .12);
-    border: 1px solid rgba(35, 176, 248, .22);
+    border-radius: 12px;
+    font-size: 17px;
+    color: var(--rk-primary);
+    background: #e8f1fe;
+    border: 1px solid #d3e4fb;
 }
 
-/* Dekoratif 5x5 matris: urunun kendi gorseli.
-   Kosede duruyor, tasan kisim kirpiliyor - dolayisiyla "arka plan
-   deseni" gibi degil, ekrana devam eden bir nesne gibi okunuyor. */
-.rk-login-matrix {
+/* İzometrik görsel + çağrı kartı */
+.rk-lg-art {
+    position: relative;
+    margin: 24px 0 0;
+    max-width: 560px;
+}
+.rk-lg-art svg { width: 100%; height: auto; display: block; }
+
+.rk-lg-callout {
     position: absolute;
-    right: -74px;
-    bottom: -74px;
-    display: grid;
-    grid-template-columns: repeat(5, 58px);
-    gap: 8px;
-    transform: rotate(-8deg);
-    pointer-events: none;
-    /* Metnin ustune binmesin: sola dogru soluklasip kaybolur. */
-    -webkit-mask-image: linear-gradient(115deg, transparent 8%, #000 52%);
-            mask-image: linear-gradient(115deg, transparent 8%, #000 52%);
-}
-.rk-login-mx {
-    display: block;
-    height: 58px;
-    border-radius: 10px;
-}
-
-/* Koyu lacivert uzerinde --sev-*-fg tonlari (#166534, #991b1b gibi)
-   neredeyse siyaha dusuyor ve matris camur gibi gorunuyordu. Acik
-   pastel --sev-*-bd tonlari zeminden ayrisiyor. Alfa seviyeye gore
-   artar: sicak kose daha belirgin, desen anlamli okunur. */
-.rk-login-mx.sev-low      { background: var(--sev-low-bd);      opacity: .16; }
-.rk-login-mx.sev-medium   { background: var(--sev-medium-bd);   opacity: .26; }
-.rk-login-mx.sev-high     { background: var(--sev-high-bd);     opacity: .36; }
-.rk-login-mx.sev-critical { background: var(--sev-critical-bd); opacity: .48; }
-
-/* -------------------------------------------------------- sag: form */
-
-.rk-login-panel {
-    display: grid;
-    place-items: center;
-    padding: 40px 24px;
-    background: var(--rk-surface);
-}
-
-.rk-login-form {
-    width: 100%;
-    max-width: 372px;
-}
-
-.rk-login-mobile-brand { display: none; margin-bottom: 26px; }
-.rk-login-mobile-brand .rk-wordmark { height: 34px; }
-
-.rk-login-title {
-    font-size: 25px;
-    font-weight: 660;
-    letter-spacing: -.5px;
-    margin: 0;
-    color: var(--rk-text);
-}
-.rk-login-sub {
+    right: 4%;
+    bottom: 22%;
+    max-width: 210px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .82);
+    backdrop-filter: blur(6px);
+    border: 1px solid #dfeafa;
+    box-shadow: 0 14px 32px rgba(6, 32, 63, .09);
     font-size: 13.5px;
-    color: var(--rk-muted);
-    margin: 5px 0 26px;
+    line-height: 1.45;
+    color: var(--rk-text-soft);
+}
+.rk-lg-callout strong { color: #06203f; font-weight: 650; }
+.rk-lg-callout .rk-lg-rule { margin-top: 10px; display: block; }
+
+/* -------------------------------------------------------- orta: kart */
+
+.rk-lg-card {
+    background: #fff;
+    border: 1px solid #e6eefa;
+    border-radius: 20px;
+    padding: 30px 34px 26px;
+    box-shadow:
+        0 2px 4px rgba(6, 32, 63, .03),
+        0 22px 48px rgba(6, 32, 63, .10);
 }
 
-.rk-login-form .rk-btn {
+.rk-lg-card-head { text-align: center; margin-bottom: 22px; }
+.rk-lg-card-head .rk-wordmark { height: 32px; }
+.rk-lg-card-head p {
+    margin: 8px 0 0;
+    font-size: 11.5px;
+    color: var(--rk-muted-light);
+}
+
+.rk-lg-welcome {
+    margin: 0;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 680;
+    letter-spacing: -.5px;
+    color: #06203f;
+}
+.rk-lg-welcome-sub {
+    margin: 6px 0 22px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--rk-muted);
+}
+
+.rk-lg-card .rk-btn {
     width: 100%;
     justify-content: center;
-    height: 42px;
-    margin-top: 4px;
+    height: 44px;
+    font-size: 14.5px;
+    border-radius: 11px;
+    background: linear-gradient(180deg, #2b83e8 0%, var(--rk-primary) 100%);
+    border-color: var(--rk-primary-dark);
+    box-shadow: 0 8px 18px rgba(1, 108, 204, .24);
 }
 
-/* Alan ici ikon: input'un sol dolgusu ikona yer acacak kadar artar. */
-.rk-input-icon { position: relative; }
-.rk-input-icon > i {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    color: var(--rk-muted-light);
-    pointer-events: none;
+.rk-lg-hint {
+    margin: -4px 0 16px;
+    text-align: right;
+    font-size: 12px;
+    color: var(--rk-muted);
 }
-.rk-input-icon .rk-input { padding-left: 36px; }
-.rk-input-icon:focus-within > i { color: var(--rk-primary); }
 
-.rk-login-foot {
+/* Güvenlik kutusu */
+.rk-lg-secure {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding: 13px 15px;
+    border-radius: 13px;
+    background: #f3f8fe;
+    border: 1px solid #e1ecfb;
+}
+.rk-lg-secure-ic {
+    flex: none;
+    width: 34px; height: 34px;
+    display: grid; place-items: center;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #fff;
+    background: linear-gradient(160deg, #4f9bf0, var(--rk-primary));
+}
+.rk-lg-secure-txt { flex: 1 1 150px; line-height: 1.35; }
+.rk-lg-secure-txt strong { display: block; font-size: 12.5px; color: var(--rk-text); }
+.rk-lg-secure-txt span   { font-size: 11.5px; color: var(--rk-muted); }
+
+.rk-lg-secure-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.rk-lg-secure-tags span {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .2px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    color: var(--rk-primary-dark);
+    background: #fff;
+    border: 1px solid #d7e6fa;
+}
+
+.rk-lg-audit {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 7px;
-    margin: 26px 0 0;
-    padding-top: 18px;
+    margin: 18px 0 0;
+    padding-top: 16px;
     border-top: 1px solid var(--rk-border);
     font-size: 11.5px;
     color: var(--rk-muted-light);
 }
 
-/* ------------------------------------------------------------ dar ekran */
+/* Alan içi ikon ve parola göster/gizle */
+.rk-input-icon { position: relative; }
+.rk-input-icon > i {
+    position: absolute;
+    left: 13px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: var(--rk-muted-light);
+    pointer-events: none;
+}
+.rk-input-icon .rk-input {
+    padding-left: 38px;
+    height: 44px;
+    border-radius: 11px;
+    background: #f8fbff;
+}
+.rk-input-icon .rk-input:focus { background: #fff; }
+.rk-input-icon:focus-within > i { color: var(--rk-primary); }
+.rk-input-icon.has-toggle .rk-input { padding-right: 42px; }
 
-@media (max-width: 900px) {
-    .rk-login-shell { grid-template-columns: 1fr; }
-    .rk-login-brand { display: none; }
-    .rk-login-mobile-brand { display: block; }
-    .rk-login-panel { min-height: 100vh; align-content: center; }
+.rk-pw-toggle {
+    position: absolute;
+    right: 6px; top: 50%;
+    transform: translateY(-50%);
+    width: 32px; height: 32px;
+    display: grid; place-items: center;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--rk-muted-light);
+    cursor: pointer;
+}
+.rk-pw-toggle:hover  { color: var(--rk-primary); background: #eef5fe; }
+.rk-pw-toggle:focus-visible { outline: 2px solid var(--rk-primary); outline-offset: 1px; }
+
+/* -------------------------------------------------------- sağ: şerit */
+
+.rk-lg-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 42px;
+    height: 100%;
+    padding: 30px 0;
+}
+.rk-lg-rail { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; }
+.rk-lg-rail li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--rk-text-soft);
+}
+.rk-lg-rail i {
+    flex: none;
+    width: 34px; height: 34px;
+    display: grid; place-items: center;
+    border-radius: 10px;
+    font-size: 15px;
+    color: var(--rk-primary);
+    background: #eaf2fe;
+    border: 1px solid #d9e8fb;
+}
+.rk-lg-motto {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.45;
+    font-weight: 600;
+    letter-spacing: -.3px;
+    color: #b4c7de;
+}
+.rk-lg-motto .rk-lg-rule { margin-top: 14px; display: block; }
+
+/* ------------------------------------------------------------- alt */
+
+.rk-lg-foot {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 16px;
+    font-size: 12px;
+    color: var(--rk-muted-light);
+}
+.rk-lg-foot strong { color: var(--rk-text-soft); font-weight: 600; }
+.rk-lg-foot-env {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--rk-border);
 }
 
-/* Cok kisa ekranda dikey ortalama yerine ustten akis */
-@media (max-height: 620px) {
-    .rk-login-panel { place-items: start center; }
+/* --------------------------------------------------------- dar ekran */
+
+@media (max-width: 1240px) {
+    .rk-lg-main { grid-template-columns: minmax(0, 1fr) minmax(360px, 440px); }
+    .rk-lg-right { display: none; }
+}
+
+@media (max-width: 980px) {
+    .rk-lg-main {
+        grid-template-columns: minmax(0, 460px);
+        justify-content: center;
+        padding: 26px 0;
+    }
+    .rk-lg-left { display: none; }
+    .rk-lg-top-note { display: none; }
+    .rk-lg-top { justify-content: center; text-align: center; }
+    .rk-lg-top-brand { display: flex; flex-direction: column; align-items: center; }
+    /* Kart kendi logosunu zaten tasiyor: ustte iki kez gorunmesin. */
+    .rk-lg-top { display: none; }
+    .rk-lg-foot { flex-direction: column; gap: 10px; text-align: center; }
+}
+
+@media (max-width: 520px) {
+    .rk-lg { padding: 18px 14px 16px; }
+    .rk-lg-card { padding: 24px 20px 20px; border-radius: 16px; }
 }
 
 /* ------------------------------------------------------ Duyarli (responsive) */

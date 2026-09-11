@@ -122,8 +122,38 @@
         update();
     }
 
+    /* ------------------------------------------------------------------
+       Parola goster / gizle
+       ------------------------------------------------------------------
+       Dugme SATIR ICI onclick ile degil, data-rk-pw-toggle ozniteligiyle
+       baglaniyor. Sebep: CSP'den 'unsafe-inline' kaldirilabilsin (yol
+       haritasinda duran madde). Satir ici bir onclick eklemek o maddeyi
+       kalici olarak imkansiz kilardi.
+       ------------------------------------------------------------------ */
+    function initPasswordToggle(btn) {
+        var input = document.getElementById(btn.getAttribute('data-rk-pw-toggle'));
+        if (!input) { return; }
+
+        btn.addEventListener('click', function () {
+            var show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+
+            btn.setAttribute('aria-pressed', show ? 'true' : 'false');
+            btn.setAttribute('aria-label', show ? 'Parolayi gizle' : 'Parolayi goster');
+
+            var icon = btn.querySelector('i');
+            if (icon) {
+                icon.className = show ? 'bi bi-eye' : 'bi bi-eye-slash';
+            }
+
+            /* Odak alanda kalsin: kullanici yazmaya devam edebilsin. */
+            input.focus();
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('[data-rk-score-scope]').forEach(initScorePreview);
+        document.querySelectorAll('[data-rk-pw-toggle]').forEach(initPasswordToggle);
     });
 
 })();
