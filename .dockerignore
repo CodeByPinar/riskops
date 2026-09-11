@@ -1,0 +1,49 @@
+# =====================================================================
+#  RiskOps - imaja girmeyecek dosyalar
+# =====================================================================
+
+# ---------------------------------------------------------------------
+#  GİZLİ BİLGİ
+#
+#  Geliştiricinin yerel config/database.php dosyası gerçek bir parola
+#  içerir. Dockerfile bunu docker/database.php ile ezer, ama önce
+#  COPY ile imaj katmanına yazılırdı - ve silinmiş bir dosya bile ara
+#  katmanda okunabilir kalır. Derleme bağlamına hiç girmemeli.
+# ---------------------------------------------------------------------
+config/database.php
+config/*.local.php
+.env
+
+# ---------------------------------------------------------------------
+#  ÇALIŞMA ZAMANI
+#  storage/ imajda boş oluşturulur (bkz. Dockerfile), hacme bağlanır.
+# ---------------------------------------------------------------------
+storage/logs/*
+storage/uploads/*
+storage/.auth_timing_hash
+storage/brand
+
+# ---------------------------------------------------------------------
+#  İMAJDA GEREKSİZ
+#
+#  docs/  ~1,3 MB ekran görüntüsü; yalnızca README için.
+#  deploy/ VM ve VPS kurulum dosyaları; konteynerde kullanılmaz.
+#  tools/ DIŞARIDA BIRAKILMAZ - entrypoint seed_demo.php'yi çağırır.
+# ---------------------------------------------------------------------
+.git
+.gitignore
+docs
+deploy
+README.md
+LICENSE
+
+# ---------------------------------------------------------------------
+#  Yerel gürültü
+# ---------------------------------------------------------------------
+*.bak
+*.old
+*.log
+.DS_Store
+Thumbs.db
+.idea
+.vscode

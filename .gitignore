@@ -22,6 +22,9 @@
 # ---------------------------------------------------------------------
 /storage/*
 !/storage/.gitkeep
+# .htaccess koruma dosyasidir, calisma zamani verisi degil: depoya girmeli.
+# Paylasilan hostingde storage/ icin TEK koruma budur (VirtualHost yok).
+!/storage/.htaccess
 !/storage/brand/
 /storage/brand/*
 !/storage/brand/.gitkeep

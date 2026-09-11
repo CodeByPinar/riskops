@@ -1,0 +1,67 @@
+# =====================================================================
+#  RiskOps - tek komutla çalıştırma
+#
+#      docker compose up
+#      http://localhost:8080
+#
+#  Giriş:  demo@riskops.local / RiskOpsDemo2026   (salt okunur)
+#
+#  İlk açılışta MariaDB şemayı ve ayarları kurar, uygulama konteyneri
+#  18 örnek risk ile 22 aksiyonu yükler. Sonraki açılışlarda veri
+#  korunur (adlandırılmış hacim).
+#
+#  Sıfırdan başlamak için:   docker compose down -v && docker compose up
+# =====================================================================
+
+services:
+
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: riskops
+      MARIADB_USER: riskops_user
+      # Geliştirme/demo parolaları. Bu compose dosyası yalnızca yerel
+      # kullanım ve tanıtım içindir; internete açılacak bir kurulumda
+      # bu değerler .env dosyasından verilmelidir.
+      MARIADB_PASSWORD: riskops_dev
+      MARIADB_ROOT_PASSWORD: root_dev
+    volumes:
+      - riskops-db:/var/lib/mysql
+      # Şema ve ayarlar: MariaDB bunları İLK açılışta, alfabetik sırayla
+      # gerçek mysql istemcisiyle çalıştırır. Adlardaki 01/02 öneki bu
+      # sıralamayı garantiler - seed şemadan sonra gelmek zorunda.
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      # Ortam: production -> hata ayrıntısı ekrana basılmaz.
+      RISKOPS_ENV: production
+      # Demo kipi: giriş ekranında deneme hesabı görünür, o hesap
+      # parolasını değiştiremez. Yetkilendirmeye etkisi yoktur.
+      RISKOPS_DEMO: "1"
+      RISKOPS_DB_HOST: db
+      RISKOPS_DB_NAME: riskops
+      RISKOPS_DB_USER: riskops_user
+      RISKOPS_DB_PASS: riskops_dev
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      # Loglar konteyner dışında kalsın; yeniden kurulumda kaybolmasın.
+      - riskops-storage:/var/www/html/storage
+
+volumes:
+  riskops-db:
+  riskops-storage:

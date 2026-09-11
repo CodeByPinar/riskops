@@ -12,6 +12,7 @@
   <img src="https://img.shields.io/badge/MariaDB-10.11-003545?logo=mariadb&logoColor=white" alt="MariaDB 10.11">
   <img src="https://img.shields.io/badge/framework-yok-lightgrey" alt="Framework yok">
   <img src="https://img.shields.io/badge/CDN-yok-lightgrey" alt="CDN yok">
+  <img src="https://img.shields.io/badge/docker-compose%20up-2496ED?logo=docker&logoColor=white" alt="Docker">
   <img src="https://img.shields.io/badge/lisans-MIT-green" alt="MIT">
 </p>
 
@@ -63,7 +64,7 @@ silinmez — böylece "bu risk 6 ayda nereden nereye geldi" sorusu cevaplanabili
 ## Öne çıkan özellikler
 
 **Risk yönetimi**
-- Otomatik risk kodu (`RSK-2026-0001`) — yarış koşuluna dayanıklı sıra üreteci
+- Otomatik risk kodu (`RISK-2026-0001`) — yarış koşuluna dayanıklı sıra üreteci
 - 5×5 olasılık/etki matrisi, sunucu tarafında üretilir (JavaScript kapalıyken de çalışır)
 - Skor `GENERATED ALWAYS AS (likelihood * impact) STORED` — veritabanı seviyesinde
 - Seviye eşikleri **ayarlardan** yönetilir; eşik değişince tüm kayıtlar yeniden etiketlenir
@@ -179,7 +180,39 @@ Tam şema: [`database/schema.sql`](database/schema.sql)
 
 ---
 
-## Kurulum
+## Hızlı başlangıç (Docker)
+
+Denemek için en kısa yol. Tek komut:
+
+```bash
+docker compose up
+```
+
+Sonra <http://localhost:8080> — giriş `demo@riskops.local` / `RiskOpsDemo2026`
+(salt okunur). İlk açılışta şema kurulur ve 18 örnek risk ile 22 aksiyon
+yüklenir; sonraki açılışlarda veri korunur.
+
+Sıfırdan başlamak için:
+
+```bash
+docker compose down -v && docker compose up
+```
+
+| Dosya | İşlevi |
+|---|---|
+| `Dockerfile` | `php:8.3-apache` üzerine `pdo_mysql`, `headers`, `rewrite`, `expires` |
+| `docker-compose.yml` | Uygulama + MariaDB 10.11, adlandırılmış hacimler |
+| `docker/apache-riskops.conf` | `AllowOverride All` + hassas dizinler için ikinci koruma katmanı |
+| `docker/entrypoint.sh` | Şema hazır olana kadar bekler, ilk açılışta örnek veriyi kurar |
+| `docker/database.php` | Ortam değişkeninden okur — imajda gömülü parola yoktur |
+
+> Bu compose dosyası **yerel kullanım ve tanıtım içindir**. Parolalar
+> dosyada düz metin durur. İnternete açılacak bir kurulum için
+> [deploy/DEPLOY.md](deploy/DEPLOY.md) yordamını izleyin.
+
+---
+
+## Kurulum (Docker'sız)
 
 Ubuntu Server 24.04 · PHP 8.3 · MariaDB 10.11 · Apache 2.4
 

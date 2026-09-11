@@ -39,12 +39,26 @@ function db(): PDO
             PDO::ATTR_STRINGIFY_FETCHES  => false,
         ]);
 
-        // Sessiz veri kaybini engelle: tasan/geçersiz değer HATA versin
-        $pdo->exec("SET SESSION sql_mode = 'STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION'");
     } catch (PDOException $e) {
         // Kullaniciya ASLA bağlantı detayı gosterme
         app_log('critical', 'Database connection failed: ' . $e->getMessage());
         app_abort(500);
+    }
+
+    /**
+     * Sessiz veri kaybini engelle: tasan/gecersiz deger HATA versin.
+     *
+     * AYRI try/catch: bu ifade baglantinin KENDISI degil, uzerine
+     * konan bir iyilestirmedir. Bazi paylasilan hostingler SET SESSION
+     * sql_mode'u reddeder; bunu baglanti hatasi sayip uygulamayi 500'e
+     * dusurmek, calisabilecek bir kurulumu calismaz hale getirir.
+     * Reddedilirse sunucunun kendi sql_mode'u gecerli olur ve durum
+     * loglanir - sessizce yutulmaz.
+     */
+    try {
+        $pdo->exec("SET SESSION sql_mode = 'STRICT_ALL_TABLES,NO_ENGINE_SUBSTITUTION'");
+    } catch (Throwable $e) {
+        app_log('warning', 'sql_mode could not be set: ' . $e->getMessage());
     }
 
     return $pdo;
