@@ -218,6 +218,26 @@
        risks/bulk.php karar verir. Buradaki hicbir kontrol guvenlik
        onlemi degildir.
        ------------------------------------------------------------------ */
+    /* ------------------------------------------------------------------
+       Yikici islemler icin onay
+       ------------------------------------------------------------------
+       data-rk-confirm tasiyan dugme, onay alinmadan formunu gondermez.
+       Toplu islem formu kendi submit dinleyicisinde bunu zaten ele
+       aliyor; burada o formun DISINDAKI dugmeler baglaniyor.
+
+       Bu bir GUVENLIK onlemi degil, kaza onlemidir. Yetki ve CSRF
+       kontrolu sunucuda.
+       ------------------------------------------------------------------ */
+    function initConfirm(btn) {
+        if (btn.closest('[data-rk-bulk]')) { return; }   // toplu islem kendi halleder
+
+        btn.addEventListener('click', function (ev) {
+            if (!window.confirm(btn.getAttribute('data-rk-confirm'))) {
+                ev.preventDefault();
+            }
+        });
+    }
+
     function initBulk(form) {
         var bar   = form.querySelector('[data-rk-bulk-bar]');
         var all   = form.querySelector('[data-rk-bulk-all]');
@@ -295,6 +315,7 @@
         document.querySelectorAll('[data-rk-threshold-editor]').forEach(initThresholdPreview);
         document.querySelectorAll('[data-rk-print]').forEach(initPrintButton);
         document.querySelectorAll('[data-rk-bulk]').forEach(initBulk);
+        document.querySelectorAll('[data-rk-confirm]').forEach(initConfirm);
     });
 
 })();

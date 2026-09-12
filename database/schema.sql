@@ -383,6 +383,73 @@ ALTER TABLE users
         ON DELETE SET NULL ON UPDATE CASCADE;
 
 
+-- ---------------------------------------------------------------------
+-- 11. risk_comments  (risk kayitlarina yorum)
+--
+--     ON DELETE CASCADE: risk kalici olarak silinirse yorumlari da
+--     gider - sahipsiz yorum satiri anlamsizdir. (Uygulamadaki normal
+--     silme soft delete'tir, bu yol yalnizca elle temizlikte isler.)
+--
+--     user_id SET NULL: kullanici silinse bile yorum KALIR. Yorum
+--     kurumsal kayittir; yazani bilinmiyor olabilir ama icerigi
+--     kaybolmamalidir.
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS risk_comments (
+    id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    risk_id    INT UNSIGNED NOT NULL,
+    user_id    INT UNSIGNED NULL DEFAULT NULL,
+    body       TEXT         NOT NULL,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_rc_risk (risk_id, created_at),
+    KEY idx_rc_user (user_id),
+    CONSTRAINT fk_rc_risk FOREIGN KEY (risk_id) REFERENCES risks (id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_rc_user FOREIGN KEY (user_id) REFERENCES users (id)
+        ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- ---------------------------------------------------------------------
+-- 12. risk_attachments  (risk kayitlarina dosya eki)
+--
+--     DISKTEKI AD ILE GORUNEN AD AYRIDIR:
+--       original_name -> kullaniciya gosterilen, indirirken verilen ad
+--       stored_name   -> diskteki ad; uygulama uretir, rastgeledir
+--
+--     Istemciden gelen dosya adi ASLA diske yazilmaz. Aksi halde
+--     "../../config/database.php" veya "shell.php" gibi adlarla
+--     dizin disina yazma ve kod calistirma denenebilir.
+--
+--     stored_name UNIQUE: ayni ad iki kayda baglanamaz, boylece bir
+--     kaydin silinmesi digerinin dosyasini goturmez.
+--     KISIT ADLARI "att" onekli: InnoDB'de FK adlari TUM VERITABANINDA
+--     benzersiz olmali ve "ra" oneki risk_assessments tarafindan
+--     kullaniliyor (fk_ra_risk, chk_ra_impact...). Cakisma ERROR 1005
+--     errno 121 verir.
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS risk_attachments (
+    id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    risk_id       INT UNSIGNED NOT NULL,
+    uploaded_by   INT UNSIGNED NULL DEFAULT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    stored_name   VARCHAR(120) NOT NULL,
+    mime_type     VARCHAR(120) NOT NULL,
+    size_bytes    INT UNSIGNED NOT NULL,
+    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_att_stored (stored_name),
+    KEY idx_att_risk (risk_id, created_at),
+    KEY idx_att_user (uploaded_by),
+    CONSTRAINT fk_att_risk FOREIGN KEY (risk_id) REFERENCES risks (id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_att_user FOREIGN KEY (uploaded_by) REFERENCES users (id)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT chk_att_size CHECK (size_bytes > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 -- =====================================================================
 --  SCHEMA SONU
 -- =====================================================================
