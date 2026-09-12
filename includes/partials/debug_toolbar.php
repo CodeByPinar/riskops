@@ -97,7 +97,29 @@ $tab = static function (string $id, string $icon, string $label, ?int $count = n
             <i class="bi bi-hash"></i> <?= e((string)$sum['status']) ?>
         </span>
 
-        <a class="rkdbg-x" href="?rkdebug=off" title="Bu oturum için araç çubuğunu gizle">
+        <?php if (APP_DEBUG_FROM_PANEL): ?>
+            <span class="rkdbg-stat" title="Kipin kendiliğinden kapanmasına kalan süre">
+                <i class="bi bi-hourglass-split"></i>
+                <?= e(debug_human_duration(debug_flag_remaining())) ?>
+            </span>
+            <?php /* Kipi gercekten KAPATIR. POST + CSRF: bir baglantiyla
+                      tetiklenememeli. */ ?>
+            <form class="rkdbg-off" method="post"
+                  action="<?= e(url('/admin/debug/toggle.php')) ?>">
+                <?= csrf_field() ?>
+                <input type="hidden" name="action" value="disable">
+                <button type="submit" title="Hata ayıklama kipini kapat">
+                    <i class="bi bi-power"></i> <?= e(t('Kipi kapat')) ?>
+                </button>
+            </form>
+        <?php else: ?>
+            <a class="rkdbg-stat" href="<?= e(url('/admin/debug/')) ?>"
+               title="Kip sunucu yapılandırmasından açık; yönetim ekranı">
+                <i class="bi bi-sliders"></i> <?= e(t('Ortam')) ?>
+            </a>
+        <?php endif; ?>
+
+        <a class="rkdbg-x" href="?rkdebug=off" title="Yalnızca gizle (kip açık kalır)">
             <i class="bi bi-x-lg"></i>
         </a>
     </div>

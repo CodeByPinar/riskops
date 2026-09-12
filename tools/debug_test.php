@@ -82,6 +82,79 @@ ok($gate('production',  '1', '1') === true, 'üretimde iki bayrak birlikte açar
 ok($gate('production',  '',  '1') === false, 'üretimde yalnız PRODUCTION bayrağı açmaz');
 
 /* =====================================================================
+ * 1b) GEÇİCİ AÇMA BAYRAĞI  (yönetim ekranının yazdığı dosya)
+ *
+ * Yetki kontrolü burada test EDİLMEZ - o HTTP katmanındadır
+ * (POST + CSRF + admin, bkz. admin/debug/toggle.php). Buradaki test
+ * bayrağın kendi davranışını doğrular: süre dolunca yok sayılması,
+ * bozuk dosyanın çökertmemesi, listede olmayan sürenin reddi.
+ * ===================================================================*/
+section('1b. geçici açma bayrağı');
+
+/* Testin kendi yazdığı bayrak, çalıştıran kişinin açık bıraktığı bir
+   bayrağı EZMEMELİ. Varsa yedekle, sonunda geri koy. */
+$flagBackup = is_file(DEBUG_FLAG_FILE) ? (string)file_get_contents(DEBUG_FLAG_FILE) : null;
+@unlink(DEBUG_FLAG_FILE);
+
+ok(debug_flag_read() === null,      'bayrak yokken read() null');
+ok(debug_flag_active() === false,   'bayrak yokken active() false');
+ok(debug_flag_remaining() === 0,    'bayrak yokken kalan süre 0');
+
+if (!is_writable(STORAGE_PATH)) {
+    ok(true, 'bayrak yazma testleri atlandı (storage yazılamıyor)');
+} else {
+    ok(debug_flag_enable(60), 'bayrak yazıldı');
+
+    $f = debug_flag_read();
+    ok($f !== null,                       'yazılan bayrak okunuyor');
+    ok(($f['minutes'] ?? 0) === 60,       'süre kaydedildi');
+    ok(($f['until'] ?? 0) > time(),       'bitiş zamanı gelecekte');
+    ok(debug_flag_active(),               'active() true');
+    ok(debug_flag_remaining() > 3500,     'kalan süre ~1 saat', (string)debug_flag_remaining());
+
+    /* SÜRE DOLMASI: dosya silinmese bile yok sayılmalı. Bu, "açık
+       unutuldu" durumunun neden oluşamadığının kanıtı. */
+    $expired = json_decode((string)file_get_contents(DEBUG_FLAG_FILE), true);
+    $expired['until'] = time() - 1;
+    file_put_contents(DEBUG_FLAG_FILE, json_encode($expired));
+
+    ok(debug_flag_read() === null,   'süresi dolan bayrak YOK SAYILIYOR');
+    ok(debug_flag_active() === false,'süresi dolunca active() false');
+    ok(is_file(DEBUG_FLAG_FILE),     'dosya duruyor (silinmesi beklenmiyor)');
+
+    /* BOZUK DOSYA: çökertmemeli, kapalı sayılmalı. */
+    file_put_contents(DEBUG_FLAG_FILE, 'bu json degil {{{');
+    ok(debug_flag_read() === null,   'bozuk bayrak dosyası kapalı sayılıyor');
+
+    file_put_contents(DEBUG_FLAG_FILE, '');
+    ok(debug_flag_read() === null,   'boş bayrak dosyası kapalı sayılıyor');
+
+    /* LİSTEDE OLMAYAN SÜRE: en kısasına düşmeli, keyfi süre kabul
+       edilmemeli (bir saldırgan formu değiştirip 10 yıl yazamasın). */
+    debug_flag_enable(999999);
+    $f = debug_flag_read();
+    ok(in_array((int)($f['minutes'] ?? -1), array_keys(DEBUG_FLAG_DURATIONS), true),
+       'listede olmayan süre reddedildi', (string)($f['minutes'] ?? -1));
+
+    ok(debug_flag_disable(),         'bayrak silindi');
+    ok(!is_file(DEBUG_FLAG_FILE),    'dosya gerçekten yok');
+    ok(debug_flag_disable(),         'yokken silmek hata vermiyor');
+}
+
+ok(in_array(debug_source(), ['ortam', 'panel', 'ortam+panel', 'kapalı'], true),
+   'debug_source() bilinen bir değer döndürüyor', debug_source());
+ok(debug_human_duration(0) === '-',            'süre biçimi: sıfır');
+ok(str_contains(debug_human_duration(90), 'dk'),  'süre biçimi: dakika');
+ok(str_contains(debug_human_duration(7200), 'sa'), 'süre biçimi: saat');
+
+/* Yedeği geri koy */
+if ($flagBackup !== null) {
+    file_put_contents(DEBUG_FLAG_FILE, $flagBackup);
+} else {
+    @unlink(DEBUG_FLAG_FILE);
+}
+
+/* =====================================================================
  * 2) MASKELEME - ANAHTAR ADINA GÖRE
  * ===================================================================*/
 section('2. maskeleme: anahtar adı');
@@ -287,6 +360,8 @@ $files = [
     'assets/css/debug.css',
     'assets/js/debug.js',
     'tools/debug_report.php',
+    'admin/debug/index.php',
+    'admin/debug/toggle.php',
 ];
 foreach ($files as $f) {
     ok(is_file(APP_ROOT . '/' . $f), 'dosya yerinde: ' . $f);

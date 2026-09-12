@@ -34,6 +34,7 @@ return [
     'Silinen Riskler'   => 'Deleted Risks',
     'Denetim Kaydı'     => 'Audit Logs',
     'Ayarlar'           => 'Settings',
+    'Hata Ayıklama'     => 'Debugging',
 
     'Profilim'          => 'My profile',
     'Parola değiştir'   => 'Change password',
@@ -219,4 +220,62 @@ return [
      * --------------------------------------------------------------- */
     'Kayıt bulunamadı' => 'No records found',
     'Yaklaşan termin yok' => 'No upcoming deadlines',
+
+    /* ---------------------------------------------------------------
+     * Hata ayıklama kipi yönetim ekranı  (/admin/debug/)
+     * ------------------------------------------------------------- */
+    'Geliştirme araçlarını geçici olarak açın' => 'Turn on development tools temporarily',
+    'Hata ayıklama kipi AÇIK'     => 'Debug mode is ON',
+    'Hata ayıklama kipi kapalı'   => 'Debug mode is off',
+    'Bu ekrandan açıldı'          => 'Enabled from this screen',
+    'sonra kapanacak'             => 'until it turns off',
+    'Sunucu yapılandırmasından açık (RISKOPS_DEBUG) — bu ekrandan kapatılamaz'
+        => 'Enabled by server configuration (RISKOPS_DEBUG) — cannot be turned off here',
+    'Hem sunucu yapılandırmasından hem bu ekrandan açık'
+        => 'Enabled both by server configuration and from this screen',
+    'Araç çubuğu görünmüyor, sorgular kaydedilmiyor, istisnalar sade 500 sayfası olarak görünüyor'
+        => 'No toolbar, no query recording; exceptions render as a plain 500 page',
+    'storage/ dizini yazılabilir değil; kip bu ekrandan açılamaz.'
+        => 'The storage/ directory is not writable; the mode cannot be enabled here.',
+    'Şimdi kapat'                 => 'Turn off now',
+    'Süreyi uzat'                 => 'Extend to',
+    'Aç'                          => 'Turn on',
+
+    /* Süre etiketleri: sabitte Türkçe duruyor, görünen ad çevriliyor. */
+    '1 saat'                      => '1 hour',
+    '4 saat'                      => '4 hours',
+    '24 saat'                     => '24 hours',
+    'Süre dolduğunda kip kendiliğinden kapanır; bayrak dosyası silinmemiş olsa bile yok sayılır. Açık unutma riski bu yüzden yoktur.'
+        => 'The mode turns itself off when the time is up; an expired flag file is ignored even if it was never deleted. That is why it cannot be left on by accident.',
+    'Açan'                        => 'Enabled by',
+    'Açılma'                      => 'Enabled at',
+    'Bitiş'                       => 'Expires',
+    'Açıkken ne değişir'          => 'What changes while it is on',
+    'Araç çubuğu'                 => 'Toolbar',
+    'Sayfanın altında: çalışan her SQL ve süresi, bağlanan parametreler, sorguyu açan dosya ve satır, zaman çizelgesi, istek ve oturum içeriği, log kuyruğu.'
+        => 'At the bottom of the page: every SQL that ran and how long it took, bound parameters, the file and line that issued it, a timeline, request and session contents, and the log tail.',
+    'Ayrıntılı hata sayfası'      => 'Detailed error page',
+    'İstisnalar yığın izi, hatalı satırın kaynak parçası ve o isteğe kadar çalışmış sorgularla görünür. Kapalıyken aynı hata sade bir 500 sayfasıdır.'
+        => 'Exceptions render with a stack trace, a source excerpt around the failing line, and every query that ran during the request. With the mode off, the same error is a plain 500 page.',
+    'Ölçüm kaydı'                 => 'Measurement log',
+    'istek başına süre, bellek ve sorgu sayısı.'
+        => 'time, memory and query count per request.',
+    'Neler gösterilmez'           => 'What is never shown',
+    'Parolalar, CSRF jetonu, oturum kimliği ve veritabanı parolası maskelenir. Üretim ortamında araç çubuğu yalnızca admin rolüne gösterilir.'
+        => 'Passwords, the CSRF token, the session id and the database password are masked. In production the toolbar is shown to administrators only.',
+    'Bu kurulum üretim ortamında çalışıyor. Kipi yalnızca incelemeniz gereken süre boyunca açık tutun.'
+        => 'This installation runs in production. Keep the mode on only for as long as you need to investigate.',
+    'Ortam'                       => 'Environment',
+    'Ortam (APP_ENV)'             => 'Environment (APP_ENV)',
+    'Sunucu değişkeni'            => 'Server variable',
+    'Panel bayrağı'               => 'Panel flag',
+    'Bayrak dosyası'              => 'Flag file',
+    'Yavaş sorgu eşiği'           => 'Slow query threshold',
+    'Ölçüm kaydı kapsamı'         => 'Measurement log scope',
+    'ayarlı değil'                => 'not set',
+    'açık'                        => 'on',
+    'kapalı'                      => 'off',
+    'yalnızca yavaş/hatalı istekler' => 'slow / failing requests only',
+    'her istek'                   => 'every request',
+    'Kipi kapat'                  => 'Turn off',
 ];

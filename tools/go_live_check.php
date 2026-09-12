@@ -92,13 +92,22 @@ if (APP_ENV === 'production' && ($display === '1' || strtolower($display) === 'o
    açılmasını zorlaştırır ama bilerek açılmış olabilir - üretime
    almadan önce burada görünsün. */
 if (APP_DEBUG) {
+    /* Nereden açıldığı, nasıl kapatılacağını belirler: panelden
+       açıldıysa bir düğme yeter, ortamdan geldiyse VirtualHost
+       düzenlenmeli. Yanlış tarafı söylemek zaman kaybettirir. */
+    $how = match (debug_source()) {
+        'panel'       => 'Yönetim > Hata Ayıklama ekranından "Şimdi kapat" (kalan süre: '
+                       . debug_human_duration(debug_flag_remaining()) . ')',
+        'ortam'       => 'VirtualHost içinden RISKOPS_DEBUG satırını silin',
+        'ortam+panel' => 'Hem panel bayrağını kapatın hem VirtualHost içinden RISKOPS_DEBUG satırını silin',
+        default       => 'Kapatın',
+    };
+
     result(
         APP_ENV === 'production' ? 'FAIL' : 'WARN',
         'APP_DEBUG',
-        'AÇIK',
-        APP_ENV === 'production'
-            ? 'VirtualHost içinden RISKOPS_DEBUG ve RISKOPS_DEBUG_PRODUCTION satırlarını silin'
-            : 'Canlıya çıkmadan önce kapatılmalı'
+        'AÇIK (' . debug_source() . ')',
+        $how
     );
 } else {
     result('OK', 'APP_DEBUG', 'kapalı');

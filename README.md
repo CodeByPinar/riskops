@@ -305,11 +305,25 @@ belirler, bu bayrak değil.
 
 Geliştirirken "bu sayfa neden yavaş", "bu sorgu neden boş döndü", "bu
 oturumda ne var" sorularını `var_dump()` serpiştirmeden cevaplamak için
-bir hata ayıklama kipi vardır. Ortam değişkeniyle açılır:
+bir hata ayıklama kipi vardır.
+
+### Nasıl açılır
+
+**Yönetim ekranından** (önerilen) — kenar çubuğunda
+**Yönetim &rarr; Hata Ayıklama**. Süre seçilir (1 / 4 / 24 saat), kip
+o süre için açılır ve **kendiliğinden kapanır**. Sunucuya girmek,
+dosya düzenlemek veya Apache'yi yeniden başlatmak gerekmez.
+
+![Hata ayıklama yönetim ekranı](docs/screenshots/debug-panel.png)
+
+**Ortam değişkeniyle** (kalıcı, sunucu yöneticisinin kararı):
 
 ```apache
 SetEnv RISKOPS_DEBUG 1
 ```
+
+Fark: ortamdan açılan kip yönetim ekranından kapatılamaz — o zaman
+ekran bunu açıkça söyler ve kapatma düğmesini göstermez.
 
 Açıkken sayfanın altında bir araç çubuğu belirir:
 
@@ -343,17 +357,33 @@ Ayrıca:
   yanıtlarda ölçüm buradan okunur.
 - **`storage/logs/debug.log`** — istek başına tek satır özet. Yalnızca
   sorunlu istekler istenirse `SetEnv RISKOPS_DEBUG_LOG_ONLY_SLOW 1`.
+- **Araç çubuğundaki "Kipi kapat"** — kipi gerçekten kapatır
+  (POST + CSRF). Yanındaki `✕` yalnızca gizler, kip açık kalır.
 - **`?rkdebug=off`** — araç çubuğunu bu oturum için gizler (ekran
-  görüntüsü alırken). Kipin kendisini kapatmaz; o yalnızca ortam
-  değişkenindedir.
+  görüntüsü alırken), kipi kapatmaz.
+
+### Açık unutulamaz
+
+Yönetim ekranından açılan kip bir **bitiş zamanı** taşır
+(`storage/debug.flag`). Süre dolduğunda dosya silinmemiş olsa bile
+yok sayılır — "geçen ay açmıştım, hâlâ açıkmış" durumu oluşamaz.
 
 ### Üretimde kazayla açılamaz
 
-`APP_ENV=production` iken `RISKOPS_DEBUG` **tek başına yetmez**; ayrıca
-`RISKOPS_DEBUG_PRODUCTION=1` gerekir. Kopyalanmış bir VirtualHost'ta
-unutulan tek bir satır canlı sistemi bilgi sızdıran hâle getirmesin
-diye böyle. Açılsa bile araç çubuğu yalnızca `admin` rolüne gösterilir
-ve `tools/go_live_check.php` bunu `FAIL` olarak raporlar.
+Ortam değişkeni yolunda: `APP_ENV=production` iken `RISKOPS_DEBUG`
+**tek başına yetmez**, ayrıca `RISKOPS_DEBUG_PRODUCTION=1` gerekir.
+Kopyalanmış bir VirtualHost'ta unutulan tek bir satır canlı sistemi
+bilgi sızdıran hâle getirmesin diye böyle.
+
+Yönetim ekranı yolunda bu çifte bayrak aranmaz ve bu kasıtlıdır:
+oradaki açma zaten **kazara değildir** — oturum açmış bir admin,
+POST + CSRF ile, süreli olarak yapar ve işlem denetim kaydına yazılır
+(`debug.enable` / `debug.disable`). Çifte bayrak kuralı unutulmaya
+karşıdır, bilinçli açmaya karşı değil.
+
+Hangi yoldan açılırsa açılsın araç çubuğu üretimde yalnızca `admin`
+rolüne gösterilir, `tools/go_live_check.php` durumu `FAIL` olarak
+raporlar ve nasıl kapatılacağını kaynağına göre söyler.
 
 ### Sır basmaz
 
@@ -364,8 +394,8 @@ bile **değerin kendisi** veritabanı parolası, oturum kimliği veya CSRF
 jetonuyla aynıysa yine `***` olur.
 
 ```bash
-php tools/debug_test.php                  # kip kapalıyken:  85/85
-RISKOPS_DEBUG=1 php tools/debug_test.php  # kip açıkken:     95/95
+php tools/debug_test.php                  # kip kapalıyken:  109/109
+RISKOPS_DEBUG=1 php tools/debug_test.php  # kip açıkken:     119/119
 ```
 
 ### Teşhis raporu
@@ -392,12 +422,12 @@ girmez; raporu olduğu gibi paylaşabilirsiniz.
 | CSS satırı | ~2.440 (`app.css`) + araç çubuğu ve yazdırma stili |
 | Veritabanı tablosu | 14 |
 | Duman testi | 59 doğrulama |
-| Hata ayıklama kipi testi | 85 (kapalı) + 95 (açık) |
+| Hata ayıklama kipi testi | 109 (kapalı) + 119 (açık) |
 | Harici PHP bağımlılığı | **0** |
 
 ```bash
 php tools/smoke_test.php        # 59/59
-php tools/debug_test.php        # 85/85
+php tools/debug_test.php        # 109/109
 find . -name "*.php" -not -path "./assets/*" -exec php -l {} \;
 ```
 

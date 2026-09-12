@@ -43,59 +43,6 @@ define('APP_DEMO', ($_SERVER['RISKOPS_DEMO'] ?? getenv('RISKOPS_DEMO') ?: '') ==
 define('DEMO_EMAIL',    'demo@riskops.local');
 define('DEMO_PASSWORD', 'RiskOpsDemo2026');
 
-// --- Hata ayıklama kipi -----------------------------------------------
-// Apache VirtualHost içinde:
-//     SetEnv RISKOPS_DEBUG 1
-//
-// Açıkken: sayfanın altında hata ayıklama araç çubuğu (çalışan SQL
-// sorguları ve süreleri, zaman çizelgesi, istek/oturum içeriği,
-// log kuyruğu), istisnalar için yığın izli ayrıntılı hata sayfası ve
-// storage/logs/debug.log dosyasına istek özetleri.
-//
-// ÜRETİMDE KAZAYLA AÇILAMAZ
-// -------------------------
-// APP_ENV 'production' iken RISKOPS_DEBUG tek başına YETMEZ; ayrıca
-// RISKOPS_DEBUG_PRODUCTION=1 gerekir. Neden: bu bayrak sorgu metinlerini,
-// dosya yollarını ve oturum içeriğini tarayıcıya basar. Bir kurulum
-// betiğinde ya da kopyalanmış bir VirtualHost'ta unutulmuş tek bir
-// SetEnv satırının canlı sistemi bilgi sızdıran bir hâle getirmesi
-// kabul edilemez. İki ayrı bayrak istemek bunu "unutulabilir" olmaktan
-// çıkarıp "bilerek yapılmış" hâle getirir.
-//
-// Açık olsa bile araç çubuğu üretimde YALNIZCA admin rolüne gösterilir
-// (bkz. debug_visible(), includes/debug.php).
-$riskopsDebug = (($_SERVER['RISKOPS_DEBUG'] ?? getenv('RISKOPS_DEBUG') ?: '') === '1');
-if ($riskopsDebug && APP_ENV === 'production') {
-    $riskopsDebug = (($_SERVER['RISKOPS_DEBUG_PRODUCTION']
-                      ?? getenv('RISKOPS_DEBUG_PRODUCTION') ?: '') === '1');
-}
-define('APP_DEBUG', $riskopsDebug);
-unset($riskopsDebug);
-
-// Bu süreyi aşan sorgu araç çubuğunda "yavaş" işaretlenir (ms).
-define('DEBUG_SLOW_QUERY_MS', 100);
-
-// debug.log'a VARSAYILAN OLARAK HER PHP İSTEĞİ yazılır.
-//
-// Statik dosyalar (CSS, JS, görsel) PHP'den geçmediği için dosyaya
-// girmez; bir sayfa görüntülemesi genellikle 1-2 satır üretir. Yani
-// "her isteği yaz" pratikte gürültü değil, kronolojik bir kayıttır -
-// ve hata ayıklama kipi zaten geçici olarak açılır.
-//
-// Uzun süreli bir ölçüm için yalnızca sorunlu istekler isteniyorsa:
-//     SetEnv RISKOPS_DEBUG_LOG_ONLY_SLOW 1
-// Bu durumda yalnızca aşağıdaki eşikleri aşan ya da yavaş/hatalı/
-// yinelenen sorgu içeren istekler yazılır.
-define('DEBUG_LOG_ONLY_SLOW',
-    (($_SERVER['RISKOPS_DEBUG_LOG_ONLY_SLOW']
-      ?? getenv('RISKOPS_DEBUG_LOG_ONLY_SLOW') ?: '') === '1'));
-
-define('DEBUG_LOG_MIN_MS',      250);
-define('DEBUG_LOG_MIN_QUERIES', 20);
-
-// Araç çubuğunun "Log" panelinde gösterilen app.log satır sayısı.
-define('DEBUG_LOG_TAIL_LINES', 60);
-
 // --- Dizin sabitleri --------------------------------------------------
 define('APP_ROOT',      dirname(__DIR__));
 define('CONFIG_PATH',   APP_ROOT . '/config');
@@ -111,6 +58,84 @@ define('LOG_FILE',      LOG_PATH . '/app.log');
 // uyarı ve hataların kalıcı kaydıdır, her isteğin ölçümüyle
 // şişmemelidir.
 define('DEBUG_LOG_FILE', LOG_PATH . '/debug.log');
+
+// --- Hata ayıklama kipi -----------------------------------------------
+//
+// Açıkken: sayfanın altında araç çubuğu (çalışan SQL sorguları ve
+// süreleri, zaman çizelgesi, istek/oturum içeriği, log kuyruğu),
+// istisnalar için yığın izli ayrıntılı hata sayfası ve debug.log.
+//
+// İKİ AYRI YOLDAN AÇILIR
+// ----------------------
+// 1) ORTAM DEĞİŞKENİ - kalıcı, sunucu yöneticisinin kararı:
+//        SetEnv RISKOPS_DEBUG 1
+//    APP_ENV 'production' iken bu TEK BAŞINA YETMEZ; ayrıca
+//    RISKOPS_DEBUG_PRODUCTION=1 gerekir. Neden: kopyalanmış bir
+//    VirtualHost'ta ya da kurulum betiğinde UNUTULMUŞ tek bir SetEnv
+//    satırı, canlı sistemi sorgu metinlerini ve oturum içeriğini
+//    basan bir hâle getirmemeli. İki bayrak istemek bunu
+//    "unutulabilir" olmaktan çıkarır.
+//
+// 2) YÖNETİM EKRANI - geçici, uygulama yöneticisinin kararı:
+//        /admin/debug/  →  "Aç (1 saat)"
+//    storage/debug.flag dosyasına bitiş zamanı yazılır. Bu yol
+//    üretimde de çalışır ve bu KASITLIDIR: yukarıdaki çifte bayrak
+//    kuralı KAZARA açılmaya karşıdır, bilinçli açmaya karşı değil.
+//    Buradaki açma bilinçlidir - oturum açmış bir admin, POST + CSRF
+//    ile, süresi dolduğunda kendiliğinden kapanacak şekilde yapar ve
+//    işlem denetim kaydına yazılır.
+//
+// Hangi yoldan açılırsa açılsın, araç çubuğu üretimde YALNIZCA admin
+// rolüne gösterilir (bkz. debug_visible(), includes/debug.php).
+define('DEBUG_FLAG_FILE', STORAGE_PATH . '/debug.flag');
+
+// Yönetim ekranından seçilebilen süreler (dakika => etiket).
+define('DEBUG_FLAG_DURATIONS', [60 => '1 saat', 240 => '4 saat', 1440 => '24 saat']);
+
+$riskopsDebug = (($_SERVER['RISKOPS_DEBUG'] ?? getenv('RISKOPS_DEBUG') ?: '') === '1');
+if ($riskopsDebug && APP_ENV === 'production') {
+    $riskopsDebug = (($_SERVER['RISKOPS_DEBUG_PRODUCTION']
+                      ?? getenv('RISKOPS_DEBUG_PRODUCTION') ?: '') === '1');
+}
+define('APP_DEBUG_FROM_ENV', $riskopsDebug);
+unset($riskopsDebug);
+
+/* Bayrak dosyası burada ELLE okunuyor, debug.php'deki yardımcılarla
+   değil: bu satırlar bootstrap'in en başında, hiçbir fonksiyon
+   yüklenmeden önce çalışıyor. Süresi geçmiş bayrak yok sayılır -
+   dosyanın silinmesi beklenmez, "açık kalmış olabilir" durumu
+   oluşamaz. */
+$riskopsFlag = @file_get_contents(DEBUG_FLAG_FILE);
+$riskopsFlag = is_string($riskopsFlag) && $riskopsFlag !== ''
+    ? json_decode($riskopsFlag, true)
+    : null;
+define('APP_DEBUG_FROM_PANEL',
+    is_array($riskopsFlag) && (int)($riskopsFlag['until'] ?? 0) > time());
+unset($riskopsFlag);
+
+define('APP_DEBUG', APP_DEBUG_FROM_ENV || APP_DEBUG_FROM_PANEL);
+
+// Bu süreyi aşan sorgu araç çubuğunda "yavaş" işaretlenir (ms).
+define('DEBUG_SLOW_QUERY_MS', 100);
+
+// debug.log'a VARSAYILAN OLARAK HER PHP İSTEĞİ yazılır.
+//
+// Statik dosyalar (CSS, JS, görsel) PHP'den geçmediği için dosyaya
+// girmez; bir sayfa görüntülemesi genellikle 1-2 satır üretir. Yani
+// "her isteği yaz" pratikte gürültü değil, kronolojik bir kayıttır -
+// ve hata ayıklama kipi zaten geçici olarak açılır.
+//
+// Uzun süreli bir ölçüm için yalnızca sorunlu istekler isteniyorsa:
+//     SetEnv RISKOPS_DEBUG_LOG_ONLY_SLOW 1
+define('DEBUG_LOG_ONLY_SLOW',
+    (($_SERVER['RISKOPS_DEBUG_LOG_ONLY_SLOW']
+      ?? getenv('RISKOPS_DEBUG_LOG_ONLY_SLOW') ?: '') === '1'));
+
+define('DEBUG_LOG_MIN_MS',      250);
+define('DEBUG_LOG_MIN_QUERIES', 20);
+
+// Araç çubuğunun "Log" panelinde gösterilen app.log satır sayısı.
+define('DEBUG_LOG_TAIL_LINES', 60);
 
 // --- URL --------------------------------------------------------------
 // DocumentRoot = /var/www/riskops olduğu için uygulama web kokunde duruyor.
@@ -128,7 +153,7 @@ define('BASE_PATH', '');
 // Hata "çalışmıyor" gibi görünür, oysa yalnızca önbellektir.
 //
 // ASSETS DEĞİŞTİYSE BURAYI ARTIRIN (tarih + harf yeterli).
-define('ASSET_VERSION', '20260912a');
+define('ASSET_VERSION', '20260912b');
 
 // --- Oturum -----------------------------------------------------------
 define('SESSION_NAME', 'RISKOPS_SESSION');

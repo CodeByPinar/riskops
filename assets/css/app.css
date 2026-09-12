@@ -2441,3 +2441,70 @@ a.rk-logout-btn:hover { background: var(--rk-side-bg-alt); color: #fff; text-dec
     background: rgba(35, 176, 248, .16);
     border-color: rgba(35, 176, 248, .35);
 }
+
+/* =====================================================================
+   HATA AYIKLAMA YONETIM EKRANI  (/admin/debug/)
+   ===================================================================== */
+
+.rk-dbgstate {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    background: var(--rk-surface-alt);
+    border: 1px solid var(--rk-border);
+    margin-bottom: 16px;
+}
+.rk-dbgstate.is-on {
+    background: #fffbeb;
+    border-color: #fde68a;
+}
+
+.rk-dbgstate-ic {
+    flex: none;
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    border-radius: 12px;
+    font-size: 19px;
+    background: var(--rk-surface);
+    border: 1px solid var(--rk-border);
+    color: var(--rk-muted);
+}
+.rk-dbgstate.is-on .rk-dbgstate-ic {
+    background: #fef3c7;
+    border-color: #fde68a;
+    color: #a16207;
+}
+
+.rk-dbgstate-txt { min-width: 0; }
+.rk-dbgstate-txt strong { display: block; font-size: 14.5px; font-weight: 660; }
+.rk-dbgstate-txt span   { font-size: 13px; color: var(--rk-muted); }
+
+.rk-dbgactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.rk-dbgactions form { margin: 0; }
+
+.rk-dbglist { list-style: none; margin: 0 0 16px; padding: 0; }
+.rk-dbglist li {
+    display: flex;
+    gap: 13px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rk-border);
+}
+.rk-dbglist li:last-child { border-bottom: 0; }
+.rk-dbglist i {
+    flex: none;
+    width: 34px; height: 34px;
+    display: grid; place-items: center;
+    border-radius: 10px;
+    font-size: 15px;
+    background: var(--rk-primary-soft);
+    color: var(--rk-primary);
+}
+.rk-dbglist strong { display: block; font-size: 13.5px; font-weight: 650; margin-bottom: 2px; }
+.rk-dbglist span   { font-size: 13px; color: var(--rk-muted); }

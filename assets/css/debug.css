@@ -239,6 +239,27 @@ body.rkdbg-open { padding-bottom: 42vh; }
     overflow-y: auto;
 }
 
+/* Kipi kapat dugmesi ve kalan sure - cubugun sag ucunda */
+
+.rkdbg-off { margin: 0; display: flex; }
+.rkdbg-off button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+    padding: 0 11px;
+    border: 0;
+    background: #7f1d1d;
+    color: #fecaca;
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.rkdbg-off button:hover { background: #991b1b; color: #fff; }
+
+.rkdbg-bar a.rkdbg-stat { text-decoration: none; }
+.rkdbg-bar a.rkdbg-stat:hover { background: #0b356d; color: #fff; }
+
 /* ---------------------------------------------------------- yazdırma */
 
 @media print {

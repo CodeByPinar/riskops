@@ -87,6 +87,142 @@ function debug_handle_toggle(): void
 }
 
 /* =====================================================================
+ * GEÇİCİ AÇMA BAYRAĞI  (storage/debug.flag)
+ *
+ * Yönetim ekranındaki (/admin/debug/) düğmeler bu dosyayı yazar ve
+ * siler. Dosyanın OKUNMASI config.php içinde, henüz hiçbir fonksiyon
+ * yüklenmemişken yapılır (bkz. APP_DEBUG_FROM_PANEL); burada yalnızca
+ * yazma, silme ve durum sorgulama var.
+ *
+ * NEDEN SÜRELİ
+ * ------------
+ * Hata ayıklama kipinin en büyük riski açık kalmasıdır. Bayrak bir
+ * BİTİŞ ZAMANI taşır; süresi dolduğunda dosya silinmemiş olsa bile
+ * yok sayılır. "Açık unutuldu" durumu bu yüzden oluşamaz.
+ *
+ * NEDEN OTURUMDA DEĞİL
+ * --------------------
+ * Kip, sorgu kaydedici PDO sarmalayıcılarını devreye sokuyor ve bu
+ * karar bağlantı kurulurken, oturum açılmadan önce verilmek zorunda.
+ * Ayrıca cron işleri ve CLI araçları da aynı kipi görmelidir.
+ * ===================================================================*/
+
+/**
+ * Bayrak dosyasının içeriği. Yoksa, bozuksa veya süresi dolmuşsa null.
+ *
+ * @return array{until:int, at:int, by:?int, by_name:string, minutes:int}|null
+ */
+function debug_flag_read(): ?array
+{
+    $raw = @file_get_contents(DEBUG_FLAG_FILE);
+    if (!is_string($raw) || $raw === '') {
+        return null;
+    }
+
+    $data = json_decode($raw, true);
+    if (!is_array($data) || (int)($data['until'] ?? 0) <= time()) {
+        return null;
+    }
+
+    return [
+        'until'   => (int)$data['until'],
+        'at'      => (int)($data['at'] ?? 0),
+        'by'      => isset($data['by']) ? (int)$data['by'] : null,
+        'by_name' => (string)($data['by_name'] ?? ''),
+        'minutes' => (int)($data['minutes'] ?? 0),
+    ];
+}
+
+/** Bayrak şu an geçerli mi? */
+function debug_flag_active(): bool
+{
+    return debug_flag_read() !== null;
+}
+
+/** Bayrağın bitmesine kalan saniye (geçerli değilse 0). */
+function debug_flag_remaining(): int
+{
+    $f = debug_flag_read();
+
+    return $f === null ? 0 : max(0, $f['until'] - time());
+}
+
+/**
+ * Kipi $minutes dakikalığına açar.
+ *
+ * Yalnızca /admin/debug/toggle.php tarafından, POST + CSRF + admin
+ * kontrolünden SONRA çağrılır. Yetki denetimi burada DEĞİL, orada
+ * yapılır - bu fonksiyon yalnızca dosyayı yazar.
+ */
+function debug_flag_enable(int $minutes): bool
+{
+    $allowed = array_keys(DEBUG_FLAG_DURATIONS);
+    if (!in_array($minutes, $allowed, true)) {
+        $minutes = (int)$allowed[0];
+    }
+
+    if (!is_dir(STORAGE_PATH)) {
+        @mkdir(STORAGE_PATH, 0775, true);
+    }
+
+    $payload = json_encode([
+        'until'   => time() + ($minutes * 60),
+        'at'      => time(),
+        'by'      => auth_id(),
+        'by_name' => auth_name(),
+        'minutes' => $minutes,
+    ], JSON_UNESCAPED_UNICODE);
+
+    return @file_put_contents(DEBUG_FLAG_FILE, $payload, LOCK_EX) !== false;
+}
+
+/** Kipi hemen kapatır (dosyayı siler). */
+function debug_flag_disable(): bool
+{
+    if (!is_file(DEBUG_FLAG_FILE)) {
+        return true;
+    }
+
+    return @unlink(DEBUG_FLAG_FILE);
+}
+
+/**
+ * Kip hangi yoldan açık?  'ortam' | 'panel' | 'ortam+panel' | 'kapalı'
+ *
+ * Ayrım önemli: panelden açılan kip düğmeyle kapatılabilir, ortam
+ * değişkeninden gelen kapatılamaz - onun için sunucu yapılandırması
+ * değişmelidir. Yönetim ekranı bunu açıkça söyler.
+ */
+function debug_source(): string
+{
+    $env   = defined('APP_DEBUG_FROM_ENV')   && APP_DEBUG_FROM_ENV;
+    $panel = defined('APP_DEBUG_FROM_PANEL') && APP_DEBUG_FROM_PANEL;
+
+    return match (true) {
+        $env && $panel => 'ortam+panel',
+        $env           => 'ortam',
+        $panel         => 'panel',
+        default        => 'kapalı',
+    };
+}
+
+/** "1 sa 23 dk" biçiminde kalan süre. */
+function debug_human_duration(int $seconds): string
+{
+    if ($seconds <= 0) {
+        return '-';
+    }
+    $h = intdiv($seconds, 3600);
+    $m = intdiv($seconds % 3600, 60);
+
+    if ($h > 0) {
+        return $h . ' sa ' . $m . ' dk';
+    }
+
+    return $m > 0 ? $m . ' dk' : ($seconds . ' sn');
+}
+
+/* =====================================================================
  * TOPLAYICI
  * ===================================================================*/
 

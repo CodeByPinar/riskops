@@ -372,9 +372,15 @@ sorgularını, dosya yollarını ve oturum içeriğini tarayıcıya basar;
 istisnalar yığın iziyle birlikte görünür. Bunların hiçbiri canlı bir
 sistemde ziyaretçiye gitmemelidir.
 
-Kip iki bayrakla korunur — `APP_ENV=production` iken `RISKOPS_DEBUG=1`
-**tek başına yetmez**, ayrıca `RISKOPS_DEBUG_PRODUCTION=1` gerekir.
-Yani canlıda kazara açılması zordur; ama bilerek açılmış olabilir.
+Kip **iki ayrı yoldan** açılmış olabilir:
+
+1. **Ortam değişkeni** — `APP_ENV=production` iken `RISKOPS_DEBUG=1`
+   tek başına yetmez, ayrıca `RISKOPS_DEBUG_PRODUCTION=1` gerekir.
+2. **Yönetim ekranı** — bir admin, Yönetim &rarr; Hata Ayıklama
+   ekranından süreli olarak açmış olabilir (`storage/debug.flag`).
+   Bu bayrak süresi dolunca kendiliğinden geçersizleşir.
+
+Aşağıdaki kontrol ikisini de kapsar ve hangisinin açık olduğunu söyler.
 
 Kontrol:
 
@@ -382,8 +388,13 @@ Kontrol:
 sudo -u www-data php /var/www/riskops/tools/go_live_check.php | grep APP_DEBUG
 ```
 
-`[ OK ] APP_DEBUG kapalı` görmelisiniz. `FAIL` çıkıyorsa VirtualHost
-içinden şu satırları silip Apache'yi yeniden yükleyin:
+`[ OK ] APP_DEBUG kapalı` görmelisiniz.
+
+`FAIL  APP_DEBUG  AÇIK (panel)` çıkıyorsa: Yönetim &rarr; Hata Ayıklama
+ekranından **"Şimdi kapat"**. Sunucuya dokunmaya gerek yok.
+
+`FAIL  APP_DEBUG  AÇIK (ortam)` çıkıyorsa VirtualHost içinden şu
+satırları silip Apache'yi yeniden yükleyin:
 
 ```apache
 SetEnv RISKOPS_DEBUG 1
@@ -394,18 +405,28 @@ SetEnv RISKOPS_DEBUG_PRODUCTION 1
 sudo systemctl reload apache2
 ```
 
-Kipi kapattıktan sonra biriken ölçüm dosyası da silinebilir:
+Kipi kapattıktan sonra biriken ölçüm dosyası ve varsa bayrak dosyası
+silinebilir:
 
 ```bash
-sudo rm -f /var/www/riskops/storage/logs/debug.log
+sudo rm -f /var/www/riskops/storage/logs/debug.log /var/www/riskops/storage/debug.flag
 ```
 
 ### Canlıda geçici olarak açmak gerekirse
 
-Yalnızca üreme sorunu başka türlü anlaşılamıyorsa, iki bayrağı da
-ekleyip Apache'yi yeniden yükleyin, sorunu görüp **hemen geri alın**.
+**Yönetim ekranını kullanın**: Yönetim &rarr; Hata Ayıklama &rarr;
+"Aç · 1 saat". Sunucuya girmek, yapılandırma düzenlemek ve Apache'yi
+yeniden yüklemek gerekmez; kip süre dolunca kendiliğinden kapanır ve
+açma/kapama denetim kaydına yazılır.
+
 Bu süre boyunca araç çubuğu yalnızca `admin` rolündeki kullanıcılara
-görünür; diğer kullanıcılar hiçbir fark görmez. Sorunu uzaktan
-incelemek için daha güvenli seçenek, araç çubuğu yerine sunucudaki
-`storage/logs/debug.log` dosyasını okumaktır — o dosya tarayıcıya
-hiçbir şey göndermez.
+görünür — diğer kullanıcılar hiçbir fark görmez.
+
+Ortam değişkenini canlıda yalnızca uygulamaya hiç giriş yapılamıyorsa
+(örneğin giriş ekranının kendisi hata veriyorsa) kullanın; o durumda
+iki bayrağı ekleyip Apache'yi yeniden yükleyin, sorunu görüp **hemen
+geri alın**.
+
+Araç çubuğunu hiç göstermeden ölçüm almak isterseniz, sunucudaki
+`storage/logs/debug.log` dosyasını okumak yeterlidir — o dosya
+tarayıcıya hiçbir şey göndermez.
