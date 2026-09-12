@@ -2084,3 +2084,47 @@ a.rk-logout-btn:hover { background: var(--rk-side-bg-alt); color: #fff; text-dec
     transition: background .15s ease;
 }
 .rk-side-user-link:hover { background: rgba(255, 255, 255, .06); }
+
+/* ---------------------------------------------------------------------
+   Toplu işlem çubuğu (risks/index.php)
+   Seçim yapılmadan görünmez; hidden özniteliği JS tarafından yönetilir.
+   --------------------------------------------------------------------- */
+.rk-bulk-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 16px;
+    margin: 0 0 2px;
+    background: var(--rk-primary-soft);
+    border-bottom: 1px solid var(--rk-border);
+}
+.rk-bulk-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--rk-text-soft);
+}
+.rk-bulk-count strong { color: var(--rk-primary-dark); }
+.rk-bulk-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.rk-input-sm {
+    height: 30px;
+    padding: 2px 8px;
+    font-size: 12.5px;
+    width: auto;
+    min-width: 140px;
+}
+.rk-check {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--rk-primary);
+    cursor: pointer;
+    vertical-align: middle;
+}

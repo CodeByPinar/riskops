@@ -306,10 +306,62 @@ require LAYOUT_PATH . '/header.php';
                     : ''
             ) ?>
         <?php else: ?>
+        <?php
+        /* Toplu islem YALNIZCA risk.update yetkisi olana gosterilir.
+           Gostermemek bir guvenlik onlemi degil (asil kontrol
+           risks/bulk.php icinde); yetkisi olmayana calismayan bir
+           arayuz sunmamak icin. */
+        $canBulk = can('risk.update');
+        ?>
+        <form method="post" action="<?= e(url('/risks/bulk.php')) ?>"
+              <?= $canBulk ? 'data-rk-bulk' : '' ?>>
+            <?= csrf_field() ?>
+
+            <?php if ($canBulk): ?>
+            <div class="rk-bulk-bar" data-rk-bulk-bar hidden>
+                <div class="rk-bulk-count">
+                    <i class="bi bi-check2-square"></i>
+                    <strong data-rk-bulk-count>0</strong> risk seçildi
+                </div>
+
+                <div class="rk-bulk-actions">
+                    <select class="rk-input rk-input-sm" name="bulk_owner_id" data-rk-bulk-input="assign">
+                        <option value="">Sahip seç...</option>
+                        <?= options_html(users_list(), null) ?>
+                    </select>
+                    <button type="submit" class="rk-btn rk-btn-sm"
+                            name="bulk_action" value="assign">
+                        <i class="bi bi-person-check"></i> Ata
+                    </button>
+
+                    <select class="rk-input rk-input-sm" name="bulk_status" data-rk-bulk-input="status">
+                        <option value="">Durum seç...</option>
+                        <?= options_from_values(risk_statuses(), null) ?>
+                    </select>
+                    <button type="submit" class="rk-btn rk-btn-sm"
+                            name="bulk_action" value="status">
+                        <i class="bi bi-arrow-repeat"></i> Değiştir
+                    </button>
+
+                    <button type="submit" class="rk-btn rk-btn-sm"
+                            name="bulk_action" value="close"
+                            data-rk-confirm="Seçili riskler kapatılacak. Onaylıyor musunuz?">
+                        <i class="bi bi-check2-circle"></i> Kapat
+                    </button>
+                </div>
+            </div>
+            <?php endif; ?>
+
         <div class="rk-table-wrap">
             <table class="rk-table">
                 <thead>
                     <tr>
+                        <?php if ($canBulk): ?>
+                        <th style="width:1%">
+                            <input type="checkbox" class="rk-check" data-rk-bulk-all
+                                   aria-label="Tümünü seç">
+                        </th>
+                        <?php endif; ?>
                         <?= $th('code', 'Kod') ?>
                         <?= $th('title', 'Başlık') ?>
                         <?= $th('category', 'Kategori') ?>
@@ -328,6 +380,13 @@ require LAYOUT_PATH . '/header.php';
                     $effSeverity = $r['residual_severity'] ?? $r['inherent_severity'];
                 ?>
                     <tr>
+                        <?php if ($canBulk): ?>
+                        <td>
+                            <input type="checkbox" class="rk-check" name="ids[]"
+                                   value="<?= (int)$r['id'] ?>" data-rk-bulk-item
+                                   aria-label="<?= e($r['risk_code']) ?> seç">
+                        </td>
+                        <?php endif; ?>
                         <td class="rk-code"><?= e($r['risk_code']) ?></td>
                         <td>
                             <a class="rk-link-strong" href="<?= e(url('/risks/view.php?id=' . (int)$r['id'])) ?>">
@@ -370,6 +429,7 @@ require LAYOUT_PATH . '/header.php';
                 </tbody>
             </table>
         </div>
+        </form>
         <?php endif; ?>
     </div>
 

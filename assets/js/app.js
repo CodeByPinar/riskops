@@ -208,12 +208,93 @@
         btn.addEventListener('click', function () { window.print(); });
     }
 
+    /* ------------------------------------------------------------------
+       Toplu islem  (risks/index.php)
+       ------------------------------------------------------------------
+       Secim kutulari, "tumunu sec" ve islem cubugunun gorunurlugu.
+
+       ONEMLI: bu katman yalnizca ARAYUZ. Hangi risklerin gercekten
+       guncellenecegine ve kullanicinin yetkisi olup olmadigina
+       risks/bulk.php karar verir. Buradaki hicbir kontrol guvenlik
+       onlemi degildir.
+       ------------------------------------------------------------------ */
+    function initBulk(form) {
+        var bar   = form.querySelector('[data-rk-bulk-bar]');
+        var all   = form.querySelector('[data-rk-bulk-all]');
+        var count = form.querySelector('[data-rk-bulk-count]');
+        var items = function () {
+            return Array.prototype.slice.call(form.querySelectorAll('[data-rk-bulk-item]'));
+        };
+
+        function selected() {
+            return items().filter(function (c) { return c.checked; });
+        }
+
+        function sync() {
+            var n = selected().length;
+            var total = items().length;
+
+            if (count) { count.textContent = String(n); }
+            if (bar) { bar.hidden = (n === 0); }
+
+            if (all) {
+                all.checked = (n > 0 && n === total);
+                /* Kismi secimde ucuncu bir gorsel durum: kullanici
+                   "tumu secili" saniip yanlis islem yapmasin. */
+                all.indeterminate = (n > 0 && n < total);
+            }
+        }
+
+        if (all) {
+            all.addEventListener('change', function () {
+                items().forEach(function (c) { c.checked = all.checked; });
+                sync();
+            });
+        }
+
+        form.addEventListener('change', function (ev) {
+            if (ev.target && ev.target.matches('[data-rk-bulk-item]')) { sync(); }
+        });
+
+        /* Gonderim oncesi son kontrol: secim yoksa ya da islem bir
+           deger bekliyorsa (sahip/durum) kullaniciyi bos istekle
+           sunucuya gondermeyelim. */
+        form.addEventListener('submit', function (ev) {
+            var btn = ev.submitter;
+            var act = btn && btn.value;
+
+            if (selected().length === 0) {
+                ev.preventDefault();
+                alert('Once en az bir risk secin.');
+                return;
+            }
+
+            if (act === 'assign' || act === 'status') {
+                var input = form.querySelector('[data-rk-bulk-input="' + act + '"]');
+                if (input && input.value === '') {
+                    ev.preventDefault();
+                    input.focus();
+                    return;
+                }
+            }
+
+            if (btn && btn.hasAttribute('data-rk-confirm')) {
+                if (!window.confirm(btn.getAttribute('data-rk-confirm'))) {
+                    ev.preventDefault();
+                }
+            }
+        });
+
+        sync();
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('[data-rk-score-scope]').forEach(initScorePreview);
         document.querySelectorAll('[data-rk-pw-toggle]').forEach(initPasswordToggle);
         document.querySelectorAll('[data-rk-color-sync]').forEach(initColorSync);
         document.querySelectorAll('[data-rk-threshold-editor]').forEach(initThresholdPreview);
         document.querySelectorAll('[data-rk-print]').forEach(initPrintButton);
+        document.querySelectorAll('[data-rk-bulk]').forEach(initBulk);
     });
 
 })();
