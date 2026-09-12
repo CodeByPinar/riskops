@@ -96,7 +96,7 @@ require LAYOUT_PATH . '/header.php';
                         <div class="rk-help"><i class="bi bi-lock"></i> Kod tarafından yönetilir.</div>
 
                     <?php elseif ($key === 'severity_thresholds'): ?>
-                        <div class="rk-threshold-editor" id="rkThresholds">
+                        <div class="rk-threshold-editor" id="rkThresholds" data-rk-threshold-editor="rkThresholdPreview">
                             <?php foreach (['Low', 'Medium', 'High', 'Critical'] as $sev):
                                 $band = $thresholds[$sev] ?? [0, 0];
                             ?>
@@ -222,37 +222,4 @@ require LAYOUT_PATH . '/header.php';
         </div>
     </div>
 </form>
-
-<script>
-/* Eşik alanları değiştikçe önizleme matrisini canlı boya */
-(function () {
-    var editor = document.getElementById('rkThresholds');
-    var preview = document.getElementById('rkThresholdPreview');
-    if (!editor || !preview) { return; }
-
-    var order = ['Low', 'Medium', 'High', 'Critical'];
-    var cls = { Low: 'sev-low', Medium: 'sev-medium', High: 'sev-high', Critical: 'sev-critical' };
-
-    function repaint() {
-        var bands = order.map(function (sev) {
-            return {
-                sev: sev,
-                min: parseInt(editor.querySelector('[name="threshold_' + sev + '_min"]').value, 10),
-                max: parseInt(editor.querySelector('[name="threshold_' + sev + '_max"]').value, 10)
-            };
-        });
-
-        preview.querySelectorAll('.rk-mx-cell').forEach(function (cell) {
-            var score = parseInt(cell.getAttribute('data-score'), 10);
-            var hit = bands.find(function (b) { return score >= b.min && score <= b.max; });
-            cell.className = 'rk-mx-cell ' + (hit ? cls[hit.sev] : 'sev-none');
-            cell.title = hit ? hit.sev : 'hiçbir banda girmiyor';
-        });
-    }
-
-    editor.addEventListener('input', repaint);
-    repaint();
-})();
-</script>
-
 <?php require LAYOUT_PATH . '/footer.php'; ?>

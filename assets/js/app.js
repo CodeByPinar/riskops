@@ -151,9 +151,69 @@
         });
     }
 
+    /* ------------------------------------------------------------------
+       Renk secici <-> metin alani senkronu  (admin/categories)
+       ------------------------------------------------------------------ */
+    function initColorSync(picker) {
+        var text = document.querySelector('input[name="' + picker.getAttribute('data-rk-color-sync') + '"]');
+        if (!text) { return; }
+
+        picker.addEventListener('input', function () { text.value = picker.value; });
+        text.addEventListener('change', function () {
+            if (/^#[0-9a-fA-F]{6}$/.test(text.value)) { picker.value = text.value; }
+        });
+    }
+
+    /* ------------------------------------------------------------------
+       Esik onizlemesi  (admin/settings)
+       Esik alanlari degistikce 5x5 onizleme matrisini canli boyar.
+       ------------------------------------------------------------------ */
+    function initThresholdPreview(editor) {
+        var preview = document.getElementById(editor.getAttribute('data-rk-threshold-editor'));
+        if (!preview) { return; }
+
+        var order = ['Low', 'Medium', 'High', 'Critical'];
+        var cls = { Low: 'sev-low', Medium: 'sev-medium', High: 'sev-high', Critical: 'sev-critical' };
+
+        function repaint() {
+            var bands = order.map(function (sev) {
+                var min = editor.querySelector('[name="threshold_' + sev + '_min"]');
+                var max = editor.querySelector('[name="threshold_' + sev + '_max"]');
+                return {
+                    sev: sev,
+                    min: min ? parseInt(min.value, 10) : NaN,
+                    max: max ? parseInt(max.value, 10) : NaN
+                };
+            });
+
+            preview.querySelectorAll('.rk-mx-cell').forEach(function (cell) {
+                var score = parseInt(cell.getAttribute('data-score'), 10);
+                var hit = bands.find(function (b) { return score >= b.min && score <= b.max; });
+                cell.className = 'rk-mx-cell ' + (hit ? cls[hit.sev] : 'sev-none');
+                cell.title = hit ? hit.sev : 'hicbir banda girmiyor';
+            });
+        }
+
+        editor.addEventListener('input', repaint);
+        repaint();
+    }
+
+    /* ------------------------------------------------------------------
+       Yazdir dugmesi
+       onclick="window.print()" yerine: CSP script-src'den 'unsafe-inline'
+       kaldirilabilsin diye. Satir ici bir olay ozniteligi de tipki satir
+       ici <script> gibi 'unsafe-inline' gerektirir.
+       ------------------------------------------------------------------ */
+    function initPrintButton(btn) {
+        btn.addEventListener('click', function () { window.print(); });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('[data-rk-score-scope]').forEach(initScorePreview);
         document.querySelectorAll('[data-rk-pw-toggle]').forEach(initPasswordToggle);
+        document.querySelectorAll('[data-rk-color-sync]').forEach(initColorSync);
+        document.querySelectorAll('[data-rk-threshold-editor]').forEach(initThresholdPreview);
+        document.querySelectorAll('[data-rk-print]').forEach(initPrintButton);
     });
 
 })();

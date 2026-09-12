@@ -138,10 +138,39 @@ if (PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
     unset($_SESSION['_errors']);
 
     // --- Güvenlik başlıkları (mod_headers yoksa da garanti) ---
+    //
+    // NEDEN PHP TARAFINDA DA VAR: Apache yapılandırmasındaki Header
+    // yönergeleri mod_headers yüklü değilse SESSİZCE yok sayılır.
+    // Paylaşımlı hostinglerde bu sık görülür - o kurulumda uygulama
+    // hiçbir güvenlik başlığı olmadan çalışırdı. Buradakiler her
+    // koşulda gider.
+    //
+    // Apache tarafındaki kopyalar statik dosyaları (CSS, JS, font,
+    // görsel) da kapsadığı için kaldırılmadı. İki taraf AYNI olmalı;
+    // biri değişirse diğeri de değişmeli - tarayıcı birden fazla CSP
+    // başlığı görürse hepsinin KESİŞİMİNİ uygular ve ayrışan iki
+    // politika hata ayıklaması zor bir kısıtlamaya dönüşür.
     if (!headers_sent()) {
         header('X-Content-Type-Options: nosniff');
         header('X-Frame-Options: SAMEORIGIN');
         header('Referrer-Policy: strict-origin-when-cross-origin');
+        header('Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=()');
+
+        // script-src'de 'unsafe-inline' YOKTUR: tüm betikler harici
+        // dosyadadır (assets/js/app.js) ve davranışlar data-rk-*
+        // öznitelikleriyle bağlanır. Satır içi <script> veya onclick
+        // ekleyen yeni kod sessizce çalışmaz.
+        //
+        // style-src'de 'unsafe-inline' KALDI ve bu kasıtlıdır:
+        // uygulama dinamik ölçü taşıyan style="" öznitelikleri
+        // kullanıyor (örn. ilerleme çubuğu genişliği), bunlar statik
+        // sınıfa çevrilemez. XSS yükü betik enjekte eder, stil değil.
+        header(
+            "Content-Security-Policy: default-src 'self'; img-src 'self' data:; "
+            . "style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; "
+            . "connect-src 'self'; form-action 'self'; frame-ancestors 'self'; "
+            . "base-uri 'self'; object-src 'none'"
+        );
     }
 
     // --- Oturumu veritabanıyla doğrula ---

@@ -58,7 +58,7 @@ $printScope   = $def['description'] . ' · ' . count($rows) . ' satır'
                     : '');
 $pageActions  = '<a class="rk-btn" href="' . e(url('/reports/')) . '">'
               . '<i class="bi bi-arrow-left"></i> Raporlar</a>'
-              . '<button type="button" class="rk-btn" onclick="window.print()">'
+              . '<button type="button" class="rk-btn" data-rk-print>'
               . '<i class="bi bi-printer"></i> Yazdır</button>'
               . '<a class="rk-btn rk-btn-primary" href="' . e($exportExcel) . '">'
               . '<i class="bi bi-file-earmark-excel"></i> Excel CSV</a>'

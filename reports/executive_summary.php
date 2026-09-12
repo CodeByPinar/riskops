@@ -128,7 +128,7 @@ $printScope   = 'Tüm aktif risk portföyü — ' . (int)$stats['toplam'] . ' ri
               . (int)$actions['toplam'] . ' aksiyon planı';
 $pageActions  = '<a class="rk-btn" href="' . e(url('/reports/')) . '">'
               . '<i class="bi bi-arrow-left"></i> Raporlar</a>'
-              . '<button type="button" class="rk-btn rk-btn-primary" onclick="window.print()">'
+              . '<button type="button" class="rk-btn rk-btn-primary" data-rk-print>'
               . '<i class="bi bi-printer"></i> Yazdır</button>';
 
 require LAYOUT_PATH . '/header.php';

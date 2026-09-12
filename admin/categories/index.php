@@ -98,7 +98,7 @@ require LAYOUT_PATH . '/header.php';
                     <div class="rk-field">
                         <label class="rk-label" for="color">Renk</label>
                         <div class="rk-color-field">
-                            <input type="color" id="color" name="color"
+                            <input type="color" id="color" name="color" data-rk-color-sync="color_text"
                                    value="<?= e($val('color', '#64748b')) ?>">
                             <input class="<?= e($cls('color', 'rk-input')) ?>" type="text" name="color_text"
                                    value="<?= e($val('color', '#64748b')) ?>" maxlength="7"
@@ -235,18 +235,4 @@ require LAYOUT_PATH . '/header.php';
     </div>
 
 </div>
-
-<script>
-/* Renk seçici ile metin alanını senkron tut */
-(function () {
-    var picker = document.getElementById('color');
-    var text = document.querySelector('input[name="color_text"]');
-    if (!picker || !text) { return; }
-    picker.addEventListener('input', function () { text.value = picker.value; });
-    text.addEventListener('change', function () {
-        if (/^#[0-9a-fA-F]{6}$/.test(text.value)) { picker.value = text.value; }
-    });
-})();
-</script>
-
 <?php require LAYOUT_PATH . '/footer.php'; ?>
