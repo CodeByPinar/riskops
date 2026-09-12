@@ -329,3 +329,36 @@ README'ye canlı demo rozeti ekleyin:
 
 GitHub deposunun **About** bölümündeki **Website** alanına da aynı
 adresi yazın.
+
+---
+
+## 11. Termin bildirimi (isteğe bağlı)
+
+Termini yaklaşan ve geçmiş aksiyonlar için her sabah sahiplerine tek
+bir özet e-posta gönderir.
+
+**Gereksinim:** sunucuda çalışan bir MTA. Yoksa `mail()` başarısız olur
+ve betik hata ile çıkar — sessizce "gönderildi" demez.
+
+```bash
+sudo apt install -y postfix     # kurulumda "Internet Site" seçin
+```
+
+Ayarları Settings ekranından girin: **Termin Bildirimi** açık,
+**Gönderen Adresi** dolu olmalı. Boşsa bildirim gönderilmez.
+
+Göndermeden önce ne çıkacağını görün:
+
+```bash
+cd /var/www/riskops && sudo -u www-data php tools/notify_due_actions.php --dry-run
+```
+
+Sonra cron'a ekleyin:
+
+```
+0 8 * * * cd /var/www/riskops && sudo -u www-data /usr/bin/php tools/notify_due_actions.php >> /var/log/riskops-notify.log 2>&1
+```
+
+> Demo kurulumunda **açmayın**. Demo verisindeki e-posta adresleri
+> gerçek değildir; gönderim denemeleri sunucunun posta itibarını
+> zedeler.

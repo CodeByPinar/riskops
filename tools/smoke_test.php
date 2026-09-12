@@ -67,11 +67,13 @@ check('EMULATE_PREPARES kapalı',
     $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES) == false);
 
 $expected = ['audit_logs', 'departments', 'login_attempts', 'risk_actions',
-             'risk_assessments', 'risk_categories', 'risk_sequences',
-             'risks', 'settings', 'users'];
+             'risk_assessments', 'risk_attachments', 'risk_categories',
+             'risk_comments', 'risk_sequences', 'risks', 'settings', 'users'];
 $tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
 sort($tables);
-check('10 tablo mevcut', $tables === $expected, count($tables) . ' tablo');
+check(count($expected) . ' tablo mevcut', $tables === $expected,
+    count($tables) . ' tablo: ' . implode(', ', array_diff($tables, $expected))
+    . ' fazla / ' . implode(', ', array_diff($expected, $tables)) . ' eksik');
 
 // Native int donuyor mu?
 $one = $pdo->query('SELECT COUNT(*) AS c FROM departments')->fetch();

@@ -80,10 +80,19 @@ silinmez — böylece "bu risk 6 ayda nereden nereye geldi" sorusu cevaplanabili
 - Antetli, gizlilik ibareli, imza bloklu **yazdırma çıktısı** (A4, `@page`)
 - Çift formatlı CSV: `excel` (Türkçe Excel'de çift tıkla açılır) ve `raw` (RFC 4180)
 
+**İşbirliği**
+- Risk kayıtlarına yorum; yazan kişi silinse bile yorum kalır
+- Dosya eki: içerik tipi uzantıyla karşılaştırılır, diskteki ad uygulama
+  tarafından üretilir, her ek zorla indirilir (tarayıcıda render edilmez)
+- Toplu işlem: seçili risklere sahip atama, durum değiştirme, kapatma
+
 **Yönetim**
 - 4 rol × yetki matrisi (`admin` / `manager` / `analyst` / `viewer`)
 - Departman ve risk kategorisi yönetimi
 - Değiştirilemez (append-only) denetim kaydı
+- Kullanıcı profil sayfası (rol ve departman salt okunur)
+- Silinen riskleri listeleme ve geri alma
+- Termini yaklaşan aksiyonlar için günlük e-posta özeti (cron)
 
 ---
 
@@ -112,11 +121,16 @@ Uygulanan önlemler:
 | CSV formül enjeksiyonu | `= + - @` ile başlayan hücreler tek tırnakla metne zorlanır |
 | Açık yönlendirme | Giriş sonrası `redirect` hedefi katı regex'ten geçer |
 | Dizin koruması | `.htaccess` **ve** VirtualHost — `AllowOverride` kapatılsa da geçerli |
-| Başlıklar | CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy |
+| Başlıklar | CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy — Apache **ve** PHP tarafında |
+| Dosya yükleme | Uzantı beyaz listesi + `finfo` ile gerçek içerik doğrulaması; diskteki ad uygulama üretir |
+| Ek indirme | Her zaman `application/octet-stream` + `attachment` + `nosniff` — hiçbir ek tarayıcıda render edilmez |
 
-**Bilinen sınır:** CSP'de hâlâ `'unsafe-inline'` var — birkaç sayfa satır içi
-`<script>` kullanıyor. Bunlar harici dosyaya taşındığında kaldırılacak.
-Gerekçesi `deploy/riskops.conf` içinde yorum olarak yazılıdır.
+**Bilinen sınır:** `script-src` artık `'self'` — satır içi betik yok.
+Ancak `style-src` hâlâ `'unsafe-inline'` içeriyor: uygulama dinamik ölçü
+taşıyan `style=""` öznitelikleri kullanıyor (ilerleme çubuğu genişliği
+gibi) ve bunlar statik sınıfa çevrilemez. XSS yükü betik enjekte eder,
+stil değil; asıl kazanç `script-src` tarafındaydı. Gerekçe
+`deploy/riskops.conf` içinde yorum olarak yazılıdır.
 
 ---
 
@@ -149,10 +163,11 @@ birlikte yorumlanmış durumda.
 
 ### Veri modeli
 
-10 tablo:
+12 tablo:
 
 `users` · `departments` · `risk_categories` · `risks` · `risk_assessments`
-· `risk_actions` · `settings` · `audit_logs` · `login_attempts` · `risk_sequences`
+· `risk_actions` · `risk_comments` · `risk_attachments` · `settings`
+· `audit_logs` · `login_attempts` · `risk_sequences`
 
 Dikkate değer birkaç karar:
 
@@ -290,10 +305,10 @@ belirler, bu bayrak değil.
 
 | | |
 |---|---|
-| PHP dosyası | 83 |
-| PHP satırı | ~11.960 |
-| CSS satırı | ~1.510 (`app.css`) + yazdırma stili |
-| Veritabanı tablosu | 10 |
+| PHP dosyası | 103 |
+| PHP satırı | ~14.790 |
+| CSS satırı | ~2.220 (`app.css`) + yazdırma stili |
+| Veritabanı tablosu | 12 |
 | Duman testi | 59 doğrulama |
 | Harici PHP bağımlılığı | **0** |
 
@@ -306,12 +321,23 @@ find . -name "*.php" -not -path "./assets/*" -exec php -l {} \;
 
 ## Yol haritası
 
-- [ ] CSP'den `'unsafe-inline'` kaldırma (satır içi script'leri taşı)
-- [ ] Risk kayıtlarına yorum ve dosya eki
-- [ ] Termin yaklaşan aksiyonlar için e-posta bildirimi
-- [ ] Toplu işlemler (çoklu risk atama / kapatma)
-- [ ] Kullanıcı profil sayfası
-- [ ] Silinen riski geri alma ekranı
+Önceki yol haritasındaki altı maddenin tamamı tamamlandı:
+
+- [x] CSP'den `script-src 'unsafe-inline'` kaldırıldı
+- [x] Risk kayıtlarına yorum ve dosya eki
+- [x] Termin yaklaşan aksiyonlar için e-posta bildirimi
+- [x] Toplu işlemler (çoklu risk atama / durum değiştirme / kapatma)
+- [x] Kullanıcı profil sayfası
+- [x] Silinen riski geri alma ekranı
+
+Sırada:
+
+- [ ] `style-src 'unsafe-inline'` kaldırma — dinamik ölçü taşıyan
+      `style=""` öznitelikleri CSS değişkenlerine taşınmalı
+- [ ] Aksiyonlar için de yorum ve ek
+- [ ] Risk değerlendirme hatırlatması (uzun süre gözden geçirilmeyen kayıtlar)
+- [ ] Dışa aktarılabilir denetim raporu (audit log filtreli CSV)
+- [ ] Çok dilli arayüz (şu an yalnızca Türkçe)
 
 ---
 

@@ -90,7 +90,21 @@ VALUES
     'Yazdirilan raporlarin ust ve alt bilgisinde gorunur. Bos birakilirsa gosterilmez.', 1, 70),
 ('report_footer_note', 'Bu rapor RiskOps tarafindan otomatik uretilmistir.',
                                           'string', 'general', 'Rapor Alt Not',
-    'Yazdirilan raporlarin altinda gorunen aciklama satiri.', 1, 80);
+    'Yazdirilan raporlarin altinda gorunen aciklama satiri.', 1, 80),
+
+-- ---------------------------------------------------------------------
+--  Termin bildirimi  (tools/notify_due_actions.php)
+--  Cron her sabah calisir; bu ayarlar acik/kapali ve kimin adina
+--  gonderilecegini belirler.
+-- ---------------------------------------------------------------------
+('notify_enabled',      '0',              'bool',   'notify',   'Termin Bildirimi',
+    'Acik oldugunda termini yaklasan aksiyonlar sahiplerine e-posta ile bildirilir.', 1, 10),
+('notify_days_ahead',   '7',              'int',    'notify',   'Kac Gun Once',
+    'Termine bu kadar gun kala bildirim baslar. Gecikmis aksiyonlar her zaman dahildir.', 1, 20),
+('notify_from_email',   '',               'string', 'notify',   'Gonderen Adresi',
+    'Bildirim e-postalarinin From adresi. Bos birakilirsa bildirim gonderilmez.', 1, 30),
+('notify_from_name',    'RiskOps',        'string', 'notify',   'Gonderen Adi',
+    'Bildirim e-postalarinda gorunen gonderen adi.', 1, 40);
 
 
 -- ---------------------------------------------------------------------
