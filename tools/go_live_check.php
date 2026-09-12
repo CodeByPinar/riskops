@@ -86,7 +86,31 @@ if (APP_ENV === 'production' && ($display === '1' || strtolower($display) === 'o
     result('OK', 'display_errors', $display === '' ? 'off' : $display);
 }
 
+/* Hata ayıklama kipi: üretimde KAPALI olmalı.
+   Açıkken sorgu metinleri, dosya yolları, oturum içeriği ve yığın izi
+   tarayıcıya basılır. config.php'deki çift bayrak kuralı kazayla
+   açılmasını zorlaştırır ama bilerek açılmış olabilir - üretime
+   almadan önce burada görünsün. */
+if (APP_DEBUG) {
+    result(
+        APP_ENV === 'production' ? 'FAIL' : 'WARN',
+        'APP_DEBUG',
+        'AÇIK',
+        APP_ENV === 'production'
+            ? 'VirtualHost içinden RISKOPS_DEBUG ve RISKOPS_DEBUG_PRODUCTION satırlarını silin'
+            : 'Canlıya çıkmadan önce kapatılmalı'
+    );
+} else {
+    result('OK', 'APP_DEBUG', 'kapalı');
+}
+
 result(is_writable(LOG_PATH) ? 'OK' : 'FAIL', 'Log dizini yazılabilir', LOG_PATH);
+
+if (is_file(DEBUG_LOG_FILE)) {
+    $mb = filesize(DEBUG_LOG_FILE) / 1048576;
+    result($mb > 20 ? 'WARN' : 'OK', 'debug.log boyutu', number_format($mb, 1) . ' MB',
+        $mb > 20 ? 'Hata ayıklama kipi kapatıldıysa bu dosya silinebilir' : '');
+}
 
 if (is_file(LOG_FILE)) {
     $mb = filesize(LOG_FILE) / 1048576;

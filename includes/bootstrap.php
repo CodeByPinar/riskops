@@ -25,6 +25,11 @@ ini_set('log_errors', '1');
 ini_set('error_log', LOG_FILE);
 
 require_once INCLUDES_PATH . '/functions.php';
+require_once INCLUDES_PATH . '/debug.php';
+
+/* debug.php ERKEN yuklenir: db() ilk cagrildiginda sorgu kaydedici
+   fonksiyonlarin tanimli olmasi gerekir. Kip kapaliyken bu dosyadaki
+   her fonksiyon ilk satirinda doner. */
 
 // Uyarilari/notice'lari exception'a cevir -> sessiz hata kalmasin
 set_error_handler(static function (int $no, string $str, string $file = '', int $line = 0): bool {
@@ -40,7 +45,20 @@ set_exception_handler(static function (Throwable $e): void {
         'line' => $e->getLine(),
     ]);
 
-    if (APP_ENV === 'development') {
+    /* Hata ayiklama kipi: yigin izli, kaynak parcali, sorgu kayitli
+       ayrintili sayfa. Sayfanin KENDISI hata verirse asagidaki sade
+       cikisa dusulur - hata ayiklayici bir hatanin uzerini ortmemeli. */
+    if (debug_enabled() && PHP_SAPI !== 'cli') {
+        try {
+            $rkThrowable = $e;
+            require APP_ROOT . '/errors/debug_exception.php';
+            exit(1);
+        } catch (Throwable $inner) {
+            app_log('critical', 'debug_exception.php failed: ' . $inner->getMessage());
+        }
+    }
+
+    if (APP_ENV === 'development' || debug_enabled()) {
         if (!headers_sent()) {
             http_response_code(500);
             header('Content-Type: text/plain; charset=utf-8');
@@ -56,6 +74,11 @@ set_exception_handler(static function (Throwable $e): void {
 });
 
 register_shutdown_function(static function (): void {
+    /* Olcum ozetini once yaz: asagidaki fatal error kontrolu exit
+       etmiyor ama sirayi acik tutmak icin basta duruyor. */
+    debug_headers();
+    debug_shutdown();
+
     $err = error_get_last();
     if ($err !== null && in_array($err['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
         app_log('critical', 'Fatal error: ' . $err['message'], [
@@ -198,6 +221,10 @@ if (PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
     /* Dil degistirme: oturum hazir olduktan SONRA, cunku giris yapmis
        kullanicinin tercihi veritabanina da yaziliyor. */
     i18n_handle_switch();
+
+    /* Arac cubugunu gizle/goster (?rkdebug=off). Kipin KENDISINI
+       degistirmez - o yalnizca ortam degiskeninden acilir. */
+    debug_handle_toggle();
 
     require_password_change_if_needed();
 }

@@ -1,0 +1,257 @@
+/* =====================================================================
+   RiskOps - Hata ayıklama araç çubuğu
+   /var/www/riskops/assets/css/debug.css
+
+   Yalnızca hata ayıklama kipinde yüklenir. Uygulamanın kendi
+   görünümüne karışmaması için tüm seçiciler .rkdbg altındadır ve
+   hiçbir genel öğeyi (body, table, pre) doğrudan hedeflemez.
+
+   Renk paleti bilinçli olarak uygulamadan FARKLI (koyu lacivert):
+   araç çubuğunun arayüzün bir parçası olmadığı, geliştirme aracı
+   olduğu bir bakışta anlaşılsın.
+   ===================================================================== */
+
+.rkdbg {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 2147483000;          /* her şeyin üstünde; modal'lar dâhil */
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #cbd9ea;
+    background: #06203f;
+    border-top: 2px solid #23b0f8;
+    box-shadow: 0 -8px 24px rgba(4, 31, 60, .22);
+}
+
+/* Açıkken sayfanın altındaki içerik çubuğun altında kalmasın */
+body.rkdbg-open { padding-bottom: 42vh; }
+
+/* ------------------------------------------------------------- çubuk */
+
+.rkdbg-bar {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    padding: 0 8px;
+    min-height: 34px;
+    overflow-x: auto;
+}
+
+.rkdbg-brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px 0 4px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #ffd166;
+    white-space: nowrap;
+}
+
+.rkdbg-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 11px;
+    border: 0;
+    background: transparent;
+    color: #9fb6d0;
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+}
+.rkdbg-tab:hover           { background: #0b356d; color: #fff; }
+.rkdbg-tab.is-active       { background: #0b356d; color: #fff; border-top-color: #23b0f8; }
+.rkdbg-tab.is-warn .rkdbg-count { background: #a16207; color: #fef3c7; }
+.rkdbg-tab.is-bad  .rkdbg-count { background: #b91c1c; color: #fee2e2; }
+
+.rkdbg-count {
+    font-style: normal;
+    font-size: 10.5px;
+    font-weight: 700;
+    background: #12406f;
+    color: #bcdcfa;
+    border-radius: 9px;
+    padding: 0 6px;
+}
+
+.rkdbg-spacer { flex: 1 1 auto; }
+
+.rkdbg-stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 10px;
+    color: #7d9ab8;
+    white-space: nowrap;
+}
+.rkdbg-stat i { color: #4f7ba8; }
+
+.rkdbg-x {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    color: #6685a8;
+    text-decoration: none;
+}
+.rkdbg-x:hover { color: #fff; background: #7f1d1d; }
+
+/* ------------------------------------------------------------ paneller */
+
+.rkdbg-body {
+    max-height: 42vh;
+    overflow-y: auto;
+    border-top: 1px solid #0b356d;
+    background: #041f3c;
+    padding: 14px 16px 20px;
+}
+
+.rkdbg-panel h4 {
+    margin: 18px 0 7px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    color: #6685a8;
+}
+.rkdbg-panel h4:first-child { margin-top: 0; }
+
+.rkdbg-lead   { margin: 0 0 12px; color: #9fb6d0; }
+.rkdbg-empty  { margin: 0; color: #55779c; }
+.rkdbg-note   { margin: 12px 0 0; color: #55779c; font-size: 11px; }
+.rkdbg-dim    { color: #55779c; }
+.rkdbg-panel code { color: #ffd166; }
+
+.rkdbg-warnbox {
+    background: #2a1f06;
+    border: 1px solid #6b4e0a;
+    border-radius: 8px;
+    padding: 10px 13px;
+    margin-bottom: 12px;
+    color: #fcd34d;
+}
+.rkdbg-warnbox ul { margin: 6px 0 0; padding-left: 18px; }
+.rkdbg-warnbox li { margin: 2px 0; color: #d8c08a; }
+.rkdbg-warnbox em { font-style: normal; font-weight: 700; color: #fde68a; }
+
+/* -------------------------------------------------------------- tablo */
+
+.rkdbg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+}
+.rkdbg-table th,
+.rkdbg-table td {
+    text-align: left;
+    padding: 5px 10px;
+    border-bottom: 1px solid #0a2e58;
+    vertical-align: top;
+}
+.rkdbg-table thead th { color: #6685a8; font-weight: 700; }
+.rkdbg-table tbody tr:hover { background: #07264a; }
+.rkdbg-kv th { width: 220px; color: #7d9ab8; font-weight: 600; }
+.rkdbg-kv td { color: #cbd9ea; word-break: break-word; }
+
+/* ------------------------------------------------------------ sorgular */
+
+.rkdbg-queries { margin: 0; padding: 0; list-style: none; }
+
+.rkdbg-q {
+    border: 1px solid #0a2e58;
+    border-left: 3px solid #16406f;
+    border-radius: 7px;
+    padding: 8px 11px;
+    margin-bottom: 7px;
+    background: #051d38;
+}
+.rkdbg-q.is-slow { border-left-color: #ca8a04; }
+.rkdbg-q.is-dup  { border-left-color: #7c3aed; }
+.rkdbg-q.is-bad  { border-left-color: #dc2626; background: #2a0d0d; }
+
+.rkdbg-q-head {
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: #6685a8;
+}
+.rkdbg-q-no   { color: #4f7ba8; }
+.rkdbg-q-ms   { color: #23b0f8; font-weight: 700; }
+.rkdbg-q-rows { color: #7d9ab8; }
+.rkdbg-q-flag {
+    background: #16406f;
+    color: #bcdcfa;
+    border-radius: 5px;
+    padding: 0 6px;
+    font-size: 10px;
+    font-weight: 700;
+}
+.rkdbg-q-origin { margin-left: auto; color: #55779c; }
+.rkdbg-q-err    { margin: 6px 0 0; color: #fca5a5; }
+
+.rkdbg-sql {
+    margin: 5px 0 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #a8d5f7;
+    font-size: 11.5px;
+}
+
+.rkdbg-params {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 6px;
+}
+.rkdbg-params span {
+    background: #0a2e58;
+    border-radius: 5px;
+    padding: 1px 7px;
+    font-size: 10.5px;
+    color: #9fb6d0;
+}
+.rkdbg-params b { color: #6ec6f5; font-weight: 600; }
+
+.rkdbg-dump { margin-bottom: 8px; }
+
+.rkdbg-abilities { display: flex; flex-wrap: wrap; gap: 5px; }
+.rkdbg-abilities span {
+    background: #0a2e58;
+    border-radius: 5px;
+    padding: 2px 8px;
+    font-size: 10.5px;
+    color: #a8d5f7;
+}
+
+.rkdbg-log {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 11px;
+    color: #9fb6d0;
+    max-height: 30vh;
+    overflow-y: auto;
+}
+
+/* ---------------------------------------------------------- yazdırma */
+
+@media print {
+    .rkdbg { display: none !important; }
+    body.rkdbg-open { padding-bottom: 0; }
+}
+
+/* ----------------------------------------------------------- telefon */
+
+@media (max-width: 767.98px) {
+    .rkdbg-stat:not(:first-of-type) { display: none; }
+    .rkdbg-tab span { display: none; }
+    body.rkdbg-open { padding-bottom: 52vh; }
+    .rkdbg-body { max-height: 52vh; }
+    .rkdbg-kv th { width: 120px; }
+}

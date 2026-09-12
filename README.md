@@ -301,19 +301,103 @@ belirler, bu bayrak değil.
 
 ---
 
+## Hata ayıklama kipi
+
+Geliştirirken "bu sayfa neden yavaş", "bu sorgu neden boş döndü", "bu
+oturumda ne var" sorularını `var_dump()` serpiştirmeden cevaplamak için
+bir hata ayıklama kipi vardır. Ortam değişkeniyle açılır:
+
+```apache
+SetEnv RISKOPS_DEBUG 1
+```
+
+Açıkken sayfanın altında bir araç çubuğu belirir:
+
+| Panel | İçerik |
+|---|---|
+| **Sorgular** | Çalışan her SQL, süresi, dönen satır sayısı, bağlanan parametreler ve **sorguyu açan dosya:satır**. Yavaş olanlar ve aynı SQL'in tekrarı (N+1 işareti) ayrıca işaretlenir. |
+| **Zaman** | İstek süresi, süreölçerler, sayaçlar, `debug_mark()` ile bırakılan işaretler |
+| **İstek** | `$_GET`, `$_POST`, `$_FILES`, `$_COOKIE`, ilgili `$_SERVER` anahtarları |
+| **Oturum** | Giriş yapan kullanıcı, rolünün yetki listesi, `$_SESSION` içeriği |
+| **Ortam** | APP_ENV, PHP ve MariaDB sürümü, saat dilimi, bellek sınırı, yüklenen dosya sayısı |
+| **Notlar** | `dbg()` dökümleri ve `debug_note()` notları |
+| **Log** | `storage/logs/app.log` kuyruğu |
+
+Kod içinden kullanılan yardımcılar — hepsi kip kapalıyken ilk satırında
+döner, yani üretimde unutulmuş bir çağrı hiçbir şey yapmaz:
+
+```php
+dbg($risk, 'store öncesi');          // değeri araç çubuğuna bas
+debug_mark('rapor sorgusu bitti');   // zaman çizelgesine nokta koy
+debug_timer_start('csv'); …; debug_timer_stop('csv');
+debug_note('mail', 'gönderim atlandı', ['sebep' => 'adres yok']);
+```
+
+Ayrıca:
+
+- **Ayrıntılı istisna sayfası** — yığın izi, hatalı satırın kaynak
+  parçası ve o isteğe kadar çalışmış tüm sorgular. Bozuk bir SQL'in
+  kendisi de listede ve kırmızı görünür.
+- **`X-RiskOps-Debug` yanıt başlığı** — süre, bellek ve sorgu sayısı.
+  CSV dışa aktarma ve yönlendirme gibi araç çubuğu basılamayan
+  yanıtlarda ölçüm buradan okunur.
+- **`storage/logs/debug.log`** — istek başına tek satır özet. Yalnızca
+  sorunlu istekler istenirse `SetEnv RISKOPS_DEBUG_LOG_ONLY_SLOW 1`.
+- **`?rkdebug=off`** — araç çubuğunu bu oturum için gizler (ekran
+  görüntüsü alırken). Kipin kendisini kapatmaz; o yalnızca ortam
+  değişkenindedir.
+
+### Üretimde kazayla açılamaz
+
+`APP_ENV=production` iken `RISKOPS_DEBUG` **tek başına yetmez**; ayrıca
+`RISKOPS_DEBUG_PRODUCTION=1` gerekir. Kopyalanmış bir VirtualHost'ta
+unutulan tek bir satır canlı sistemi bilgi sızdıran hâle getirmesin
+diye böyle. Açılsa bile araç çubuğu yalnızca `admin` rolüne gösterilir
+ve `tools/go_live_check.php` bunu `FAIL` olarak raporlar.
+
+### Sır basmaz
+
+Araç çubuğu istek ve oturum içeriğini gösterdiği için maskeleme
+zorunludur. İki katman çalışır: anahtar adı şüpheliyse (`password`,
+`_csrf`, `PHPSESSID`, `api_key`…) değer `***` olur; anahtar masum olsa
+bile **değerin kendisi** veritabanı parolası, oturum kimliği veya CSRF
+jetonuyla aynıysa yine `***` olur.
+
+```bash
+php tools/debug_test.php                  # kip kapalıyken:  85/85
+RISKOPS_DEBUG=1 php tools/debug_test.php  # kip açıkken:     95/95
+```
+
+### Teşhis raporu
+
+Hata bildirirken ortamı tarif etmek yerine:
+
+```bash
+php tools/debug_report.php > rapor.txt
+```
+
+PHP sürümü ve eklentileri, MariaDB sürümü ve oturum değişkenleri,
+tablo satır sayıları ve boyutları, dizin izinleri, PHP–MySQL saat
+farkı, disk durumu ve log kuyruğu. Bağlantı bilgisi ve parola çıktıya
+girmez; raporu olduğu gibi paylaşabilirsiniz.
+
+---
+
 ## Proje büyüklüğü
 
 | | |
 |---|---|
-| PHP dosyası | 103 |
-| PHP satırı | ~14.790 |
-| CSS satırı | ~2.220 (`app.css`) + yazdırma stili |
-| Veritabanı tablosu | 12 |
+| PHP dosyası | 119 |
+| PHP satırı | ~18.500 |
+| CSS satırı | ~2.440 (`app.css`) + araç çubuğu ve yazdırma stili |
+| Veritabanı tablosu | 14 |
 | Duman testi | 59 doğrulama |
+| Hata ayıklama kipi testi | 85 (kapalı) + 95 (açık) |
 | Harici PHP bağımlılığı | **0** |
 
 ```bash
 php tools/smoke_test.php        # 59/59
+php tools/debug_test.php        # 85/85
 find . -name "*.php" -not -path "./assets/*" -exec php -l {} \;
 ```
 

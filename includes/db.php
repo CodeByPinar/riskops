@@ -28,16 +28,35 @@ function db(): PDO
         $cfg['charset']
     );
 
+    $options = [
+        // Hatalar exception olarak firlatilir -> merkezi handler yakalar
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        // Gerçek prepared statement -> SQL injection'a karsi en guclu koruma
+        PDO::ATTR_EMULATE_PREPARES   => false,
+        // INT kolonlar PHP int olarak gelsin (string degil)
+        PDO::ATTR_STRINGIFY_FETCHES  => false,
+    ];
+
+    /**
+     * Hata ayiklama kipinde sorgular kaydedilsin.
+     *
+     * Sarmalayicilar YALNIZCA kip acikken devreye girer: kapaliyken bu
+     * dosya hic okunmaz, nesne duz PDO olur ve sorgu yolu bayrak
+     * eklenmeden onceki haliyle bire bir aynidir. Boylece "hata
+     * ayiklama araci uretimde performansi dusuruyor mu" sorusu hic
+     * dogmaz.
+     */
+    $debugPdo = defined('APP_DEBUG') && APP_DEBUG === true;
+    if ($debugPdo) {
+        require_once INCLUDES_PATH . '/db_debug.php';
+        $options[PDO::ATTR_STATEMENT_CLASS] = [RiskOpsDebugStatement::class, []];
+    }
+
     try {
-        $pdo = new PDO($dsn, $cfg['user'], $cfg['pass'], [
-            // Hatalar exception olarak firlatilir -> merkezi handler yakalar
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            // Gerçek prepared statement -> SQL injection'a karsi en guclu koruma
-            PDO::ATTR_EMULATE_PREPARES   => false,
-            // INT kolonlar PHP int olarak gelsin (string degil)
-            PDO::ATTR_STRINGIFY_FETCHES  => false,
-        ]);
+        $pdo = $debugPdo
+            ? new RiskOpsDebugPdo($dsn, $cfg['user'], $cfg['pass'], $options)
+            : new PDO($dsn, $cfg['user'], $cfg['pass'], $options);
 
     } catch (PDOException $e) {
         // Kullaniciya ASLA bağlantı detayı gosterme

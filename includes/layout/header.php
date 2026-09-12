@@ -38,6 +38,9 @@ $assetVersion = '20260911r';
 <link rel="stylesheet" href="<?= e(url('/assets/vendor/bootstrap/bootstrap.min.css')) ?>">
 <link rel="stylesheet" href="<?= e(url('/assets/vendor/bootstrap-icons/bootstrap-icons.css')) ?>">
 <link rel="stylesheet" href="<?= e(url('/assets/css/app.css?v=' . $assetVersion)) ?>">
+<?php if (debug_visible()): ?>
+<link rel="stylesheet" href="<?= e(url('/assets/css/debug.css?v=' . $assetVersion)) ?>">
+<?php endif; ?>
 <?php
 /* Kategori renkleri: veritabanindan gelen degerler burada, nonce tasiyan
    TEK bir blokta uretiliyor. Markup satir ici stil kullanmiyor - CSP'de

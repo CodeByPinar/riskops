@@ -362,3 +362,50 @@ Sonra cron'a ekleyin:
 > Demo kurulumunda **açmayın**. Demo verisindeki e-posta adresleri
 > gerçek değildir; gönderim denemeleri sunucunun posta itibarını
 > zedeler.
+
+---
+
+## 12. Hata ayıklama kipi canlıda kapalı olmalı
+
+Hata ayıklama kipi açıkken sayfanın altındaki araç çubuğu çalışan SQL
+sorgularını, dosya yollarını ve oturum içeriğini tarayıcıya basar;
+istisnalar yığın iziyle birlikte görünür. Bunların hiçbiri canlı bir
+sistemde ziyaretçiye gitmemelidir.
+
+Kip iki bayrakla korunur — `APP_ENV=production` iken `RISKOPS_DEBUG=1`
+**tek başına yetmez**, ayrıca `RISKOPS_DEBUG_PRODUCTION=1` gerekir.
+Yani canlıda kazara açılması zordur; ama bilerek açılmış olabilir.
+
+Kontrol:
+
+```bash
+sudo -u www-data php /var/www/riskops/tools/go_live_check.php | grep APP_DEBUG
+```
+
+`[ OK ] APP_DEBUG kapalı` görmelisiniz. `FAIL` çıkıyorsa VirtualHost
+içinden şu satırları silip Apache'yi yeniden yükleyin:
+
+```apache
+SetEnv RISKOPS_DEBUG 1
+SetEnv RISKOPS_DEBUG_PRODUCTION 1
+```
+
+```bash
+sudo systemctl reload apache2
+```
+
+Kipi kapattıktan sonra biriken ölçüm dosyası da silinebilir:
+
+```bash
+sudo rm -f /var/www/riskops/storage/logs/debug.log
+```
+
+### Canlıda geçici olarak açmak gerekirse
+
+Yalnızca üreme sorunu başka türlü anlaşılamıyorsa, iki bayrağı da
+ekleyip Apache'yi yeniden yükleyin, sorunu görüp **hemen geri alın**.
+Bu süre boyunca araç çubuğu yalnızca `admin` rolündeki kullanıcılara
+görünür; diğer kullanıcılar hiçbir fark görmez. Sorunu uzaktan
+incelemek için daha güvenli seçenek, araç çubuğu yerine sunucudaki
+`storage/logs/debug.log` dosyasını okumaktır — o dosya tarayıcıya
+hiçbir şey göndermez.

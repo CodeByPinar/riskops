@@ -33,5 +33,10 @@ $needsCharts  = $needsCharts  ?? false;   // sayfa Chart.js istiyorsa true yapar
 <?php endif; ?>
 <script src="<?= e(url('/assets/js/app.js?v=' . $assetVersion)) ?>"></script>
 <?= $pageScripts ?? '' ?>
+<?php if (debug_visible()): ?>
+    <?php /* Arac cubugu betikten ONCE basilir: debug.js DOM'u hazir bulmali. */ ?>
+    <?php require PARTIALS_PATH . '/debug_toolbar.php'; ?>
+    <script src="<?= e(url('/assets/js/debug.js?v=' . $assetVersion)) ?>"></script>
+<?php endif; ?>
 </body>
 </html>
