@@ -185,7 +185,7 @@ $th = static function (string $key, string $label) use ($sort, $dir): string {
 
 /* ------------------------------------------------------------------ */
 
-$pageTitle    = 'Risk Register';
+$pageTitle    = t('Risk Kaydı');
 $pageSubtitle = $total . ' kayıt'
               . ($activeFilters > 0 ? ' - ' . $activeFilters . ' filtre aktif' : '');
 $activeMenu   = 'risks';

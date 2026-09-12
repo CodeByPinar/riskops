@@ -29,37 +29,37 @@ $user = auth_user();
 
     <div class="rk-brand">
         <a class="rk-brand-link" href="<?= e(url('/dashboard/')) ?>"
-           aria-label="<?= e(app_name()) ?> - Dashboard">
+           aria-label="<?= e(app_name()) ?> - <?= te('Panel') ?>">
             <?= brand_wordmark('dark') ?>
         </a>
     </div>
 
     <nav class="rk-nav">
 
-        <?php $rkNavItem('dashboard', t('Dashboard'), 'bi-speedometer2', '/dashboard/'); ?>
+        <?php $rkNavItem('dashboard', t('Panel'), 'bi-speedometer2', '/dashboard/'); ?>
 
-        <div class="rk-nav-section"><?= te('Risk Management') ?></div>
+        <div class="rk-nav-section"><?= te('Risk Yönetimi') ?></div>
         <?php
-        $rkNavItem('risks', t('Risk Register'), 'bi-list-columns-reverse', '/risks/');
+        $rkNavItem('risks', t('Risk Kaydı'), 'bi-list-columns-reverse', '/risks/');
         if (can('risk.create')) {
             $rkNavItem('risks.create', t('Yeni Risk'), 'bi-plus-square', '/risks/create.php');
         }
-        $rkNavItem('assessments', t('Assessments'), 'bi-clipboard-data', '/assessments/');
-        $rkNavItem('actions', t('Action Plans'), 'bi-check2-square', '/actions/');
+        $rkNavItem('assessments', t('Değerlendirmeler'), 'bi-clipboard-data', '/assessments/');
+        $rkNavItem('actions', t('Aksiyon Planları'), 'bi-check2-square', '/actions/');
         ?>
 
         <div class="rk-nav-section"><?= te('Analiz') ?></div>
-        <?php $rkNavItem('reports', t('Reports'), 'bi-bar-chart-line', '/reports/'); ?>
+        <?php $rkNavItem('reports', t('Raporlar'), 'bi-bar-chart-line', '/reports/'); ?>
 
         <?php if (auth_role() === ROLE_ADMIN): ?>
-            <div class="rk-nav-section"><?= te('Administration') ?></div>
+            <div class="rk-nav-section"><?= te('Yönetim') ?></div>
             <?php
-            $rkNavItem('admin.users',       t('Users'),       'bi-people',        '/admin/users/');
-            $rkNavItem('admin.departments', t('Departments'), 'bi-diagram-3',     '/admin/departments/');
-            $rkNavItem('admin.categories',  t('Categories'),  'bi-tags',          '/admin/categories/');
+            $rkNavItem('admin.users',       t('Kullanıcılar'),       'bi-people',        '/admin/users/');
+            $rkNavItem('admin.departments', t('Departmanlar'), 'bi-diagram-3',     '/admin/departments/');
+            $rkNavItem('admin.categories',  t('Kategoriler'),  'bi-tags',          '/admin/categories/');
             $rkNavItem('risks.deleted',     t('Silinen Riskler'), 'bi-trash3',    '/risks/deleted.php');
-            $rkNavItem('admin.audit',       t('Audit Logs'),  'bi-journal-text',  '/admin/audit_logs/');
-            $rkNavItem('admin.settings',    t('Settings'),    'bi-gear',          '/admin/settings/');
+            $rkNavItem('admin.audit',       t('Denetim Kaydı'),  'bi-journal-text',  '/admin/audit_logs/');
+            $rkNavItem('admin.settings',    t('Ayarlar'),    'bi-gear',          '/admin/settings/');
             ?>
         <?php endif; ?>
 

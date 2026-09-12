@@ -51,11 +51,13 @@ function role_permissions(): array
 
 function role_label(?string $role): string
 {
+    /* Kaynak metin TURKCE; Ingilizcesi lang/en.php icinden gelir.
+       Rol kodu ('admin') degismez, yalnizca gorunen ad cevrilir. */
     return match ($role) {
-        ROLE_ADMIN   => 'Administrator',
-        ROLE_MANAGER => 'Manager',
-        ROLE_ANALYST => 'Analyst',
-        ROLE_VIEWER  => 'Viewer',
+        ROLE_ADMIN   => 'Sistem Yöneticisi',
+        ROLE_MANAGER => 'Yönetici',
+        ROLE_ANALYST => 'Analist',
+        ROLE_VIEWER  => 'İzleyici',
         default      => '-',
     };
 }

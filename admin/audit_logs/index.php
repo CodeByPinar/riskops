@@ -81,7 +81,7 @@ $entityLink = static function (?string $type, ?int $id): ?string {
     };
 };
 
-$pageTitle    = 'Audit Logs';
+$pageTitle    = t('Denetim Kaydı');
 $pageSubtitle = number_format((float)$total, 0, ',', '.') . ' kayıt'
               . ($activeFilters > 0 ? ' — ' . $activeFilters . ' filtre aktif' : '')
               . ($oldest ? ' · en eski: ' . format_date($oldest) : '');

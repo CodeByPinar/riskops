@@ -18,36 +18,37 @@ return [
     /* ---------------------------------------------------------------
      * Navigation
      * --------------------------------------------------------------- */
-    'Risk Management'   => 'Risk Management',
+    'Risk Yönetimi'     => 'Risk Management',
     'Analiz'            => 'Analysis',
-    'Administration'    => 'Administration',
+    'Yönetim'           => 'Administration',
 
-    'Dashboard'         => 'Dashboard',
-    'Risk Register'     => 'Risk Register',
+    'Panel'             => 'Dashboard',
+    'Risk Kaydı'        => 'Risk Register',
     'Yeni Risk'         => 'New Risk',
-    'Assessments'       => 'Assessments',
-    'Action Plans'      => 'Action Plans',
-    'Reports'           => 'Reports',
-    'Users'             => 'Users',
-    'Departments'       => 'Departments',
-    'Categories'        => 'Categories',
+    'Değerlendirmeler'  => 'Assessments',
+    'Aksiyon Planları'  => 'Action Plans',
+    'Raporlar'          => 'Reports',
+    'Kullanıcılar'      => 'Users',
+    'Departmanlar'      => 'Departments',
+    'Kategoriler'       => 'Categories',
     'Silinen Riskler'   => 'Deleted Risks',
-    'Audit Logs'        => 'Audit Logs',
-    'Settings'          => 'Settings',
+    'Denetim Kaydı'     => 'Audit Logs',
+    'Ayarlar'           => 'Settings',
 
     'Profilim'          => 'My profile',
     'Parola değiştir'   => 'Change password',
     'Çıkış yap'         => 'Sign out',
 
     'Risk kodu, başlık veya varlık ara...' => 'Search risk code, title or asset...',
+    'Menüyü aç/kapat'   => 'Toggle menu',
 
     /* ---------------------------------------------------------------
      * Roles
      * --------------------------------------------------------------- */
-    'Administrator'     => 'Administrator',
-    'Manager'           => 'Manager',
-    'Analyst'           => 'Analyst',
-    'Viewer'            => 'Viewer',
+    'Sistem Yöneticisi' => 'Administrator',
+    'Yönetici'          => 'Manager',
+    'Analist'           => 'Analyst',
+    'İzleyici'          => 'Viewer',
 
     /* ---------------------------------------------------------------
      * Login
@@ -148,10 +149,31 @@ return [
     'Pasif'         => 'Inactive',
 
     /* ---------------------------------------------------------------
+     * Severity / status / priority display labels
+     *
+     * The stored ENUM values stay English ('Open', 'Critical'); only
+     * the visible label is translated. See severity_label() etc. in
+     * includes/ui.php.
+     * --------------------------------------------------------------- */
+    'Düşük'         => 'Low',
+    'Orta'          => 'Medium',
+    'Yüksek'        => 'High',
+    'Kritik'        => 'Critical',
+
+    'Açık'          => 'Open',
+    'İncelemede'    => 'Under Review',
+    'Devam ediyor'  => 'In Progress',
+    'Azaltıldı'     => 'Mitigated',
+    'Kabul edildi'  => 'Accepted',
+    'Devredildi'    => 'Transferred',
+    'Kapatıldı'     => 'Closed',
+    'Tamamlandı'    => 'Completed',
+    'İptal edildi'  => 'Cancelled',
+
+    /* ---------------------------------------------------------------
      * Risk detail tabs
      * --------------------------------------------------------------- */
     'Genel'                  => 'Overview',
-    'Aksiyon Planları'       => 'Action Plans',
     'Değerlendirme Geçmişi'  => 'Assessment History',
     'Audit'                  => 'Audit',
     'Yorumlar'               => 'Comments',

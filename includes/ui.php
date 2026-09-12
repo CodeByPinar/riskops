@@ -23,7 +23,7 @@ function severity_badge(?string $severity, bool $withIcon = false): string
             default    => '',
         };
     }
-    return '<span class="rk-badge ' . severity_class($severity) . '">' . $icon . e($severity) . '</span>';
+    return '<span class="rk-badge ' . severity_class($severity) . '">' . $icon . e(severity_label($severity)) . '</span>';
 }
 
 function status_badge(?string $status): string
@@ -31,7 +31,7 @@ function status_badge(?string $status): string
     if ($status === null || $status === '') {
         return '<span class="rk-badge st-none">-</span>';
     }
-    return '<span class="rk-badge ' . status_class($status) . '">' . e($status) . '</span>';
+    return '<span class="rk-badge ' . status_class($status) . '">' . e(status_label($status)) . '</span>';
 }
 
 function priority_badge(?string $priority): string
@@ -39,7 +39,7 @@ function priority_badge(?string $priority): string
     if ($priority === null || $priority === '') {
         return '<span class="rk-badge pr-none">-</span>';
     }
-    return '<span class="rk-badge ' . priority_class($priority) . '">' . e($priority) . '</span>';
+    return '<span class="rk-badge ' . priority_class($priority) . '">' . e(priority_label($priority)) . '</span>';
 }
 
 /** Skoru severity rengiyle birlikte kutu icinde gösterir. */
@@ -237,4 +237,49 @@ function category_color_styles(): string
 function category_dot(?string $hex): string
 {
     return '<span class="rk-dot ' . e(category_color_class($hex)) . '"></span>';
+}
+
+/* =====================================================================
+ * VERITABANI DEGERLERININ GORUNEN ADLARI
+ *
+ * status / severity / priority kolonlari ENUM'dur ve degerleri
+ * INGILIZCEDIR ('Open', 'Critical'...). Bu degerler CSS sinifi ve
+ * ayarlardaki esik JSON anahtari olarak da kullaniliyor, dolayisiyla
+ * DEGISTIRILEMEZ.
+ *
+ * Degisen yalnizca GORUNEN AD: asagidaki haritalar Turkce karsiligi
+ * doner, Ingilizcesi lang/en.php uzerinden gelir. Boylece depolanan
+ * deger ile gosterilen metin birbirinden ayrilir.
+ * ===================================================================== */
+
+function severity_label(?string $v): string
+{
+    return match ($v) {
+        'Low'      => t('Düşük'),
+        'Medium'   => t('Orta'),
+        'High'     => t('Yüksek'),
+        'Critical' => t('Kritik'),
+        default    => (string)$v,
+    };
+}
+
+function status_label(?string $v): string
+{
+    return match ($v) {
+        'Open'         => t('Açık'),
+        'Under Review' => t('İncelemede'),
+        'In Progress'  => t('Devam ediyor'),
+        'Mitigated'    => t('Azaltıldı'),
+        'Accepted'     => t('Kabul edildi'),
+        'Transferred'  => t('Devredildi'),
+        'Closed'       => t('Kapatıldı'),
+        'Completed'    => t('Tamamlandı'),
+        'Cancelled'    => t('İptal edildi'),
+        default        => (string)$v,
+    };
+}
+
+function priority_label(?string $v): string
+{
+    return severity_label($v);
 }

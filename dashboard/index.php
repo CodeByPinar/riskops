@@ -151,7 +151,7 @@ $myRiskCount = (int)$myRiskStmt->fetchColumn();
 
 /* ------------------------------------------------------------------ */
 
-$pageTitle    = 'Dashboard';
+$pageTitle    = t('Panel');
 $pageSubtitle = 'Kurumsal IT ve siber risk durumu — ' . format_datetime(date('Y-m-d H:i:s'));
 $activeMenu   = 'dashboard';
 $needsCharts  = true;

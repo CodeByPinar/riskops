@@ -13,7 +13,7 @@ if (!defined('RISKOPS_BOOTSTRAPPED')) {
 ?>
 <header class="rk-topbar">
 
-    <button type="button" class="rk-burger" data-rk-sidebar-toggle aria-label="Menüyü aç/kapat">
+    <button type="button" class="rk-burger" data-rk-sidebar-toggle aria-label="<?= te('Menüyü aç/kapat') ?>">
         <i class="bi bi-list"></i>
     </button>
 
@@ -21,7 +21,7 @@ if (!defined('RISKOPS_BOOTSTRAPPED')) {
         <i class="bi bi-search"></i>
         <input type="search" name="q" autocomplete="off"
                value="<?= e($_GET['q'] ?? '') ?>"
-               placeholder="Risk kodu, başlık veya varlık ara...">
+               placeholder="<?= te('Risk kodu, başlık veya varlık ara...') ?>">
     </form>
 
     <div class="rk-topbar-right">
@@ -31,7 +31,7 @@ if (!defined('RISKOPS_BOOTSTRAPPED')) {
 
         <?php if (can('risk.create')): ?>
             <a class="rk-btn rk-btn-primary rk-btn-sm" href="<?= e(url('/risks/create.php')) ?>">
-                <i class="bi bi-plus-lg"></i> Yeni Risk
+                <i class="bi bi-plus-lg"></i> <?= te('Yeni Risk') ?>
             </a>
         <?php endif; ?>
     </div>

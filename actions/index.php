@@ -152,7 +152,7 @@ $th = static function (string $key, string $label) use ($sort, $dir): string {
          . '">' . e($label) . ' ' . $icon . '</a></th>';
 };
 
-$pageTitle    = 'Action Plans';
+$pageTitle    = t('Aksiyon Planları');
 $pageSubtitle = $total . ' aksiyon'
               . ($activeFilters > 0 ? ' — ' . $activeFilters . ' filtre aktif' : '');
 $activeMenu   = 'actions';
