@@ -11,7 +11,7 @@ if (!defined('RISKOPS_BOOTSTRAPPED')) {
     exit('Direct access denied.');
 }
 
-$assetVersion = $assetVersion ?? '20260911n';
+$assetVersion = $assetVersion ?? ASSET_VERSION;
 $needsCharts  = $needsCharts  ?? false;   // sayfa Chart.js istiyorsa true yapar
 ?>
         <?php require PARTIALS_PATH . '/print_footer.php'; ?>

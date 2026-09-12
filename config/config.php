@@ -117,6 +117,19 @@ define('DEBUG_LOG_FILE', LOG_PATH . '/debug.log');
 // Alt dizine tasinirsa buraya '/riskops' gibi bir on ek yazılır.
 define('BASE_PATH', '');
 
+// --- Varlık sürümü ----------------------------------------------------
+// CSS ve JS bağlantılarına ?v=... olarak eklenir; tarayıcının eski
+// dosyayı önbellekten vermesini engeller.
+//
+// TEK YERDE DURUR VE BÖYLE KALMALI. Önceden bu değer üç ayrı dosyada
+// (header.php, footer.php, auth/login.php) elle yazılıydı. app.css
+// baştan sona yenilendiğinde ikisi güncellendi, giriş ekranındaki
+// unutuldu: dosya sunucuda yeniydi ama tarayıcı eskisini gösteriyordu.
+// Hata "çalışmıyor" gibi görünür, oysa yalnızca önbellektir.
+//
+// ASSETS DEĞİŞTİYSE BURAYI ARTIRIN (tarih + harf yeterli).
+define('ASSET_VERSION', '20260912a');
+
 // --- Oturum -----------------------------------------------------------
 define('SESSION_NAME', 'RISKOPS_SESSION');
 

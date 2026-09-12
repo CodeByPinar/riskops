@@ -15,7 +15,7 @@ if (auth_check()) {
     redirect('/dashboard/');
 }
 
-$assetVersion = '20260911r';
+$assetVersion = ASSET_VERSION;
 $flashes = flash_take();
 
 $flashIcons = [
