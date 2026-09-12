@@ -59,6 +59,14 @@ silinmez — böylece "bu risk 6 ayda nereden nereye geldi" sorusu cevaplanabili
 |---|---|
 | ![Matris](docs/screenshots/matrix.png) | ![Rapor](docs/screenshots/executive-summary.png) |
 
+| Hata Ayıklama Kipi | Hata Ayıklama Yönetimi |
+|---|---|
+| ![Araç çubuğu](docs/screenshots/debug-toolbar.png) | ![Yönetim ekranı](docs/screenshots/debug-panel.png) |
+
+Araç çubuğu her sorguyu, süresini ve o sorguyu açan dosya:satır bilgisini
+gösterir. Menüden süreli olarak açılır, süre dolunca kendiliğinden kapanır.
+Ayrıntı: [Hata ayıklama kipi](#hata-ayıklama-kipi).
+
 ---
 
 ## Öne çıkan özellikler
@@ -93,6 +101,17 @@ silinmez — böylece "bu risk 6 ayda nereden nereye geldi" sorusu cevaplanabili
 - Kullanıcı profil sayfası (rol ve departman salt okunur)
 - Silinen riskleri listeleme ve geri alma
 - Termini yaklaşan aksiyonlar için günlük e-posta özeti (cron)
+
+**Geliştirme ve teşhis**
+- **Hata ayıklama kipi** — menüden süreli olarak açılır (1/4/24 saat),
+  süre dolunca kendiliğinden kapanır; açma/kapama denetim kaydına yazılır
+- Araç çubuğu: çalışan her SQL ve süresi, bağlanan parametreler,
+  **sorguyu açan dosya:satır**, yinelenen sorgu (N+1) uyarısı, zaman
+  çizelgesi, istek ve oturum içeriği
+- Yığın izli, kaynak parçalı ayrıntılı istisna sayfası
+- Parola, CSRF jetonu, oturum kimliği ve veritabanı parolası maskelenir —
+  maskeleme testle doğrulanır
+- Tek komutluk sistem teşhis raporu (`tools/debug_report.php`)
 
 ---
 
@@ -452,6 +471,13 @@ Sırada:
 - [x] Risk değerlendirme hatırlatması (uzun süre gözden geçirilmeyen kayıtlar)
 - [x] Dışa aktarılabilir denetim raporu (audit log filtreli CSV)
 - [~] Çok dilli arayüz — **altyapı tamam, çeviri kısmi** (aşağıya bakın)
+
+Sonradan eklenenler:
+
+- [x] Arayüz yenilendi — giriş ekranının açık, ferah dili uygulama
+      geneline taşındı
+- [x] **Hata ayıklama kipi** — sorgu kaydedici, araç çubuğu, ayrıntılı
+      istisna sayfası, teşhis raporu; menüden süreli açılıp kapanıyor
 
 ### Çok dilli arayüz: durum
 
