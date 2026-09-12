@@ -54,7 +54,7 @@ require __DIR__ . '/_form.php';
         <h2 class="rk-card-title"><i class="bi bi-key"></i> Parola</h2>
     </div>
     <div class="rk-card-body">
-        <div class="rk-danger-zone" style="margin:0;background:var(--rk-surface-alt);border-color:var(--rk-border)">
+        <div class="rk-danger-zone rk-u-panel-soft">
             <div>
                 <strong>Parolayı sıfırla</strong>
                 <div class="rk-help">

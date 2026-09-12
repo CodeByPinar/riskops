@@ -147,7 +147,7 @@ $roleDescriptions = [
                     </div>
 
                     <?php if (empty($userId)): ?>
-                        <div class="rk-alert rk-alert-info" style="margin:0">
+                        <div class="rk-alert rk-alert-info rk-u-m0">
                             <i class="bi bi-key"></i>
                             <div>
                                 Kayıttan sonra sistem <strong>geçici bir parola</strong> üretecek ve

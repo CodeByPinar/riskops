@@ -53,14 +53,70 @@ function app_abort(int $status = 500, string $internalMessage = ''): never
         500 => 'An unexpected error occurred.',
     ];
     $msg = $titles[$status] ?? 'An unexpected error occurred.';
+    /* Bu sayfa uygulama stil dosyasini YUKLEMEZ: hata, CSS'e ulasilamayan
+       bir durumda da olusabilir. Stiller bu yuzden sayfanin icinde, ama
+       satir ici OZNITELIK olarak degil - nonce tasiyan tek bir blokta.
+       Satir ici oznitelik style-src 'unsafe-inline' gerektirirdi. */
+    $css = '.rk-err{font:15px/1.6 system-ui,sans-serif;color:#1e293b;'
+         . 'max-width:540px;margin:14vh auto;padding:0 24px}'
+         . '.rk-err-code{font-size:46px;font-weight:700;color:#94a3b8}'
+         . '.rk-err p{margin:8px 0 20px}'
+         . '.rk-err a{color:#1d4ed8;text-decoration:none}';
+
     echo '<!doctype html><meta charset="utf-8"><title>' . $status . '</title>'
-       . '<div style="font:15px/1.6 system-ui,sans-serif;color:#1e293b;max-width:540px;'
-       . 'margin:14vh auto;padding:0 24px">'
-       . '<div style="font-size:46px;font-weight:700;color:#94a3b8">' . $status . '</div>'
-       . '<p style="margin:8px 0 20px">' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p>'
-       . '<a href="' . htmlspecialchars(BASE_PATH . '/', ENT_QUOTES, 'UTF-8') . '"'
-       . ' style="color:#1d4ed8;text-decoration:none">&larr; Ana sayfaya dön</a></div>';
+       . style_block($css)
+       . '<div class="rk-err">'
+       . '<div class="rk-err-code">' . $status . '</div>'
+       . '<p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p>'
+       . '<a href="' . htmlspecialchars(BASE_PATH . '/', ENT_QUOTES, 'UTF-8') . '">'
+       . '&larr; Ana sayfaya dön</a></div>';
     exit;
+}
+
+/* =====================================================================
+ * CSP NONCE
+ * ===================================================================*/
+
+/**
+ * Bu istek için tek kullanımlık CSP nonce değeri.
+ *
+ * NEDEN GEREKLİ
+ * -------------
+ * `style-src` içinden 'unsafe-inline' kaldırıldı. Ama uygulamanın
+ * VERİTABANINDAN gelen renkleri basması gerekiyor: kategori rozetleri
+ * kullanıcının seçtiği herhangi bir hex değeri olabilir. Bunları statik
+ * bir sınıfa çevirmek mümkün değil.
+ *
+ * Çözüm, o renkleri TEK bir <style> bloğunda üretip bloğa nonce vermek.
+ * Nonce her istekte yeniden üretilir; saldırganın enjekte ettiği bir
+ * <style> bloğu doğru nonce'u bilemeyeceği için çalışmaz.
+ *
+ * DİKKAT: nonce YALNIZCA <style> ve <script> BLOKLARINDA işe yarar.
+ * style="" ÖZNİTELİĞİ için geçerli değildir - onun için 'unsafe-hashes'
+ * gerekir. Bu yüzden uygulamada satır içi stil özniteliği KALMADI;
+ * hepsi utility sınıfına ya da nonce'lu bloğa taşındı.
+ *
+ * Yeni kod yazarken style="" EKLEMEYİN, sessizce uygulanmaz.
+ */
+function csp_nonce(): string
+{
+    static $nonce = null;
+
+    if ($nonce === null) {
+        $nonce = base64_encode(random_bytes(16));
+    }
+
+    return $nonce;
+}
+
+/** Nonce taşıyan bir <style> bloğu üretir. */
+function style_block(string $css): string
+{
+    if (trim($css) === '') {
+        return '';
+    }
+
+    return '<style nonce="' . e(csp_nonce()) . '">' . $css . '</style>';
 }
 
 /* =====================================================================

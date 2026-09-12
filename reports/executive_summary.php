@@ -279,7 +279,7 @@ require LAYOUT_PATH . '/header.php';
                 </tbody>
             </table>
         </div>
-        <div class="rk-help" style="padding:10px 16px">
+        <div class="rk-help rk-u-pad-cell">
             Açık aksiyonu <strong>0</strong> olan yüksek riskler, planı olmayan risklerdir.
         </div>
         <?php endif; ?>
@@ -389,7 +389,7 @@ require LAYOUT_PATH . '/header.php';
                     <?php endforeach; ?>
                     </tbody>
                 </table>
-                <div class="rk-help" style="padding:10px 16px">
+                <div class="rk-help rk-u-pad-cell">
                     Net pozitifse portföy büyüyor: kapatılandan fazla risk açılıyor.
                 </div>
             </div>

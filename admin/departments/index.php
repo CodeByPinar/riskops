@@ -87,15 +87,14 @@ require LAYOUT_PATH . '/header.php';
                         <label class="rk-label" for="code">Kod <span class="req">*</span></label>
                         <input class="<?= e($cls('code', 'rk-input')) ?>" type="text" id="code" name="code"
                                maxlength="20" required value="<?= e($val('code')) ?>"
-                               placeholder="Örn: IT" style="text-transform:uppercase">
+                               placeholder="Örn: IT" class="rk-u-upper">
                         <?= $err('code') ?>
                         <div class="rk-help">Kısa, benzersiz tanımlayıcı. Büyük harfe çevrilir.</div>
                     </div>
 
                     <div class="rk-field">
                         <label class="rk-label" for="description">Açıklama</label>
-                        <textarea class="rk-textarea" id="description" name="description" rows="2"
-                                  style="min-height:60px"><?= e($val('description')) ?></textarea>
+                        <textarea class="rk-textarea rk-u-minh60" id="description" name="description" rows="2"><?= e($val('description')) ?></textarea>
                     </div>
 
                     <div class="rk-field">
@@ -118,7 +117,7 @@ require LAYOUT_PATH . '/header.php';
                         <div class="col-6">
                             <div class="rk-field">
                                 <label class="rk-label">Durum</label>
-                                <label class="rk-check" style="height:34px">
+                                <label class="rk-check rk-u-h34">
                                     <input type="checkbox" name="is_active" value="1"
                                            <?= $val('is_active', '1') === '0' ? '' : 'checked' ?>>
                                     <span>Aktif</span>
@@ -127,7 +126,7 @@ require LAYOUT_PATH . '/header.php';
                         </div>
                     </div>
 
-                    <div class="rk-form-actions" style="margin-bottom:0">
+                    <div class="rk-form-actions rk-u-mb0">
                         <button type="submit" class="rk-btn rk-btn-primary">
                             <i class="bi bi-check-lg"></i> <?= $editing ? 'Kaydet' : 'Ekle' ?>
                         </button>
@@ -150,7 +149,7 @@ require LAYOUT_PATH . '/header.php';
                     <table class="rk-table">
                         <thead>
                             <tr><th>Kod</th><th>Ad</th><th>Yönetici</th><th>Kullanım</th>
-                                <th>Sıra</th><th>Durum</th><th style="width:1%"></th></tr>
+                                <th>Sıra</th><th>Durum</th><th class="rk-u-shrink"></th></tr>
                         </thead>
                         <tbody>
                         <?php foreach ($rows as $d):

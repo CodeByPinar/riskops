@@ -151,7 +151,7 @@ $intOrNull = static function (string $v): ?int {
                         Henüz aksiyon planlanmadıysa boş bırakın &mdash; sonradan doldurabilirsiniz.
                     </p>
 
-                    <div class="rk-field" style="max-width:320px">
+                    <div class="rk-field rk-u-maxw320">
                         <label class="rk-label" for="treatment_strategy">Treatment Strategy</label>
                         <select class="rk-select" id="treatment_strategy" name="treatment_strategy">
                             <option value="">Belirlenmedi</option>

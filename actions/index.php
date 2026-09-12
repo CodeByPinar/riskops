@@ -145,7 +145,7 @@ $summary = db()->query(
 $th = static function (string $key, string $label) use ($sort, $dir): string {
     $nextDir = ($sort === $key && $dir === 'asc') ? 'desc' : 'asc';
     $icon = $sort !== $key
-        ? '<i class="bi bi-arrow-down-up" style="opacity:.35"></i>'
+        ? '<i class="bi bi-arrow-down-up rk-u-dim"></i>'
         : ($dir === 'asc' ? '<i class="bi bi-arrow-up"></i>' : '<i class="bi bi-arrow-down"></i>');
 
     return '<th><a href="' . e(query_url(['sort' => $key, 'dir' => $nextDir], ['page']))
@@ -283,7 +283,7 @@ require LAYOUT_PATH . '/header.php';
                         <?= $th('priority', 'Öncelik') ?>
                         <?= $th('status', 'Durum') ?>
                         <?= $th('due', 'Termin') ?>
-                        <th style="width:1%"></th>
+                        <th class="rk-u-shrink"></th>
                     </tr>
                 </thead>
                 <tbody>

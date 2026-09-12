@@ -121,7 +121,7 @@ require LAYOUT_PATH . '/header.php';
                         </div>
 
                         <div class="rk-threshold-preview" id="rkThresholdPreview">
-                            <div class="rk-help" style="margin-bottom:6px">Önizleme (5×5 matris)</div>
+                            <div class="rk-help rk-u-mb6">Önizleme (5×5 matris)</div>
                             <table class="rk-matrix rk-matrix-mini">
                                 <tbody>
                                 <?php for ($i = 5; $i >= 1; $i--): ?>
@@ -198,7 +198,7 @@ require LAYOUT_PATH . '/header.php';
     <div class="rk-card">
         <div class="rk-card-body">
             <?php if ($riskCount > 0): ?>
-            <label class="rk-check" style="margin-bottom:12px">
+            <label class="rk-check rk-u-mb12">
                 <input type="checkbox" name="recalculate" value="1" checked>
                 <span>
                     Eşikler değişirse <strong><?= $riskCount ?> riskin</strong> ve

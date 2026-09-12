@@ -271,7 +271,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
                             <?php
                             $row('Risk Kodu', '<span class="rk-code">' . e($risk['risk_code']) . '</span>');
                             $row('Kategori',
-                                '<span class="rk-dot" style="background:' . e($risk['category_color']) . '"></span> '
+                                category_dot($risk['category_color']) . ' '
                                 . e($risk['category']));
                             $row('Departman', e($risk['department']));
                             $row('Risk Sahibi',
@@ -350,7 +350,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
                             <tr>
                                 <th>Aksiyon</th><th>Sorumlu</th><th>Öncelik</th>
                                 <th>Durum</th><th>Termin</th><th>Tamamlanma</th>
-                                <th style="width:1%"></th>
+                                <th class="rk-u-shrink"></th>
                             </tr>
                         </thead>
                         <tbody>

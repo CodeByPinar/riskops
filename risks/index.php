@@ -176,7 +176,7 @@ $rows = $listStmt->fetchAll();
 $th = static function (string $key, string $label) use ($sort, $dir): string {
     $nextDir = ($sort === $key && $dir === 'asc') ? 'desc' : 'asc';
     $icon = $sort !== $key
-        ? '<i class="bi bi-arrow-down-up" style="opacity:.35"></i>'
+        ? '<i class="bi bi-arrow-down-up rk-u-dim"></i>'
         : ($dir === 'asc' ? '<i class="bi bi-arrow-up"></i>' : '<i class="bi bi-arrow-down"></i>');
 
     return '<th><a href="' . e(query_url(['sort' => $key, 'dir' => $nextDir], ['page']))
@@ -357,7 +357,7 @@ require LAYOUT_PATH . '/header.php';
                 <thead>
                     <tr>
                         <?php if ($canBulk): ?>
-                        <th style="width:1%">
+                        <th class="rk-u-shrink">
                             <input type="checkbox" class="rk-check" data-rk-bulk-all
                                    aria-label="Tümünü seç">
                         </th>
@@ -372,7 +372,7 @@ require LAYOUT_PATH . '/header.php';
                         <?= $th('severity', 'Seviye') ?>
                         <?= $th('status', 'Durum') ?>
                         <?= $th('target', 'Termin') ?>
-                        <th style="width:1%"></th>
+                        <th class="rk-u-shrink"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -397,7 +397,7 @@ require LAYOUT_PATH . '/header.php';
                             <?php endif; ?>
                         </td>
                         <td>
-                            <span class="rk-dot" style="background:<?= e($r['category_color']) ?>"></span>
+                            <?= category_dot($r['category_color']) ?>
                             <?= e($r['category']) ?>
                         </td>
                         <td><?= e($r['department']) ?></td>

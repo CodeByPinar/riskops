@@ -119,7 +119,7 @@ $summary = db()->query(
 $th = static function (string $key, string $label) use ($sort, $dir): string {
     $nextDir = ($sort === $key && $dir === 'asc') ? 'desc' : 'asc';
     $icon = $sort !== $key
-        ? '<i class="bi bi-arrow-down-up" style="opacity:.35"></i>'
+        ? '<i class="bi bi-arrow-down-up rk-u-dim"></i>'
         : ($dir === 'asc' ? '<i class="bi bi-arrow-up"></i>' : '<i class="bi bi-arrow-down"></i>');
     return '<th><a href="' . e(query_url(['sort' => $key, 'dir' => $nextDir], ['page']))
          . '">' . e($label) . ' ' . $icon . '</a></th>';
@@ -254,7 +254,7 @@ require LAYOUT_PATH . '/header.php';
                 <tbody>
                 <?php foreach ($rows as $a): ?>
                     <tr>
-                        <td style="white-space:nowrap"><?= e(format_datetime($a['assessed_at'])) ?></td>
+                        <td class="rk-u-nowrap"><?= e(format_datetime($a['assessed_at'])) ?></td>
                         <td>
                             <a class="rk-code" href="<?= e(url('/risks/view.php?id=' . (int)$a['risk_id'])) ?>">
                                 <?= e($a['risk_code']) ?></a>

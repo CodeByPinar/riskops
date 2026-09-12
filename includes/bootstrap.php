@@ -165,11 +165,21 @@ if (PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
         // uygulama dinamik ölçü taşıyan style="" öznitelikleri
         // kullanıyor (örn. ilerleme çubuğu genişliği), bunlar statik
         // sınıfa çevrilemez. XSS yükü betik enjekte eder, stil değil.
+        /* style-src'de de 'unsafe-inline' YOK. Satır içi stil özniteliği
+           uygulamada kalmadı; veritabanından gelen renkler (kategori
+           rozetleri) nonce taşıyan tek bir <style> bloğunda üretiliyor.
+           Bkz. csp_nonce(), includes/functions.php.
+
+           CSP ARTIK YALNIZCA BURADAN GÖNDERİLİYOR. Apache tarafındaki
+           kopya KALDIRILDI: nonce her istekte değişir, Apache bunu
+           üretemez. İki CSP başlığı gönderilseydi tarayıcı ikisinin
+           KESİŞİMİNİ uygular, Apache'ninki nonce içermediği için
+           bloklar engellenirdi. */
         header(
             "Content-Security-Policy: default-src 'self'; img-src 'self' data:; "
-            . "style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; "
-            . "connect-src 'self'; form-action 'self'; frame-ancestors 'self'; "
-            . "base-uri 'self'; object-src 'none'"
+            . "style-src 'self' 'nonce-" . csp_nonce() . "'; script-src 'self'; "
+            . "font-src 'self'; connect-src 'self'; form-action 'self'; "
+            . "frame-ancestors 'self'; base-uri 'self'; object-src 'none'"
         );
     }
 

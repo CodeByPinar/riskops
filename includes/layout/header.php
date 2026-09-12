@@ -38,6 +38,12 @@ $assetVersion = '20260911r';
 <link rel="stylesheet" href="<?= e(url('/assets/vendor/bootstrap/bootstrap.min.css')) ?>">
 <link rel="stylesheet" href="<?= e(url('/assets/vendor/bootstrap-icons/bootstrap-icons.css')) ?>">
 <link rel="stylesheet" href="<?= e(url('/assets/css/app.css?v=' . $assetVersion)) ?>">
+<?php
+/* Kategori renkleri: veritabanindan gelen degerler burada, nonce tasiyan
+   TEK bir blokta uretiliyor. Markup satir ici stil kullanmiyor - CSP'de
+   style-src 'unsafe-inline' bu sayede kaldirilabildi. */
+?>
+<?= style_block(category_color_styles()) ?>
 <link rel="stylesheet" media="print" href="<?= e(url('/assets/css/print.css?v=' . $assetVersion)) ?>">
 </head>
 <body class="rk-body">

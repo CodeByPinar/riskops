@@ -201,7 +201,7 @@ require LAYOUT_PATH . '/header.php';
                     <h2 class="rk-card-title"><i class="bi bi-calendar-event"></i> Tarih</h2>
                 </div>
                 <div class="rk-card-body">
-                    <div class="rk-field" style="margin-bottom:0">
+                    <div class="rk-field rk-u-mb0">
                         <label class="rk-label" for="assessed_at">Değerlendirme Tarihi</label>
                         <input class="<?= e($cls('assessed_at', 'rk-input')) ?>" type="date"
                                id="assessed_at" name="assessed_at"

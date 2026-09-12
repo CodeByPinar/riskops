@@ -209,7 +209,7 @@ require LAYOUT_PATH . '/header.php';
                     $link = $entityLink($log['entity_type'], $log['entity_id'] !== null ? (int)$log['entity_id'] : null);
                 ?>
                     <tr>
-                        <td style="white-space:nowrap"><?= e(format_datetime($log['created_at'])) ?></td>
+                        <td class="rk-u-nowrap"><?= e(format_datetime($log['created_at'])) ?></td>
                         <td>
                             <?= e((string)($log['user_name_snapshot'] ?? 'Sistem')) ?>
                             <?php if ($log['user_id'] === null && $log['user_name_snapshot'] !== null): ?>

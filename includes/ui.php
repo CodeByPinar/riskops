@@ -172,3 +172,69 @@ function favicon_tags(): string
     }
     return $out;
 }
+
+/* =====================================================================
+ * KATEGORİ RENKLERİ
+ *
+ * Kategori rozetinin rengi veritabanından gelir ve kullanıcı tarafından
+ * seçilir; sabit bir sınıfa çevrilemez. Önceden style="background:#xxx"
+ * olarak basılıyordu, bu da CSP'de style-src 'unsafe-inline' gerektiriyordu.
+ *
+ * Yeni yol: tüm kategori renkleri sayfa başında TEK bir <style> bloğunda
+ * üretilir, blok nonce taşır (bkz. csp_nonce()). Markup yalnızca sınıf
+ * kullanır.
+ * ===================================================================== */
+
+/**
+ * Hex rengi güvenli bir sınıf adına çevirir.
+ *
+ * DOĞRULAMA ZORUNLU: bu değer doğrudan CSS'e yazılıyor. Doğrulanmadan
+ * geçirilseydi veritabanına "#000;} body{display:none} .x{" gibi bir
+ * değer yazan biri sayfanın stilini ele geçirebilirdi (CSS enjeksiyonu).
+ * Yalnızca #rrggbb biçimi kabul edilir.
+ */
+function category_color_class(?string $hex): string
+{
+    if ($hex === null || preg_match('/^#[0-9a-fA-F]{6}$/', $hex) !== 1) {
+        return 'rk-cat-default';
+    }
+
+    return 'rk-cat-' . strtolower(substr($hex, 1));
+}
+
+/**
+ * Tüm kategori renkleri için CSS kuralları.
+ *
+ * PASİF KATEGORİLER DE DAHİL: pasif bir kategoriye bağlı eski riskler
+ * listelerde görünmeye devam ediyor; yalnızca aktifler yazılsaydı o
+ * rozetler renksiz kalırdı.
+ */
+function category_color_styles(): string
+{
+    $seen = [];
+    $css  = '.rk-cat-default{background:var(--rk-muted-light)}';
+
+    foreach (categories_list(false) as $c) {
+        $hex = (string)($c['color'] ?? '');
+
+        if (preg_match('/^#[0-9a-fA-F]{6}$/', $hex) !== 1) {
+            continue;
+        }
+
+        $cls = category_color_class($hex);
+        if (isset($seen[$cls])) {
+            continue;
+        }
+        $seen[$cls] = true;
+
+        $css .= '.' . $cls . '{background:' . strtolower($hex) . '}';
+    }
+
+    return $css;
+}
+
+/** Kategori rengini taşıyan nokta. */
+function category_dot(?string $hex): string
+{
+    return '<span class="rk-dot ' . e(category_color_class($hex)) . '"></span>';
+}

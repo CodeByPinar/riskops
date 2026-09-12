@@ -17,7 +17,7 @@ $needsCharts  = $needsCharts  ?? false;   // sayfa Chart.js istiyorsa true yapar
         <?php require PARTIALS_PATH . '/print_footer.php'; ?>
     </main><!-- /.rk-content -->
 
-    <footer class="text-center text-muted" style="padding:14px 22px 22px;font-size:11.5px;">
+    <footer class="text-center text-muted rk-u-foot-note">
         <?= e(app_name()) ?>
         <?php if ((string)setting('company_name', '') !== ''): ?>
             &middot; <?= e((string)setting('company_name')) ?>

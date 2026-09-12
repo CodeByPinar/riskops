@@ -166,8 +166,11 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
        . '<div class="rk-barrow-label">'
        . ($href !== '' ? '<a href="' . e($href) . '">' . e($label) . '</a>' : e($label))
        . '</div>'
+       /* Genislik satir ici stil DEGIL, utility sinifi: yuzde tam sayiya
+          yuvarlandigi icin olasi tum degerler 0-100 arasi 101 tanedir ve
+          hepsi app.css icinde tanimli (.rk-w-0 ... .rk-w-100). */
        . '<div class="rk-barrow-track"><div class="rk-barrow-fill ' . e($cls)
-       . '" style="width:' . ($count > 0 ? max(3, $pct) : 0) . '%"></div></div>'
+       . ' rk-w-' . (int)($count > 0 ? max(3, $pct) : 0) . '"></div></div>'
        . '<div class="rk-barrow-value"><strong>' . $count . '</strong>'
        . '<span class="rk-barrow-pct">%' . $pct . '</span></div>'
        . '</div>';
