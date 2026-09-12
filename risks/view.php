@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/bootstrap.php';
 require_once __DIR__ . '/../includes/attachments.php';
+require_once __DIR__ . '/../includes/discussion.php';
 
 require_login();
 require_can('risk.view');
@@ -75,28 +76,12 @@ $auditStmt = db()->prepare(
 $auditStmt->execute([':t' => 'risk', ':id' => $id]);
 $auditRows = can('audit.view') || auth_role() === ROLE_ADMIN ? $auditStmt->fetchAll() : [];
 
-/* --- Yorumlar --- */
-$commentStmt = db()->prepare(
-    'SELECT c.id, c.body, c.created_at, c.user_id, u.name AS author_name
-       FROM risk_comments c
-       LEFT JOIN users u ON u.id = c.user_id
-      WHERE c.risk_id = :id
-      ORDER BY c.created_at DESC'
-);
-$commentStmt->execute([':id' => $risk['id']]);
-$comments = $commentStmt->fetchAll();
-
-/* --- Ekler --- */
-$attachStmt = db()->prepare(
-    'SELECT a.id, a.original_name, a.mime_type, a.size_bytes, a.created_at,
-            a.uploaded_by, u.name AS uploader_name
-       FROM risk_attachments a
-       LEFT JOIN users u ON u.id = a.uploaded_by
-      WHERE a.risk_id = :id
-      ORDER BY a.created_at DESC'
-);
-$attachStmt->execute([':id' => $risk['id']]);
-$attachments = $attachStmt->fetchAll();
+/* Yorum ve ekler ortak katmandan gelir (includes/discussion.php):
+   ayni kod aksiyon detayinda da kullaniliyor. */
+$dType       = 'risk';
+$dParentId   = (int)$risk['id'];
+$comments    = discussion_comments($dType, $dParentId);
+$attachments = discussion_attachments($dType, $dParentId);
 
 /* Yorum ve ek yazma yetkisi risk.update'e bagli.
    Neden risk.view degil: viewer rolu bilincli olarak SALT OKUNURDUR.
@@ -456,128 +441,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
             </div>
         </div>
 
-        <!-- -------------------- Yorumlar -------------------- -->
-        <div class="tab-pane fade" id="tab-comments" role="tabpanel">
-            <div class="rk-card-body">
-                <span id="yorumlar"></span>
-
-                <?php if ($canWrite): ?>
-                <form method="post" action="<?= e(url('/risks/comment_store.php')) ?>"
-                      class="rk-comment-form">
-                    <?= csrf_field() ?>
-                    <input type="hidden" name="risk_id" value="<?= (int)$risk['id'] ?>">
-                    <div class="rk-field">
-                        <label class="rk-label" for="comment_body">Yorum ekle</label>
-                        <textarea class="rk-input" id="comment_body" name="body" rows="3"
-                                  maxlength="4000" required
-                                  placeholder="Bu riskle ilgili notunuz..."></textarea>
-                    </div>
-                    <button type="submit" class="rk-btn rk-btn-primary rk-btn-sm">
-                        <i class="bi bi-send"></i> Gonder
-                    </button>
-                </form>
-                <?php endif; ?>
-
-                <?php if ($comments === []): ?>
-                    <?= empty_state(
-                        'Henuz yorum yok',
-                        $canWrite ? 'Ilk yorumu siz ekleyin.'
-                                  : 'Yorum eklemek icin risk guncelleme yetkisi gerekir.',
-                        'bi-chat-left-text'
-                    ) ?>
-                <?php else: ?>
-                <ul class="rk-comments">
-                    <?php foreach ($comments as $c):
-                        $mine = $c['user_id'] !== null && (int)$c['user_id'] === auth_id();
-                    ?>
-                    <li class="rk-comment">
-                        <div class="rk-comment-avatar"><?= e(initials($c['author_name'] ?? '?')) ?></div>
-                        <div class="rk-comment-main">
-                            <div class="rk-comment-head">
-                                <strong><?= e($c['author_name'] ?? 'Silinmis kullanici') ?></strong>
-                                <span><?= e(format_datetime($c['created_at'])) ?></span>
-                                <?php if ($canWrite && ($mine || auth_role() === ROLE_ADMIN)): ?>
-                                <form method="post" action="<?= e(url('/risks/comment_delete.php')) ?>" class="m-0">
-                                    <?= csrf_field() ?>
-                                    <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
-                                    <button type="submit" class="rk-comment-del"
-                                            data-rk-confirm="Yorum silinecek. Onayliyor musunuz?"
-                                            title="Sil" aria-label="Yorumu sil">
-                                        <i class="bi bi-trash3"></i>
-                                    </button>
-                                </form>
-                                <?php endif; ?>
-                            </div>
-                            <div class="rk-comment-body"><?= nl2br(e($c['body'])) ?></div>
-                        </div>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <!-- -------------------- Ekler -------------------- -->
-        <div class="tab-pane fade" id="tab-attachments" role="tabpanel">
-            <div class="rk-card-body">
-                <span id="ekler"></span>
-
-                <?php if ($canWrite): ?>
-                <form method="post" action="<?= e(url('/risks/attachment_store.php')) ?>"
-                      enctype="multipart/form-data" class="rk-upload-form">
-                    <?= csrf_field() ?>
-                    <input type="hidden" name="risk_id" value="<?= (int)$risk['id'] ?>">
-                    <input type="file" class="rk-input" name="attachment" required
-                           accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,.csv,.doc,.docx,.xls,.xlsx,.zip">
-                    <button type="submit" class="rk-btn rk-btn-primary rk-btn-sm">
-                        <i class="bi bi-upload"></i> Yukle
-                    </button>
-                </form>
-                <div class="rk-help">
-                    En fazla <?= e(attach_format_size(ATTACH_MAX_BYTES)) ?>, risk basina
-                    <?= ATTACH_MAX_PER_RISK ?> dosya. Izin verilen turler:
-                    <?= e(implode(', ', array_keys(attach_allowed_types()))) ?>.
-                    Dosya icerigi uzantisiyla karsilastirilir; uyusmayan dosya reddedilir.
-                </div>
-                <?php endif; ?>
-
-                <?php if ($attachments === []): ?>
-                    <?= empty_state('Ek yok', 'Kanit belgelerini buraya yukleyebilirsiniz.', 'bi-paperclip') ?>
-                <?php else: ?>
-                <ul class="rk-attachments">
-                    <?php foreach ($attachments as $a):
-                        $ext  = strtolower((string)pathinfo($a['original_name'], PATHINFO_EXTENSION));
-                        $mine = $a['uploaded_by'] !== null && (int)$a['uploaded_by'] === auth_id();
-                    ?>
-                    <li class="rk-attachment">
-                        <i class="bi <?= e(attach_icon($ext)) ?>"></i>
-                        <div class="rk-attachment-main">
-                            <a href="<?= e(url('/risks/attachment_download.php?id=' . (int)$a['id'])) ?>">
-                                <?= e($a['original_name']) ?>
-                            </a>
-                            <span>
-                                <?= e(attach_format_size((int)$a['size_bytes'])) ?> &middot;
-                                <?= e($a['uploader_name'] ?? 'Silinmis kullanici') ?> &middot;
-                                <?= e(format_datetime($a['created_at'])) ?>
-                            </span>
-                        </div>
-                        <?php if ($canWrite && ($mine || auth_role() === ROLE_ADMIN)): ?>
-                        <form method="post" action="<?= e(url('/risks/attachment_delete.php')) ?>" class="m-0">
-                            <?= csrf_field() ?>
-                            <input type="hidden" name="id" value="<?= (int)$a['id'] ?>">
-                            <button type="submit" class="rk-comment-del"
-                                    data-rk-confirm="Dosya kalici olarak silinecek. Onayliyor musunuz?"
-                                    title="Sil" aria-label="Eki sil">
-                                <i class="bi bi-trash3"></i>
-                            </button>
-                        </form>
-                        <?php endif; ?>
-                    </li>
-                    <?php endforeach; ?>
-                </ul>
-                <?php endif; ?>
-            </div>
-        </div>
+        <?php require PARTIALS_PATH . '/discussion_tabs.php'; ?>
 
         <!-- -------------------- Audit -------------------- -->
         <?php if ($auditRows !== []): ?>

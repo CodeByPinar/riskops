@@ -450,6 +450,62 @@ CREATE TABLE IF NOT EXISTS risk_attachments (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+-- ---------------------------------------------------------------------
+-- 13. action_comments  (aksiyonlara yorum)
+--
+--     risk_comments ile ayni yapida ama AYRI TABLO.
+--
+--     Neden tek bir polimorfik tablo (entity_type + entity_id) degil:
+--     polimorfik anahtara YABANCI ANAHTAR verilemez. Silinen bir
+--     aksiyonun yorumlari sahipsiz kalir ve veritabani bunu engelleyemez.
+--     Iki tablo biraz tekrar demek, ama butunlugu veritabani garanti
+--     ediyor - uygulama koduna birakilmiyor.
+--
+--     Kisit onekleri "acmt": mevcut adlarla cakismamali (InnoDB'de FK
+--     adlari tum veritabaninda benzersizdir).
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS action_comments (
+    id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    action_id  INT UNSIGNED NOT NULL,
+    user_id    INT UNSIGNED NULL DEFAULT NULL,
+    body       TEXT         NOT NULL,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_acmt_action (action_id, created_at),
+    KEY idx_acmt_user (user_id),
+    CONSTRAINT fk_acmt_action FOREIGN KEY (action_id) REFERENCES risk_actions (id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_acmt_user FOREIGN KEY (user_id) REFERENCES users (id)
+        ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- ---------------------------------------------------------------------
+-- 14. action_attachments  (aksiyonlara dosya eki)
+--     risk_attachments ile ayni kurallar; bkz. includes/attachments.php
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS action_attachments (
+    id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    action_id     INT UNSIGNED NOT NULL,
+    uploaded_by   INT UNSIGNED NULL DEFAULT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    stored_name   VARCHAR(120) NOT NULL,
+    mime_type     VARCHAR(120) NOT NULL,
+    size_bytes    INT UNSIGNED NOT NULL,
+    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_aatt_stored (stored_name),
+    KEY idx_aatt_action (action_id, created_at),
+    KEY idx_aatt_user (uploaded_by),
+    CONSTRAINT fk_aatt_action FOREIGN KEY (action_id) REFERENCES risk_actions (id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_aatt_user FOREIGN KEY (uploaded_by) REFERENCES users (id)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT chk_aatt_size CHECK (size_bytes > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
 -- =====================================================================
 --  SCHEMA SONU
 -- =====================================================================

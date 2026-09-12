@@ -66,9 +66,10 @@ check('ERRMODE_EXCEPTION aktif',
 check('EMULATE_PREPARES kapalı',
     $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES) == false);
 
-$expected = ['audit_logs', 'departments', 'login_attempts', 'risk_actions',
-             'risk_assessments', 'risk_attachments', 'risk_categories',
-             'risk_comments', 'risk_sequences', 'risks', 'settings', 'users'];
+$expected = ['action_attachments', 'action_comments', 'audit_logs', 'departments',
+             'login_attempts', 'risk_actions', 'risk_assessments',
+             'risk_attachments', 'risk_categories', 'risk_comments',
+             'risk_sequences', 'risks', 'settings', 'users'];
 $tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
 sort($tables);
 check(count($expected) . ' tablo mevcut', $tables === $expected,

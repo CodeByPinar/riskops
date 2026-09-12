@@ -321,6 +321,10 @@ require LAYOUT_PATH . '/header.php';
                                 <?php endif; ?>
 
                                 <?php if (can('action.update')): ?>
+                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="<?= e(url('/actions/view.php?id=' . (int)$a['id'])) ?>">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
                                     <a class="rk-icon-btn" title="Düzenle"
                                        href="<?= e(url('/actions/edit.php?id=' . (int)$a['id'])) ?>">
                                         <i class="bi bi-pencil"></i>
