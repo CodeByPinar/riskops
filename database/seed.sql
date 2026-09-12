@@ -86,6 +86,9 @@ VALUES
 ('audit_retention_days','730',            'int',    'security', 'Audit Log Saklama (gun)',
     'Bu sureden eski audit kayitlari arsivlenebilir. 0 = sinirsiz.', 1, 50),
 
+('default_locale',       'tr',             'string', 'general',  'Varsayilan Dil',
+    'Kullanici kendi tercihini belirlemediyse kullanilacak arayuz dili (tr / en).', 1, 65),
+
 ('report_classification', 'Kuruma Ozel', 'string', 'general', 'Rapor Gizlilik Ibaresi',
     'Yazdirilan raporlarin ust ve alt bilgisinde gorunur. Bos birakilirsa gosterilmez.', 1, 70),
 ('report_footer_note', 'Bu rapor RiskOps tarafindan otomatik uretilmistir.',

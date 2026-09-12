@@ -63,14 +63,14 @@ require LAYOUT_PATH . '/header.php';
 
 <div class="rk-page-actions">
     <a class="rk-btn" href="<?= e(url('/actions/')) ?>">
-        <i class="bi bi-arrow-left"></i> Listeye dön
+        <i class="bi bi-arrow-left"></i> <?= te('Listeye dön') ?>
     </a>
     <a class="rk-btn" href="<?= e(url('/risks/view.php?id=' . (int)$action['risk_id'])) ?>">
         <i class="bi bi-shield-exclamation"></i> Riski aç
     </a>
     <?php if ($canWrite): ?>
     <a class="rk-btn rk-btn-primary" href="<?= e(url('/actions/edit.php?id=' . $dParentId)) ?>">
-        <i class="bi bi-pencil"></i> Düzenle
+        <i class="bi bi-pencil"></i> <?= te('Düzenle') ?>
     </a>
     <?php endif; ?>
 </div>
@@ -91,20 +91,20 @@ require LAYOUT_PATH . '/header.php';
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-overview"
                         type="button" role="tab">
-                    <i class="bi bi-info-circle"></i> Genel
+                    <i class="bi bi-info-circle"></i> <?= te('Genel') ?>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-comments"
                         type="button" role="tab">
-                    <i class="bi bi-chat-left-text"></i> Yorumlar
+                    <i class="bi bi-chat-left-text"></i> <?= te('Yorumlar') ?>
                     <span class="rk-tab-count"><?= count($comments) ?></span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-attachments"
                         type="button" role="tab">
-                    <i class="bi bi-paperclip"></i> Ekler
+                    <i class="bi bi-paperclip"></i> <?= te('Ekler') ?>
                     <span class="rk-tab-count"><?= count($attachments) ?></span>
                 </button>
             </li>
@@ -119,10 +119,10 @@ require LAYOUT_PATH . '/header.php';
                 <div class="row g-3">
                     <div class="col-12 col-lg-7">
                         <dl class="rk-dl">
-                            <dt>Başlık</dt>
+                            <dt><?= te('Başlık') ?></dt>
                             <dd><?= e($action['title']) ?></dd>
 
-                            <dt>Açıklama</dt>
+                            <dt><?= te('Açıklama') ?></dt>
                             <dd>
                                 <?= $action['description'] !== null && $action['description'] !== ''
                                     ? nl2br(e($action['description']))
@@ -141,25 +141,25 @@ require LAYOUT_PATH . '/header.php';
 
                     <div class="col-12 col-lg-5">
                         <dl class="rk-dl">
-                            <dt>Durum</dt>
+                            <dt><?= te('Durum') ?></dt>
                             <dd><?= status_badge($action['status']) ?></dd>
 
-                            <dt>Öncelik</dt>
+                            <dt><?= te('Öncelik') ?></dt>
                             <dd><?= priority_badge($action['priority']) ?></dd>
 
-                            <dt>Sorumlu</dt>
+                            <dt><?= te('Sorumlu') ?></dt>
                             <dd><?= e($action['owner_name'] ?? '-') ?></dd>
 
-                            <dt>Termin</dt>
+                            <dt><?= te('Termin') ?></dt>
                             <dd><?= due_date_cell($action['due_date'], $action['status']) ?></dd>
 
-                            <dt>Tamamlanma</dt>
+                            <dt><?= te('Tamamlanma') ?></dt>
                             <dd><?= e(format_datetime($action['completed_at'])) ?></dd>
 
-                            <dt>Oluşturan</dt>
+                            <dt><?= te('Oluşturan') ?></dt>
                             <dd><?= e($action['created_by_name'] ?? '-') ?></dd>
 
-                            <dt>Oluşturulma</dt>
+                            <dt><?= te('Oluşturulma') ?></dt>
                             <dd><?= e(format_datetime($action['created_at'])) ?></dd>
                         </dl>
                     </div>

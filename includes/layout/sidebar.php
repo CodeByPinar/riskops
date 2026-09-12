@@ -36,44 +36,59 @@ $user = auth_user();
 
     <nav class="rk-nav">
 
-        <?php $rkNavItem('dashboard', 'Dashboard', 'bi-speedometer2', '/dashboard/'); ?>
+        <?php $rkNavItem('dashboard', t('Dashboard'), 'bi-speedometer2', '/dashboard/'); ?>
 
-        <div class="rk-nav-section">Risk Management</div>
+        <div class="rk-nav-section"><?= te('Risk Management') ?></div>
         <?php
-        $rkNavItem('risks', 'Risk Register', 'bi-list-columns-reverse', '/risks/');
+        $rkNavItem('risks', t('Risk Register'), 'bi-list-columns-reverse', '/risks/');
         if (can('risk.create')) {
-            $rkNavItem('risks.create', 'Yeni Risk', 'bi-plus-square', '/risks/create.php');
+            $rkNavItem('risks.create', t('Yeni Risk'), 'bi-plus-square', '/risks/create.php');
         }
-        $rkNavItem('assessments', 'Assessments', 'bi-clipboard-data', '/assessments/');
-        $rkNavItem('actions', 'Action Plans', 'bi-check2-square', '/actions/');
+        $rkNavItem('assessments', t('Assessments'), 'bi-clipboard-data', '/assessments/');
+        $rkNavItem('actions', t('Action Plans'), 'bi-check2-square', '/actions/');
         ?>
 
-        <div class="rk-nav-section">Analiz</div>
-        <?php $rkNavItem('reports', 'Reports', 'bi-bar-chart-line', '/reports/'); ?>
+        <div class="rk-nav-section"><?= te('Analiz') ?></div>
+        <?php $rkNavItem('reports', t('Reports'), 'bi-bar-chart-line', '/reports/'); ?>
 
         <?php if (auth_role() === ROLE_ADMIN): ?>
-            <div class="rk-nav-section">Administration</div>
+            <div class="rk-nav-section"><?= te('Administration') ?></div>
             <?php
-            $rkNavItem('admin.users',       'Users',       'bi-people',        '/admin/users/');
-            $rkNavItem('admin.departments', 'Departments', 'bi-diagram-3',     '/admin/departments/');
-            $rkNavItem('admin.categories',  'Categories',  'bi-tags',          '/admin/categories/');
-            $rkNavItem('risks.deleted',     'Silinen Riskler', 'bi-trash3',    '/risks/deleted.php');
-            $rkNavItem('admin.audit',       'Audit Logs',  'bi-journal-text',  '/admin/audit_logs/');
-            $rkNavItem('admin.settings',    'Settings',    'bi-gear',          '/admin/settings/');
+            $rkNavItem('admin.users',       t('Users'),       'bi-people',        '/admin/users/');
+            $rkNavItem('admin.departments', t('Departments'), 'bi-diagram-3',     '/admin/departments/');
+            $rkNavItem('admin.categories',  t('Categories'),  'bi-tags',          '/admin/categories/');
+            $rkNavItem('risks.deleted',     t('Silinen Riskler'), 'bi-trash3',    '/risks/deleted.php');
+            $rkNavItem('admin.audit',       t('Audit Logs'),  'bi-journal-text',  '/admin/audit_logs/');
+            $rkNavItem('admin.settings',    t('Settings'),    'bi-gear',          '/admin/settings/');
             ?>
         <?php endif; ?>
 
     </nav>
 
     <?php if ($user !== null): ?>
+    <?php
+    /* Dil degistirici. GET ile calisir - degisen tek sey goruntuleme
+       dilidir: veri degismez, yetki degismez, geri alinabilir. */
+    $rkLocales = i18n_locales();
+    ?>
+    <?php if (count($rkLocales) > 1): ?>
+    <div class="rk-side-locale">
+        <?php foreach ($rkLocales as $code => $name): ?>
+            <a class="rk-locale-btn<?= locale() === $code ? ' is-active' : '' ?>"
+               href="<?= e(locale_switch_url($code)) ?>"
+               title="<?= e($name) ?>"><?= e(strtoupper($code)) ?></a>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+
     <div class="rk-side-user">
         <?php /* Ad ve avatar profile baglanir: kullanicinin kendi
                  hesabini aradigi ilk yer burasi. */ ?>
-        <a class="rk-side-user-link" href="<?= e(url('/profile/')) ?>" title="Profilim">
+        <a class="rk-side-user-link" href="<?= e(url('/profile/')) ?>" title="<?= te('Profilim') ?>">
             <div class="rk-avatar"><?= e(initials($user['name'])) ?></div>
             <div class="rk-side-user-info">
                 <div class="rk-side-user-name"><?= e($user['name']) ?></div>
-                <div class="rk-side-user-role"><?= e(role_label($user['role'])) ?></div>
+                <div class="rk-side-user-role"><?= te(role_label($user['role'])) ?></div>
             </div>
         </a>
         <?php /* Demo hesabı parolasını değiştiremez; bağlantıyı da gösterme.
@@ -81,13 +96,13 @@ $user = auth_user();
                  kullanıcıyı çalışmayan bir düğmeye tıklatmamak için. */ ?>
         <?php if (!(APP_DEMO && strcasecmp((string)($user['email'] ?? ''), DEMO_EMAIL) === 0)): ?>
         <a class="rk-logout-btn" href="<?= e(url('/auth/change_password.php')) ?>"
-           title="Parola değiştir" aria-label="Parola değiştir">
+           title="<?= te('Parola değiştir') ?>" aria-label="<?= te('Parola değiştir') ?>">
             <i class="bi bi-key"></i>
         </a>
         <?php endif; ?>
         <form method="post" action="<?= e(url('/auth/logout.php')) ?>" class="m-0">
             <?= csrf_field() ?>
-            <button type="submit" class="rk-logout-btn" title="Çıkış yap" aria-label="Çıkış yap">
+            <button type="submit" class="rk-logout-btn" title="<?= te('Çıkış yap') ?>" aria-label="<?= te('Çıkış yap') ?>">
                 <i class="bi bi-box-arrow-right"></i>
             </button>
         </form>

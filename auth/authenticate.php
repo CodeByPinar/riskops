@@ -96,7 +96,7 @@ if ($emailLocked || $ipLocked) {
 /* ------------------------------------------------------------------ */
 
 $stmt = db()->prepare(
-    'SELECT id, name, email, password, role, status, department_id, must_change_password
+    'SELECT id, name, email, password, role, status, department_id, must_change_password, locale
      FROM users
      WHERE email = :email
      LIMIT 1'

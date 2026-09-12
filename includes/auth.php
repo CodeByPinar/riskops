@@ -109,6 +109,9 @@ function auth_start(array $user): void
     $_SESSION['user_email']         = (string)$user['email'];
     $_SESSION['user_role']          = (string)$user['role'];
     $_SESSION['user_department_id'] = isset($user['department_id']) ? (int)$user['department_id'] : null;
+    /* Arayuz dili tercihi oturumda tasinir: her istekte kullanici
+       tablosuna gitmemek icin (bkz. includes/i18n.php locale()). */
+    $_SESSION['user_locale']        = $user['locale'] ?? null;
     $_SESSION['must_change_password'] = !empty($user['must_change_password']);
     $_SESSION['login_at']           = time();
     $_SESSION['last_activity']      = time();

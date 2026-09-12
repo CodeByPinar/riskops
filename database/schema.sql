@@ -366,6 +366,11 @@ ALTER TABLE users
     ADD COLUMN IF NOT EXISTS password_changed_at   DATETIME     NULL DEFAULT NULL AFTER must_change_password,
     ADD COLUMN IF NOT EXISTS created_by            INT UNSIGNED NULL DEFAULT NULL AFTER last_login_at;
 
+-- Arayuz dili tercihi. NULL ise sistem varsayilani kullanilir
+-- (settings.default_locale). Bkz. includes/i18n.php
+ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS locale CHAR(2) NULL DEFAULT NULL AFTER phone;
+
 ALTER TABLE users
     ADD INDEX IF NOT EXISTS idx_users_role       (role),
     ADD INDEX IF NOT EXISTS idx_users_status     (status),

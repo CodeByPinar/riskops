@@ -30,21 +30,21 @@ $dUrl = static fn(string $file): string => url('/discussion/' . $file);
             <input type="hidden" name="type" value="<?= e($dType) ?>">
             <input type="hidden" name="parent_id" value="<?= (int)$dParentId ?>">
             <div class="rk-field">
-                <label class="rk-label" for="comment_body">Yorum ekle</label>
+                <label class="rk-label" for="comment_body"><?= te('Yorum ekle') ?></label>
                 <textarea class="rk-input" id="comment_body" name="body" rows="3"
                           maxlength="4000" required
-                          placeholder="Bu kayıtla ilgili notunuz..."></textarea>
+                          placeholder="<?= te('Bu kayıtla ilgili notunuz...') ?>"></textarea>
             </div>
             <button type="submit" class="rk-btn rk-btn-primary rk-btn-sm">
-                <i class="bi bi-send"></i> Gönder
+                <i class="bi bi-send"></i> <?= te('Gönder') ?>
             </button>
         </form>
         <?php endif; ?>
 
         <?php if ($comments === []): ?>
             <?= empty_state(
-                'Henüz yorum yok',
-                $canWrite ? 'İlk yorumu siz ekleyin.'
+                t('Henüz yorum yok'),
+                $canWrite ? t('İlk yorumu siz ekleyin.')
                           : 'Yorum eklemek için güncelleme yetkisi gerekir.',
                 'bi-chat-left-text'
             ) ?>
@@ -68,7 +68,7 @@ $dUrl = static fn(string $file): string => url('/discussion/' . $file);
                             <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
                             <button type="submit" class="rk-comment-del"
                                     data-rk-confirm="Yorum silinecek. Onaylıyor musunuz?"
-                                    title="Sil" aria-label="Yorumu sil">
+                                    title="<?= te('Sil') ?>" aria-label="<?= te('Sil') ?>">
                                 <i class="bi bi-trash3"></i>
                             </button>
                         </form>
@@ -97,7 +97,7 @@ $dUrl = static fn(string $file): string => url('/discussion/' . $file);
             <input type="file" class="rk-input" name="attachment" required
                    accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,.csv,.doc,.docx,.xls,.xlsx,.zip">
             <button type="submit" class="rk-btn rk-btn-primary rk-btn-sm">
-                <i class="bi bi-upload"></i> Yükle
+                <i class="bi bi-upload"></i> <?= te('Yükle') ?>
             </button>
         </form>
         <div class="rk-help">
@@ -109,7 +109,7 @@ $dUrl = static fn(string $file): string => url('/discussion/' . $file);
         <?php endif; ?>
 
         <?php if ($attachments === []): ?>
-            <?= empty_state('Ek yok', 'Kanıt belgelerini buraya yükleyebilirsiniz.', 'bi-paperclip') ?>
+            <?= empty_state(t('Ek yok'), t('Kanıt belgelerini buraya yükleyebilirsiniz.'), 'bi-paperclip') ?>
         <?php else: ?>
         <ul class="rk-attachments">
             <?php foreach ($attachments as $a):
@@ -138,7 +138,7 @@ $dUrl = static fn(string $file): string => url('/discussion/' . $file);
                     <input type="hidden" name="id" value="<?= (int)$a['id'] ?>">
                     <button type="submit" class="rk-comment-del"
                             data-rk-confirm="Dosya kalıcı olarak silinecek. Onaylıyor musunuz?"
-                            title="Sil" aria-label="Eki sil">
+                            title="<?= te('Sil') ?>" aria-label="<?= te('Sil') ?>">
                         <i class="bi bi-trash3"></i>
                     </button>
                 </form>

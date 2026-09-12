@@ -332,12 +332,43 @@ find . -name "*.php" -not -path "./assets/*" -exec php -l {} \;
 
 Sırada:
 
-- [ ] `style-src 'unsafe-inline'` kaldırma — dinamik ölçü taşıyan
-      `style=""` öznitelikleri CSS değişkenlerine taşınmalı
-- [ ] Aksiyonlar için de yorum ve ek
-- [ ] Risk değerlendirme hatırlatması (uzun süre gözden geçirilmeyen kayıtlar)
-- [ ] Dışa aktarılabilir denetim raporu (audit log filtreli CSV)
-- [ ] Çok dilli arayüz (şu an yalnızca Türkçe)
+- [x] `style-src 'unsafe-inline'` kaldırıldı — satır içi stil özniteliği
+      kalmadı; dinamik renkler nonce taşıyan bir `<style>` bloğunda
+- [x] Aksiyonlar için de yorum ve ek (ortak tartışma katmanı)
+- [x] Risk değerlendirme hatırlatması (uzun süre gözden geçirilmeyen kayıtlar)
+- [x] Dışa aktarılabilir denetim raporu (audit log filtreli CSV)
+- [~] Çok dilli arayüz — **altyapı tamam, çeviri kısmi** (aşağıya bakın)
+
+### Çok dilli arayüz: durum
+
+Altyapı çalışır durumda ve test edilmiştir: `t()` / `te()` fonksiyonları,
+`lang/tr.php` + `lang/en.php` sözlükleri, kullanıcı başına kalıcı dil
+tercihi (`users.locale`), kenar çubuğunda dil değiştirici.
+
+**Çeviri anahtarı Türkçe metnin kendisidir** (`t('Yeni Risk')`). Bunun
+pratik sonucu: sözlükte karşılığı olmayan bir metin bozulmaz, doğru
+Türkçesiyle görünür. Yani kısmi çeviri kullanılabilir bir durumdur,
+kırık bir durum değil.
+
+Şu an İngilizceye çevrilmiş olanlar:
+
+| Çevrildi | Henüz çevrilmedi |
+|---|---|
+| Kenar çubuğu ve üst bilgi (tüm menü) | Risk listesi ve formu |
+| Giriş ekranı | Risk detayı |
+| Profil sayfası | Raporlar ve yönetici özeti |
+| Silinen riskler | Yönetim ekranları (kullanıcı, departman, kategori, ayarlar) |
+| Yorumlar ve ekler | Değerlendirme ekranları |
+| Aksiyon detayı | Denetim kaydı ekranı |
+
+Kalanları çevirmek mekanik bir iştir: metni `t('...')` ile sarıp
+`lang/en.php` dosyasına bir satır eklemek. Sözlükte 124 kayıt var.
+
+**Bilinen sınır:** aynı Türkçe kelime farklı bağlamlarda farklı
+çevrilmesi gerektiğinde tek anahtar yetmez. Giriş ekranındaki
+"Daha Güvenli" bunun örneği: hem başlıkta hem rozette geçiyor, iki
+farklı İngilizce karşılığı var. Çözüm, o metinleri tam ifade olarak
+anahtarlamak (`'Daha Güvenli Operasyonlar'`).
 
 ---
 

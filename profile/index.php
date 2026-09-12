@@ -53,8 +53,8 @@ $val = static function (string $key, $fallback): string {
     return has_old($key) ? old($key) : (string)($fallback ?? '');
 };
 
-$pageTitle    = 'Profilim';
-$pageSubtitle = 'Hesap bilgilerinizi görüntüleyin ve güncelleyin';
+$pageTitle    = t('Profilim');
+$pageSubtitle = t('Hesap bilgilerinizi görüntüleyin ve güncelleyin');
 $activeMenu   = 'profile';
 
 require LAYOUT_PATH . '/header.php';
@@ -77,14 +77,14 @@ require LAYOUT_PATH . '/header.php';
     <div class="col-12 col-lg-7">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-person-gear"></i> Bilgilerim</h2>
+                <h2 class="rk-card-title"><i class="bi bi-person-gear"></i> <?= te('Bilgilerim') ?></h2>
             </div>
             <div class="rk-card-body">
                 <form method="post" action="<?= e(url('/profile/update.php')) ?>" novalidate>
                     <?= csrf_field() ?>
 
                     <div class="rk-field">
-                        <label class="rk-label" for="name">Ad Soyad <span class="req">*</span></label>
+                        <label class="rk-label" for="name"><?= te('Ad Soyad') ?> <span class="req">*</span></label>
                         <input class="<?= e($cls('name')) ?>" type="text" id="name" name="name"
                                value="<?= e($val('name', $me['name'])) ?>"
                                maxlength="100" required
@@ -93,7 +93,7 @@ require LAYOUT_PATH . '/header.php';
                     </div>
 
                     <div class="rk-field">
-                        <label class="rk-label" for="title">Unvan</label>
+                        <label class="rk-label" for="title"><?= te('Unvan') ?></label>
                         <input class="<?= e($cls('title')) ?>" type="text" id="title" name="title"
                                value="<?= e($val('title', $me['title'])) ?>"
                                maxlength="100" placeholder="Bilgi Güvenliği Uzmanı"
@@ -102,7 +102,7 @@ require LAYOUT_PATH . '/header.php';
                     </div>
 
                     <div class="rk-field">
-                        <label class="rk-label" for="phone">Telefon</label>
+                        <label class="rk-label" for="phone"><?= te('Telefon') ?></label>
                         <input class="<?= e($cls('phone')) ?>" type="text" id="phone" name="phone"
                                value="<?= e($val('phone', $me['phone'])) ?>"
                                maxlength="30" placeholder="+90 5xx xxx xx xx"
@@ -112,7 +112,7 @@ require LAYOUT_PATH . '/header.php';
 
                     <?php if (!$isDemoAccount): ?>
                     <button type="submit" class="rk-btn rk-btn-primary">
-                        <i class="bi bi-check-lg"></i> Kaydet
+                        <i class="bi bi-check-lg"></i> <?= te('Kaydet') ?>
                     </button>
                     <?php endif; ?>
                 </form>
@@ -124,35 +124,35 @@ require LAYOUT_PATH . '/header.php';
     <div class="col-12 col-lg-5">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-shield-lock"></i> Hesap</h2>
+                <h2 class="rk-card-title"><i class="bi bi-shield-lock"></i> <?= te('Hesap') ?></h2>
             </div>
             <div class="rk-card-body">
                 <dl class="rk-dl">
-                    <dt>E-posta</dt>
+                    <dt><?= te('E-posta') ?></dt>
                     <dd><?= e($me['email']) ?></dd>
 
-                    <dt>Rol</dt>
-                    <dd><span class="rk-badge"><?= e(role_label($me['role'])) ?></span></dd>
+                    <dt><?= te('Rol') ?></dt>
+                    <dd><span class="rk-badge"><?= te(role_label($me['role'])) ?></span></dd>
 
-                    <dt>Departman</dt>
+                    <dt><?= te('Departman') ?></dt>
                     <dd><?= e($me['department_name'] ?? '-') ?></dd>
 
-                    <dt>Durum</dt>
+                    <dt><?= te('Durum') ?></dt>
                     <dd>
                         <?php if ((int)$me['status'] === 1): ?>
-                            <span class="rk-badge st-open"><i class="bi bi-check-circle-fill"></i> Aktif</span>
+                            <span class="rk-badge st-open"><i class="bi bi-check-circle-fill"></i> <?= te('Aktif') ?></span>
                         <?php else: ?>
-                            <span class="rk-badge sev-none">Pasif</span>
+                            <span class="rk-badge sev-none"><?= te('Pasif') ?></span>
                         <?php endif; ?>
                     </dd>
 
-                    <dt>Son giriş</dt>
+                    <dt><?= te('Son giriş') ?></dt>
                     <dd><?= e(format_datetime($me['last_login_at'])) ?></dd>
 
-                    <dt>Parola değişimi</dt>
+                    <dt><?= te('Parola değişimi') ?></dt>
                     <dd><?= e(format_datetime($me['password_changed_at'])) ?></dd>
 
-                    <dt>Kayıt tarihi</dt>
+                    <dt><?= te('Kayıt tarihi') ?></dt>
                     <dd><?= e(format_datetime($me['created_at'])) ?></dd>
                 </dl>
 
@@ -164,7 +164,7 @@ require LAYOUT_PATH . '/header.php';
 
                 <?php if (!$isDemoAccount): ?>
                 <a class="rk-btn" href="<?= e(url('/auth/change_password.php')) ?>">
-                    <i class="bi bi-key"></i> Parolamı değiştir
+                    <i class="bi bi-key"></i> <?= te('Parolamı değiştir') ?>
                 </a>
                 <?php endif; ?>
             </div>

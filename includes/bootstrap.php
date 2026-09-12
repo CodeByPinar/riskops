@@ -77,6 +77,10 @@ require_once INCLUDES_PATH . '/risk.php';
 require_once INCLUDES_PATH . '/ui.php';
 require_once INCLUDES_PATH . '/lookups.php';
 
+/* i18n settings.php'ye bagimli (setting() kullaniyor), o yuzden
+   ondan SONRA yukleniyor. */
+require_once INCLUDES_PATH . '/i18n.php';
+
 /* ---------------------------------------------------------------------
  * 3) Zaman dilimi  (settings tablosundan)
  * -------------------------------------------------------------------*/
@@ -191,5 +195,9 @@ if (PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
     // --- Geçici parola zorunluluğu ---
     // Geçici parolayla giren kullanıcı, parolasını değiştirmeden
     // başka hiçbir sayfaya erişemez.
+    /* Dil degistirme: oturum hazir olduktan SONRA, cunku giris yapmis
+       kullanicinin tercihi veritabanina da yaziliyor. */
+    i18n_handle_switch();
+
     require_password_change_if_needed();
 }

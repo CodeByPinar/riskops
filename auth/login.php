@@ -26,7 +26,7 @@ $flashIcons = [
 ];
 ?>
 <!doctype html>
-<html lang="tr">
+<html lang="<?= e(locale()) ?>">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,7 +59,7 @@ $flashIcons = [
             <p>IT &amp; Cyber Risk Management Platform</p>
         </div>
         <div class="rk-lg-top-note">
-            Daha güvenli bir gelecek için <span class="rk-lg-rule"></span>
+            <?= te('Daha güvenli bir gelecek için') ?> <span class="rk-lg-rule"></span>
         </div>
     </header>
 
@@ -68,28 +68,27 @@ $flashIcons = [
 
         <!-- ---------------------------- sol: anlatı --------------------- -->
         <section class="rk-lg-left rk-lg-in">
-            <p class="rk-lg-eyebrow">Riskleri bugün yönetin</p>
+            <p class="rk-lg-eyebrow"><?= te('Riskleri bugün yönetin') ?></p>
             <h1 class="rk-lg-head">
-                Daha Güvenli<br>
-                Daha Dayanıklı Bir Yarın
+                <?= te('Daha Güvenli') ?><br>
+                <?= te('Daha Dayanıklı Bir Yarın') ?>
             </h1>
             <p class="rk-lg-lede">
-                RiskOps, kurumların BT ve siber risklerini bütüncül bir
-                yaklaşımla yönetmelerine yardımcı olur.
+                <?= te('RiskOps, kurumların BT ve siber risklerini bütüncül bir yaklaşımla yönetmelerine yardımcı olur.') ?>
             </p>
 
             <ul class="rk-lg-chips">
                 <li>
                     <span class="rk-lg-chip-ic"><i class="bi bi-shield-check"></i></span>
-                    <span>Daha Güvenli<br>Operasyonlar</span>
+                    <span><?= te('Daha Güvenli Operasyonlar') ?></span>
                 </li>
                 <li>
                     <span class="rk-lg-chip-ic"><i class="bi bi-bar-chart"></i></span>
-                    <span>Uyumluluk ve<br>Raporlama</span>
+                    <span><?= te('Uyumluluk ve Raporlama') ?></span>
                 </li>
                 <li>
                     <span class="rk-lg-chip-ic"><i class="bi bi-people"></i></span>
-                    <span>Daha Güçlü<br>Kurumlar</span>
+                    <span><?= te('Daha Güçlü Kurumlar') ?></span>
                 </li>
             </ul>
 
@@ -147,7 +146,7 @@ $flashIcons = [
                 </svg>
 
                 <figcaption class="rk-lg-callout">
-                    Siber risklere karşı<br><strong>bir adım önde</strong>
+                    <?= te('Siber risklere karşı') ?><br><strong><?= te('bir adım önde') ?></strong>
                     <span class="rk-lg-rule"></span>
                 </figcaption>
             </figure>
@@ -161,8 +160,8 @@ $flashIcons = [
                 <p>IT &amp; Cyber Risk Management Platform</p>
             </div>
 
-            <h2 class="rk-lg-welcome">Tekrar hoş geldiniz</h2>
-            <p class="rk-lg-welcome-sub">Hesabınıza giriş yaparak devam edin.</p>
+            <h2 class="rk-lg-welcome"><?= te('Tekrar hoş geldiniz') ?></h2>
+            <p class="rk-lg-welcome-sub"><?= te('Hesabınıza giriş yaparak devam edin.') ?></p>
 
             <?php foreach ($flashes as $msg):
                 $type = isset($msg['type'], $flashIcons[$msg['type']]) ? $msg['type'] : 'info'; ?>
@@ -192,7 +191,7 @@ $flashIcons = [
                 <?= csrf_field() ?>
 
                 <div class="rk-field">
-                    <label class="rk-label" for="email">E-posta</label>
+                    <label class="rk-label" for="email"><?= te('E-posta') ?></label>
                     <div class="rk-input-icon">
                         <i class="bi bi-envelope"></i>
                         <input class="rk-input" type="email" id="email" name="email"
@@ -203,15 +202,15 @@ $flashIcons = [
                 </div>
 
                 <div class="rk-field">
-                    <label class="rk-label" for="password">Parola</label>
+                    <label class="rk-label" for="password"><?= te('Parola') ?></label>
                     <div class="rk-input-icon has-toggle">
                         <i class="bi bi-lock"></i>
                         <input class="rk-input" type="password" id="password" name="password"
                                autocomplete="current-password" required
-                               placeholder="Parolanız">
+                               placeholder="<?= te('Parolanız') ?>">
                         <button type="button" class="rk-pw-toggle"
                                 data-rk-pw-toggle="password"
-                                aria-label="Parolayı göster" aria-pressed="false">
+                                aria-label="<?= te('Parolayı göster') ?>" aria-pressed="false">
                             <i class="bi bi-eye-slash"></i>
                         </button>
                     </div>
@@ -224,11 +223,11 @@ $flashIcons = [
                    koymaktansa doğru yönlendirmeyi yazmak daha dürüst. */
                 ?>
                 <p class="rk-lg-hint">
-                    Parolanızı mı unuttunuz? Sistem yöneticinize başvurun.
+                    <?= te('Parolanızı mı unuttunuz? Sistem yöneticinize başvurun.') ?>
                 </p>
 
                 <button type="submit" class="rk-btn rk-btn-primary">
-                    <i class="bi bi-box-arrow-in-right"></i> Giriş yap
+                    <i class="bi bi-box-arrow-in-right"></i> <?= te('Giriş yap') ?>
                 </button>
             </form>
 
@@ -241,17 +240,17 @@ $flashIcons = [
             <div class="rk-lg-secure">
                 <span class="rk-lg-secure-ic"><i class="bi bi-shield-lock-fill"></i></span>
                 <div class="rk-lg-secure-txt">
-                    <strong>Oturumunuz korunuyor</strong>
-                    <span>Her istek sunucuda yeniden doğrulanır.</span>
+                    <strong><?= te('Oturumunuz korunuyor') ?></strong>
+                    <span><?= te('Her istek sunucuda yeniden doğrulanır.') ?></span>
                 </div>
                 <div class="rk-lg-secure-tags">
-                    <span>CSRF</span><span>Audit log</span><span>Rol bazlı yetki</span>
+                    <span>CSRF</span><span>Audit log</span><span><?= te('Rol bazlı yetki') ?></span>
                 </div>
             </div>
 
             <p class="rk-lg-audit">
                 <i class="bi bi-record-circle"></i>
-                Bu sistemdeki tüm işlemler kayıt altına alınmaktadır.
+                <?= te('Bu sistemdeki tüm işlemler kayıt altına alınmaktadır.') ?>
             </p>
 
         </section>
@@ -273,14 +272,14 @@ $flashIcons = [
 
     <!-- =========================== alt şerit =========================== -->
     <footer class="rk-lg-foot">
-        <span>&copy; <?= date('Y') ?> <strong>RiskOps</strong>. Tüm hakları saklıdır.</span>
+        <span>&copy; <?= date('Y') ?> <strong>RiskOps</strong>. <?= te('Tüm hakları saklıdır.') ?></span>
         <?php
         /* Gizlilik / Kullanım Şartları / Destek bağlantıları YOK: karşılıkları
            olan sayfalar bulunmuyor. Ölü bağlantı bırakmak yerine kurulum
            türü gösteriliyor. */
         ?>
         <span class="rk-lg-foot-env">
-            <?= APP_DEMO ? 'Deneme kurulumu' : 'Kurumsal kurulum' ?>
+            <?= te(APP_DEMO ? 'Deneme kurulumu' : 'Kurumsal kurulum') ?>
         </span>
     </footer>
 

@@ -2354,3 +2354,31 @@ a.rk-logout-btn:hover { background: var(--rk-side-bg-alt); color: #fff; text-dec
 .rk-w-98 { width: 98%; }
 .rk-w-99 { width: 99%; }
 .rk-w-100 { width: 100%; }
+
+/* ---------------------------------------------------------------------
+   Dil değiştirici (kenar çubuğu)
+   --------------------------------------------------------------------- */
+.rk-side-locale {
+    display: flex;
+    gap: 4px;
+    padding: 0 14px 10px;
+}
+.rk-locale-btn {
+    flex: 1;
+    text-align: center;
+    padding: 4px 0;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .4px;
+    text-decoration: none;
+    color: var(--rk-side-muted);
+    border: 1px solid rgba(255, 255, 255, .08);
+    transition: background .15s ease, color .15s ease;
+}
+.rk-locale-btn:hover { color: var(--rk-side-fg); background: rgba(255, 255, 255, .06); }
+.rk-locale-btn.is-active {
+    color: #fff;
+    background: rgba(35, 176, 248, .16);
+    border-color: rgba(35, 176, 248, .35);
+}

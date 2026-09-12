@@ -45,7 +45,7 @@ $rows = db()->query(
       LIMIT {$perPage} OFFSET {$offset}"
 )->fetchAll();
 
-$pageTitle    = 'Silinen Riskler';
+$pageTitle    = t('Silinen Riskler');
 $pageSubtitle = $total . ' silinmiş kayıt · geri alınabilir';
 $activeMenu   = 'risks.deleted';
 
@@ -66,8 +66,8 @@ require LAYOUT_PATH . '/header.php';
     <div class="rk-card-body p-0">
         <?php if ($rows === []): ?>
             <?= empty_state(
-                'Silinmiş risk kaydı yok',
-                'Bir risk silindiğinde burada listelenir ve geri alınabilir.',
+                t('Silinmiş risk kaydı yok'),
+                t('Bir risk silindiğinde burada listelenir ve geri alınabilir.'),
                 'bi-trash3'
             ) ?>
         <?php else: ?>
@@ -75,14 +75,14 @@ require LAYOUT_PATH . '/header.php';
             <table class="rk-table">
                 <thead>
                     <tr>
-                        <th>Kod</th>
-                        <th>Başlık</th>
-                        <th>Departman</th>
-                        <th>Kategori</th>
-                        <th>Seviye</th>
-                        <th>Silinme</th>
-                        <th>Silen</th>
-                        <th class="text-end">İşlem</th>
+                        <th><?= te('Kod') ?></th>
+                        <th><?= te('Başlık') ?></th>
+                        <th><?= te('Departman') ?></th>
+                        <th><?= te('Kategori') ?></th>
+                        <th><?= te('Seviye') ?></th>
+                        <th><?= te('Silinme') ?></th>
+                        <th><?= te('Silen') ?></th>
+                        <th class="text-end"><?= te('İşlem') ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -107,7 +107,7 @@ require LAYOUT_PATH . '/header.php';
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                                 <button type="submit" class="rk-btn rk-btn-sm">
-                                    <i class="bi bi-arrow-counterclockwise"></i> Geri al
+                                    <i class="bi bi-arrow-counterclockwise"></i> <?= te('Geri al') ?>
                                 </button>
                             </form>
                         </td>

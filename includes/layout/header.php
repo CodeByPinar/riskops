@@ -27,7 +27,7 @@ $pageActions  = $pageActions  ?? '';   // HAM HTML - sayfa kendisi kacislamakla 
 $assetVersion = '20260911r';
 ?>
 <!doctype html>
-<html lang="tr">
+<html lang="<?= e(locale()) ?>">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
