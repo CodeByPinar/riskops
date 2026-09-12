@@ -17,6 +17,16 @@ $rkTitle = $rkTitle ?? 'Bir hata oluştu';
 $rkText  = $rkText  ?? 'An unexpected error occurred.';
 $rkHome  = defined('BASE_PATH') ? BASE_PATH . '/' : '/';
 
+/* CSP.
+   bootstrap.php "style-src 'self' 'nonce-...'" gonderiyor. Bu sayfa kendi
+   stilini satir ici bir <style> blogunda tasidigi icin ayni nonce olmadan
+   tarayici blokluyor ve sayfa bicimsiz goruluyordu.
+   csp_nonce() yuklenememis olabilir (hata bootstrap'in ortasinda da
+   olusabilir): o durumda nitelik hic yazilmaz, sayfa yine okunur kalir. */
+$rkNonce = function_exists('csp_nonce')
+    ? ' nonce="' . htmlspecialchars(csp_nonce(), ENT_QUOTES, 'UTF-8') . '"'
+    : '';
+
 /* Doğrudan açıldığında da (ör. /errors/404.php) doğru durum kodu dönsün.
    Önceden 200 dönüyordu: bir tarama aracı bunu "sayfa var" diye okurdu. */
 if (!headers_sent()) {
@@ -28,20 +38,22 @@ if (!headers_sent()) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= (int)$rkCode ?> - RiskOps</title>
-<style>
+<style<?= $rkNonce ?>>
     *{box-sizing:border-box}
     body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;
-         background:#f1f5f9;color:#0f172a;
+         background:#f4f8fd;color:#041f3c;
          font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-    .box{max-width:440px;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:12px;
-         box-shadow:0 4px 14px rgba(15,23,42,.07);padding:34px 32px;text-align:center}
-    .code{font-size:52px;font-weight:700;line-height:1;color:#cbd5e1;letter-spacing:-2px}
-    h1{font-size:17px;font-weight:650;margin:14px 0 6px}
-    p{color:#64748b;margin:0 0 22px;font-size:13.5px}
-    a{display:inline-block;background:#1d4ed8;color:#fff;text-decoration:none;
-      padding:9px 18px;border-radius:6px;font-size:13px;font-weight:600}
-    a:hover{background:#1e3a8a}
-    .ref{margin-top:18px;font-size:11px;color:#94a3b8}
+    .box{max-width:440px;width:100%;background:#fff;border:1px solid #e6eefa;border-radius:20px;
+         box-shadow:0 2px 4px rgba(6,32,63,.03),0 22px 48px rgba(6,32,63,.10);
+         padding:36px 34px;text-align:center}
+    .code{font-size:52px;font-weight:700;line-height:1;color:#cfdcee;letter-spacing:-2px}
+    h1{font-size:18px;font-weight:660;margin:14px 0 6px;letter-spacing:-.3px}
+    p{color:#5c7897;margin:0 0 22px;font-size:13.5px}
+    a{display:inline-block;background:linear-gradient(180deg,#2b83e8 0%,#016ccc 100%);
+      color:#fff;text-decoration:none;padding:11px 20px;border-radius:11px;
+      font-size:13.5px;font-weight:600;box-shadow:0 8px 18px rgba(1,108,204,.24)}
+    a:hover{background:linear-gradient(180deg,#1f76de 0%,#0056b4 100%)}
+    .ref{margin-top:18px;font-size:11px;color:#90a7c2}
 </style>
 </head>
 <body>

@@ -41,7 +41,7 @@
 
     /* Yerlesim */
     --rk-sidebar-w:     252px;
-    --rk-topbar-h:      56px;
+    --rk-topbar-h:      64px;
 
     /* -----------------------------------------------------------------
        MARKA RENKLERI
@@ -59,12 +59,15 @@
     --rk-blue-bright:   #0d9bf6;
     --rk-blue-light:    #23b0f8;
 
-    /* Yuzeyler */
-    --rk-bg:            #eef2f7;
+    /* Yuzeyler
+       Zemin ve kenarlik degerleri giris ekranindan alinmistir
+       (#f4f8fd zemin, #e6eefa kart kenarligi): daha acik, daha az
+       kontrast, uzun sureli bakista daha az yorucu. */
+    --rk-bg:            #f4f8fd;
     --rk-surface:       #ffffff;
-    --rk-surface-alt:   #f6f9fc;
-    --rk-border:        #dde5ef;
-    --rk-border-strong: #c3d1e2;
+    --rk-surface-alt:   #f6faff;
+    --rk-border:        #e6eefa;
+    --rk-border-strong: #cfdcee;
 
     /* Metin */
     --rk-text:          #041f3c;
@@ -91,10 +94,13 @@
     --sev-low-fg:       #166534;  --sev-low-bg:      #dcfce7;  --sev-low-bd:      #bbf7d0;
     --sev-none-fg:      #475569;  --sev-none-bg:     #f1f5f9;  --sev-none-bd:     #e2e8f0;
 
-    --rk-radius:        8px;
-    --rk-radius-sm:     6px;
-    --rk-shadow:        0 1px 2px rgba(4, 31, 60, .07), 0 1px 3px rgba(4, 31, 60, .05);
-    --rk-shadow-lg:     0 4px 14px rgba(4, 31, 60, .10);
+    /* Koseler ve golgeler
+       Giris kartinin dili: genis kose, cok yumusak ve genis yayilan
+       golge. Kenarlik cizgisi degil golge tasiyor yuzeyi. */
+    --rk-radius:        14px;
+    --rk-radius-sm:     10px;
+    --rk-shadow:        0 1px 2px rgba(6, 32, 63, .03), 0 8px 20px rgba(6, 32, 63, .05);
+    --rk-shadow-lg:     0 2px 4px rgba(6, 32, 63, .03), 0 18px 40px rgba(6, 32, 63, .09);
 }
 
 /* ---------------------------------------------------------------- Temel */
@@ -133,7 +139,7 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     position: fixed;
     inset: 0 auto 0 0;
     width: var(--rk-sidebar-w);
-    background: var(--rk-side-bg);
+    background: linear-gradient(180deg, #07284c 0%, #041f3c 52%, #03182f 100%);
     color: var(--rk-side-fg);
     display: flex;
     flex-direction: column;
@@ -145,16 +151,16 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     height: var(--rk-topbar-h);
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 0 18px;
-    border-bottom: 1px solid rgba(148, 163, 184, .14);
+    gap: 11px;
+    padding: 0 20px;
+    border-bottom: 1px solid rgba(148, 163, 184, .12);
     flex: none;
 }
 
 /* Yedek marka rozeti - logo dosyalari yoksa devreye girer */
 .rk-brand-mark {
-    width: 28px; height: 28px;
-    border-radius: 7px;
+    width: 32px; height: 32px;
+    border-radius: 9px;
     background: linear-gradient(160deg, var(--rk-blue-bright), var(--rk-blue-dark));
     display: grid; place-items: center;
     color: #fff; font-size: 15px;
@@ -162,9 +168,9 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 }
 
 .rk-brand-logo {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
     display: block;
     flex: none;
 }
@@ -174,13 +180,15 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
    .rk-wordmark-light  -> KOYU zemin ("Risk" beyaz, "Ops" mavi) */
 .rk-wordmark,
 .rk-wordmark-light {
-    height: 26px;
+    height: 30px;
     width: auto;
     display: block;
 }
 
+/* Kenar cubugundaki tam logo biraz daha buyuk durur; ust cubuk
+   yuksekligi (64px) bunun icin arttirildi. */
 .rk-brand .rk-wordmark-light {
-    height: 30px;
+    height: 34px;
 }
 
 .rk-brand-link {
@@ -204,7 +212,7 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-nav {
     flex: 1 1 auto;
     overflow-y: auto;
-    padding: 12px 10px 20px;
+    padding: 14px 12px 22px;
 }
 
 .rk-nav::-webkit-scrollbar { width: 6px; }
@@ -222,28 +230,43 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-nav-link {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
-    margin-bottom: 1px;
-    border-radius: var(--rk-radius-sm);
+    gap: 11px;
+    padding: 9px 12px;
+    margin-bottom: 2px;
+    border-radius: 10px;
     color: var(--rk-side-fg);
     font-size: 13.5px;
     line-height: 1.3;
     white-space: nowrap;
-    border-left: 2px solid transparent;
+    position: relative;
+    transition: background .14s ease, color .14s ease;
 }
 
 .rk-nav-link:hover {
-    background: var(--rk-side-bg-alt);
+    background: rgba(11, 53, 109, .55);
     color: #fff;
     text-decoration: none;
 }
 
+/* Aktif satir: sol kenarda cizgi yerine yumusak bir hap.
+   Isaretci hapin disinda, kenar cubugunun kenarina dayanir. */
 .rk-nav-link.active {
-    background: var(--rk-side-bg-alt);
+    background: linear-gradient(90deg, rgba(35, 176, 248, .20), rgba(11, 53, 109, .62));
+    box-shadow: inset 0 0 0 1px rgba(35, 176, 248, .20);
     color: #fff;
-    border-left-color: var(--rk-side-accent);
     font-weight: 600;
+}
+
+.rk-nav-link.active::before {
+    content: "";
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 18px;
+    border-radius: 0 3px 3px 0;
+    background: var(--rk-side-accent);
 }
 
 .rk-nav-link i { font-size: 15px; width: 18px; text-align: center; color: var(--rk-muted-light); }
@@ -266,17 +289,17 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 /* Sidebar alt: kullanici */
 .rk-side-user {
     flex: none;
-    border-top: 1px solid rgba(148, 163, 184, .14);
-    padding: 12px 14px;
+    border-top: 1px solid rgba(148, 163, 184, .12);
+    padding: 13px 16px;
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
 .rk-avatar {
-    width: 34px; height: 34px;
+    width: 36px; height: 36px;
     border-radius: 50%;
-    background: var(--rk-blue);
+    background: linear-gradient(160deg, #2b83e8, var(--rk-blue-dark));
     color: #fff;
     display: grid; place-items: center;
     font-size: 12.5px; font-weight: 700;
@@ -310,10 +333,11 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     height: var(--rk-topbar-h);
     background: var(--rk-surface);
     border-bottom: 1px solid var(--rk-border);
+    box-shadow: 0 1px 2px rgba(6, 32, 63, .03);
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 0 22px;
+    gap: 16px;
+    padding: 0 26px;
     position: sticky;
     top: 0;
     z-index: 1030;
@@ -329,17 +353,17 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 
 .rk-search { position: relative; flex: 0 1 380px; }
 .rk-search i {
-    position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
     color: var(--rk-muted-light); font-size: 14px; pointer-events: none;
 }
 .rk-search input {
     width: 100%;
-    height: 34px;
-    padding: 0 12px 0 32px;
+    height: 38px;
+    padding: 0 13px 0 36px;
     border: 1px solid var(--rk-border);
-    border-radius: var(--rk-radius-sm);
-    background: var(--rk-surface-alt);
-    font-size: 13px;
+    border-radius: 10px;
+    background: #f4f8fd;
+    font-size: 13.5px;
     color: var(--rk-text);
 }
 .rk-search input::placeholder { color: var(--rk-muted-light); }
@@ -363,7 +387,7 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 
 .rk-content {
     flex: 1 1 auto;
-    padding: 22px 22px 40px;
+    padding: 26px 26px 48px;
     max-width: 1600px;
     width: 100%;
 }
@@ -373,20 +397,21 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     align-items: flex-start;
     gap: 16px;
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: 22px;
 }
 
 .rk-page-title {
-    font-size: 20px;
-    font-weight: 650;
+    font-size: 23px;
+    font-weight: 680;
     margin: 0;
-    letter-spacing: -.2px;
+    letter-spacing: -.5px;
+    color: #06203f;
 }
 
 .rk-page-sub {
-    margin: 3px 0 0;
+    margin: 5px 0 0;
     color: var(--rk-muted);
-    font-size: 13px;
+    font-size: 13.5px;
 }
 
 .rk-page-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
@@ -403,7 +428,7 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 }
 
 .rk-card-head {
-    padding: 13px 16px;
+    padding: 15px 18px;
     border-bottom: 1px solid var(--rk-border);
     display: flex;
     align-items: center;
@@ -413,13 +438,14 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 
 .rk-card-title {
     margin: 0;
-    font-size: 14px;
-    font-weight: 650;
+    font-size: 14.5px;
+    font-weight: 660;
+    letter-spacing: -.1px;
     color: var(--rk-text);
 }
 
 .rk-card-head .rk-card-tools { margin-left: auto; display: flex; gap: 8px; }
-.rk-card-body { padding: 16px; }
+.rk-card-body { padding: 18px; }
 .rk-card-body.is-flush { padding: 0; }
 
 /* ---------------------------------------------------------- Stat kart */
@@ -427,8 +453,8 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(156px, 1fr));
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 14px;
+    margin-bottom: 22px;
 }
 
 .rk-stat {
@@ -436,19 +462,28 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     border: 1px solid var(--rk-border);
     border-radius: var(--rk-radius);
     box-shadow: var(--rk-shadow);
-    padding: 14px 16px;
+    padding: 16px 18px;
     display: flex;
     align-items: center;
-    gap: 13px;
+    gap: 14px;
     position: relative;
     overflow: hidden;
+    transition: box-shadow .14s ease, transform .14s ease;
 }
+.rk-stat:hover { box-shadow: var(--rk-shadow-lg); transform: translateY(-1px); }
 
+/* Seviye serididi.
+   Kartin kose yaricapi 14px oldugu icin kenardan kenara uzanan duz bir
+   cizgi kosede kirik goruluyordu; serit artik kartin icinde duran,
+   uclari yuvarlatilmis kisa bir cubuk. */
 .rk-stat::before {
     content: "";
     position: absolute;
-    inset: 0 auto 0 0;
-    width: 3px;
+    left: 0;
+    top: 14px;
+    bottom: 14px;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
     background: var(--rk-border-strong);
 }
 
@@ -460,10 +495,10 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-stat.is-neutral::before  { background: #64748b; }
 
 .rk-stat-icon {
-    width: 38px; height: 38px;
-    border-radius: var(--rk-radius-sm);
+    width: 42px; height: 42px;
+    border-radius: 12px;
     display: grid; place-items: center;
-    font-size: 17px;
+    font-size: 18px;
     background: var(--rk-surface-alt);
     color: var(--rk-muted);
     flex: none;
@@ -476,10 +511,11 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 
 .rk-stat-body { min-width: 0; }
 .rk-stat-value {
-    font-size: 24px;
-    font-weight: 680;
+    font-size: 26px;
+    font-weight: 690;
     line-height: 1.1;
-    letter-spacing: -.5px;
+    letter-spacing: -.6px;
+    color: #06203f;
 }
 .rk-stat-label {
     font-size: 11.5px;
@@ -495,9 +531,9 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 
 .rk-table thead th {
-    background: var(--rk-surface-alt);
+    background: #f8fbff;
     border-bottom: 1px solid var(--rk-border);
-    padding: 9px 14px;
+    padding: 11px 14px;
     text-align: left;
     font-size: 11.5px;
     font-weight: 700;
@@ -511,13 +547,13 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-table thead th a:hover { color: var(--rk-primary); text-decoration: none; }
 
 .rk-table tbody td {
-    padding: 10px 14px;
+    padding: 12px 14px;
     border-bottom: 1px solid var(--rk-border);
     vertical-align: middle;
 }
 
 .rk-table tbody tr:last-child td { border-bottom: none; }
-.rk-table tbody tr:hover { background: var(--rk-surface-alt); }
+.rk-table tbody tr:hover { background: #f6faff; }
 
 .rk-table .rk-code {
     font-family: var(--rk-font-mono);
@@ -587,31 +623,43 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    height: 34px;
-    padding: 0 13px;
-    border-radius: var(--rk-radius-sm);
+    gap: 7px;
+    height: 38px;
+    padding: 0 15px;
+    border-radius: 10px;
     border: 1px solid var(--rk-border-strong);
     background: var(--rk-surface);
     color: var(--rk-text-soft);
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
+    transition: background .14s ease, border-color .14s ease, box-shadow .14s ease;
 }
 .rk-btn:hover { background: var(--rk-surface-alt); color: var(--rk-text); text-decoration: none; }
 
+/* Birincil dugme giris ekranindaki ile ayni gecis ve golgeyi tasir */
 .rk-btn-primary {
-    background: var(--rk-primary);
-    border-color: var(--rk-primary);
+    background: linear-gradient(180deg, #2b83e8 0%, var(--rk-primary) 100%);
+    border-color: var(--rk-primary-dark);
     color: #fff;
+    box-shadow: 0 6px 14px rgba(1, 108, 204, .20);
 }
-.rk-btn-primary:hover { background: var(--rk-primary-dark); border-color: var(--rk-primary-dark); color: #fff; }
+.rk-btn-primary:hover {
+    background: linear-gradient(180deg, #1f76de 0%, var(--rk-primary-dark) 100%);
+    border-color: var(--rk-primary-dark);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(1, 108, 204, .26);
+}
 
-.rk-btn-danger { background: #b91c1c; border-color: #b91c1c; color: #fff; }
-.rk-btn-danger:hover { background: #991b1b; border-color: #991b1b; color: #fff; }
+.rk-btn-danger {
+    background: linear-gradient(180deg, #d43434 0%, #b91c1c 100%);
+    border-color: #991b1b; color: #fff;
+    box-shadow: 0 6px 14px rgba(185, 28, 28, .18);
+}
+.rk-btn-danger:hover { background: linear-gradient(180deg, #b91c1c 0%, #991b1b 100%); border-color: #7f1d1d; color: #fff; }
 
-.rk-btn-sm { height: 28px; padding: 0 10px; font-size: 12.5px; }
+.rk-btn-sm { height: 32px; padding: 0 12px; font-size: 12.5px; border-radius: 9px; }
 
 /* ------------------------------------------------------------ Uyarilar */
 
@@ -619,10 +667,10 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    padding: 11px 14px;
+    padding: 13px 16px;
     border-radius: var(--rk-radius);
     border: 1px solid;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     font-size: 13.5px;
 }
 .rk-alert i { font-size: 16px; line-height: 1.4; flex: none; }
@@ -658,16 +706,19 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-input, .rk-select, .rk-textarea {
     width: 100%;
     border: 1px solid var(--rk-border-strong);
-    border-radius: var(--rk-radius-sm);
-    padding: 7px 11px;
+    border-radius: 10px;
+    padding: 9px 13px;
     font-size: 13.5px;
     color: var(--rk-text);
-    background: #fff;
+    /* Giris ekranindaki gibi: alan durgunken hafif mavi, odakta beyaz */
+    background: #f8fbff;
+    transition: background .14s ease, border-color .14s ease, box-shadow .14s ease;
 }
 .rk-textarea { min-height: 90px; resize: vertical; }
 
 .rk-input:focus, .rk-select:focus, .rk-textarea:focus {
     outline: none;
+    background: #fff;
     border-color: #7cc0f5;
     box-shadow: 0 0 0 3px rgba(1, 108, 204, .13);
 }
@@ -1087,6 +1138,13 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     .rk-stats { grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); }
     .rk-stat-value { font-size: 21px; }
     .rk-page-actions { margin-left: 0; width: 100%; }
+
+    /* Telefonda ust cubukta arama alani, ortam rozeti ve dugme ayni
+       satira sigmiyor; arama alani kullanilamayacak kadar daraliyordu.
+       Ortam rozeti yalnizca bilgilendirme amacli, once o gizlenir. */
+    .rk-env-tag { display: none; }
+    .rk-topbar { padding: 0 14px; gap: 10px; }
+    .rk-search { min-width: 0; }
 }
 
 /* ------------------------------------------------------------- Yazdirma */
@@ -1094,7 +1152,8 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 @media print {
     .rk-sidebar, .rk-topbar, .rk-page-actions, .rk-backdrop { display: none !important; }
     .rk-main { margin-left: 0; }
-    .rk-card { box-shadow: none; border-color: #c3d1e2; }
+    .rk-card, .rk-stat, .rk-report-card { box-shadow: none; border-color: #c3d1e2; }
+    .rk-btn { box-shadow: none; }
     body.rk-body { background: #fff; }
 }
 
@@ -1159,8 +1218,8 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 .rk-icon-btn {
     display: inline-grid;
     place-items: center;
-    width: 28px; height: 28px;
-    border-radius: var(--rk-radius-sm);
+    width: 30px; height: 30px;
+    border-radius: 9px;
     color: var(--rk-muted);
     font-size: 14px;
 }
@@ -1177,9 +1236,9 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
-    padding: 12px 16px;
+    padding: 13px 18px;
     border-top: 1px solid var(--rk-border);
-    background: var(--rk-surface-alt);
+    background: #f8fbff;
 }
 .rk-pagination-info { font-size: 12.5px; color: var(--rk-muted); }
 .rk-pagination-links { margin-left: auto; display: flex; gap: 4px; flex-wrap: wrap; }
@@ -1251,7 +1310,7 @@ a:hover { color: var(--rk-primary-dark); text-decoration: underline; }
 
 /* -------------------------------------------------------------- Sekme */
 
-.rk-tabs { border-bottom: 1px solid var(--rk-border); padding: 0 8px; }
+.rk-tabs { border-bottom: 1px solid var(--rk-border); padding: 0 10px; }
 
 .rk-tabs .nav-tabs { border-bottom: none; gap: 2px; }
 
