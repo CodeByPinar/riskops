@@ -57,6 +57,7 @@ $user = auth_user();
             $rkNavItem('admin.users',       'Users',       'bi-people',        '/admin/users/');
             $rkNavItem('admin.departments', 'Departments', 'bi-diagram-3',     '/admin/departments/');
             $rkNavItem('admin.categories',  'Categories',  'bi-tags',          '/admin/categories/');
+            $rkNavItem('risks.deleted',     'Silinen Riskler', 'bi-trash3',    '/risks/deleted.php');
             $rkNavItem('admin.audit',       'Audit Logs',  'bi-journal-text',  '/admin/audit_logs/');
             $rkNavItem('admin.settings',    'Settings',    'bi-gear',          '/admin/settings/');
             ?>
@@ -66,11 +67,15 @@ $user = auth_user();
 
     <?php if ($user !== null): ?>
     <div class="rk-side-user">
-        <div class="rk-avatar"><?= e(initials($user['name'])) ?></div>
-        <div class="rk-side-user-info">
-            <div class="rk-side-user-name"><?= e($user['name']) ?></div>
-            <div class="rk-side-user-role"><?= e(role_label($user['role'])) ?></div>
-        </div>
+        <?php /* Ad ve avatar profile baglanir: kullanicinin kendi
+                 hesabini aradigi ilk yer burasi. */ ?>
+        <a class="rk-side-user-link" href="<?= e(url('/profile/')) ?>" title="Profilim">
+            <div class="rk-avatar"><?= e(initials($user['name'])) ?></div>
+            <div class="rk-side-user-info">
+                <div class="rk-side-user-name"><?= e($user['name']) ?></div>
+                <div class="rk-side-user-role"><?= e(role_label($user['role'])) ?></div>
+            </div>
+        </a>
         <?php /* Demo hesabı parolasını değiştiremez; bağlantıyı da gösterme.
                  Asıl engel change_password.php içindedir - bu yalnızca
                  kullanıcıyı çalışmayan bir düğmeye tıklatmamak için. */ ?>
