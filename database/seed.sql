@@ -104,7 +104,9 @@ VALUES
 ('notify_from_email',   '',               'string', 'notify',   'Gonderen Adresi',
     'Bildirim e-postalarinin From adresi. Bos birakilirsa bildirim gonderilmez.', 1, 30),
 ('notify_from_name',    'RiskOps',        'string', 'notify',   'Gonderen Adi',
-    'Bildirim e-postalarinda gorunen gonderen adi.', 1, 40);
+    'Bildirim e-postalarinda gorunen gonderen adi.', 1, 40),
+('notify_stale_days',   '180',            'int',    'notify',   'Gozden Gecirme Esigi (gun)',
+    'Bir risk bu kadar gundur gozden gecirilmediyse sahibine hatirlatilir.', 1, 50);
 
 
 -- ---------------------------------------------------------------------

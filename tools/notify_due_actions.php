@@ -41,6 +41,7 @@ if (PHP_SAPI !== 'cli') {
 }
 
 require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../includes/mailer.php';
 
 $argvList = array_slice($argv, 1);
 $dryRun   = in_array('--dry-run', $argvList, true);
@@ -56,19 +57,20 @@ $log = static function (string $m): void {
 
 $enabled   = (int)setting('notify_enabled', '0') === 1;
 $daysAhead = max(1, min(90, (int)setting('notify_days_ahead', '7')));
-$fromEmail = trim((string)setting('notify_from_email', ''));
-$fromName  = trim((string)setting('notify_from_name', app_name()));
-
 if (!$enabled && !$force) {
     $log('Bildirim kapali (notify_enabled = 0). --force ile zorlanabilir.');
     exit(0);
 }
 
-if ($fromEmail === '' || !filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
-    $log('HATA: notify_from_email ayari bos veya gecersiz.');
-    $log('      Settings ekranindan gecerli bir gonderen adresi girin.');
+/* Gonderen dogrulamasi ortak katmanda (includes/mailer.php):
+   ayni kontrol notify_stale_reviews.php icinde de gerekiyor. */
+$sender = mail_sender();
+if (!$sender['ok']) {
+    $log('HATA: ' . $sender['error']);
     exit(1);
 }
+$fromEmail = $sender['email'];
+$fromName  = $sender['name'];
 
 $log('Termin bildirimi basliyor (' . $daysAhead . ' gun ileriye bakiliyor)'
     . ($dryRun ? ' [KURU CALISMA]' : ''));
@@ -168,47 +170,7 @@ function build_body(array $actions, string $ownerName): string
         $out .= "\n";
     }
 
-    $out .= str_repeat('=', 60) . "\n"
-          . "Bu e-posta " . app_name() . " tarafindan otomatik gonderilmistir.\n"
-          . "Aksiyonlarinizi sistemden guncelleyebilirsiniz.\n";
-
-    return $out;
-}
-
-/**
- * Tek bir bildirimi gönderir.
- *
- * Başlık alanlarına satır sonu karakteri KAÇAMAZ: aksi hâlde
- * e-posta başlığı enjeksiyonu ile ek alıcı (Bcc) eklenebilirdi.
- * Alıcı adresi ayrıca doğrulanıyor.
- */
-function send_notification(
-    string $toEmail,
-    string $toName,
-    string $subject,
-    string $body,
-    string $fromEmail,
-    string $fromName
-): bool {
-    if (!filter_var($toEmail, FILTER_VALIDATE_EMAIL)) {
-        return false;
-    }
-
-    $clean = static fn(string $v): string =>
-        (string)preg_replace('/[\r\n\x00]/', '', $v);
-
-    $subject  = $clean($subject);
-    $fromName = $clean($fromName);
-
-    $headers = [
-        'From: ' . $clean($fromName) . ' <' . $clean($fromEmail) . '>',
-        'Content-Type: text/plain; charset=UTF-8',
-        'Content-Transfer-Encoding: 8bit',
-        'X-Mailer: RiskOps',
-        'Auto-Submitted: auto-generated',
-    ];
-
-    return @mail($clean($toEmail), $subject, $body, implode("\r\n", $headers));
+    return $out . mail_footer();
 }
 
 /* ------------------------------------------------------------------ */
@@ -241,9 +203,8 @@ foreach ($byOwner as $ownerId => $actions) {
         continue;
     }
 
-    $ok = send_notification(
+    $ok = mail_send(
         (string)$owner['owner_email'],
-        (string)$owner['owner_name'],
         $subject,
         $body,
         $fromEmail,

@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 
 require_once __DIR__ . '/../../includes/bootstrap.php';
+require_once __DIR__ . '/_filters.php';
 
 require_login();
 require_role(ROLE_ADMIN);
@@ -18,58 +19,17 @@ $users = users_list(false);
 
 /* Mevcut action ve entity değerleri veritabanından gelir: yeni bir işlem
    türü eklendiğinde filtre listesi kendiliğinden güncellenir. */
-$actionOptions = db()->query(
-    'SELECT action, COUNT(*) AS adet FROM audit_logs GROUP BY action ORDER BY action'
-)->fetchAll();
-$entityOptions = db()->query(
-    'SELECT entity_type FROM audit_logs WHERE entity_type IS NOT NULL
-     GROUP BY entity_type ORDER BY entity_type'
-)->fetchAll(PDO::FETCH_COLUMN);
+/* Filtreler ORTAK dosyadan: CSV disa aktarma da ayni mantigi
+   kullaniyor. Iki yere kopyalansaydi ekranda gorunen ile indirilen
+   dosya ayrisabilirdi - denetim ciktisinda bu kabul edilemez. */
+$flt = audit_filters();
 
-$f = [
-    'action' => input_enum('action', array_column($actionOptions, 'action')),
-    'entity' => input_enum('entity', $entityOptions),
-    'user'   => input_int('user'),
-    'from'   => input_date('from'),
-    'to'     => input_date('to'),
-    'q'      => input('q'),
-];
-if (!lookup_has($users, $f['user'])) {
-    $f['user'] = null;
-}
-$activeFilters = count(array_filter($f, static fn($v) => $v !== null && $v !== ''));
-
-$where  = ['1=1'];
-$params = [];
-
-if ($f['action'] !== null) {
-    $where[] = 'l.action = :action';
-    $params[':action'] = $f['action'];
-}
-if ($f['entity'] !== null) {
-    $where[] = 'l.entity_type = :entity';
-    $params[':entity'] = $f['entity'];
-}
-if ($f['user'] !== null) {
-    $where[] = 'l.user_id = :user';
-    $params[':user'] = $f['user'];
-}
-if ($f['from'] !== null) {
-    $where[] = 'l.created_at >= :dfrom';
-    $params[':dfrom'] = $f['from'] . ' 00:00:00';
-}
-if ($f['to'] !== null) {
-    $where[] = 'l.created_at <= :dto';
-    $params[':dto'] = $f['to'] . ' 23:59:59';
-}
-if ($f['q'] !== null) {
-    // Ayrı placeholder'lar: EMULATE_PREPARES=false tekrar kullanıma izin vermez
-    $where[] = '(l.user_name_snapshot LIKE :q1 OR l.old_values LIKE :q2 OR l.new_values LIKE :q3'
-             . ' OR l.ip_address LIKE :q4)';
-    $like = '%' . addcslashes($f['q'], '\\%_') . '%';
-    $params += [':q1' => $like, ':q2' => $like, ':q3' => $like, ':q4' => $like];
-}
-$whereSql = implode(' AND ', $where);
+$f             = $flt['f'];
+$actionOptions = $flt['counts'];
+$entityOptions = $flt['entities'];
+$activeFilters = $flt['active'];
+$params        = $flt['params'];
+$whereSql      = $flt['where'];
 
 $countStmt = db()->prepare("SELECT COUNT(*) FROM audit_logs l WHERE {$whereSql}");
 $countStmt->execute($params);
@@ -129,6 +89,28 @@ $activeMenu   = 'admin.audit';
 
 require LAYOUT_PATH . '/header.php';
 ?>
+
+<?php
+/* Disa aktarma AYNI filtrelerle calisir: ekranda ne goruyorsan onu
+   indirirsin. Mevcut sorgu dizesi oldugu gibi aktariliyor. */
+$qs = $_GET;
+unset($qs['page'], $qs['format']);
+$qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
+?>
+<div class="rk-page-actions">
+    <a class="rk-btn" href="<?= e(url('/admin/audit_logs/export_csv.php?format=excel' . $qsStr)) ?>"
+       title="Türkçe Excel'de çift tıkla açılır">
+        <i class="bi bi-file-earmark-excel"></i> Excel
+    </a>
+    <a class="rk-btn" href="<?= e(url('/admin/audit_logs/export_csv.php?format=raw' . $qsStr)) ?>"
+       title="RFC 4180 — sistem entegrasyonu için">
+        <i class="bi bi-filetype-csv"></i> Ham CSV
+    </a>
+    <span class="rk-help rk-u-m0">
+        Dışa aktarma, ekrandaki filtrelerin aynısını kullanır ve
+        <strong>audit log'a yazılır</strong>.
+    </span>
+</div>
 
 <form method="get" class="rk-card rk-filters">
     <div class="rk-card-body">
