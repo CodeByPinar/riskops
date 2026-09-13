@@ -1,0 +1,252 @@
+name: CI
+
+# Depoya iten herkes aynı kontrollerden geçer. Yerelde "bende çalışıyor"
+# demenin karşılığı burada sıfırdan kurulmuş bir MariaDB üzerinde
+# çalışan şema + testlerdir.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  # Aynı dala arka arkaya gelen itmelerde eskisini iptal et.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ===================================================================
+  #  1) SÖZDİZİMİ
+  #
+  #  En ucuz kontrol en başta: bir sözdizimi hatası varsa MariaDB
+  #  kurup şema yüklemenin anlamı yok.
+  # ===================================================================
+  lint:
+    name: Sözdizimi (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 8.2 = alt sınır (composer.json), 8.3 = üretim, 8.4 = ileriye dönük
+        php: ['8.2', '8.3', '8.4']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP kur
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo_mysql, mbstring, fileinfo, json
+          coverage: none
+          tools: none
+
+      - name: php -l (tüm dosyalar)
+        run: |
+          fail=0
+          count=0
+          while IFS= read -r -d '' file; do
+            count=$((count + 1))
+            if ! php -l "$file" > /dev/null 2>&1; then
+              echo "::error file=$file::Sözdizimi hatası"
+              php -l "$file" || true
+              fail=1
+            fi
+          done < <(find . -name '*.php' -not -path './vendor/*' -not -path './storage/*' -print0)
+          echo "$count PHP dosyası denetlendi"
+          exit $fail
+
+  # ===================================================================
+  #  2) BİRİM TESTLERİ
+  #
+  #  Veritabanı YOK. Hızlı geri bildirim; saf mantık burada kırılır.
+  # ===================================================================
+  unit:
+    name: Birim testleri (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP kur
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo_mysql, mbstring, fileinfo, json
+          coverage: none
+
+      - name: Composer önbelleği
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer
+          key: composer-${{ matrix.php }}-${{ hashFiles('composer.json') }}
+          restore-keys: composer-${{ matrix.php }}-
+
+      - name: Bağımlılıklar (yalnızca geliştirme)
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: PHPUnit (unit)
+        run: vendor/bin/phpunit --testsuite unit --bootstrap tests/bootstrap-unit.php
+
+  # ===================================================================
+  #  3) ENTEGRASYON + UÇTAN UCA
+  #
+  #  Gerçek MariaDB, sıfırdan yüklenen şema. Buradaki asıl değer,
+  #  schema.sql'in TEMİZ BİR VERİTABANINDA çalıştığını her seferinde
+  #  kanıtlamak: kurulum betikleri zamanla sessizce bozulur ve bu
+  #  yalnızca yeni bir kurulum yapılınca fark edilir.
+  # ===================================================================
+  integration:
+    name: Entegrasyon (MariaDB ${{ matrix.mariadb }})
+    runs-on: ubuntu-latest
+    needs: lint
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # 10.11 = üretimdeki sürüm (Ubuntu 24.04 LTS), 11.4 = sonraki LTS
+        mariadb: ['10.11', '11.4']
+
+    services:
+      mariadb:
+        image: mariadb:${{ matrix.mariadb }}
+        env:
+          MARIADB_ROOT_PASSWORD: ci_root_password
+          MARIADB_DATABASE: riskops_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP kur
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql, mbstring, fileinfo, json
+          coverage: none
+
+      - name: Composer önbelleği
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/composer
+          key: composer-8.3-${{ hashFiles('composer.json') }}
+          restore-keys: composer-8.3-
+
+      - name: Bağımlılıklar
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Şemayı SIFIRDAN yükle
+        run: |
+          mysql -h 127.0.0.1 -u root -pci_root_password riskops_ci < database/schema.sql
+          mysql -h 127.0.0.1 -u root -pci_root_password riskops_ci < database/seed.sql
+
+      - name: Şema iki kez yüklenebiliyor mu
+        # schema.sql'in yeniden çalıştırılabilir (idempotent) olması
+        # gerekiyor: kurulum yarıda kalırsa operatör baştan çalıştırır.
+        run: mysql -h 127.0.0.1 -u root -pci_root_password riskops_ci < database/schema.sql
+
+      - name: Yapılandırma
+        run: |
+          cat > config/database.php <<'PHP'
+          <?php
+          return [
+              'host'    => '127.0.0.1',
+              'name'    => 'riskops_ci',
+              'user'    => 'root',
+              'pass'    => 'ci_root_password',
+              'charset' => 'utf8mb4',
+          ];
+          PHP
+          mkdir -p storage/logs storage/uploads
+          chmod -R 775 storage
+
+      - name: PHPUnit (integration)
+        run: vendor/bin/phpunit --testsuite integration --bootstrap tests/bootstrap-app.php
+
+      - name: Duman testi
+        run: php tools/smoke_test.php
+
+      - name: Hata ayıklama kipi — KAPALIYKEN
+        run: php tools/debug_test.php
+
+      - name: Hata ayıklama kipi — AÇIKKEN
+        env:
+          RISKOPS_DEBUG: '1'
+        run: php tools/debug_test.php
+
+      - name: Ay penceresi
+        run: php tools/trend_months_test.php
+
+      - name: Son admin yarış koşulu
+        run: php tools/last_admin_race_test.php
+
+      - name: Teşhis raporu üretilebiliyor mu
+        run: php tools/debug_report.php > /dev/null
+
+      - name: Hata varsa uygulama logunu göster
+        if: failure()
+        run: |
+          echo "::group::storage/logs/app.log"
+          tail -n 100 storage/logs/app.log 2>/dev/null || echo "(log yok)"
+          echo "::endgroup::"
+
+  # ===================================================================
+  #  4) GÜVENLİK SINIRLARI
+  #
+  #  Projenin kendine koyduğu kuralları makineye denetlettiriyoruz.
+  #  Bunlar bir tarayıcının bulacağı genel açıklar değil; BU projede
+  #  bilerek konmuş ve bozulması kolay kurallar.
+  # ===================================================================
+  guardrails:
+    name: Proje kuralları
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHP kur
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, json
+          coverage: none
+          tools: none
+
+      - name: Kural denetimi
+        # SQL'e doğrudan kullanıcı girdisi, satır içi script/stil,
+        # GET ile silme, CSRF'siz POST ucu, unutulmuş var_dump,
+        # eksik strict_types. Ayrıntı: tools/check_conventions.php
+        run: php tools/check_conventions.php
+
+      - name: Sürüm kontrolüne sır girmemiş
+        run: |
+          fail=0
+          if git ls-files --error-unmatch config/database.php 2>/dev/null; then
+            echo "::error::config/database.php depoya girmiş - bağlantı parolası sızar"
+            fail=1
+          fi
+          if git ls-files 'storage/uploads/*' | grep -q .; then
+            echo "::error::storage/uploads altında dosya var"
+            fail=1
+          fi
+          if git ls-files 'storage/logs/*.log' | grep -q .; then
+            echo "::error::log dosyası depoya girmiş"
+            fail=1
+          fi
+          [ $fail -eq 0 ] && echo "Depoda sır yok"
+          exit $fail

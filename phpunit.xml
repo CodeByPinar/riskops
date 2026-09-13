@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    RiskOps - PHPUnit yapılandırması
+
+    İKİ AYRI TAKIM, İKİ AYRI ÖN YÜKLEYİCİ
+    =====================================
+    unit        -> tests/bootstrap-unit.php     VERİTABANI GEREKTİRMEZ
+    integration -> tests/bootstrap-app.php      gerçek bootstrap + veritabanı
+
+    Neden ayrı: uygulamanın kendi bootstrap'ı ayar tablosunu okuduğu
+    için her zaman veritabanına gider. Saf mantığı (dil devri kuralı,
+    maskeleme, skor hesabı, ay penceresi) sınamak için veritabanı
+    kurmak gereksiz bir engeldir - katkı vermek isteyen biri
+    "composer test:unit" ile hiçbir kurulum yapmadan
+    çalıştırabilmeli.
+
+    Çalıştırma:
+        composer test                    # ikisi de
+        composer test:unit               # veritabanısız
+        composer test:integration        # veritabanı gerekir
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         colors="true"
+         failOnWarning="true"
+         failOnRisky="true"
+         failOnDeprecation="true"
+         beStrictAboutOutputDuringTests="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         cacheDirectory=".phpunit.cache">
+
+    <testsuites>
+        <testsuite name="unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory suffix=".php">includes</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">includes/layout</directory>
+            <directory suffix=".php">includes/partials</directory>
+        </exclude>
+    </source>
+
+    <php>
+        <!-- Testler ortamı kendileri kurar; dışarıdan gelen bayrak sızmasın. -->
+        <env name="RISKOPS_ENV" value="development"/>
+        <env name="RISKOPS_DEBUG" value=""/>
+        <env name="RISKOPS_DEMO" value=""/>
+    </php>
+</phpunit>

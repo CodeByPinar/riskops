@@ -252,6 +252,8 @@ Ubuntu Server 24.04 · PHP 8.3 · MariaDB 10.11 · Apache 2.4
 
 ```bash
 # 1. Kodu yerleştirin
+
+[![CI](https://github.com/CodeByPinar/riskops/actions/workflows/ci.yml/badge.svg)](https://github.com/CodeByPinar/riskops/actions/workflows/ci.yml)
 sudo git clone https://github.com/<kullanici>/riskops.git /var/www/riskops
 sudo chown -R www-data:www-data /var/www/riskops
 
@@ -317,6 +319,32 @@ bilgilerini gösterir ve o hesabın parolasını değiştirmesini engeller
 (yoksa bir ziyaretçi demoyu herkese kapatabilirdi). **Yetkilendirmeye
 hiçbir etkisi yoktur**: ziyaretçinin ne yapabileceğini `viewer` rolü
 belirler, bu bayrak değil.
+
+---
+
+## Mimari kararlar (ADR)
+
+Projede **neden öyle yapıldığı** `docs/architecture/` altında ayrı
+kayıtlarda tutuluyor. Her kayıt aynı beş başlığı taşır: bağlam, karar,
+sonuçlar, **kabul edilen maliyet** ve **değerlendirilen alternatifler**.
+
+| # | Karar | Özet |
+|---|---|---|
+| [0001](docs/architecture/0001-cerceve-kullanilmadi.md) | Çerçeve kullanılmadı | Kurulum dosya kopyalamak; bedeli ~18.500 satırın bakımı |
+| [0002](docs/architecture/0002-ceviri-anahtari-kaynak-metin.md) | Çeviri anahtarı = Türkçe metnin kendisi | Eksik çeviri sayfayı bozmaz; bedeli metin değişince çevirinin düşmesi |
+| [0003](docs/architecture/0003-csp-unsafe-inline-kaldirildi.md) | CSP'den `unsafe-inline` kaldırıldı | XSS'in etkisi sınırlı; bedeli Apache'de CSP kopyası tutulamaması |
+| [0004](docs/architecture/0004-saat-dilimi-hizalamasi.md) | MySQL saati PHP ile hizalanır | 3 saatlik kayma hesap kilidini sessizce devre dışı bırakıyordu |
+| [0005](docs/architecture/0005-son-admin-invaryanti.md) | Son admin koruması kilitli okumayla | Check-then-act yarışı sistemi adminsiz bırakabiliyordu |
+| [0006](docs/architecture/0006-seviye-esikleri-ayarda.md) | Skor `GENERATED`, seviye değil | Eşikler ayardan değişebiliyor, skorun tanımı sabit |
+| [0007](docs/architecture/0007-hata-ayiklama-kipi.md) | Hata ayıklama: iki anahtar, süreli bayrak | Üretimde kazayla açılamaz, açık unutulamaz |
+| [0008](docs/architecture/0008-dosya-eki-guvenligi.md) | Dosya ekleri üç katmanlı doğrulanır | Ne sunucuda çalıştırılabilir ne tarayıcıda yorumlanabilir |
+
+Bu kayıtlar önce kaynak dosyaların başındaki uzun yorum bloklarındaydı.
+İki sorun vardı: bir karar tek bir dosyaya ait değildi (CSP kararı dört
+dosyaya bölünmüştü, hiçbiri bütün değildi) ve 40 satırlık gerekçenin
+ardından gelen 12 satırlık fonksiyonu görmek zorlaşıyordu. Artık kod
+**onu bozmadan değiştirmek için gerekeni** söylüyor, kayıt tartışmayı
+taşıyor.
 
 ---
 
@@ -432,23 +460,82 @@ girmez; raporu olduğu gibi paylaşabilirsiniz.
 
 ---
 
+## Testler ve CI
+
+Her itmede GitHub Actions dört iş çalıştırır:
+
+| İş | Ne yapar |
+|---|---|
+| **Sözdizimi** | PHP 8.2 / 8.3 / 8.4 üzerinde `php -l`, tüm dosyalar |
+| **Birim testleri** | PHPUnit, **veritabanısız**, üç PHP sürümünde |
+| **Entegrasyon** | MariaDB 10.11 ve 11.4; şema SIFIRDAN yüklenir, sonra bir kez daha (yeniden çalıştırılabilirlik), ardından tüm test betikleri |
+| **Proje kuralları** | `tools/check_conventions.php` + sürüm kontrolüne sır girmemiş mi |
+
+### Test yapısı
+
+```
+tests/
+  bootstrap-unit.php     veritabanı GEREKTİRMEZ
+  bootstrap-app.php      gerçek bootstrap + veritabanı
+  Unit/                  saf mantık      (116 test)
+  Integration/           şema ve sayaçlar (12 test)
+```
+
+```bash
+composer test:unit           # veritabanı gerekmez
+composer test:integration    # config/database.php gerekir
+composer test                # ikisi
+```
+
+İki ayrı ön yükleyici olmasının sebebi: uygulamanın kendi bootstrap'ı
+açılışta ayar tablosunu okur, yani her zaman veritabanına gider. Dil
+devri kuralını ya da maskelemeyi sınamak için MariaDB kurmak zorunda
+kalmak, katkı vermenin önünde gereksiz bir engel olurdu. Birim
+ön yükleyicisinde `db()` bilerek bir istisna fırlatır — bir birim testi
+yanlışlıkla veritabanına uzanırsa sessizce beklemek yerine nereye ait
+olduğunu söyler.
+
+### Betik testleri
+
+PHPUnit'e taşınmayan, uçtan uca çalışan denetimler:
+
+```bash
+php tools/smoke_test.php           # 59 doğrulama
+php tools/debug_test.php           # 109 (kip kapalı) / 119 (açık)
+php tools/check_conventions.php    # 7 proje kuralı
+php tools/last_admin_race_test.php # eşzamanlılık
+php tools/go_live_check.php        # üretime alma ön kontrolü
+php tools/debug_report.php         # sistem teşhis raporu
+```
+
+### Denetlenen proje kuralları
+
+`tools/check_conventions.php` dosyaları token'larına ayırarak inceler —
+grep değil, çünkü kuralı **anlatan** yorum satırları kuralın ihlali
+sanılıyordu:
+
+- SQL'e doğrudan kullanıcı girdisi birleştirilmemiş
+- Satır içi `<script>` yok (CSP: `script-src 'self'`)
+- `style=""` özniteliği yok (nonce yalnızca blokları kapsar)
+- Silme işlemine GET bağlantısı yok
+- POST işleyen her uç `csrf_require()` çağırıyor
+- Üretim kodunda unutulmuş `var_dump` / `print_r` yok
+- Her dosya `declare(strict_types=1)` ile başlıyor
+
+---
+
 ## Proje büyüklüğü
 
 | | |
 |---|---|
-| PHP dosyası | 119 |
-| PHP satırı | ~18.500 |
-| CSS satırı | ~2.440 (`app.css`) + araç çubuğu ve yazdırma stili |
+| PHP dosyası | 120 uygulama + 11 test |
+| PHP satırı | ~19.570 uygulama + ~1.440 test |
+| CSS satırı | ~2.510 (`app.css`) + araç çubuğu ve yazdırma stili |
 | Veritabanı tablosu | 14 |
-| Duman testi | 59 doğrulama |
-| Hata ayıklama kipi testi | 109 (kapalı) + 119 (açık) |
-| Harici PHP bağımlılığı | **0** |
-
-```bash
-php tools/smoke_test.php        # 59/59
-php tools/debug_test.php        # 109/109
-find . -name "*.php" -not -path "./assets/*" -exec php -l {} \;
-```
+| PHPUnit | 116 birim + 12 entegrasyon |
+| Betik testleri | 59 duman + 109/119 hata ayıklama + 7 kural |
+| Mimari kaydı (ADR) | 8 kayıt, ~750 satır |
+| Çalışma zamanı bağımlılığı | **0** (PHPUnit yalnızca `require-dev`) |
 
 ---
 
@@ -478,6 +565,16 @@ Sonradan eklenenler:
       geneline taşındı
 - [x] **Hata ayıklama kipi** — sorgu kaydedici, araç çubuğu, ayrıntılı
       istisna sayfası, teşhis raporu; menüden süreli açılıp kapanıyor
+- [x] GitHub Actions CI — sözdizimi, birim + entegrasyon testleri,
+      sıfırdan şema kurulumu, proje kuralları
+- [x] PHPUnit test yapısı (veritabanılı ve veritabanısız iki takım)
+- [x] Mimari karar kayıtları (`docs/architecture/`)
+
+Sırada:
+
+- [ ] Statik çözümleyici (PHPStan ya da Psalm) — çerçevesiz bir kod
+      tabanında değeri yüksek
+- [ ] Kalan ekranların çevirisi (mekanik iş; bkz. aşağıdaki tablo)
 
 ### Çok dilli arayüz: durum
 

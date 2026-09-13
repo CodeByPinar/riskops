@@ -80,23 +80,12 @@ function app_abort(int $status = 500, string $internalMessage = ''): never
 /**
  * Bu istek için tek kullanımlık CSP nonce değeri.
  *
- * NEDEN GEREKLİ
- * -------------
- * `style-src` içinden 'unsafe-inline' kaldırıldı. Ama uygulamanın
- * VERİTABANINDAN gelen renkleri basması gerekiyor: kategori rozetleri
- * kullanıcının seçtiği herhangi bir hex değeri olabilir. Bunları statik
- * bir sınıfa çevirmek mümkün değil.
- *
- * Çözüm, o renkleri TEK bir <style> bloğunda üretip bloğa nonce vermek.
- * Nonce her istekte yeniden üretilir; saldırganın enjekte ettiği bir
- * <style> bloğu doğru nonce'u bilemeyeceği için çalışmaz.
- *
  * DİKKAT: nonce YALNIZCA <style> ve <script> BLOKLARINDA işe yarar.
- * style="" ÖZNİTELİĞİ için geçerli değildir - onun için 'unsafe-hashes'
- * gerekir. Bu yüzden uygulamada satır içi stil özniteliği KALMADI;
- * hepsi utility sınıfına ya da nonce'lu bloğa taşındı.
+ * style="" ÖZNİTELİĞİ için geçerli DEĞİLDİR (onun için 'unsafe-hashes'
+ * gerekirdi). Yeni kod yazarken style="" EKLEMEYİN - sessizce
+ * uygulanmaz, hata da görünmez.
  *
- * Yeni kod yazarken style="" EKLEMEYİN, sessizce uygulanmaz.
+ * Gerekçe: docs/architecture/0003-csp-unsafe-inline-kaldirildi.md
  */
 function csp_nonce(): string
 {

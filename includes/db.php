@@ -86,25 +86,16 @@ function db(): PDO
 /**
  * MySQL oturum saat dilimini PHP'nin saat dilimiyle hizalar.
  *
- * NEDEN GEREKLI: Sunucunun MySQL'i UTC, uygulama Europe/Istanbul
- * calisiyordu. created_at, updated_at, last_login_at ve audit zaman
- * damgalari MySQL tarafindan (NOW/CURRENT_TIMESTAMP) yaziliyor, PHP ise
- * onlari kendi saat diliminde okuyor. Olculen fark: 3 saat.
+ * Hizalanmazsa zamana dayali GUVENLIK KONTROLLERI sessizce devre disi
+ * kalir: olculen 3 saatlik fark yuzunden hesap kilidi hic devreye
+ * girmiyor, parola degisiminde acik oturum kapanmiyordu.
  *
- * Sonuclari yalnizca kozmetik degildi:
- *   - Tum ekranlarda tarihler 3 saat geri gorunuyordu.
- *   - Brute-force penceresi PHP tarafinda hesaplaniyor
- *     (date(..., time() - lockout)) ve MySQL'in yazdigi attempted_at ile
- *     karsilastiriliyordu. Pencere baslangici kayitlardan ILERIDE
- *     kaldigi icin kosul hicbir satiri yakalamiyor, hesap kilidi hic
- *     devreye girmiyordu. Olcumle dogrulandi: 8 basarisiz denemede kilit
- *     olusmadi.
- *   - auth_revalidate() icindeki "parola benden sonra mi degisti"
- *     karsilastirmasi da ayni nedenle calismiyordu.
+ * Gerekce ve olculen sonuclar:
+ *     docs/architecture/0004-saat-dilimi-hizalamasi.md
  *
- * Baglanti kurulurken PHP'nin saat dilimi henuz ayarlanmamis olabilir
- * (settings tablosundan okunuyor), bu yuzden hizalama bootstrap icinde
- * date_default_timezone_set() cagrisindan SONRA yapilir.
+ * SIRA ONEMLI: bootstrap icinde date_default_timezone_set() cagrisindan
+ * SONRA calisir - PHP'nin saat dilimi ayar tablosundan okunuyor ve
+ * baglanti kurulurken henuz belli degil.
  */
 function db_sync_timezone(?PDO $pdo = null): void
 {

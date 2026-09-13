@@ -51,30 +51,18 @@ function other_active_admin_exists(int $excludeUserId): bool
 /**
  * "Sistemde en az bir aktif admin kalmalı" invariantını ATOMİK doğrular.
  *
- * SORUN
- * -----
- * Eski koruma bir check-then-act yarışıydı: kilitsiz bir SELECT COUNT(*),
- * ardından ayrı bir UPDATE. Tam iki aktif admin varken birbirini aynı
- * anda pasifleştiren iki istek, HER İKİSİ de "başka admin var" görür,
- * her ikisi de korumadan geçer ve sistemde sıfır aktif admin kalır.
- * Kurtarma doğrudan veritabanı müdahalesi gerektirir.
+ * Kilitsiz bir sayım + ayrı UPDATE bir check-then-act yarışıdır: iki
+ * admin birbirini aynı anda pasifleştirdiğinde ikisi de korumadan geçer
+ * ve sistemde sıfır admin kalır. Aşağıdaki sorgu, hedef satırı ve tüm
+ * aktif admin satırlarını sabit sırada (ORDER BY id -> deadlock yok)
+ * FOR UPDATE ile kilitleyerek işlemleri serileştirir.
  *
- * ÇÖZÜM
- * -----
- * Çağıranın transaction'ı içinde, hem hedef satır hem de tüm aktif
- * admin satırları FOR UPDATE ile kilitlenir. İki eşzamanlı işlem aynı
- * satır kümesini AYNI SIRADA (ORDER BY id) kilitlediği için serileşir:
- * ikincisi, birincisi commit edene kadar bloklanır, sonra commit
- * edilmiş güncel durumu okur ve reddedilir.
+ * Hedefin durumu da BURADA okunur: çağıranın transaction öncesi okuduğu
+ * bilgiye güvenilemez. Kilitli okuma REPEATABLE READ altında bile
+ * güncel veriyi görür.
  *
- * NEDEN ORDER BY id: kilit sırası sabit olmazsa iki işlem satırları
- * ters sırada kilitleyip birbirini bekleyebilir (deadlock).
- *
- * NEDEN hedefin durumunu da BURADA okuyoruz: çağıranın transaction
- * ÖNCESİ okuduğu "hedef aktif admin miydi" bilgisine güvenilemez.
- * Hedef bu arada admin'e yükseltilmiş olabilir; o bilgiyle erken
- * dönmek korumayı tamamen atlatırdı. Kilitli okuma, REPEATABLE READ
- * altında bile güncel veriyi (current read) görür.
+ * Yarış senaryosu ve alternatifler:
+ *     docs/architecture/0005-son-admin-invaryanti.md
  *
  * @param PDO $pdo          Çağıranın AÇIK transaction'ındaki bağlantı
  * @param int $targetUserId Admin'likten çıkarılacak/pasifleştirilecek kullanıcı

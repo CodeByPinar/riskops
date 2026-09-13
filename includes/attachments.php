@@ -5,36 +5,18 @@ declare(strict_types=1);
  * RiskOps - Dosya eki yardımcıları
  * /var/www/riskops/includes/attachments.php
  *
- * =====================================================================
- *  DOSYA YÜKLEME, UYGULAMANIN EN TEHLİKELİ YÜZEYİDİR
- * =====================================================================
+ * DOSYA YÜKLEME, UYGULAMANIN EN TEHLİKELİ YÜZEYİDİR. Beş kural birlikte
+ * uygulanır; hiçbiri tek başına yeterli değildir:
  *
- * Saldırganın hedefi genellikle şudur: sunucuya çalıştırılabilir bir
- * dosya yazdırmak (shell.php), ya da tarayıcıda çalışan bir dosya
- * sunmak (.html, .svg içinde script). Buradaki her kural bu ikisinden
- * birini kapatır.
+ *   1. İstemciden gelen ad ASLA diske yazılmaz (ad uygulama üretir)
+ *   2. Uzantı beyaz listeden (kara liste .phtml/.php5/.phar ile bitmez)
+ *   3. Gerçek içerik tipi finfo ile doğrulanır (Content-Type sahtedir)
+ *   4. Dosyalar web erişimine kapalı dizinde durur (.htaccess + VHost)
+ *   5. İndirme her zaman octet-stream + attachment; hiçbir ek RENDER
+ *      EDİLMEZ (inline SVG/HTML = uygulamanın kökeninde kalıcı XSS)
  *
- * 1. İSTEMCİDEN GELEN AD ASLA DİSKE YAZILMAZ.
- *    Diskteki ad uygulama tarafından üretilir ve rastgeledir.
- *    "../../config/database.php" veya "shell.php" gibi adlar bu yüzden
- *    hiçbir şey yapamaz.
- *
- * 2. UZANTI BEYAZ LİSTEDEN. Kara liste kullanılmaz: .phtml, .php5,
- *    .phar gibi varyantları saymakla bitmez, biri unutulur.
- *
- * 3. GERÇEK İÇERİK TİPİ DOĞRULANIR (finfo). İstemcinin bildirdiği
- *    Content-Type değeri tamamen sahtedir; PHP dosyasının başına GIF
- *    başlığı koyup "image/gif" demek saniyeler sürer. finfo dosyanın
- *    KENDİSİNE bakar.
- *
- * 4. DOSYALAR DOCROOT İÇİNDE AMA WEB ERİŞİMİNE KAPALI DİZİNDE durur
- *    (storage/.htaccess + VirtualHost DirectoryMatch) ve yalnızca
- *    PHP üzerinden, zorla indirme olarak sunulur.
- *
- * 5. İNDİRME HER ZAMAN application/octet-stream + attachment.
- *    Tarayıcıda hiçbir ek RENDER EDİLMEZ. Bir SVG veya HTML eki
- *    inline sunulsaydı içindeki script uygulamanın kendi kökeninde
- *    çalışır - kalıcı XSS olurdu.
+ * Her kuralın hangi saldırıyı kapattığı ve alternatifler:
+ *     docs/architecture/0008-dosya-eki-guvenligi.md
  */
 
 /** Tek dosya için üst sınır. php.ini upload_max_filesize bundan büyük olmalı. */

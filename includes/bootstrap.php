@@ -183,25 +183,20 @@ if (PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
         header('Referrer-Policy: strict-origin-when-cross-origin');
         header('Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=()');
 
-        // script-src'de 'unsafe-inline' YOKTUR: tüm betikler harici
-        // dosyadadır (assets/js/app.js) ve davranışlar data-rk-*
-        // öznitelikleriyle bağlanır. Satır içi <script> veya onclick
-        // ekleyen yeni kod sessizce çalışmaz.
-        //
-        // style-src'de 'unsafe-inline' KALDI ve bu kasıtlıdır:
-        // uygulama dinamik ölçü taşıyan style="" öznitelikleri
-        // kullanıyor (örn. ilerleme çubuğu genişliği), bunlar statik
-        // sınıfa çevrilemez. XSS yükü betik enjekte eder, stil değil.
-        /* style-src'de de 'unsafe-inline' YOK. Satır içi stil özniteliği
-           uygulamada kalmadı; veritabanından gelen renkler (kategori
-           rozetleri) nonce taşıyan tek bir <style> bloğunda üretiliyor.
-           Bkz. csp_nonce(), includes/functions.php.
+        /* Ne script-src'de ne style-src'de 'unsafe-inline' VAR.
+           Betikler harici dosyada, davranışlar data-rk-* ile bağlı;
+           veritabanından gelen renkler nonce taşıyan tek bir <style>
+           bloğunda (bkz. csp_nonce(), style_block()).
 
-           CSP ARTIK YALNIZCA BURADAN GÖNDERİLİYOR. Apache tarafındaki
-           kopya KALDIRILDI: nonce her istekte değişir, Apache bunu
-           üretemez. İki CSP başlığı gönderilseydi tarayıcı ikisinin
-           KESİŞİMİNİ uygular, Apache'ninki nonce içermediği için
-           bloklar engellenirdi. */
+           DİKKAT: satır içi <script> ya da style="" ekleyen yeni kod
+           SESSİZCE çalışmaz - hata görünmez, yalnızca davranış olmaz.
+           tools/check_conventions.php bunu denetler.
+
+           CSP YALNIZCA BURADAN gönderilir; Apache kopyası kaldırıldı
+           (nonce her istekte değişir, Apache üretemez; iki başlık
+           gönderilseydi tarayıcı KESİŞİMİNİ uygulardı).
+
+           Gerekçe: docs/architecture/0003-csp-unsafe-inline-kaldirildi.md */
         header(
             "Content-Security-Policy: default-src 'self'; img-src 'self' data:; "
             . "style-src 'self' 'nonce-" . csp_nonce() . "'; script-src 'self'; "

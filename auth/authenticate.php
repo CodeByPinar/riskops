@@ -159,6 +159,12 @@ auth_start([
     'role'          => (string)$user['role'],
     'department_id' => $user['department_id'] !== null ? (int)$user['department_id'] : null,
     'must_change_password' => (int)$user['must_change_password'] === 1,
+    /* Sorgu bu kolonu SEÇİYOR ve auth_start() onu BEKLİYOR; arada duran
+       bu dizi taşımadığı için kullanıcının kayıtlı dil tercihi girişte
+       hiç uygulanmıyordu (oturumda her zaman null kalıyordu). Belirti
+       şuydu: hesabında İngilizce seçili biri giriş yapınca arayüz
+       Türkçe açılıyor, ancak kenar çubuğundan EN'e basınca düzeliyordu. */
+    'locale'        => $user['locale'] ?? null,
 ]);
 
 try {

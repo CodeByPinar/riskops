@@ -5,28 +5,14 @@ declare(strict_types=1);
  * RiskOps - Çok dilli arayüz
  * /var/www/riskops/includes/i18n.php
  *
- * =====================================================================
- *  ANAHTAR, TÜRKÇE METNİN KENDİSİDİR
- * =====================================================================
+ * ÇEVİRİ ANAHTARI, TÜRKÇE METNİN KENDİSİDİR:
+ *     t('Yeni Risk')        değil        t('risks.new')
  *
- * t('Yeni Risk') şeklinde çağrılır; t('risks.new') gibi soyut bir
- * anahtar kullanılmaz. Sebep bir tasarım tercihinden fazlası:
+ * Pratik sonucu: sözlükte karşılığı olmayan metin BOZULMAZ, doğru
+ * Türkçesiyle görünür. Kısmi çeviri kullanılabilir bir durumdur.
  *
- * 1. GEÇİŞ GÜVENLİ. Uygulamada 900'den fazla satır metin içeriyor.
- *    Soyut anahtar kullanılsaydı, wrap edilmemiş her metin ya boş
- *    görünür ya da "risks.new" gibi bir anahtar basardı. Kaynak metin
- *    anahtar olunca, çevrilmemiş bir metin OLDUĞU GİBİ - yani doğru
- *    Türkçesiyle - görünür. Eksik çeviri sayfayı bozmaz.
- *
- * 2. KOD OKUNUR KALIR. t('Silinen Riskler') okunduğunda ne yazdığı
- *    bellidir; t('risks.deleted.title') için sözlüğe bakmak gerekir.
- *
- * 3. Türkçe sözlük dosyası BOŞ olabilir: anahtar bulunamazsa anahtarın
- *    kendisi döner, o da zaten Türkçedir.
- *
- * MALİYETİ: Türkçe metin değişirse çeviri anahtarı da değişir ve
- * İngilizcesi düşer (Türkçeye geri döner). Bu kabul edilebilir -
- * sessizce YANLIŞ çeviri göstermektense doğru Türkçe göstermek yeğdir.
+ * Gerekçe ve reddedilen alternatifler:
+ *     docs/architecture/0002-ceviri-anahtari-kaynak-metin.md
  *
  * DEĞİŞKEN ARAYÜZ
  *   t('%d risk seçildi', [5])           -> sprintf ile
@@ -63,25 +49,59 @@ function i18n_default(): string
  */
 function locale(): string
 {
-    static $locale = null;
+    $cache = &locale_cache();
 
-    if ($locale !== null) {
-        return $locale;
+    if ($cache !== null) {
+        return $cache;
     }
 
     $locales = i18n_locales();
 
     $s = $_SESSION['locale'] ?? null;
     if (is_string($s) && isset($locales[$s])) {
-        return $locale = $s;
+        return $cache = $s;
     }
 
     $u = $_SESSION['user_locale'] ?? null;
     if (is_string($u) && isset($locales[$u])) {
-        return $locale = $u;
+        return $cache = $u;
     }
 
-    return $locale = i18n_default();
+    return $cache = i18n_default();
+}
+
+/**
+ * locale() önbelleğinin tutulduğu yer.
+ *
+ * NEDEN AYRI BİR FONKSİYON: dil istek başına bir kez hesaplanır ve
+ * önbelleğe alınır. Önbellek locale() içinde `static` olsaydı
+ * DIŞARIDAN SIFIRLANAMAZDI - PHP'de bir fonksiyonun static değişkenine
+ * erişilemez. Aynı süreçte birden fazla dil senaryosu sınayan testler
+ * bu yüzden hep ilk hesaplanan değeri görürdü; yani dil mantığı
+ * pratikte test edilemez olurdu.
+ *
+ * Referansla döndüğü için çağıran yazabilir:
+ *     $cache = &locale_cache();
+ *     $cache = 'en';
+ */
+function &locale_cache(): ?string
+{
+    static $value = null;
+
+    return $value;
+}
+
+/**
+ * Önbelleği boşaltır; sonraki locale() çağrısı yeniden hesaplar.
+ *
+ * Uygulama akışında GEREKMEZ (dil bir istek içinde değişmez).
+ * Testler ve dili değiştirip aynı süreçte çıktı üreten CLI araçları
+ * için vardır.
+ */
+function locale_reset(): void
+{
+    $cache = &locale_cache();
+    $cache = null;
 }
 
 /**

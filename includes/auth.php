@@ -101,6 +101,61 @@ function auth_user(): ?array
 }
 
 /** Başarılı login sonrasi oturumu baslatir. */
+/**
+ * Giriş anında hangi dil kazanır?
+ *
+ * İki kaynak çakışabilir:
+ *   - $accountLocale : kullanıcının hesabına kayıtlı tercihi (users.locale)
+ *   - $sessionLocale : giriş EKRANINDA seçilmiş dil ($_SESSION['locale'])
+ *
+ * KURAL
+ * -----
+ * 1. Hesabın kayıtlı tercihi varsa O kazanır ve oturumdaki anonim
+ *    seçim TEMİZLENİR.
+ *
+ *    Neden: giriş ekranı paylaşılan bir ekran olabilir (ortak
+ *    bilgisayar, kiosk). Önceki kişinin oradaki seçimi, benim
+ *    hesabıma kayıtlı tercihimi bastırmamalı. Kişisel ayar, gelip
+ *    geçici bir ekran seçiminden güçlüdür.
+ *
+ * 2. Hesabın kayıtlı tercihi YOKSA ve giriş ekranında bilinçli bir
+ *    seçim yapılmışsa, o seçim hesaba YAZILIR.
+ *
+ *    Neden: kullanıcı dilini daha o anda söylemiştir. Kaydetmezsek
+ *    bir sonraki girişte yeniden Türkçe açılır ve "ben bunu seçmiştim"
+ *    hissi oluşur.
+ *
+ * 3. İkisi de yoksa sistem varsayılanı geçerlidir (karar yok).
+ *
+ * Saf fonksiyondur: $_SESSION'a ya da veritabanına dokunmaz, yalnızca
+ * ne yapılacağını söyler. Uygulaması auth_start() içindedir, testi
+ * tests/Unit/AuthLocaleHandoffTest.php içinde.
+ *
+ * @return array{session: ?string, persist: ?string}
+ *         session = oturuma yazılacak değer (null ise anahtar silinir)
+ *         persist = users.locale'e yazılacak değer (null ise yazma yok)
+ */
+function auth_locale_handoff(?string $accountLocale, ?string $sessionLocale): array
+{
+    $valid = function_exists('i18n_locales') ? i18n_locales() : ['tr' => '', 'en' => ''];
+
+    $account = ($accountLocale !== null && isset($valid[$accountLocale])) ? $accountLocale : null;
+    $session = ($sessionLocale !== null && isset($valid[$sessionLocale])) ? $sessionLocale : null;
+
+    // 1) Hesabın tercihi varsa o kazanır, anonim seçim silinir.
+    if ($account !== null) {
+        return ['session' => null, 'persist' => null];
+    }
+
+    // 2) Hesapta tercih yok ama ekranda seçim yapılmışsa kalıcılaştır.
+    if ($session !== null) {
+        return ['session' => $session, 'persist' => $session];
+    }
+
+    // 3) Karar verecek bir şey yok.
+    return ['session' => null, 'persist' => null];
+}
+
 function auth_start(array $user): void
 {
     // Session fixation koruması
@@ -113,7 +168,41 @@ function auth_start(array $user): void
     $_SESSION['user_department_id'] = isset($user['department_id']) ? (int)$user['department_id'] : null;
     /* Arayuz dili tercihi oturumda tasinir: her istekte kullanici
        tablosuna gitmemek icin (bkz. includes/i18n.php locale()). */
-    $_SESSION['user_locale']        = $user['locale'] ?? null;
+    $accountLocale = isset($user['locale']) && is_string($user['locale'])
+        ? $user['locale']
+        : null;
+    $_SESSION['user_locale'] = $accountLocale;
+
+    /* Giriş ekranındaki seçim ile hesabın tercihi çakışabilir; kuralı
+       auth_locale_handoff() söyler. */
+    $sessionLocale = isset($_SESSION['locale']) && is_string($_SESSION['locale'])
+        ? $_SESSION['locale']
+        : null;
+
+    $handoff = auth_locale_handoff($accountLocale, $sessionLocale);
+
+    if ($handoff['session'] === null) {
+        unset($_SESSION['locale']);
+    } else {
+        $_SESSION['locale'] = $handoff['session'];
+    }
+
+    if ($handoff['persist'] !== null) {
+        try {
+            db()->prepare('UPDATE users SET locale = :l WHERE id = :id')
+                ->execute([':l' => $handoff['persist'], ':id' => (int)$user['id']]);
+            $_SESSION['user_locale'] = $handoff['persist'];
+        } catch (Throwable $e) {
+            /* locale kolonu olmayan eski kurulum: oturum içinde çalışır,
+               giriş bu yüzden başarısız sayılmaz. */
+            app_log('warning', 'Locale preference could not be saved at login: ' . $e->getMessage());
+        }
+    }
+
+    /* NOT: locale() içindeki static önbellek burada sıfırlanmıyor.
+       Gerekmiyor - auth_start() yalnızca authenticate.php içinden,
+       hemen ardından redirect() gelen bir akışta çağrılıyor; bu istekte
+       hiçbir arayüz basılmıyor. Dil bir sonraki istekte hesaplanıyor. */
     $_SESSION['must_change_password'] = !empty($user['must_change_password']);
     $_SESSION['login_at']           = time();
     $_SESSION['last_activity']      = time();
