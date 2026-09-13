@@ -49,3 +49,15 @@ desktop.ini
 .vscode/
 *.swp
 *~
+
+# ---------------------------------------------------------------------
+#  Gelistirme araclarinin uretikleri
+#
+#  assets/vendor/ DEPODA DURUR (Bootstrap, Chart.js, ikonlar): uygulama
+#  CDN kullanmiyor ve kurulumun internet gerektirmemesi bilincli bir
+#  karar. Asagidaki vendor/ ise COMPOSER'in dizini - o baska.
+# ---------------------------------------------------------------------
+/vendor/
+/.phpunit.cache/
+/composer.lock
+.phpunit.result.cache
