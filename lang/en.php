@@ -35,6 +35,7 @@ return [
     'Denetim Kaydı'     => 'Audit Logs',
     'Ayarlar'           => 'Settings',
     'Hata Ayıklama'     => 'Debugging',
+    'Eklentiler'        => 'Plugins',
 
     'Profilim'          => 'My profile',
     'Parola değiştir'   => 'Change password',
@@ -278,4 +279,36 @@ return [
     'yalnızca yavaş/hatalı istekler' => 'slow / failing requests only',
     'her istek'                   => 'every request',
     'Kipi kapat'                  => 'Turn off',
+
+    /* ---------------------------------------------------------------
+     * Eklenti yönetim ekranı  (/admin/plugins/)
+     * ------------------------------------------------------------- */
+    'Diskteki eklentileri açın veya kapatın' => 'Enable or disable plugins found on disk',
+    'Kurulu eklentiler'           => 'Installed plugins',
+    'Eklenti'                     => 'Plugin',
+    'Sürüm'                       => 'Version',
+    'bulundu'                     => 'found',
+    'yüklü'                       => 'loaded',
+    'Yüklenemedi'                 => 'Failed to load',
+    /* 'Açık' / 'Aç' anahtarları hata ayıklama ekranında BAŞKA anlamda
+       kullanılıyor (kip açık / kipi aç). Aynı kelimeyi iki bağlamda
+       anahtar yapmak, ADR-0002'de yazılı bilinen sınır: PHP dizisinde
+       ikinci tanım birinciyi sessizce ezer. Tam ifade kullanıyoruz. */
+    'Eklenti açık'                => 'Enabled',
+    'Eklenti kapalı'              => 'Disabled',
+    'Eklentiyi aç'                => 'Enable',
+    'Eklentiyi kapat'             => 'Disable',
+    'Eklenti kapatılacak. Emin misiniz?' => 'This plugin will be disabled. Are you sure?',
+    'Henüz eklenti yok'           => 'No plugins yet',
+    'Eklentiler plugins/ dizinine konur. Her eklenti kendi klasöründe bir plugin.php dosyası taşır.'
+        => 'Plugins live in the plugins/ directory. Each one carries a plugin.php manifest in its own folder.',
+    'Eklenti kurmak'              => 'Installing a plugin',
+    'Eklenti kurmak, yazarına çekirdek kadar güvenmektir.'
+        => 'Installing a plugin means trusting its author as much as the core.',
+    'Bu istekte eklenti hatası oluştu' => 'A plugin failed during this request',
+    'Bu istekte kayıtlı dinleyiciler'  => 'Listeners registered in this request',
+    'Mevcut kancalar'             => 'Available hooks',
+    'dinleyici'                   => 'listener(s)',
+    'storage/ dizini yazılabilir değil; eklentiler bu ekrandan açılıp kapatılamaz.'
+        => 'The storage/ directory is not writable; plugins cannot be toggled here.',
 ];

@@ -91,5 +91,10 @@ try {
 
 audit('risk_created', 'risk', $riskId, null, ['risk_code' => $riskCode] + $data);
 
+/* Eklenti kancası. Transaction COMMIT EDİLDİKTEN sonra: bir eklentinin
+   hatası kaydı geri almamalı, ve eklenti veritabanında kalıcı olmuş
+   veriyi görmeli. */
+hook_do('risk.created', $riskId, ['risk_code' => $riskCode] + $data);
+
 flash('success', $riskCode . ' kodlu risk oluşturuldu.');
 redirect('/risks/view.php?id=' . $riskId);

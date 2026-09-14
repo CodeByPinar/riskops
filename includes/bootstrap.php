@@ -104,6 +104,7 @@ require_once INCLUDES_PATH . '/lookups.php';
 /* i18n settings.php'ye bagimli (setting() kullaniyor), o yuzden
    ondan SONRA yukleniyor. */
 require_once INCLUDES_PATH . '/i18n.php';
+require_once INCLUDES_PATH . '/plugins.php';
 
 /* ---------------------------------------------------------------------
  * 3) Zaman dilimi  (settings tablosundan)
@@ -119,6 +120,20 @@ unset($riskopsTz);
 // Europe/Istanbul olabilir; NOW() ile date() ayni ani gostermezse
 // tum zaman damgalari ve zamana dayali kontroller kayar.
 db_sync_timezone();
+
+/* ---------------------------------------------------------------------
+ * 3b) Eklentiler
+ *
+ * Ayarlar okunduktan ve saat dilimi kurulduktan SONRA, oturumdan ÖNCE.
+ *
+ * Sonra: eklenti kodu setting() ve db() kullanabilsin.
+ * Önce:  eklentiler oturum kurulumuna ve yetkilendirmeye KARIŞAMASIN -
+ *        kanca eklemek, oturum başlatmadan önce çalışan bir yerde
+ *        olmamalı.
+ *
+ * CLI'da da çalışır: cron işleri de kancaları görmeli.
+ * -------------------------------------------------------------------*/
+plugins_boot();
 
 /* ---------------------------------------------------------------------
  * 4) Güvenli oturum  (CLI'da atlanir)

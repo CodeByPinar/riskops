@@ -142,6 +142,7 @@ require_once INCLUDES_PATH . '/risk.php';
 require_once INCLUDES_PATH . '/ui.php';
 require_once INCLUDES_PATH . '/i18n.php';
 require_once INCLUDES_PATH . '/debug.php';
+require_once INCLUDES_PATH . '/plugins.php';
 
 date_default_timezone_set((string)setting('timezone', FALLBACK_TIMEZONE));
 

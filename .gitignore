@@ -62,3 +62,15 @@ desktop.ini
 .php-cs-fixer.cache
 /composer.lock
 .phpunit.result.cache
+
+# ---------------------------------------------------------------------
+#  Eklentiler
+#
+#  plugins/ DEPODA DURUR - ornek eklenti belge niteliginde.
+#  Ucuncu taraf eklentiler operator tarafindan sunucuya konur ve bu
+#  depoya girmez; alt dizinleri yok saymiyoruz cunku her kurulum
+#  kendi eklentilerini kendi deposunda tutabilir.
+#
+#  Acik eklenti listesi ise kuruluma ozeldir.
+# ---------------------------------------------------------------------
+/storage/plugins.json

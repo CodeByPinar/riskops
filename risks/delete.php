@@ -43,5 +43,12 @@ audit('risk_deleted', 'risk', $id, [
     'status'    => $risk['status'],
 ], null);
 
+/* Yumuşak silme: kayıt hâlâ veritabanında, eklenti okuyabilir. */
+hook_do('risk.deleted', $id, [
+    'risk_code' => $risk['risk_code'],
+    'title'     => $risk['title'],
+    'status'    => $risk['status'],
+]);
+
 flash('success', $risk['risk_code'] . ' kodlu risk silindi.');
 redirect('/risks/');

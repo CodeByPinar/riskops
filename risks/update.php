@@ -142,6 +142,12 @@ try {
 
 if ($oldValues !== []) {
     audit('risk_updated', 'risk', $id, $oldValues, $newValues);
+
+    /* Yalnızca GERÇEKTEN değişiklik varken tetiklenir - "kaydet"e basıp
+       hiçbir şeyi değiştirmemek bir olay değildir. Eklentiye eski ve
+       yeni değerler birlikte verilir; "hangi alan değişti" sorusunun
+       cevabı yalnızca yeni değerden çıkarılamaz. */
+    hook_do('risk.updated', $id, $oldValues, $newValues);
 }
 if ($statusChanged) {
     audit('risk_status_changed', 'risk', $id,

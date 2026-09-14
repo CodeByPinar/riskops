@@ -63,6 +63,10 @@ silinmez — böylece "bu risk 6 ayda nereden nereye geldi" sorusu cevaplanabili
 |---|---|
 | ![Araç çubuğu](docs/screenshots/debug-toolbar.png) | ![Yönetim ekranı](docs/screenshots/debug-panel.png) |
 
+| Eklenti Yönetimi | |
+|---|---|
+| ![Eklentiler](docs/screenshots/plugins.png) | |
+
 Araç çubuğu her sorguyu, süresini ve o sorguyu açan dosya:satır bilgisini
 gösterir. Menüden süreli olarak açılır, süre dolunca kendiliğinden kapanır.
 Ayrıntı: [Hata ayıklama kipi](#hata-ayıklama-kipi).
@@ -101,6 +105,16 @@ Ayrıntı: [Hata ayıklama kipi](#hata-ayıklama-kipi).
 - Kullanıcı profil sayfası (rol ve departman salt okunur)
 - Silinen riskleri listeleme ve geri alma
 - Termini yaklaşan aksiyonlar için günlük e-posta özeti (cron)
+
+**Genişletilebilirlik**
+- **Eklenti sistemi** — çekirdeği çatallamadan menüye giriş, kuruma özel
+  rapor ve risk olaylarına tepki eklenebiliyor
+- Kancalar: `risk.created`, `risk.updated`, `risk.deleted`, `nav.items`,
+  `reports.definitions`
+- Bozuk bir eklenti uygulamayı düşürmüyor; hata yakalanıp yönetim
+  ekranında gösteriliyor
+- Eklenti **web arayüzünden yüklenemez** — ekran yalnızca diskte var
+  olanı açıp kapatır (bkz. ADR-0010)
 
 **Geliştirme ve teşhis**
 - **Hata ayıklama kipi** — menüden süreli olarak açılır (1/4/24 saat),
@@ -339,6 +353,7 @@ sonuçlar, **kabul edilen maliyet** ve **değerlendirilen alternatifler**.
 | [0007](docs/architecture/0007-hata-ayiklama-kipi.md) | Hata ayıklama: iki anahtar, süreli bayrak | Üretimde kazayla açılamaz, açık unutulamaz |
 | [0008](docs/architecture/0008-dosya-eki-guvenligi.md) | Dosya ekleri üç katmanlı doğrulanır | Ne sunucuda çalıştırılabilir ne tarayıcıda yorumlanabilir |
 | [0009](docs/architecture/0009-gelistirme-bagimliliklari.md) | Geliştirme bağımlılığı evet, çalışma zamanı hayır | PHPUnit/php-cs-fixer/PHPStan alındı; Doctrine alınmadı, gerekçesiyle |
+| [0010](docs/architecture/0010-eklenti-sistemi.md) | Eklenti sistemi: kancalar var, kum havuzu yok | Web'den yükleme YOK — admin hesabı uzaktan kod çalıştırmaya dönüşmesin |
 
 Bu kayıtlar önce kaynak dosyaların başındaki uzun yorum bloklarındaydı.
 İki sorun vardı: bir karar tek bir dosyaya ait değildi (CSP kararı dört
@@ -541,9 +556,9 @@ sanılıyordu:
 | PHP satırı | ~19.570 uygulama + ~1.440 test |
 | CSS satırı | ~2.510 (`app.css`) + araç çubuğu ve yazdırma stili |
 | Veritabanı tablosu | 14 |
-| PHPUnit | 128 birim + 12 entegrasyon |
+| PHPUnit | 159 birim + 12 entegrasyon |
 | Betik testleri | 59 duman + 109/119 hata ayıklama + 7 kural |
-| Mimari kaydı (ADR) | 9 kayıt |
+| Mimari kaydı (ADR) | 10 kayıt |
 | Statik çözümleme | PHPStan seviye 5, temel çizgi (baseline) yok |
 | Çalışma zamanı bağımlılığı | **0** (PHPUnit yalnızca `require-dev`) |
 
@@ -585,6 +600,7 @@ Sırada:
 - [x] Statik çözümleyici — PHPStan seviye 5, ilk koşusunda gerçek bir
       hata buldu (`due_date_cell` sessizce düşen argüman)
 - [x] php-cs-fixer — kod biçimi PSR-12
+- [x] Eklenti sistemi — kancalar, yönetim ekranı, örnek eklenti
 - [ ] PHPStan seviyesini kademeli yükselt (6 → 7 → 8)
 - [ ] İnce bir **repository katmanı** — ORM değil: sorguları tek yerde
       toplayıp refactor maliyetini düşürmek, SQL kontrolünü bırakmadan

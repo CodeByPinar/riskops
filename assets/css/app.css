@@ -2508,3 +2508,37 @@ a.rk-logout-btn:hover { background: var(--rk-side-bg-alt); color: #fff; text-dec
 }
 .rk-dbglist strong { display: block; font-size: 13.5px; font-weight: 650; margin-bottom: 2px; }
 .rk-dbglist span   { font-size: 13px; color: var(--rk-muted); }
+
+/* =====================================================================
+   EKLENTI YONETIM EKRANI  (/admin/plugins/)
+   ===================================================================== */
+
+/* Kurulum komutlarinin gosterildigi blok. Kod olarak okunmasi ve
+   kopyalanabilmesi gerekiyor; satir kaymasin diye kaydirilabilir. */
+.rk-code-block {
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    border-radius: var(--rk-radius-sm);
+    background: #06203f;
+    color: #a8d5f7;
+    font-family: var(--rk-font-mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+.rk-u-mt { margin-top: 18px; }
+
+/* Kart gövdesi içindeki ara başlık.
+   Tarayıcının varsayılan h4'u kart başlığından büyük görünüyordu;
+   ara başlık kart başlığından KÜÇÜK olmalı. */
+.rk-subhead {
+    margin: 20px 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--rk-muted);
+}
+.rk-subhead:first-child { margin-top: 0; }

@@ -32,7 +32,7 @@ function report_definitions(): array
     $effSev   = 'COALESCE(r.residual_severity, r.inherent_severity)';
     $effScore = 'COALESCE(r.residual_score, r.inherent_score)';
 
-    return [
+    $definitions = [
         /* ---------------------------------------------------- Açık riskler */
         'open_risks' => [
             'title'       => 'Açık Riskler',
@@ -215,6 +215,12 @@ function report_definitions(): array
                               'acik_aksiyon', 'geciken_aksiyon'],
         ],
     ];
+
+    /* Eklentiler rapor ekleyebilir.
+       Dönen tanımlar GÜVENİLMEZ: reports/index.php ve view.php her
+       alanı kendi doğrulamasından geçirir, SQL yalnızca tanımdan gelir
+       ve kullanıcı girdisi her zaman parametre olarak bağlanır. */
+    return hook_filter('reports.definitions', $definitions);
 }
 
 /**
