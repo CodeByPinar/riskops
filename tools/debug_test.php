@@ -181,7 +181,7 @@ foreach ($shouldNotMask as $k) {
  * ===================================================================*/
 section('3. maskeleme: değerin kendisi');
 
-/** @var array $dbCfg */
+/** @var array<string, mixed> $dbCfg */
 $dbCfg  = require CONFIG_PATH . '/database.php';
 $dbPass = (string)($dbCfg['pass'] ?? '');
 

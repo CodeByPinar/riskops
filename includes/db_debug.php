@@ -71,6 +71,9 @@ class RiskOpsDebugStatement extends PDOStatement
         return parent::bindParam($param, $var, $type, $maxLength, $driverOptions);
     }
 
+    /**
+     * @param array<array-key, mixed>|null $params
+     */
     public function execute(?array $params = null): bool
     {
         $started = microtime(true);
@@ -146,6 +149,9 @@ class RiskOpsDebugPdo extends PDO
         return $result;
     }
 
+    /**
+     * @param array<int, mixed> $options
+     */
     public function prepare(string $query, array $options = []): PDOStatement|false
     {
         try {

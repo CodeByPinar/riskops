@@ -11,6 +11,9 @@ declare(strict_types=1);
  * 5x5 MATRIS ETIKETLERI
  * ===================================================================*/
 
+/**
+ * @return array<int, string>
+ */
 function likelihood_labels(): array
 {
     return [
@@ -22,6 +25,9 @@ function likelihood_labels(): array
     ];
 }
 
+/**
+ * @return array<int, string>
+ */
 function impact_labels(): array
 {
     return [
@@ -37,37 +43,59 @@ function impact_labels(): array
  * SABİT LİSTELER  (DB'deki ENUM tanimlariyla BIREBIR ayni olmali)
  * ===================================================================*/
 
+/**
+ * @return list<string>
+ */
 function risk_statuses(): array
 {
     return ['Open', 'Under Review', 'In Progress', 'Mitigated', 'Accepted', 'Transferred', 'Closed'];
 }
 
-/** Riskin hala "açık" sayildigi durumlar (overdue hesabı için). */
+/**
+ * Riskin hala "açık" sayildigi durumlar (overdue hesabı için).
+ *
+ * @return list<string>
+ */
 function risk_open_statuses(): array
 {
     return ['Open', 'Under Review', 'In Progress'];
 }
 
+/**
+ * @return list<string>
+ */
 function treatment_strategies(): array
 {
     return ['Avoid', 'Mitigate', 'Transfer', 'Accept'];
 }
 
+/**
+ * @return list<string>
+ */
 function severities(): array
 {
     return ['Low', 'Medium', 'High', 'Critical'];
 }
 
+/**
+ * @return list<string>
+ */
 function action_statuses(): array
 {
     return ['Open', 'In Progress', 'Completed', 'Cancelled'];
 }
 
+/**
+ * @return list<string>
+ */
 function action_open_statuses(): array
 {
     return ['Open', 'In Progress'];
 }
 
+/**
+ * @return list<string>
+ */
 function action_priorities(): array
 {
     return ['Low', 'Medium', 'High', 'Critical'];
@@ -250,6 +278,8 @@ function risk_recalculate_severities(?PDO $pdo = null): array
 /**
  * Overdue DB'de kolon olarak TUTULMAZ; her zaman anlik hesaplanir.
  * Aksi halde her gece cron ile güncellenmesi gerekirdi.
+ *
+ * @param list<string> $openStatuses
  */
 function is_overdue(?string $dueDate, ?string $status, array $openStatuses = []): bool
 {

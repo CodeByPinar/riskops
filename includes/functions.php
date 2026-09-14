@@ -11,7 +11,11 @@ declare(strict_types=1);
  * LOGLAMA VE HATA SONLANDIRMA
  * ===================================================================*/
 
-/** Uygulama log dosyasina satir yazar. Asla exception firlatmaz. */
+/**
+ * Uygulama log dosyasina satir yazar. Asla exception firlatmaz.
+ *
+ * @param array<string, mixed> $context
+ */
 function app_log(string $level, string $message, array $context = []): void
 {
     if (!is_dir(LOG_PATH)) {
@@ -152,6 +156,9 @@ function current_path(): string
 /**
  * Mevcut query string'i koruyarak yeni bir URL üretir.
  * Filtre + siralama + sayfalama linkleri için kullanılır.
+ *
+ * @param array<string, scalar|null> $overrides
+ * @param list<string> $remove
  */
 function query_url(array $overrides = [], array $remove = []): string
 {
@@ -200,7 +207,11 @@ function input_int_range(string $key, int $min, int $max, ?int $default = null):
     return ($v === null || $v < $min || $v > $max) ? $default : $v;
 }
 
-/** Deger yalnızca izin verilen listedeyse kabul edilir (ENUM guvenligi). */
+/**
+ * Deger yalnızca izin verilen listedeyse kabul edilir (ENUM guvenligi).
+ *
+ * @param list<string> $allowed
+ */
 function input_enum(string $key, array $allowed, ?string $default = null): ?string
 {
     $v = input($key);
@@ -338,7 +349,11 @@ function flash(string $type, string $message): void
     $_SESSION['_flash'][] = ['type' => $type, 'message' => $message];
 }
 
-/** Mesajlari döndürür VE siler. Yalnızca layout icinde cagrilmali. */
+/**
+ * Mesajlari döndürür VE siler. Yalnızca layout icinde cagrilmali.
+ *
+ * @return list<array{type: string, message: string}>
+ */
 function flash_take(): array
 {
     $messages = $_SESSION['_flash'] ?? [];
@@ -350,6 +365,10 @@ function flash_take(): array
  * ESKI FORM GIRDILERI  (validation hatasindan sonra formu doldurmak için)
  * ===================================================================*/
 
+/**
+ * @param array<string, mixed> $data
+ * @param list<string> $except
+ */
 function old_set(array $data, array $except = ['password', 'password_confirm', '_token']): void
 {
     if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -405,6 +424,9 @@ function has_errors(): bool
  * SAYFALAMA
  * ===================================================================*/
 
+/**
+ * @return array{total: int, per_page: int, pages: int, current: int, offset: int, from: int, to: int, has_prev: bool, has_next: bool}
+ */
 function paginate(int $total, int $perPage, int $currentPage): array
 {
     $perPage = max(1, $perPage);

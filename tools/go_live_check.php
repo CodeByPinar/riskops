@@ -54,7 +54,11 @@ function section(string $title): void
     echo "\n" . str_repeat('-', 74) . "\n  " . $title . "\n" . str_repeat('-', 74) . "\n";
 }
 
-/** Yerel HTTP isteği: başlık ve durum kodu döndürür. */
+/**
+ * Yerel HTTP isteği: başlık ve durum kodu döndürür.
+ *
+ * @return array<string, mixed>
+ */
 function probe(string $path): array
 {
     $ch = curl_init('http://127.0.0.1' . $path);

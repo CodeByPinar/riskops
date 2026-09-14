@@ -192,7 +192,11 @@ function user_collect_input(?int $selfId = null): array
     ], $errors];
 }
 
-/** Doğrulama hatasında formu tekrar gösterir. */
+/**
+ * Doğrulama hatasında formu tekrar gösterir.
+ *
+ * @param array<string, string> $errors
+ */
 function user_fail_back(array $errors, string $backUrl): never
 {
     old_set($_POST);

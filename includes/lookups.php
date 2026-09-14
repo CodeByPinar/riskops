@@ -45,6 +45,8 @@ function categories_list(bool $onlyActive = true): array
 /**
  * Risk/aksiyon sahibi olabilecek kullanıcılar.
  * viewer rolu sahip olarak atanabilir (izler ama duzenleyemez).
+ *
+ * @return list<array<string, mixed>>
  */
 function users_list(bool $onlyActive = true): array
 {
@@ -63,7 +65,11 @@ function users_list(bool $onlyActive = true): array
     return $cache[$key];
 }
 
-/** Verilen id listede var mi? Form dogrulamasinda kullanılır. */
+/**
+ * Verilen id listede var mi? Form dogrulamasinda kullanılır.
+ *
+ * @param list<array<string, mixed>> $rows
+ */
 function lookup_has(array $rows, ?int $id): bool
 {
     if ($id === null) {
@@ -77,7 +83,11 @@ function lookup_has(array $rows, ?int $id): bool
     return false;
 }
 
-/** <option> listesi üretir. $selected esitse seçili işaretlenir. */
+/**
+ * <option> listesi üretir. $selected esitse seçili işaretlenir.
+ *
+ * @param list<array<string, mixed>> $rows
+ */
 function options_html(array $rows, ?int $selected, string $labelField = 'name'): string
 {
     $out = '';
@@ -91,7 +101,11 @@ function options_html(array $rows, ?int $selected, string $labelField = 'name'):
     return $out;
 }
 
-/** Duz değer listesinden <option> üretir (status, severity vb.). */
+/**
+ * Duz değer listesinden <option> üretir (status, severity vb.).
+ *
+ * @param list<string> $values
+ */
 function options_from_values(array $values, ?string $selected): string
 {
     $out = '';
@@ -104,7 +118,11 @@ function options_from_values(array $values, ?string $selected): string
     return $out;
 }
 
-/** 1-5 olcek listesi: "3 - Possible" seklinde. */
+/**
+ * 1-5 olcek listesi: "3 - Possible" seklinde.
+ *
+ * @param array<int, string> $labels
+ */
 function options_from_scale(array $labels, ?int $selected): string
 {
     $out = '';

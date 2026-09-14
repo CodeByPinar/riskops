@@ -37,11 +37,11 @@
 #  yazıldı. Seviye buradan kademeli yükseltilecek - her yükseltme kendi
 #  commit'inde, kendi düzeltmeleriyle.
 #
-#  Sıradaki: seviye 6 (eksik dizi tipleri) -> 7 -> 8 (null güvenliği).
+#  Sıradaki: seviye 7 (birleşim tipleri) -> 8 (null güvenliği).
 # =====================================================================
 
 parameters:
-    level: 5
+    level: 6
 
     paths:
         - includes

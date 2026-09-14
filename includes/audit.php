@@ -16,6 +16,9 @@ declare(strict_types=1);
  * Audit kaydı yazar.
  * Bu fonksiyon ASLA exception firlatmaz; başarısız olursa app.log'a yazar.
  * Cunku audit hatası yuzunden kullanıcının risk kaydı kaybolmamalidir.
+ *
+ * @param array<string, mixed>|null $oldValues
+ * @param array<string, mixed>|null $newValues
  */
 function audit(
     string $action,
@@ -58,7 +61,11 @@ function audit(
     }
 }
 
-/** Parola gibi hassas alanlar audit'e ASLA yazilmaz. */
+/**
+ * Parola gibi hassas alanlar audit'e ASLA yazilmaz.
+ *
+ * @param array<string, mixed> $data
+ */
 function audit_json(array $data): string
 {
     $sensitive = ['password', 'password_hash', 'password_confirm', '_token', 'pass'];
@@ -74,6 +81,11 @@ function audit_json(array $data): string
  * Iki durum arasindaki farki cikarir.
  * Donus: [degisen_eski_degerler, degisen_yeni_degerler]
  * Sadece GERCEKTEN degisen alanlar loglanir -> audit tablosu sismez.
+ *
+ * @param array<string, mixed> $before
+ * @param array<string, mixed> $after
+ * @param list<string> $ignore
+ * @return array{0: array<string, mixed>, 1: array<string, mixed>}
  */
 function audit_diff(array $before, array $after, array $ignore = ['updated_at', 'created_at']): array
 {

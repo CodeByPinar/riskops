@@ -17,6 +17,8 @@ if (!defined('RISKOPS_BOOTSTRAPPED')) {
 /**
  * Verilen id'ye ait silinmemiş riski döndürür, yoksa null.
  * Aksiyon her zaman yaşayan bir riske bağlı olmalıdır.
+ *
+ * @return array<string, mixed>
  */
 function action_find_risk(?int $riskId): ?array
 {
@@ -90,7 +92,11 @@ function action_collect_input(): array
     ], $errors];
 }
 
-/** Doğrulama hatasında formu tekrar gösterir. */
+/**
+ * Doğrulama hatasında formu tekrar gösterir.
+ *
+ * @param array<string, string> $errors
+ */
 function action_fail_back(array $errors, string $backUrl): never
 {
     old_set($_POST);

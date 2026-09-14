@@ -11,6 +11,8 @@ declare(strict_types=1);
  * ayrışabilirdi — denetim çıktısında bu kabul edilemez.
  *
  * Döndürür: ['f' => filtreler, 'where' => SQL, 'params' => bağlamalar]
+ *
+ * @return array<string, mixed>
  */
 
 function audit_filters(): array

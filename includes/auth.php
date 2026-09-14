@@ -15,6 +15,9 @@ const ROLE_MANAGER = 'manager';
 const ROLE_ANALYST = 'analyst';
 const ROLE_VIEWER  = 'viewer';
 
+/**
+ * @return list<string>
+ */
 function all_roles(): array
 {
     return [ROLE_ADMIN, ROLE_MANAGER, ROLE_ANALYST, ROLE_VIEWER];
@@ -26,6 +29,8 @@ function all_roles(): array
  * Listede OLMAYAN her yetki admin'e ozeldir:
  *   risk.delete, user.manage, department.manage,
  *   category.manage, settings.manage, audit.view
+ *
+ * @return array<string, list<string>>
  */
 function role_permissions(): array
 {
@@ -86,6 +91,9 @@ function auth_name(): string
     return (string)($_SESSION['user_name'] ?? '');
 }
 
+/**
+ * @return array{id: int|null, name: string, email: string, role: string|null, department_id: int|null}|null
+ */
 function auth_user(): ?array
 {
     if (!auth_check()) {
@@ -157,6 +165,9 @@ function auth_locale_handoff(?string $accountLocale, ?string $sessionLocale): ar
     return ['session' => null, 'persist' => null];
 }
 
+/**
+ * @param array<string, mixed> $user
+ */
 function auth_start(array $user): void
 {
     // Session fixation koruması

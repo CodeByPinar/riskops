@@ -35,7 +35,11 @@ function check(string $label, bool $ok, string $note = ''): void
     printf("  [%s] %s%s\n", $ok ? 'OK  ' : 'FAIL', $label, $note !== '' ? "  ({$note})" : '');
 }
 
-/** Beklenen pencereyi, tasmaya dusmeyen bagimsiz bir yolla uretir. */
+/**
+ * Beklenen pencereyi, tasmaya dusmeyen bagimsiz bir yolla uretir.
+ *
+ * @return list<string>
+ */
 function expected_months(int $baseTs, int $count): array
 {
     $y = (int)date('Y', $baseTs);

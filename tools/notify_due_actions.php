@@ -123,6 +123,7 @@ $log(count($rows) . ' aksiyon, ' . count($byOwner) . ' kisi.');
 /* gereken her şey düz metinle anlatılabilir.                           */
 /* ------------------------------------------------------------------ */
 
+/** @param list<array<string, mixed>> $actions */
 function build_body(array $actions, string $ownerName): string
 {
     $overdue  = array_filter($actions, static fn ($a) => (int)$a['days_left'] < 0);

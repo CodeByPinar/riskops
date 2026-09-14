@@ -97,6 +97,9 @@ function riskops_test_settings_reset(): void
     riskops_test_settings([]);
 }
 
+/**
+ * @return array<string, mixed>
+ */
 function settings_all(bool $refresh = false): array
 {
     return riskops_test_settings();

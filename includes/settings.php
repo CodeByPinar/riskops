@@ -9,7 +9,11 @@ declare(strict_types=1);
  * settings tablosu istek başına BIR KEZ okunur ve bellekte tutulur.
  */
 
-/** Tüm ayarlari tip donusumu yapilmis halde döndürür. */
+/**
+ * Tüm ayarlari tip donusumu yapilmis halde döndürür.
+ *
+ * @return array<string, mixed>
+ */
 function settings_all(bool $refresh = false): array
 {
     static $cache = null;

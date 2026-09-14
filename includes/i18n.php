@@ -20,7 +20,11 @@ declare(strict_types=1);
  *   t('Merhaba :name', [':name' => $n]) -> adlandırılmış yer tutucu
  */
 
-/** Desteklenen diller: kod => görünen ad. */
+/**
+ * Desteklenen diller: kod => görünen ad.
+ *
+ * @return array<string, string>
+ */
 function i18n_locales(): array
 {
     return [
@@ -108,6 +112,8 @@ function locale_reset(): void
 /**
  * Aktif dilin sözlüğü. Dosya yoksa boş dizi döner ve her metin
  * anahtarının kendisiyle (Türkçesiyle) görünür.
+ *
+ * @return array<string, string>
  */
 function i18n_dictionary(): array
 {
@@ -133,6 +139,7 @@ function i18n_dictionary(): array
  *
  * @param string $text Türkçe kaynak metin (aynı zamanda anahtar)
  * @param array  $vars sprintf argümanları ya da [':ad' => 'değer']
+ * @param array<array-key, string|int|float> $vars
  */
 function t(string $text, array $vars = []): string
 {
@@ -160,7 +167,11 @@ function t(string $text, array $vars = []): string
     return vsprintf($out, $vars);
 }
 
-/** Çevir ve HTML olarak kaçır. Şablonlarda en sık kullanılan biçim. */
+/**
+ * Çevir ve HTML olarak kaçır. Şablonlarda en sık kullanılan biçim.
+ *
+ * @param array<array-key, string|int|float> $vars
+ */
 function te(string $text, array $vars = []): string
 {
     return e(t($text, $vars));

@@ -60,7 +60,7 @@ declare(strict_types=1);
  * Referansla döner ki çağıran yazabilsin; PHP'de bir fonksiyonun
  * static değişkenine dışarıdan erişilemiyor.
  *
- * @return array{listeners: array<string, array<int, list<callable>>>, loaded: list<string>, errors: list<array{plugin:string, hook:string, message:string}>}
+ * @return array{listeners: array<string, array<int, list<callable>>>, loaded: list<string>, errors: list<array{hook: string, message: string, file: string}>}
  */
 function &plugins_state(): array
 {
@@ -180,7 +180,11 @@ function hook_listeners(string $hook): array
     return $flat;
 }
 
-/** Hata ayıklama için: hangi kancada kaç dinleyici var? */
+/**
+ * Hata ayıklama için: hangi kancada kaç dinleyici var?
+ *
+ * @return array<string, int>
+ */
 function hook_map(): array
 {
     $state = &plugins_state();
@@ -480,7 +484,11 @@ function plugins_load_hooks(string $file): void
     require $file;
 }
 
-/** Bu istekte yüklenen eklentiler. @return list<string> */
+/**
+ * Bu istekte yüklenen eklentiler.
+ *
+ * @return list<string>
+ */
 function plugins_loaded(): array
 {
     $state = &plugins_state();
@@ -488,7 +496,11 @@ function plugins_loaded(): array
     return $state['loaded'];
 }
 
-/** Yükleme ve çalıştırma hataları. */
+/**
+ * Yükleme ve çalıştırma hataları.
+ *
+ * @return list<array{hook: string, message: string, file: string}>
+ */
 function plugins_errors(): array
 {
     $state = &plugins_state();

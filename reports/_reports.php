@@ -26,6 +26,9 @@ if (!defined('RISKOPS_BOOTSTRAPPED')) {
     exit('Direct access denied.');
 }
 
+/**
+ * @return array<string, array<string, mixed>>
+ */
 function report_definitions(): array
 {
     $open     = "'" . implode("','", risk_open_statuses()) . "'";
@@ -229,7 +232,8 @@ function report_definitions(): array
  * Tarih filtresi SQL'e %DATE% yer tutucusundan enjekte edilir; değerler
  * her zaman prepared statement parametresidir.
  *
- * @return array{rows: array, sql: string}
+ * @return array{rows: list<array<string, mixed>>, sql: string}
+ * @param array<string, mixed> $def
  */
 function report_run(array $def, ?string $from, ?string $to): array
 {
@@ -260,6 +264,8 @@ function report_run(array $def, ?string $from, ?string $to): array
  * Kural tabanlı: her rapor için ayrı biçimlendirici tanımlamak yerine
  * kolon adı biçimi belirler. Yeni rapor eklendiğinde rozetler ve tarih
  * biçimleri kendiliğinden doğru gelir.
+ *
+ * @param mixed $value
  */
 function report_cell_html(string $column, $value): string
 {

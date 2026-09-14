@@ -75,6 +75,8 @@ function score_chip(?int $score, ?string $severity = null): string
  *
  * Boş bırakılırsa is_overdue() aksiyon durumlarına düşer - aksiyon
  * ekranlarının beklediği davranış budur.
+ *
+ * @param list<string> $openStatuses
  */
 function due_date_cell(?string $dueDate, ?string $status = null, array $openStatuses = []): string
 {

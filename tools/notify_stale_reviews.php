@@ -107,6 +107,7 @@ $log(count($rows) . ' risk, ' . count($byOwner) . ' kisi.');
 
 /* ------------------------------------------------------------------ */
 
+/** @param list<array<string, mixed>> $risks */
 function stale_body(array $risks, string $ownerName, int $threshold): string
 {
     $out = 'Merhaba ' . $ownerName . ",\n\n"

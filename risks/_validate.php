@@ -138,6 +138,8 @@ function risk_collect_input(): array
 /**
  * Doğrulama hatasında formu tekrar gösterir.
  * Girilen değerler ve alan hatalari oturumda taşınır.
+ *
+ * @param array<string, string> $errors
  */
 function risk_fail_back(array $errors, string $backUrl): never
 {

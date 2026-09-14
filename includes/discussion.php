@@ -87,7 +87,11 @@ function discussion_type(): string
     return $type;
 }
 
-/** Kayıt defteri satırı. */
+/**
+ * Kayıt defteri satırı.
+ *
+ * @return array<string, string|null>
+ */
 function discussion_config(string $type): array
 {
     $reg = discussion_registry();
@@ -101,6 +105,8 @@ function discussion_config(string $type): array
 
 /**
  * Üst kaydı (risk ya da aksiyon) getirir; yoksa akışı sonlandırır.
+ *
+ * @return array<string, mixed>
  */
 function discussion_parent(string $type, ?int $id): array
 {
@@ -136,7 +142,11 @@ function discussion_url(string $type, int $parentId, string $hash = ''): string
     return discussion_config($type)['url'] . $parentId . $hash;
 }
 
-/** Bir kaydın yorumları, yazarlarıyla birlikte. */
+/**
+ * Bir kaydın yorumları, yazarlarıyla birlikte.
+ *
+ * @return list<array<string, mixed>>
+ */
 function discussion_comments(string $type, int $parentId): array
 {
     $cfg = discussion_config($type);
@@ -153,7 +163,11 @@ function discussion_comments(string $type, int $parentId): array
     return $stmt->fetchAll();
 }
 
-/** Bir kaydın ekleri, yükleyenleriyle birlikte. */
+/**
+ * Bir kaydın ekleri, yükleyenleriyle birlikte.
+ *
+ * @return list<array<string, mixed>>
+ */
 function discussion_attachments(string $type, int $parentId): array
 {
     $cfg = discussion_config($type);

@@ -230,7 +230,14 @@ function debug_human_duration(int $seconds): string
 /**
  * İstek boyunca biriken veri. Referansla döner ki çağıran yazabilsin.
  *
- * @return array{queries:array,marks:array,notes:array,dumps:array,timers:array,counters:array}
+ * @return array{
+ *     queries: list<array<string, mixed>>,
+ *     marks: list<array<string, mixed>>,
+ *     notes: list<array<string, mixed>>,
+ *     dumps: list<array<string, mixed>>,
+ *     timers: array<string, array<string, float|int>>,
+ *     counters: array<string, int>
+ * }
  */
 function &debug_store(): array
 {
@@ -275,6 +282,8 @@ function debug_mark(string $label): void
 /**
  * Kanal bazlı not. app_log()'un araç çubuğunda görünen hafif kardeşi:
  * diske yazmaz, yalnızca bu isteğin çıktısında durur.
+ *
+ * @param array<string, mixed> $context
  */
 function debug_note(string $channel, string $message, array $context = []): void
 {
@@ -353,6 +362,8 @@ function debug_count(string $name, int $by = 1): void
  *
  * includes/db_debug.php içindeki PDO alt sınıfları tarafından çağrılır;
  * uygulama kodunun bunu çağırması gerekmez.
+ *
+ * @param array<array-key, mixed> $params
  */
 function debug_record_query(string $sql, array $params, float $ms, int $rows = -1, ?string $error = null): void
 {
@@ -424,6 +435,9 @@ function debug_mask_key(string $key): bool
  *   2) Değer, veritabanı parolasıyla veya oturum kimliğiyle birebir
  *      aynıysa anahtar adı ne olursa olsun maskelenir. Birinci katman
  *      anahtarın adına güvenir; bu katman değere bakar.
+ *
+ * @param array<array-key, mixed> $data
+ * @return array<array-key, mixed>
  */
 function debug_mask_array(array $data, int $depth = 0): array
 {
@@ -481,7 +495,7 @@ function debug_is_secret_value(mixed $value): bool
         $secrets = [];
         $file = CONFIG_PATH . '/database.php';
         if (is_file($file)) {
-            /** @var array $cfg */
+            /** @var array<string, mixed> $cfg */
             $cfg = require $file;
             foreach (['pass', 'user'] as $k) {
                 if (is_string($cfg[$k] ?? null) && $cfg[$k] !== '') {

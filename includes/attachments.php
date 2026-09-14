@@ -35,6 +35,8 @@ const ATTACH_MAX_PER_RISK = 20;
  * BURAYA .svg, .html, .htm, .xml EKLEMEYİN: hepsi tarayıcıda script
  * çalıştırabilir. Zorla indirme bunu bir kat engelliyor ama savunmayı
  * tek katmana bırakmayın.
+ *
+ * @return array<string, list<string>>
  */
 function attach_allowed_types(): array
 {
@@ -117,6 +119,8 @@ function attach_error_message(int $code): string
  * @param array $file $_FILES['...'] dizisi
  * @return array{ok:bool, error?:string, stored?:string, original?:string,
  *                mime?:string, size?:int}
+ *
+ * @param array<string, mixed> $file
  */
 function attach_store(array $file): array
 {

@@ -18,6 +18,8 @@ if (!defined('RISKOPS_BOOTSTRAPPED')) {
  * 'initial' listede YOKTUR: ilk değerlendirme risk oluşturulurken
  * otomatik yazılır ve sonradan elle eklenemez - aksi halde bir riskin
  * birden fazla "ilk" değerlendirmesi olurdu.
+ *
+ * @return list<string>
  */
 function assessment_types(): array
 {
@@ -34,7 +36,11 @@ function assessment_type_label(string $type): string
     };
 }
 
-/** Silinmemiş riski döndürür. */
+/**
+ * Silinmemiş riski döndürür.
+ *
+ * @return array<string, mixed>
+ */
 function assessment_find_risk(?int $riskId): ?array
 {
     if ($riskId === null || $riskId < 1) {
@@ -141,6 +147,9 @@ function assessment_collect_input(): array
     ], $errors];
 }
 
+/**
+ * @param array<string, string> $errors
+ */
 function assessment_fail_back(array $errors, string $backUrl): never
 {
     old_set($_POST);
