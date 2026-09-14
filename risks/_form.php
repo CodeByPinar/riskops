@@ -21,6 +21,16 @@ if (!defined('RISKOPS_BOOTSTRAPPED')) {
     exit('Direct access denied.');
 }
 
+/* Bu parça bir GİRİŞ NOKTASI DEĞİL: create.php ve edit.php içinden
+   include ediliyor ve değişkenleri onların kapsamından alıyor.
+   Aşağıdaki bildirimler o sözleşmeyi makine okunur hâle getirir -
+   yukarıdaki düz metin listeyle aynı şeyi söylüyorlar, ama bunu
+   statik çözümleme de doğrulayabiliyor. */
+/** @var array<string, mixed> $form */
+/** @var string $formAction */
+/** @var string $submitLabel */
+/** @var string $cancelUrl */
+
 /** Alan değeri: once old input, yoksa $form. */
 $val = static function (string $key) use ($form): string {
     return has_old($key) ? old($key) : (string)($form[$key] ?? '');

@@ -59,5 +59,6 @@ desktop.ini
 # ---------------------------------------------------------------------
 /vendor/
 /.phpunit.cache/
+.php-cs-fixer.cache
 /composer.lock
 .phpunit.result.cache

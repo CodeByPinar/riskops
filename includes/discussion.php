@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -28,7 +29,11 @@ declare(strict_types=1);
 /**
  * Desteklenen tartışma hedefleri.
  *
- * @return array<string, array<string, string>>
+ * 'code_col' aksiyonlarda NULL'dur (aksiyonun kod alanı yok); tip
+ * bildirimi bunu yansıtmalı, yoksa çağıran tarafta null kontrolü
+ * gereksiz görünür.
+ *
+ * @return array<string, array<string, string|null>>
  */
 function discussion_registry(): array
 {

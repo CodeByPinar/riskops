@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -55,7 +56,9 @@ $run = static function (array $args) use ($php, $root, $log): void {
     exec($cmd, $out, $code);
     if ($code !== 0) {
         $log('HATA: seed_demo ' . implode(' ', $args) . ' -> cikis ' . $code);
-        foreach ($out as $line) { $log('  ' . $line); }
+        foreach ($out as $line) {
+        $log('  ' . $line);
+        }
         exit(1);
     }
 };

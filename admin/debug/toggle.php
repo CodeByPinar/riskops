@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -30,7 +31,6 @@ require_role(ROLE_ADMIN);
 $action = (string)input('action', '');
 
 if ($action === 'enable') {
-
     $minutes = input_int('minutes', 0) ?? 0;
     if (!array_key_exists($minutes, DEBUG_FLAG_DURATIONS)) {
         /* Süre listede yoksa en kısasına düş. Kullanıcıya hata
@@ -55,9 +55,7 @@ if ($action === 'enable') {
         'Hata ayıklama kipi açıldı — %s sonra kendiliğinden kapanacak.',
         DEBUG_FLAG_DURATIONS[$minutes]
     ));
-
 } elseif ($action === 'disable') {
-
     /* Ortam değişkeninden gelen kip dosya silinerek kapanmaz; bunu
        söylemek, "kapattım ama hâlâ açık" şaşkınlığını önler. */
     $stillOn = defined('APP_DEBUG_FROM_ENV') && APP_DEBUG_FROM_ENV;
@@ -77,7 +75,6 @@ if ($action === 'enable') {
               . '(RISKOPS_DEBUG) hâlâ açık. Kapatmak için VirtualHost düzenlenmeli.'
             : 'Hata ayıklama kipi kapatıldı.'
     );
-
 } else {
     app_abort(400, 'Unknown debug toggle action: ' . $action);
 }

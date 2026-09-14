@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -53,13 +54,35 @@ function score_chip(?int $score, ?string $severity = null): string
 }
 
 /** Gecikmis tarihleri kirmizi ve ikonlu gösterir. */
-function due_date_cell(?string $dueDate, ?string $status = null): string
+/**
+ * Termin hücresi: gecikmişse kırmızı ve "N gün gecikti" ile.
+ *
+ * $openStatuses NEDEN VAR
+ * -----------------------
+ * "Gecikmiş" yalnızca AÇIK kayıtlar için anlamlıdır; kapatılmış bir
+ * kaydın geçmiş termini gecikme değildir. Ama açık sayılan durumlar
+ * risklerde ve aksiyonlarda FARKLIDIR:
+ *
+ *     risk_open_statuses()   = Open, Under Review, In Progress
+ *     action_open_statuses() = Open, In Progress
+ *
+ * Bu parametre eklenmeden önce fonksiyon iki argüman alıyordu ama risk
+ * ekranları üç argümanla çağırıyordu. PHP fazla argümanı SESSİZCE atar;
+ * is_overdue() de aksiyon listesine düşüyordu. Sonuç: termini geçmiş
+ * "Under Review" bir risk, risk listesinde, panelde, risk detayında ve
+ * yönetici özetinde gecikmiş GÖRÜNMÜYORDU. Hata hiçbir uyarı üretmiyor,
+ * yalnızca eksik vurgu olarak ortaya çıkıyordu.
+ *
+ * Boş bırakılırsa is_overdue() aksiyon durumlarına düşer - aksiyon
+ * ekranlarının beklediği davranış budur.
+ */
+function due_date_cell(?string $dueDate, ?string $status = null, array $openStatuses = []): string
 {
     if ($dueDate === null || $dueDate === '') {
         return '<span class="text-muted">-</span>';
     }
     $text = e(format_date($dueDate));
-    if (is_overdue($dueDate, $status)) {
+    if (is_overdue($dueDate, $status, $openStatuses)) {
         $days = abs((int)days_until($dueDate));
         return '<span class="rk-overdue"><i class="bi bi-clock-history"></i> ' . $text
              . ' <small>(' . $days . ' gün gecikti)</small></span>';

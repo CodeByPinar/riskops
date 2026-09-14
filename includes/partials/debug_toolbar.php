@@ -75,12 +75,12 @@ $tab = static function (string $id, string $icon, string $label, ?int $count = n
         <?= $tab('queries', 'database', 'Sorgular', $sum['query_count'],
                  $sum['query_failed'] > 0 ? 'bad' : ($sum['query_slow'] > 0 || $dupTotal > 0 ? 'warn' : '')) ?>
         <?= $tab('timeline', 'stopwatch', 'Zaman', $sum['mark_count']) ?>
-        <?= $tab('request',  'box-arrow-in-right', 'İstek') ?>
-        <?= $tab('session',  'person-badge', 'Oturum') ?>
-        <?= $tab('config',   'sliders', 'Ortam') ?>
-        <?= $tab('notes',    'journal-text', 'Notlar', $sum['note_count'] + $sum['dump_count'],
+        <?= $tab('request', 'box-arrow-in-right', 'İstek') ?>
+        <?= $tab('session', 'person-badge', 'Oturum') ?>
+        <?= $tab('config', 'sliders', 'Ortam') ?>
+        <?= $tab('notes', 'journal-text', 'Notlar', $sum['note_count'] + $sum['dump_count'],
                  $sum['dump_count'] > 0 ? 'warn' : '') ?>
-        <?= $tab('log',      'file-text', 'Log', count($logLines)) ?>
+        <?= $tab('log', 'file-text', 'Log', count($logLines)) ?>
 
         <span class="rkdbg-spacer"></span>
 
@@ -261,7 +261,9 @@ $tab = static function (string $id, string $icon, string $label, ?int $count = n
                            'CONTENT_TYPE', 'CONTENT_LENGTH', 'SERVER_SOFTWARE'];
             $server = [];
             foreach ($serverKeys as $k) {
-                if (isset($_SERVER[$k])) { $server[$k] = $_SERVER[$k]; }
+                if (isset($_SERVER[$k])) {
+                $server[$k] = $_SERVER[$k];
+                }
             }
 
             /* $_POST parola taşıyabilir; maskeleme ZORUNLU. */

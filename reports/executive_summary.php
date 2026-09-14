@@ -101,13 +101,17 @@ $q = db()->prepare("SELECT DATE_FORMAT(created_at,'%Y-%m') AS ay, COUNT(*) AS n
                     FROM risks WHERE deleted_at IS NULL AND created_at >= :s GROUP BY ay");
 $q->execute([':s' => $since]);
 foreach ($q->fetchAll() as $r) {
-    if (isset($trend[$r['ay']])) { $trend[$r['ay']]['acilan'] = (int)$r['n']; }
+    if (isset($trend[$r['ay']])) {
+    $trend[$r['ay']]['acilan'] = (int)$r['n'];
+    }
 }
 $q = db()->prepare("SELECT DATE_FORMAT(closed_at,'%Y-%m') AS ay, COUNT(*) AS n
                     FROM risks WHERE deleted_at IS NULL AND closed_at >= :s GROUP BY ay");
 $q->execute([':s' => $since]);
 foreach ($q->fetchAll() as $r) {
-    if (isset($trend[$r['ay']])) { $trend[$r['ay']]['kapanan'] = (int)$r['n']; }
+    if (isset($trend[$r['ay']])) {
+    $trend[$r['ay']]['kapanan'] = (int)$r['n'];
+    }
 }
 
 $neverReviewed = (int)db()->query(

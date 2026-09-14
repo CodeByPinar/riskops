@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -57,7 +58,6 @@ function db(): PDO
         $pdo = $debugPdo
             ? new RiskOpsDebugPdo($dsn, $cfg['user'], $cfg['pass'], $options)
             : new PDO($dsn, $cfg['user'], $cfg['pass'], $options);
-
     } catch (PDOException $e) {
         // Kullaniciya ASLA bağlantı detayı gosterme
         app_log('critical', 'Database connection failed: ' . $e->getMessage());

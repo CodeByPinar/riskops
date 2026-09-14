@@ -20,6 +20,14 @@ if (!defined('RISKOPS_BOOTSTRAPPED')) {
     exit('Direct access denied.');
 }
 
+/* Bu parça bir GİRİŞ NOKTASI DEĞİL: çağıran sayfanın kapsamından
+   besleniyor. Bildirimler o sözleşmeyi denetlenebilir kılar. */
+/** @var array<string, mixed> $form */
+/** @var string $formAction */
+/** @var string $submitLabel */
+/** @var string $cancelUrl */
+/** @var array<int, array<string, mixed>> $risks */
+
 $val = static function (string $key) use ($form): string {
     return has_old($key) ? old($key) : (string)($form[$key] ?? '');
 };

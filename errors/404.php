@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 $rkCode  = 404;
 $rkTitle = 'Sayfa bulunamadı';

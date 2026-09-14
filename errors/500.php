@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 $rkCode  = 500;
 $rkTitle = 'Beklenmeyen bir hata oluştu';

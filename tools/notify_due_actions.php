@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -124,9 +125,9 @@ $log(count($rows) . ' aksiyon, ' . count($byOwner) . ' kisi.');
 
 function build_body(array $actions, string $ownerName): string
 {
-    $overdue  = array_filter($actions, static fn($a) => (int)$a['days_left'] < 0);
-    $today    = array_filter($actions, static fn($a) => (int)$a['days_left'] === 0);
-    $upcoming = array_filter($actions, static fn($a) => (int)$a['days_left'] > 0);
+    $overdue  = array_filter($actions, static fn ($a) => (int)$a['days_left'] < 0);
+    $today    = array_filter($actions, static fn ($a) => (int)$a['days_left'] === 0);
+    $upcoming = array_filter($actions, static fn ($a) => (int)$a['days_left'] > 0);
 
     $line = static function (array $a): string {
         $d = (int)$a['days_left'];
@@ -152,21 +153,27 @@ function build_body(array $actions, string $ownerName): string
     if ($overdue !== []) {
         $out .= "GECIKMIS (" . count($overdue) . ")\n"
               . str_repeat('-', 60) . "\n";
-        foreach ($overdue as $a) { $out .= $line($a); }
+        foreach ($overdue as $a) {
+        $out .= $line($a);
+        }
         $out .= "\n";
     }
 
     if ($today !== []) {
         $out .= "BUGUN TESLIM (" . count($today) . ")\n"
               . str_repeat('-', 60) . "\n";
-        foreach ($today as $a) { $out .= $line($a); }
+        foreach ($today as $a) {
+        $out .= $line($a);
+        }
         $out .= "\n";
     }
 
     if ($upcoming !== []) {
         $out .= "YAKLASAN (" . count($upcoming) . ")\n"
               . str_repeat('-', 60) . "\n";
-        foreach ($upcoming as $a) { $out .= $line($a); }
+        foreach ($upcoming as $a) {
+        $out .= $line($a);
+        }
         $out .= "\n";
     }
 
@@ -182,7 +189,7 @@ $failed = 0;
 
 foreach ($byOwner as $ownerId => $actions) {
     $owner = $actions[0];
-    $overdueCount = count(array_filter($actions, static fn($a) => (int)$a['days_left'] < 0));
+    $overdueCount = count(array_filter($actions, static fn ($a) => (int)$a['days_left'] < 0));
 
     $subject = sprintf(
         '[%s] %d aksiyon dikkat bekliyor%s',

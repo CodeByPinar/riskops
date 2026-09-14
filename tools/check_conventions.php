@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -198,7 +199,6 @@ foreach ($files as $file) {
     $htmlLineStart = [];
 
     foreach ($tokens as $idx => $token) {
-
         /* --- Basılan HTML'i topla (yorumlar DEĞİL) -------------------- */
         if (is_array($token) && $token[0] === T_INLINE_HTML) {
             $htmlLineStart[strlen($inlineHtml)] = $token[2];
@@ -242,7 +242,6 @@ foreach ($files as $file) {
         if ($token[0] === T_STRING
             && in_array(strtolower($token[1]), ['var_dump', 'print_r', 'var_export'], true)
             && !str_starts_with($rel, 'tools/')) {
-
             /* var_export meşru kullanımları var (ayar yazımı); yalnızca
                ÇIKTIYA basanları yakala: ikinci argümanı true olmayan
                var_export ile var_dump/print_r. */

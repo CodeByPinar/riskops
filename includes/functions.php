@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -163,7 +164,7 @@ function query_url(array $overrides = [], array $remove = []): string
     }
     $params = array_filter(
         $params,
-        static fn($v) => $v !== '' && $v !== null && !is_array($v)
+        static fn ($v) => $v !== '' && $v !== null && !is_array($v)
     );
     $qs = http_build_query($params);
     return current_path() . ($qs !== '' ? '?' . $qs : '');
@@ -357,7 +358,7 @@ function old_set(array $data, array $except = ['password', 'password_confirm', '
     foreach ($except as $k) {
         unset($data[$k]);
     }
-    $_SESSION['_old'] = array_filter($data, static fn($v) => !is_array($v));
+    $_SESSION['_old'] = array_filter($data, static fn ($v) => !is_array($v));
 }
 
 function old(string $key, string $default = ''): string

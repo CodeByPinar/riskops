@@ -38,3 +38,4 @@ notuyla işaretlenir.
 | [0006](0006-seviye-esikleri-ayarda.md) | Skor veritabanında üretilir, seviye üretilmez | `database/schema.sql`, `includes/risk.php` |
 | [0007](0007-hata-ayiklama-kipi.md) | Hata ayıklama kipi: iki anahtar, süreli bayrak | `config/config.php`, `includes/debug.php` |
 | [0008](0008-dosya-eki-guvenligi.md) | Dosya ekleri üç katmanlı doğrulanır | `includes/attachments.php` |
+| [0009](0009-gelistirme-bagimliliklari.md) | Geliştirme bağımlılığı evet, çalışma zamanı hayır | `composer.json`, `phpstan.neon` |

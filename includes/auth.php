@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -222,7 +223,12 @@ function auth_destroy(): void
             'domain'   => $p['domain'],
             'secure'   => $p['secure'],
             'httponly' => $p['httponly'],
-            'samesite' => $p['samesite'] ?? 'Lax',
+            /* Geri düşüş YOK ve gerekmiyor: bootstrap.php oturumu
+               açarken samesite'ı 'Lax' olarak ayarlıyor, bu fonksiyon
+               da yalnızca oturum açıkken çağrılıyor. Önceki
+               `?? 'Lax'` ölü koddu - session_get_cookie_params() bu
+               anahtarı her zaman döndürür, null asla dönmez. */
+            'samesite' => $p['samesite'],
         ]);
     }
 

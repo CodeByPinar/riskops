@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -34,7 +35,13 @@ function result(string $level, string $label, string $detail = '', string $fix =
         'WARN' => '[WARN]',
         default => '[ OK ]',
     };
-    if ($level === 'FAIL') { $fail++; } elseif ($level === 'WARN') { $warn++; } else { $pass++; }
+    if ($level === 'FAIL') {
+    $fail++;
+    } elseif ($level === 'WARN') {
+    $warn++;
+    } else {
+    $pass++;
+    }
 
     printf("  %s  %-44s %s\n", $tag, $label, $detail);
     if ($fix !== '' && $level !== 'OK') {
@@ -276,7 +283,9 @@ $skew = 0;
 try {
     $mysqlNow = (string)db()->query('SELECT NOW()')->fetchColumn();
     $skew = abs(strtotime(date('Y-m-d H:i:s')) - strtotime($mysqlNow));
-} catch (Throwable $e) { $skew = 9999; }
+} catch (Throwable $e) {
+$skew = 9999;
+}
 result($skew <= 2 ? 'OK' : 'FAIL', 'MySQL/PHP saat dilimi', 'fark ' . $skew . ' sn',
     $skew > 2 ? 'Brute-force penceresi ve oturum kontrolleri sessizce calismaz' : '');
 

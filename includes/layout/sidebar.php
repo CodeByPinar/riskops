@@ -54,15 +54,15 @@ $user = auth_user();
         <?php if (auth_role() === ROLE_ADMIN): ?>
             <div class="rk-nav-section"><?= te('Yönetim') ?></div>
             <?php
-            $rkNavItem('admin.users',       t('Kullanıcılar'),       'bi-people',        '/admin/users/');
-            $rkNavItem('admin.departments', t('Departmanlar'), 'bi-diagram-3',     '/admin/departments/');
-            $rkNavItem('admin.categories',  t('Kategoriler'),  'bi-tags',          '/admin/categories/');
-            $rkNavItem('risks.deleted',     t('Silinen Riskler'), 'bi-trash3',    '/risks/deleted.php');
-            $rkNavItem('admin.audit',       t('Denetim Kaydı'),  'bi-journal-text',  '/admin/audit_logs/');
-            $rkNavItem('admin.settings',    t('Ayarlar'),    'bi-gear',          '/admin/settings/');
+            $rkNavItem('admin.users', t('Kullanıcılar'), 'bi-people', '/admin/users/');
+            $rkNavItem('admin.departments', t('Departmanlar'), 'bi-diagram-3', '/admin/departments/');
+            $rkNavItem('admin.categories', t('Kategoriler'), 'bi-tags', '/admin/categories/');
+            $rkNavItem('risks.deleted', t('Silinen Riskler'), 'bi-trash3', '/risks/deleted.php');
+            $rkNavItem('admin.audit', t('Denetim Kaydı'), 'bi-journal-text', '/admin/audit_logs/');
+            $rkNavItem('admin.settings', t('Ayarlar'), 'bi-gear', '/admin/settings/');
             /* Kip acikken menude de gorunsun: "acik unuttum mu" sorusu
                ayri bir sayfaya girmeden cevaplanabilmeli. */
-            $rkNavItem('admin.debug',       t('Hata Ayıklama'),  'bi-bug',       '/admin/debug/');
+            $rkNavItem('admin.debug', t('Hata Ayıklama'), 'bi-bug', '/admin/debug/');
             ?>
         <?php endif; ?>
 

@@ -40,11 +40,17 @@ $f = [
 ];
 
 // Var olmayan id gelirse filtreyi yok say
-if (!lookup_has($categories,  $f['category']))   { $f['category']   = null; }
-if (!lookup_has($departments, $f['department'])) { $f['department'] = null; }
-if (!lookup_has($users,       $f['owner']))      { $f['owner']      = null; }
+if (!lookup_has($categories, $f['category'])) {
+$f['category']   = null;
+}
+if (!lookup_has($departments, $f['department'])) {
+$f['department'] = null;
+}
+if (!lookup_has($users, $f['owner'])) {
+$f['owner']      = null;
+}
 
-$activeFilters = count(array_filter($f, static fn($v) => $v !== null && $v !== ''));
+$activeFilters = count(array_filter($f, static fn ($v) => $v !== null && $v !== ''));
 
 /* ------------------------------------------------------------------ */
 /* 2) WHERE kur                                                        */

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -75,11 +76,11 @@ $gate = static function (string $env, string $debug, string $prodFlag): bool {
     return $on;
 };
 
-ok($gate('development', '1', '') === true,  'geliştirmede RISKOPS_DEBUG=1 yeterli');
-ok($gate('development', '',  '') === false, 'geliştirmede bayraksız kapalı');
-ok($gate('production',  '1', '') === false, 'ÜRETİMDE tek bayrak YETMEZ');
-ok($gate('production',  '1', '1') === true, 'üretimde iki bayrak birlikte açar');
-ok($gate('production',  '',  '1') === false, 'üretimde yalnız PRODUCTION bayrağı açmaz');
+ok($gate('development', '1', '') === true, 'geliştirmede RISKOPS_DEBUG=1 yeterli');
+ok($gate('development', '', '') === false, 'geliştirmede bayraksız kapalı');
+ok($gate('production', '1', '') === false, 'ÜRETİMDE tek bayrak YETMEZ');
+ok($gate('production', '1', '1') === true, 'üretimde iki bayrak birlikte açar');
+ok($gate('production', '', '1') === false, 'üretimde yalnız PRODUCTION bayrağı açmaz');
 
 /* =====================================================================
  * 1b) GEÇİCİ AÇMA BAYRAĞI  (yönetim ekranının yazdığı dosya)
@@ -96,9 +97,9 @@ section('1b. geçici açma bayrağı');
 $flagBackup = is_file(DEBUG_FLAG_FILE) ? (string)file_get_contents(DEBUG_FLAG_FILE) : null;
 @unlink(DEBUG_FLAG_FILE);
 
-ok(debug_flag_read() === null,      'bayrak yokken read() null');
-ok(debug_flag_active() === false,   'bayrak yokken active() false');
-ok(debug_flag_remaining() === 0,    'bayrak yokken kalan süre 0');
+ok(debug_flag_read() === null, 'bayrak yokken read() null');
+ok(debug_flag_active() === false, 'bayrak yokken active() false');
+ok(debug_flag_remaining() === 0, 'bayrak yokken kalan süre 0');
 
 if (!is_writable(STORAGE_PATH)) {
     ok(true, 'bayrak yazma testleri atlandı (storage yazılamıyor)');
@@ -106,11 +107,11 @@ if (!is_writable(STORAGE_PATH)) {
     ok(debug_flag_enable(60), 'bayrak yazıldı');
 
     $f = debug_flag_read();
-    ok($f !== null,                       'yazılan bayrak okunuyor');
-    ok(($f['minutes'] ?? 0) === 60,       'süre kaydedildi');
-    ok(($f['until'] ?? 0) > time(),       'bitiş zamanı gelecekte');
-    ok(debug_flag_active(),               'active() true');
-    ok(debug_flag_remaining() > 3500,     'kalan süre ~1 saat', (string)debug_flag_remaining());
+    ok($f !== null, 'yazılan bayrak okunuyor');
+    ok(($f['minutes'] ?? 0) === 60, 'süre kaydedildi');
+    ok(($f['until'] ?? 0) > time(), 'bitiş zamanı gelecekte');
+    ok(debug_flag_active(), 'active() true');
+    ok(debug_flag_remaining() > 3500, 'kalan süre ~1 saat', (string)debug_flag_remaining());
 
     /* SÜRE DOLMASI: dosya silinmese bile yok sayılmalı. Bu, "açık
        unutuldu" durumunun neden oluşamadığının kanıtı. */
@@ -118,16 +119,16 @@ if (!is_writable(STORAGE_PATH)) {
     $expired['until'] = time() - 1;
     file_put_contents(DEBUG_FLAG_FILE, json_encode($expired));
 
-    ok(debug_flag_read() === null,   'süresi dolan bayrak YOK SAYILIYOR');
-    ok(debug_flag_active() === false,'süresi dolunca active() false');
-    ok(is_file(DEBUG_FLAG_FILE),     'dosya duruyor (silinmesi beklenmiyor)');
+    ok(debug_flag_read() === null, 'süresi dolan bayrak YOK SAYILIYOR');
+    ok(debug_flag_active() === false, 'süresi dolunca active() false');
+    ok(is_file(DEBUG_FLAG_FILE), 'dosya duruyor (silinmesi beklenmiyor)');
 
     /* BOZUK DOSYA: çökertmemeli, kapalı sayılmalı. */
     file_put_contents(DEBUG_FLAG_FILE, 'bu json degil {{{');
-    ok(debug_flag_read() === null,   'bozuk bayrak dosyası kapalı sayılıyor');
+    ok(debug_flag_read() === null, 'bozuk bayrak dosyası kapalı sayılıyor');
 
     file_put_contents(DEBUG_FLAG_FILE, '');
-    ok(debug_flag_read() === null,   'boş bayrak dosyası kapalı sayılıyor');
+    ok(debug_flag_read() === null, 'boş bayrak dosyası kapalı sayılıyor');
 
     /* LİSTEDE OLMAYAN SÜRE: en kısasına düşmeli, keyfi süre kabul
        edilmemeli (bir saldırgan formu değiştirip 10 yıl yazamasın). */
@@ -136,15 +137,15 @@ if (!is_writable(STORAGE_PATH)) {
     ok(in_array((int)($f['minutes'] ?? -1), array_keys(DEBUG_FLAG_DURATIONS), true),
        'listede olmayan süre reddedildi', (string)($f['minutes'] ?? -1));
 
-    ok(debug_flag_disable(),         'bayrak silindi');
-    ok(!is_file(DEBUG_FLAG_FILE),    'dosya gerçekten yok');
-    ok(debug_flag_disable(),         'yokken silmek hata vermiyor');
+    ok(debug_flag_disable(), 'bayrak silindi');
+    ok(!is_file(DEBUG_FLAG_FILE), 'dosya gerçekten yok');
+    ok(debug_flag_disable(), 'yokken silmek hata vermiyor');
 }
 
 ok(in_array(debug_source(), ['ortam', 'panel', 'ortam+panel', 'kapalı'], true),
    'debug_source() bilinen bir değer döndürüyor', debug_source());
-ok(debug_human_duration(0) === '-',            'süre biçimi: sıfır');
-ok(str_contains(debug_human_duration(90), 'dk'),  'süre biçimi: dakika');
+ok(debug_human_duration(0) === '-', 'süre biçimi: sıfır');
+ok(str_contains(debug_human_duration(90), 'dk'), 'süre biçimi: dakika');
 ok(str_contains(debug_human_duration(7200), 'sa'), 'süre biçimi: saat');
 
 /* Yedeği geri koy */
@@ -189,8 +190,8 @@ if ($dbPass === '' || strlen($dbPass) < 6) {
 } else {
     /* Anahtar adı tamamen masum; yalnızca DEĞER sırdır. */
     $masked = debug_mask_array(['not' => $dbPass, 'derin' => ['x' => $dbPass]]);
-    ok($masked['not'] === '***',          'masum anahtar altındaki DB parolası maskelendi');
-    ok($masked['derin']['x'] === '***',   'iç içe dizide de maskelendi');
+    ok($masked['not'] === '***', 'masum anahtar altındaki DB parolası maskelendi');
+    ok($masked['derin']['x'] === '***', 'iç içe dizide de maskelendi');
 
     $exported = debug_export(['a' => ['b' => ['c' => $dbPass]]]);
     ok(!str_contains($exported, $dbPass), 'debug_export() çıktısında DB parolası yok');
@@ -221,13 +222,13 @@ $request = [
 $out  = debug_mask_array($request);
 $flat = debug_export($out);
 
-ok($out['password'] === '***',                    'password maskelendi');
-ok($out['_csrf'] === '***',                       '_csrf maskelendi');
-ok($out['nested']['current_password'] === '***',  'nested current_password maskelendi');
-ok($out['nested']['new_password'] === '***',      'nested new_password maskelendi');
-ok($out['title'] === 'İnternete açık RDP',        'title korundu');
-ok($out['email'] === 'admin@riskops.local',       'email korundu');
-ok($out['nested']['note'] === 'sıradan metin',    'nested note korundu');
+ok($out['password'] === '***', 'password maskelendi');
+ok($out['_csrf'] === '***', '_csrf maskelendi');
+ok($out['nested']['current_password'] === '***', 'nested current_password maskelendi');
+ok($out['nested']['new_password'] === '***', 'nested new_password maskelendi');
+ok($out['title'] === 'İnternete açık RDP', 'title korundu');
+ok($out['email'] === 'admin@riskops.local', 'email korundu');
+ok($out['nested']['note'] === 'sıradan metin', 'nested note korundu');
 
 foreach (['CokGizliParola123', 'EskiParola', 'YeniParola'] as $secret) {
     ok(!str_contains($flat, $secret), 'çıktıda görünmüyor: ' . $secret);
@@ -253,15 +254,15 @@ if (APP_DEBUG) {
     ok($recorded >= 1, 'sorgu kaydedildi', 'kaydedilen: ' . $recorded);
 
     $q = debug_store()['queries'][$after - 1];
-    ok(str_contains($q['sql'], 'FROM risks'),  'SQL metni kaydedildi');
-    ok($q['params'] === [0],                   'parametreler kaydedildi', json_encode($q['params']));
-    ok($q['ms'] >= 0,                          'süre ölçüldü');
+    ok(str_contains($q['sql'], 'FROM risks'), 'SQL metni kaydedildi');
+    ok($q['params'] === [0], 'parametreler kaydedildi', json_encode($q['params']));
+    ok($q['ms'] >= 0, 'süre ölçüldü');
     /* Kaydedilen kaynak, db.php/db_debug.php degil, sorguyu ACAN
        dosya olmali - "bu sorguyu hangi sayfa calistirdi" sorusunun
        cevabi budur. */
     ok(str_starts_with($q['origin'], 'tools/debug_test.php:'),
        'çağıran dosya tespit edildi', $q['origin']);
-    ok($q['error'] === null,                   'hatasız sorguda error null');
+    ok($q['error'] === null, 'hatasız sorguda error null');
 } else {
     ok($recorded === 0, 'kip kapalıyken sorgu TOPLANMAZ', 'kaydedilen: ' . $recorded);
 }
@@ -303,9 +304,9 @@ debug_timer_stop('deneme');
 
 if (APP_DEBUG) {
     $t = debug_store()['timers']['deneme'] ?? null;
-    ok($t !== null,                    'süreölçer kaydedildi');
-    ok(($t['calls'] ?? 0) === 2,       'iki çağrı sayıldı', (string)($t['calls'] ?? 0));
-    ok(($t['total'] ?? 0) >= 5,        'süreler toplandı', number_format((float)($t['total'] ?? 0), 2) . ' ms');
+    ok($t !== null, 'süreölçer kaydedildi');
+    ok(($t['calls'] ?? 0) === 2, 'iki çağrı sayıldı', (string)($t['calls'] ?? 0));
+    ok(($t['total'] ?? 0) >= 5, 'süreler toplandı', number_format((float)($t['total'] ?? 0), 2) . ' ms');
     ok((debug_store()['counters']['test sayacı'] ?? 0) === 1, 'sayaç arttı');
 } else {
     ok(!isset(debug_store()['timers']['deneme']), 'kip kapalıyken süreölçer yok');
@@ -316,11 +317,11 @@ if (APP_DEBUG) {
  * ===================================================================*/
 section('7. biçimlendirme yardımcıları');
 
-ok(debug_bytes(512) === '512 B',            'debug_bytes: bayt');
-ok(str_contains(debug_bytes(2048), 'KB'),   'debug_bytes: KB');
-ok(str_contains(debug_bytes(5242880), 'MB'),'debug_bytes: MB');
-ok(str_contains(debug_ms(12.3), 'ms'),      'debug_ms: milisaniye');
-ok(str_contains(debug_ms(2500), 's'),       'debug_ms: saniye');
+ok(debug_bytes(512) === '512 B', 'debug_bytes: bayt');
+ok(str_contains(debug_bytes(2048), 'KB'), 'debug_bytes: KB');
+ok(str_contains(debug_bytes(5242880), 'MB'), 'debug_bytes: MB');
+ok(str_contains(debug_ms(12.3), 'ms'), 'debug_ms: milisaniye');
+ok(str_contains(debug_ms(2500), 's'), 'debug_ms: saniye');
 
 $sql = 'SELECT id, title FROM risks WHERE severity = ? ORDER BY id LIMIT 10';
 $fmt = debug_format_sql($sql);
@@ -338,9 +339,9 @@ $s = debug_summary();
 foreach (['env', 'php', 'time_ms', 'memory_peak', 'query_count', 'query_ms', 'duplicates'] as $key) {
     ok(array_key_exists($key, $s), 'özet anahtarı var: ' . $key);
 }
-ok($s['env'] === APP_ENV,        'özet ortamı doğru');
-ok($s['time_ms'] > 0,            'özet süresi pozitif');
-ok($s['memory_peak'] > 0,        'özet belleği pozitif');
+ok($s['env'] === APP_ENV, 'özet ortamı doğru');
+ok($s['time_ms'] > 0, 'özet süresi pozitif');
+ok($s['memory_peak'] > 0, 'özet belleği pozitif');
 
 $flatSummary = json_encode($s, JSON_UNESCAPED_UNICODE);
 if ($dbPass !== '' && strlen($dbPass) >= 6) {

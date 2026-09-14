@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -508,11 +509,21 @@ function debug_is_secret_value(mixed $value): bool
 /** Bir değeri araç çubuğunda gösterilebilir metne çevirir. */
 function debug_export(mixed $value, int $depth = 0): string
 {
-    if ($value === null)    { return 'null'; }
-    if (is_bool($value))    { return $value ? 'true' : 'false'; }
-    if (is_int($value) || is_float($value)) { return (string)$value; }
-    if (is_string($value))  { return '"' . (mb_strlen($value) > 2000 ? mb_substr($value, 0, 2000) . '…' : $value) . '"'; }
-    if (is_object($value))  { return '(' . get_class($value) . ')'; }
+    if ($value === null) {
+    return 'null';
+    }
+    if (is_bool($value)) {
+    return $value ? 'true' : 'false';
+    }
+    if (is_int($value) || is_float($value)) {
+    return (string)$value;
+    }
+    if (is_string($value)) {
+    return '"' . (mb_strlen($value) > 2000 ? mb_substr($value, 0, 2000) . '…' : $value) . '"';
+    }
+    if (is_object($value)) {
+    return '(' . get_class($value) . ')';
+    }
 
     if (is_array($value)) {
         if ($depth > 4) {
@@ -521,7 +532,10 @@ function debug_export(mixed $value, int $depth = 0): string
         $parts = [];
         $n = 0;
         foreach (debug_mask_array($value) as $k => $v) {
-            if (++$n > 50) { $parts[] = '…'; break; }
+            if (++$n > 50) {
+            $parts[] = '…';
+            break;
+            }
             $parts[] = $k . ' => ' . debug_export($v, $depth + 1);
         }
 
@@ -552,8 +566,12 @@ function debug_summary(): array
 
     foreach ($queries as $q) {
         $totalMs += $q['ms'];
-        if ($q['ms'] >= DEBUG_SLOW_QUERY_MS) { $slow++; }
-        if ($q['error'] !== null)            { $failed++; }
+        if ($q['ms'] >= DEBUG_SLOW_QUERY_MS) {
+        $slow++;
+        }
+        if ($q['error'] !== null) {
+        $failed++;
+        }
         $byNorm[$q['norm']] = ($byNorm[$q['norm']] ?? 0) + 1;
     }
 
@@ -672,9 +690,9 @@ function debug_shutdown(): void
         debug_bytes($s['memory_peak']),
         $s['query_count'],
         $s['query_ms'],
-        $s['query_slow']   ? ' | YAVAS:' . $s['query_slow']        : '',
-        $s['query_failed'] ? ' | HATALI:' . $s['query_failed']     : '',
-        $s['duplicates']   ? ' | YINELENEN:' . count($s['duplicates']) : ''
+        $s['query_slow'] ? ' | YAVAS:' . $s['query_slow'] : '',
+        $s['query_failed'] ? ' | HATALI:' . $s['query_failed'] : '',
+        $s['duplicates'] ? ' | YINELENEN:' . count($s['duplicates']) : ''
     );
 
     if (!is_dir(LOG_PATH)) {
@@ -689,8 +707,12 @@ function debug_shutdown(): void
 
 function debug_bytes(int $bytes): string
 {
-    if ($bytes >= 1048576) { return number_format($bytes / 1048576, 1) . ' MB'; }
-    if ($bytes >= 1024)    { return number_format($bytes / 1024, 0) . ' KB'; }
+    if ($bytes >= 1048576) {
+    return number_format($bytes / 1048576, 1) . ' MB';
+    }
+    if ($bytes >= 1024) {
+    return number_format($bytes / 1024, 0) . ' KB';
+    }
 
     return $bytes . ' B';
 }

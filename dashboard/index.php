@@ -319,7 +319,9 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
                 <?php else: ?>
                     <?php foreach (risk_statuses() as $st):
                         $c = (int)($statusCounts[$st] ?? 0);
-                        if ($c === 0) { continue; }
+                        if ($c === 0) {
+                        continue;
+                        }
                         $barRow($st, $c, (int)$stats['total'], 'is-neutral-fill',
                                 url('/risks/?status=' . urlencode($st)));
                     endforeach; ?>

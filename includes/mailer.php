@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -58,7 +59,7 @@ function mail_send(
         return false;
     }
 
-    $clean = static fn(string $v): string => (string)preg_replace('/[\r\n\x00]/', '', $v);
+    $clean = static fn (string $v): string => (string)preg_replace('/[\r\n\x00]/', '', $v);
 
     $headers = [
         'From: ' . $clean($fromName) . ' <' . $clean($fromEmail) . '>',

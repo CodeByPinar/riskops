@@ -1,0 +1,125 @@
+# =====================================================================
+#  RiskOps - Statik çözümleme (PHPStan)
+#
+#  Çalıştırma:
+#      composer stan
+#
+#  NEDEN ÇERÇEVESİZ BİR PROJEDE DAHA DEĞERLİ
+#  -----------------------------------------
+#  Laravel ya da Symfony kullanan bir projede tip güvencesinin bir
+#  kısmını çerçeve verir: container tipli nesne döndürür, ORM entity
+#  sınıfı üretir. Burada öyle bir güvence yok - db() düz PDO döndürüyor,
+#  fetch() dizi döndürüyor, ne içerdiğini yalnızca sorguya bakarak
+#  bilebiliyorsunuz. PHPStan bu boşluğun bir kısmını dolduruyor.
+#
+#  İLK KOŞUSUNDA BULDUĞU GERÇEK HATA
+#  ---------------------------------
+#  due_date_cell() iki parametre alıyordu, dört risk ekranı ise ÜÇ
+#  argümanla çağırıyordu. PHP fazla argümanı sessizce atar; termini
+#  geçmiş "Under Review" bir risk dört ekranda da gecikmiş
+#  görünmüyordu. Gözle fark edilmemişti.
+#  Bkz. tests/Unit/DueDateCellTest.php
+#
+#  SEVİYE 5 VE TEMEL ÇİZGİ OLMAMASI
+#  --------------------------------
+#  Kod tabanı PHPStan olmadan yazıldı; ilk koşuda seviye 5'te 110 bulgu
+#  çıktı. Alışılmış çözüm bir TEMEL ÇİZGİ (baseline) üretip hepsini
+#  dondurmaktır. Burada gerek kalmadı:
+#
+#    110 -> 37   dynamicConstantNames (aşağıda): bulguların çoğu
+#                sahteydi, ön yükleyici sabitleri değişmez sanıyordu
+#     37 -> 12   parçalara @var sözleşmesi yazıldı, üç gerçek hata
+#                düzeltildi (biri gerçek bir kusurdu: due_date_cell)
+#     12 ->  0   tools/ altındaki doğrulama betiklerinde "her zaman
+#                doğru" uyarıları gerekçeli olarak yok sayıldı
+#
+#  Yani BORÇ YOK: her bulgu ya düzeltildi ya da neden yok sayıldığı
+#  yazıldı. Seviye buradan kademeli yükseltilecek - her yükseltme kendi
+#  commit'inde, kendi düzeltmeleriyle.
+#
+#  Sıradaki: seviye 6 (eksik dizi tipleri) -> 7 -> 8 (null güvenliği).
+# =====================================================================
+
+parameters:
+    level: 5
+
+    paths:
+        - includes
+        - admin
+        - auth
+        - actions
+        - api
+        - assessments
+        - dashboard
+        - discussion
+        - profile
+        - reports
+        - risks
+        - tools
+        - tests
+
+    excludePaths:
+        analyse:
+            - vendor
+            - storage
+            - assets/vendor
+            # Docker açılış betikleri tek başına çalışır, uygulama
+            # sabitlerini görmez; statik çözümleme burada anlamsız.
+            - docker
+
+    # Uygulama PROSEDÜREL ve bootstrap ile açılıyor. PHPStan'in
+    # sabitleri ve global fonksiyonları görebilmesi için aynı dosyayı
+    # yüklemesi gerekiyor - testlerin kullandığı VERİTABANISIZ
+    # ön yükleyiciyi kullanıyoruz ki çözümleme sırasında bağlantı
+    # kurulmasın.
+    bootstrapFiles:
+        - tests/bootstrap-unit.php
+
+    # ÖN YÜKLEYİCİNİN YAN ETKİSİ VE ÇÖZÜMÜ
+    # ------------------------------------
+    # bootstrapFiles config.php'yi GERÇEKTEN çalıştırıyor. Sonuç:
+    # PHPStan APP_ENV'i 'development' sabit değeri olarak görüyor ve
+    # `APP_ENV === 'production'` karşılaştırmalarını "her zaman false"
+    # diye işaretliyordu - 60'tan fazla sahte bulgu.
+    #
+    # Bu sabitler çalışma zamanında ORTAM DEĞİŞKENİNDEN geliyor; değeri
+    # çözümleme anındaki değer değil. dynamicConstantNames bunu söyler.
+    dynamicConstantNames:
+        - APP_ENV
+        - APP_DEBUG
+        - APP_DEBUG_FROM_ENV
+        - APP_DEBUG_FROM_PANEL
+        - APP_DEMO
+        - DEBUG_LOG_ONLY_SLOW
+        - BASE_PATH
+
+    treatPhpDocTypesAsCertain: false
+
+    # -----------------------------------------------------------------
+    #  TEST BETİKLERİNDEKİ "HER ZAMAN DOĞRU" UYARILARI
+    #
+    #  tools/ altındaki betikler birer doğrulama koşucusu:
+    #      ck('tablo sayısı', count($tables) === 14);
+    #      exit($fail === 0 ? 0 : 1);
+    #
+    #  PHPStan bu karşılaştırmaların sonucunu sabit olarak çıkarabiliyor
+    #  ve "her zaman doğru" diyor. Teknik olarak haklı - ama bir testin
+    #  iddiası tam da böyle görünür. Bu uyarıları düzeltmek, testi
+    #  PHPStan'i memnun etmek için bozmak olurdu.
+    #
+    #  YALNIZCA tools/ İÇİN geçerli. Uygulama kodunda aynı uyarı gerçek
+    #  bir mantık hatasına işaret eder ve orada açık kalır.
+    # -----------------------------------------------------------------
+    ignoreErrors:
+        -
+            identifier: identical.alwaysTrue
+            path: tools/*
+        -
+            identifier: greater.alwaysFalse
+            path: tools/*
+        -
+            identifier: greaterOrEqual.alwaysTrue
+            path: tools/*
+        -
+            identifier: instanceof.alwaysTrue
+            path: tools/*

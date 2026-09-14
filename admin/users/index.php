@@ -22,7 +22,7 @@ $f = [
 if (!lookup_has($departments, $f['department'])) {
     $f['department'] = null;
 }
-$activeFilters = count(array_filter($f, static fn($v) => $v !== null && $v !== ''));
+$activeFilters = count(array_filter($f, static fn ($v) => $v !== null && $v !== ''));
 
 $where  = ['1=1'];
 $params = [];

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -82,6 +83,6 @@ function audit_filters(): array
         'entities' => $entityOptions,
         'where'    => implode(' AND ', $where),
         'params'   => $params,
-        'active'   => count(array_filter($f, static fn($v) => $v !== null && $v !== '')),
+        'active'   => count(array_filter($f, static fn ($v) => $v !== null && $v !== '')),
     ];
 }

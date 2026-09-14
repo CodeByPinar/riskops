@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -40,19 +41,19 @@ define('APP_DEMO', ($_SERVER['RISKOPS_DEMO'] ?? getenv('RISKOPS_DEMO') ?: '') ==
 
 // Giriş ekranında gösterilecek deneme hesabı. Parola BURADA durur ve
 // zaten herkese açıktır; bu hesabın rolü 'viewer' olmalıdır.
-define('DEMO_EMAIL',    'demo@riskops.local');
+define('DEMO_EMAIL', 'demo@riskops.local');
 define('DEMO_PASSWORD', 'RiskOpsDemo2026');
 
 // --- Dizin sabitleri --------------------------------------------------
-define('APP_ROOT',      dirname(__DIR__));
-define('CONFIG_PATH',   APP_ROOT . '/config');
+define('APP_ROOT', dirname(__DIR__));
+define('CONFIG_PATH', APP_ROOT . '/config');
 define('INCLUDES_PATH', APP_ROOT . '/includes');
-define('LAYOUT_PATH',   INCLUDES_PATH . '/layout');
+define('LAYOUT_PATH', INCLUDES_PATH . '/layout');
 define('PARTIALS_PATH', INCLUDES_PATH . '/partials');
-define('STORAGE_PATH',  APP_ROOT . '/storage');
-define('LOG_PATH',      STORAGE_PATH . '/logs');
-define('UPLOAD_PATH',   STORAGE_PATH . '/uploads');
-define('LOG_FILE',      LOG_PATH . '/app.log');
+define('STORAGE_PATH', APP_ROOT . '/storage');
+define('LOG_PATH', STORAGE_PATH . '/logs');
+define('UPLOAD_PATH', STORAGE_PATH . '/uploads');
+define('LOG_FILE', LOG_PATH . '/app.log');
 
 // Hata ayıklama istek özetleri. app.log'dan AYRI tutulur: o dosya
 // uyarı ve hataların kalıcı kaydıdır, her isteğin ölçümüyle
@@ -131,7 +132,7 @@ define('DEBUG_LOG_ONLY_SLOW',
     (($_SERVER['RISKOPS_DEBUG_LOG_ONLY_SLOW']
       ?? getenv('RISKOPS_DEBUG_LOG_ONLY_SLOW') ?: '') === '1'));
 
-define('DEBUG_LOG_MIN_MS',      250);
+define('DEBUG_LOG_MIN_MS', 250);
 define('DEBUG_LOG_MIN_QUERIES', 20);
 
 // Araç çubuğunun "Log" panelinde gösterilen app.log satır sayısı.
@@ -160,8 +161,8 @@ define('SESSION_NAME', 'RISKOPS_SESSION');
 
 // --- Fallback değerler ------------------------------------------------
 // settings tablosu okunamazsa bunlar kullanılır.
-define('FALLBACK_APP_NAME',        'RiskOps');
-define('FALLBACK_TIMEZONE',        'Europe/Istanbul');
-define('FALLBACK_DATE_FORMAT',     'd.m.Y');
+define('FALLBACK_APP_NAME', 'RiskOps');
+define('FALLBACK_TIMEZONE', 'Europe/Istanbul');
+define('FALLBACK_DATE_FORMAT', 'd.m.Y');
 define('FALLBACK_DATETIME_FORMAT', 'd.m.Y H:i');
-define('FALLBACK_PER_PAGE',        25);
+define('FALLBACK_PER_PAGE', 25);

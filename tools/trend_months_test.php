@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -43,7 +44,10 @@ function expected_months(int $baseTs, int $count): array
     for ($i = $count - 1; $i >= 0; $i--) {
         $mm = $m - $i;
         $yy = $y;
-        while ($mm <= 0) { $mm += 12; $yy--; }
+        while ($mm <= 0) {
+        $mm += 12;
+        $yy--;
+        }
         $out[] = sprintf('%04d-%02d', $yy, $mm);
     }
     return $out;

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -16,13 +17,17 @@ declare(strict_types=1);
  * birakip sistemi kilitleyebilirdi.)
  */
 
-if (PHP_SAPI !== 'cli') { exit(1); }
+if (PHP_SAPI !== 'cli') {
+exit(1);
+}
 
 require_once __DIR__ . '/../includes/bootstrap.php';
 require_once __DIR__ . '/../admin/users/_validate.php';
 
-$pass = 0; $fail = 0;
-function check(string $label, bool $ok, string $note = ''): void {
+$pass = 0;
+$fail = 0;
+function check(string $label, bool $ok, string $note = ''): void
+{
     global $pass, $fail;
     $ok ? $pass++ : $fail++;
     printf("  [%s] %s%s\n", $ok ? 'OK  ' : 'FAIL', $label, $note !== '' ? "  ($note)" : '');
@@ -102,7 +107,9 @@ echo json_encode(['guard'=>'gecti','updated'=>true]);
 PHP;
     file_put_contents("$dir/worker.php", $worker);
 
-    $outA = "$dir/a.out"; $outB = "$dir/b.out"; $gate = "$dir/gate";
+    $outA = "$dir/a.out";
+    $outB = "$dir/b.out";
+    $gate = "$dir/gate";
     // Her isci digerini pasiflestirmeye calisir.
     $php = PHP_BINARY;
     exec(sprintf('%s %s %d %s > %s 2>&1 &', escapeshellarg($php), escapeshellarg("$dir/worker.php"), $b, escapeshellarg($gate), escapeshellarg($outA)));
@@ -121,8 +128,8 @@ PHP;
     check('YARIS SONRASI: en az 1 aktif admin kaldi (invariant)', $after >= 1, "$after aktif admin");
     check('tam olarak 1 isci guncelledi', substr_count($ra . $rb, '"updated":true') === 1);
 
-    array_map('unlink', glob("$dir/*")); rmdir($dir);
-
+    array_map('unlink', glob("$dir/*"));
+    rmdir($dir);
 } finally {
     $restore();
     $now = $pdo->query('SELECT id, role, status FROM users ORDER BY id')->fetchAll();

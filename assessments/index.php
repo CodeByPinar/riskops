@@ -29,7 +29,7 @@ $f = [
 if (!lookup_has($users, $f['assessor'])) {
     $f['assessor'] = null;
 }
-$activeFilters = count(array_filter($f, static fn($v) => $v !== null && $v !== ''));
+$activeFilters = count(array_filter($f, static fn ($v) => $v !== null && $v !== ''));
 
 $where  = ['r.deleted_at IS NULL'];
 $params = [];

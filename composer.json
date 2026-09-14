@@ -11,6 +11,8 @@
         "ext-fileinfo": "*"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.64",
+        "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^11.0"
     },
     "autoload-dev": {
@@ -19,13 +21,25 @@
         }
     },
     "scripts": {
-        "test": "phpunit",
-        "test:unit": "phpunit --testsuite unit",
-        "test:integration": "phpunit --testsuite integration",
-        "lint": "find . -name '*.php' -not -path './vendor/*' -not -path './storage/*' -print0 | xargs -0 -n1 php -l"
+        "test": [
+            "@test:unit",
+            "@test:integration"
+        ],
+        "test:unit": "phpunit --testsuite unit --bootstrap tests/bootstrap-unit.php",
+        "test:integration": "phpunit --testsuite integration --bootstrap tests/bootstrap-app.php",
+        "lint": "php tools/check_conventions.php",
+        "cs": "php-cs-fixer check --diff",
+        "cs:fix": "php-cs-fixer fix",
+        "stan": "phpstan analyse",
+        "quality": [
+            "@lint",
+            "@cs",
+            "@stan"
+        ]
     },
     "config": {
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "allow-plugins": {}
     }
 }

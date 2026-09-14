@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -123,7 +124,6 @@ db_sync_timezone();
  * 4) Güvenli oturum  (CLI'da atlanir)
  * -------------------------------------------------------------------*/
 if (PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
-
     $riskopsSecure = (!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off')
                   || ((string)($_SERVER['SERVER_PORT'] ?? '') === '443');
 
@@ -148,7 +148,6 @@ if (PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
     if ($riskopsLifetime > 0
         && isset($_SESSION['last_activity'])
         && (time() - (int)$_SESSION['last_activity']) > $riskopsLifetime) {
-
         auth_destroy();
         session_start();
         flash('warning', 'Oturumunuz zaman aşımına uğradı. Lütfen tekrar giriş yapın.');

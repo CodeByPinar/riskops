@@ -338,6 +338,7 @@ sonuçlar, **kabul edilen maliyet** ve **değerlendirilen alternatifler**.
 | [0006](docs/architecture/0006-seviye-esikleri-ayarda.md) | Skor `GENERATED`, seviye değil | Eşikler ayardan değişebiliyor, skorun tanımı sabit |
 | [0007](docs/architecture/0007-hata-ayiklama-kipi.md) | Hata ayıklama: iki anahtar, süreli bayrak | Üretimde kazayla açılamaz, açık unutulamaz |
 | [0008](docs/architecture/0008-dosya-eki-guvenligi.md) | Dosya ekleri üç katmanlı doğrulanır | Ne sunucuda çalıştırılabilir ne tarayıcıda yorumlanabilir |
+| [0009](docs/architecture/0009-gelistirme-bagimliliklari.md) | Geliştirme bağımlılığı evet, çalışma zamanı hayır | PHPUnit/php-cs-fixer/PHPStan alındı; Doctrine alınmadı, gerekçesiyle |
 
 Bu kayıtlar önce kaynak dosyaların başındaki uzun yorum bloklarındaydı.
 İki sorun vardı: bir karar tek bir dosyaya ait değildi (CSP kararı dört
@@ -469,7 +470,7 @@ Her itmede GitHub Actions dört iş çalıştırır:
 | **Sözdizimi** | PHP 8.2 / 8.3 / 8.4 üzerinde `php -l`, tüm dosyalar |
 | **Birim testleri** | PHPUnit, **veritabanısız**, üç PHP sürümünde |
 | **Entegrasyon** | MariaDB 10.11 ve 11.4; şema SIFIRDAN yüklenir, sonra bir kez daha (yeniden çalıştırılabilirlik), ardından tüm test betikleri |
-| **Proje kuralları** | `tools/check_conventions.php` + sürüm kontrolüne sır girmemiş mi |
+| **Kod kalitesi** | php-cs-fixer (biçim), PHPStan seviye 5, `tools/check_conventions.php`, sürüm kontrolüne sır girmemiş mi |
 
 ### Test yapısı
 
@@ -485,7 +486,15 @@ tests/
 composer test:unit           # veritabanı gerekmez
 composer test:integration    # config/database.php gerekir
 composer test                # ikisi
+
+composer cs                  # kod biçimi: yalnızca rapor
+composer cs:fix              # kod biçimi: düzelt
+composer stan                # statik çözümleme
+composer quality             # kurallar + biçim + statik çözümleme
 ```
+
+Üçü de **geliştirme** bağımlılığı: uygulamayı çalıştırmak için
+`vendor/` dizini gerekmiyor, çalışma zamanı bağımlılığı hâlâ sıfır.
 
 İki ayrı ön yükleyici olmasının sebebi: uygulamanın kendi bootstrap'ı
 açılışta ayar tablosunu okur, yani her zaman veritabanına gider. Dil
@@ -532,9 +541,10 @@ sanılıyordu:
 | PHP satırı | ~19.570 uygulama + ~1.440 test |
 | CSS satırı | ~2.510 (`app.css`) + araç çubuğu ve yazdırma stili |
 | Veritabanı tablosu | 14 |
-| PHPUnit | 116 birim + 12 entegrasyon |
+| PHPUnit | 128 birim + 12 entegrasyon |
 | Betik testleri | 59 duman + 109/119 hata ayıklama + 7 kural |
-| Mimari kaydı (ADR) | 8 kayıt, ~750 satır |
+| Mimari kaydı (ADR) | 9 kayıt |
+| Statik çözümleme | PHPStan seviye 5, temel çizgi (baseline) yok |
 | Çalışma zamanı bağımlılığı | **0** (PHPUnit yalnızca `require-dev`) |
 
 ---
@@ -572,8 +582,13 @@ Sonradan eklenenler:
 
 Sırada:
 
-- [ ] Statik çözümleyici (PHPStan ya da Psalm) — çerçevesiz bir kod
-      tabanında değeri yüksek
+- [x] Statik çözümleyici — PHPStan seviye 5, ilk koşusunda gerçek bir
+      hata buldu (`due_date_cell` sessizce düşen argüman)
+- [x] php-cs-fixer — kod biçimi PSR-12
+- [ ] PHPStan seviyesini kademeli yükselt (6 → 7 → 8)
+- [ ] İnce bir **repository katmanı** — ORM değil: sorguları tek yerde
+      toplayıp refactor maliyetini düşürmek, SQL kontrolünü bırakmadan
+      (bkz. ADR-0009)
 - [ ] Kalan ekranların çevirisi (mekanik iş; bkz. aşağıdaki tablo)
 
 ### Çok dilli arayüz: durum

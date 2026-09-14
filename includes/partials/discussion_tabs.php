@@ -16,7 +16,16 @@ declare(strict_types=1);
  *   $canWrite    yazma yetkisi var mi
  */
 
-$dUrl = static fn(string $file): string => url('/discussion/' . $file);
+/* Bu parça bir GİRİŞ NOKTASI DEĞİL: risk ve aksiyon detay sayfaları
+   include ediyor ve değişkenleri onların kapsamından alıyor.
+   Bildirimler yukarıdaki düz metin sözleşmeyi denetlenebilir kılar. */
+/** @var string $dType */
+/** @var int $dParentId */
+/** @var array<int, array<string, mixed>> $comments */
+/** @var array<int, array<string, mixed>> $attachments */
+/** @var bool $canWrite */
+
+$dUrl = static fn (string $file): string => url('/discussion/' . $file);
 ?>
 
 <!-- -------------------- Yorumlar -------------------- -->

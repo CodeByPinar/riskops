@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -97,7 +98,9 @@ if ($missing !== []) {
 /* upload_max_filesize, uygulamanın ek boyutu sınırını altta bırakıyor mu? */
 $iniUpload = (int)filter_var((string)ini_get('upload_max_filesize'), FILTER_SANITIZE_NUMBER_INT);
 $iniUnit   = strtoupper(substr(trim((string)ini_get('upload_max_filesize')), -1));
-$iniBytes  = $iniUpload * match ($iniUnit) { 'G' => 1073741824, 'M' => 1048576, 'K' => 1024, default => 1 };
+$iniBytes  = $iniUpload * match ($iniUnit) {
+'G' => 1073741824, 'M' => 1048576, 'K' => 1024, default => 1
+};
 if (defined('ATTACH_MAX_BYTES') && $iniBytes > 0 && $iniBytes < ATTACH_MAX_BYTES) {
     warn(sprintf(
         'upload_max_filesize (%s) uygulamanın ek sınırından (%s) küçük;',
@@ -164,7 +167,6 @@ try {
         );
     }
     row('Toplam tablo', count($tables));
-
 } catch (Throwable $e) {
     warn('Veritabanına ulaşılamadı: ' . $e->getMessage());
 }

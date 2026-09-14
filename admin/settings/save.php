@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -192,8 +193,8 @@ try {
 settings_all(true);   // önbelleği tazele
 
 audit('settings_updated', 'settings', null,
-    array_map(static fn($p) => $p[0], $changes),
-    array_map(static fn($p) => $p[1], $changes)
+    array_map(static fn ($p) => $p[0], $changes),
+    array_map(static fn ($p) => $p[1], $changes)
 );
 
 flash('success', count($changes) . ' ayar güncellendi.');

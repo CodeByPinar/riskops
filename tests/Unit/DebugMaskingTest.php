@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace RiskOps\Tests\Unit;
@@ -130,7 +131,9 @@ final class DebugMaskingTest extends TestCase
 
         $masked = debug_mask_array($deep);
 
-        self::assertIsArray($masked);
+        /* assertIsArray BURADA YOK: debug_mask_array() dönüş tipi zaten
+           array, dolayısıyla hiçbir şey doğrulamıyordu. Asıl iddia
+           aşağıdaki - derinlik sınırının gerçekten uygulanması. */
         self::assertStringNotContainsString(
             'en dipteki deger',
             json_encode($masked, JSON_UNESCAPED_UNICODE) ?: '',

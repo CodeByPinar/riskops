@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -46,7 +47,7 @@ $total = (int)$countStmt->fetchColumn();
 audit('audit_exported', 'audit_log', null, null, [
     'format'  => $format,
     'rows'    => $total,
-    'filters' => array_filter($flt['f'], static fn($v) => $v !== null && $v !== ''),
+    'filters' => array_filter($flt['f'], static fn ($v) => $v !== null && $v !== ''),
     'doc'     => $docCode,
 ]);
 

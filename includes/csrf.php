@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -66,5 +67,11 @@ function csrf_require(): void
 }
 
 /* --- Proje dokumaninda gecen isimler için takma adlar --------------- */
-function generate_csrf_token(): string { return csrf_token(); }
-function verify_csrf_token(?string $token): bool { return csrf_verify($token); }
+function generate_csrf_token(): string
+{
+return csrf_token();
+}
+function verify_csrf_token(?string $token): bool
+{
+return csrf_verify($token);
+}

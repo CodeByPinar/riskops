@@ -37,7 +37,7 @@ $rows   = $result['rows'];
 
 $exportQuery = array_filter(
     ['r' => $key, 'from' => $from, 'to' => $to],
-    static fn($v) => $v !== null && $v !== ''
+    static fn ($v) => $v !== null && $v !== ''
 );
 $exportExcel = url('/reports/export_csv.php?' . http_build_query($exportQuery + ['format' => 'excel']));
 $exportRaw   = url('/reports/export_csv.php?' . http_build_query($exportQuery + ['format' => 'raw']));

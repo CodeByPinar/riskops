@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -32,7 +33,6 @@ function report_definitions(): array
     $effScore = 'COALESCE(r.residual_score, r.inherent_score)';
 
     return [
-
         /* ---------------------------------------------------- Açık riskler */
         'open_risks' => [
             'title'       => 'Açık Riskler',

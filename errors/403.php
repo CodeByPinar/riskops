@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 $rkCode  = 403;
 $rkTitle = 'Erişim reddedildi';

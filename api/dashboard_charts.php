@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -142,9 +143,9 @@ foreach (risk_statuses() as $s) {
 
 echo json_encode([
     'trend'      => $trend,
-    'category'   => array_map(static fn($r) => ['ad' => $r['ad'], 'adet' => (int)$r['adet']], $category),
+    'category'   => array_map(static fn ($r) => ['ad' => $r['ad'], 'adet' => (int)$r['adet']], $category),
     'department' => array_map(
-        static fn($r) => ['ad' => $r['ad'], 'adet' => (int)$r['adet'], 'onemli' => (int)$r['onemli']],
+        static fn ($r) => ['ad' => $r['ad'], 'adet' => (int)$r['adet'], 'onemli' => (int)$r['onemli']],
         $department
     ),
     'status'     => $status,
