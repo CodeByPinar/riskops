@@ -1,0 +1,10 @@
+# Yalnizca BICIM iceren commitler.
+#
+# Kullanim, bir kez:
+#     git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# Bundan sonra git blame bu commitleri atlar ve satirin GERCEK
+# yazarini gosterir.
+
+# PSR-12 bicimlendirmesi - php-cs-fixer ilk kosusu, 106 dosya
+ce7ff217ea5cf7e10a4889f6352ea48721c30be2
