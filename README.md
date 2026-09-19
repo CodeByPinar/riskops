@@ -6,11 +6,22 @@
   <strong>Kurumsal risk envanteri · 5×5 değerlendirme · aksiyon takibi · yönetim raporlaması</strong>
 </p>
 
-<!-- Rozetler docs/assets/badge/ altinda, depoda. Tek dis kaynak
-     asagidaki CI durumu: o gercekten dinamik olmak zorunda ve
-     GitHub'in kendi ucundan geliyor. Uzerinde "CDN yok" yazan bir
-     rozetin bir CDN'den gelmesi tuhaf olurdu. Ureteci:
-     docs/assets/generate.py -->
+<!-- Rozetlerin cogu docs/assets/badge/ altinda, DEPODA duruyor;
+     ureteci docs/assets/generate.py. Uzerinde "CDN yok" yazan bir
+     rozetin bir CDN'den gelmesi tuhaf olurdu.
+
+     IKI ISTISNA VAR, ikisi de teknik zorunluluk:
+
+       1. CI DURUMU - kosunun sonucunu gostermesi gerekiyor, yani
+          dinamik. GitHub'in kendi ucundan geliyor (ucuncu taraf degil).
+
+       2. GORUNTULENME SAYACI - bir sayac KENDI BARINDIRILAMAZ: saymak
+          icin istegi alan bir sunucu gerekir, depodaki statik bir SVG
+          sayamaz. Bedeli acikca yazili olsun: hits.sh her goruntulemede
+          isteyenin IP ve tarayici bilgisini goruyor, ve sayim
+          guvenilir degildir (tarayici onbellegi, GitHub'in camo vekili
+          ve tarayici botlari sayimi hem sisirir hem eksiltir).
+          Gercek trafik verisi icin: depo > Insights > Traffic. -->
 <p align="center">
   <a href="https://github.com/CodeByPinar/riskops/actions/workflows/ci.yml">
     <img src="https://github.com/CodeByPinar/riskops/actions/workflows/ci.yml/badge.svg" alt="CI durumu"></a>
@@ -28,6 +39,7 @@
   <img src="docs/assets/badge/cdn-yok.svg" alt="CDN yok">
   <img src="docs/assets/badge/arayuz-tr-en.svg" alt="Arayüz: Türkçe / İngilizce">
   <img src="docs/assets/badge/lisans-mit.svg" alt="Lisans: MIT">
+  <img src="https://hits.sh/github.com/CodeByPinar/riskops.svg?style=flat&amp;label=g%C3%B6r%C3%BCnt%C3%BClenme&amp;color=016ccc&amp;labelColor=0b356d" alt="Görüntülenme sayısı">
 </p>
 
 <p align="center">
@@ -268,8 +280,11 @@ Tam şema: [`database/schema.sql`](database/schema.sql)
   ayrıca üçüncü taraf bir sunucunun kullanıcıları izlemesini engeller.
 - Renk paleti `validate_palette.js` ile renk körlüğü açısından doğrulandı;
   durum renkleri her zaman ikon + etiketle birlikte gelir, renk tek başına anlam taşımaz
-- README'deki animasyonlu görseller de kendi deposunda barınıyor; dış bir
-  servise (readme-typing-svg vb.) bağlanmıyor. Üreteçleri
+- README'deki animasyonlu görseller ve rozetlerin çoğu da kendi deposunda
+  barınıyor; dış bir servise (readme-typing-svg vb.) bağlanmıyor. İki
+  istisna var ve ikisi de zorunlu: CI durumu (dinamik) ve görüntülenme
+  sayacı (bir sayaç kendi barındırılamaz — saymak için isteği alan bir
+  sunucu gerekir). Üreteçleri
   [`docs/assets/generate.py`](docs/assets/generate.py) içinde: matris
   renkleri skordan hesaplandığı için eşikler değişirse tek bir yer değişir.
   `prefers-reduced-motion` destekleniyor — hareket kapatıldığında animasyon
