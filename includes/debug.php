@@ -392,7 +392,18 @@ function debug_record_query(string $sql, array $params, float $ms, int $rows = -
  */
 function debug_caller(): string
 {
-    $skip = ['includes/debug.php', 'includes/db_debug.php', 'includes/db.php'];
+    /* VERİTABANI SARMALAYICILARI ATLANIR
+       Aranan şey sorguyu AÇAN uygulama satırı; "query.php:79" yazan
+       bir sorgu günlüğü hiçbir şey anlatmaz çünkü her sorgu oradan
+       geçer. Sorgu katmanı (ADR-0011) araya girdiğinde bu liste
+       güncellenmezse özellik sessizce işe yaramaz hâle gelir —
+       tools/debug_test.php bunu sınıyor. */
+    $skip = [
+        'includes/debug.php',
+        'includes/db_debug.php',
+        'includes/db.php',
+        'includes/query.php',
+    ];
 
     foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 18) as $frame) {
         $file = $frame['file'] ?? '';
