@@ -33,7 +33,33 @@ function check(string $label, bool $ok, string $note = ''): void
     printf("  [%s] %s%s\n", $ok ? 'OK  ' : 'FAIL', $label, $note !== '' ? "  ($note)" : '');
 }
 
+/* TEST KENDİ VERİSİNİ KURAR
+   ------------------------------------------------------------------
+   Bölüm 1 iki kullanıcı istiyor ("iki aktif admin varken biri
+   düşürülebilir"). Kurulum tohumu (seed.sql) TEK bir admin
+   oluşturuyor; bu test o güne kadar yalnızca demo verisi yüklü
+   makinelerde geçiyordu ve CI'da `Undefined array key 1` ile
+   patlıyordu. Eksikse ikinci kullanıcı burada üretilir, finally
+   blogunda silinir. */
 $pdo = db();
+
+$temporaryUserId = null;
+if (db_int('SELECT COUNT(*) FROM users') < 2) {
+    $temporaryUserId = db_insert(
+        'INSERT INTO users (name, email, password, role, status)
+         VALUES (:n, :e, :p, :r, 1)',
+        [
+            ':n' => 'Yaris testi gecici kullanici',
+            ':e' => 'race-test-' . bin2hex(random_bytes(6)) . '@riskops.invalid',
+            ':p' => password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT),
+            ':r' => 'admin',
+        ]
+    );
+    echo "  (not: ikinci kullanici yoktu, gecici olarak olusturuldu)\n";
+}
+
+/* Anlık görüntü geçici kullanıcıdan SONRA alınır: aksi hâlde
+   sondaki "geri yüklendi" karşılaştırması onu fazlalık sayardı. */
 $snapshot = db_all('SELECT id, role, status FROM users ORDER BY id');
 
 $restore = static function () use ($pdo, $snapshot): void {
@@ -134,6 +160,15 @@ PHP;
     $restore();
     $now = db_all('SELECT id, role, status FROM users ORDER BY id');
     check('users tablosu geri yuklendi', $now == $snapshot);
+
+    /* Karşılaştırmadan SONRA silinir; öncesinde silinseydi tablo
+       anlık görüntüyle uyuşmazdı ve test kendi temizliğini hata
+       sanardı. */
+    if ($temporaryUserId !== null) {
+        db_run('DELETE FROM users WHERE id = :id', [':id' => $temporaryUserId]);
+        check('gecici kullanici silindi',
+            db_int('SELECT COUNT(*) FROM users WHERE id = :id', [':id' => $temporaryUserId]) === 0);
+    }
 }
 
 echo "\n  SONUC: $pass OK / $fail FAIL\n";
