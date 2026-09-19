@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 320"
+     width="1000" height="320" role="img"
+     aria-label="RiskOps — BT ve siber guvenlik risk yonetimi platformu">
+  <title>RiskOps</title>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#041f3c"/>
+      <stop offset="0.55" stop-color="#072a52"/>
+      <stop offset="1" stop-color="#0b356d"/>
+    </linearGradient>
+
+    <!-- Basligin uzerinden gecen isik: gradyanin KENDISI kayiyor,
+         boylece maske ya da filtre gerekmiyor. -->
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"    stop-color="#eaf3ff"/>
+      <stop offset="0.40" stop-color="#eaf3ff"/>
+      <stop offset="0.50" stop-color="#23b0f8"/>
+      <stop offset="0.60" stop-color="#eaf3ff"/>
+      <stop offset="1"    stop-color="#eaf3ff"/>
+      <animateTransform attributeName="gradientTransform" type="translate"
+                        values="-1.2 0; 1.2 0; 1.2 0" dur="7s" repeatCount="indefinite"/>
+    </linearGradient>
+
+    <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#016ccc" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#23b0f8"/>
+      <stop offset="1" stop-color="#016ccc" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Seviye seridi: matrisin renk mantiginin ozeti -->
+    <linearGradient id="sev" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"    stop-color="#16a34a"/>
+      <stop offset="0.34" stop-color="#ca8a04"/>
+      <stop offset="0.67" stop-color="#ea580c"/>
+      <stop offset="1"    stop-color="#b91c1c"/>
+    </linearGradient>
+
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#0d9bf6" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#0d9bf6" stop-opacity="0"/>
+    </radialGradient>
+
+    <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1.1" fill="#ffffff" fill-opacity="0.045"/>
+    </pattern>
+
+    <!-- Tarama seridi yalnizca matrisin uzerinde gorunur -->
+    <clipPath id="gridclip">
+      <rect x="721" y="75" width="188" height="188" rx="10"/>
+    </clipPath>
+  </defs>
+
+  <style>
+    text { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; }
+
+    .brand  { font-size: 62px;   font-weight: 800; letter-spacing: -1.8px; fill: url(#shine); }
+    .kicker { font-size: 11.5px; font-weight: 700; letter-spacing: 2.4px;  fill: #23b0f8; }
+    .lead   { font-size: 16px;   font-weight: 600; fill: #eaf3ff; }
+    .cbig   { font-size: 19px;   font-weight: 700; fill: #eaf3ff; }
+    .csml   { font-size: 10px;   font-weight: 500; fill: #6685a8; letter-spacing: .3px; }
+    .axis   { font-size: 10px;   font-weight: 600; fill: #6685a8; letter-spacing: 1.2px; }
+    .tick   { font-size: 9.5px;  font-weight: 500; fill: #9fb8d4; }
+
+    /* Giris animasyonlari BIR KEZ oynar (forwards). Surekli kipirdayan
+       bir afis okumayi zorlastirir; tekrarlayan tek sey basliktaki isik
+       ve matris taramasi. */
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); }
+                       to   { opacity: 1; transform: none; } }
+    @keyframes pop  { 0%   { opacity: 0; transform: scale(.55); }
+                       70%  { opacity: 1; transform: scale(1.07); }
+                       100% { opacity: 1; transform: scale(1); } }
+    @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    .r    { opacity: 0; animation: rise .7s cubic-bezier(.2,.7,.3,1) forwards; }
+    .chip { opacity: 0; animation: rise .6s cubic-bezier(.2,.7,.3,1) forwards; }
+    .c    { opacity: 0; transform-box: fill-box; transform-origin: center;
+             animation: pop .5s cubic-bezier(.25,1.4,.5,1) forwards; }
+    .hr   { transform-origin: left center; animation: grow .9s .35s ease-out backwards; }
+    .bar  { transform-origin: left center; animation: grow 1s 1.5s cubic-bezier(.2,.7,.3,1) backwards; }
+
+    /* Hareketi azalt: animasyon kapanir, son kare gosterilir. */
+    @media (prefers-reduced-motion: reduce) {
+      .r, .chip, .c, .hr, .bar { animation: none; opacity: 1; transform: none; }
+      .brand { fill: #eaf3ff; }
+    }
+  </style>
+
+  <rect width="1000" height="320" rx="20" fill="url(#bg)"/>
+  <rect width="1000" height="320" rx="20" fill="url(#dots)"/>
+  <ellipse cx="815" cy="160" rx="240" ry="190" fill="url(#glow)"/>
+
+  <!-- SOL BLOK -->
+  <g class="r" style="animation-delay:.05s">
+    <text x="58" y="88" class="kicker">BT &amp; SİBER RİSK YÖNETİMİ</text>
+  </g>
+
+  <g class="r" style="animation-delay:.15s">
+    <text x="56" y="146" class="brand">RiskOps</text>
+  </g>
+
+  <rect class="hr" x="58" y="163" width="136" height="2.5" rx="1.25" fill="url(#rule)"/>
+
+  <g class="r" style="animation-delay:.45s">
+    <text x="58" y="192" class="lead">Risk envanteri · 5×5 değerlendirme · aksiyon takibi</text>
+  </g>
+
+  <g class="chip" style="animation-delay:1.15s"><rect x="58" y="212" width="94" height="48" rx="12" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.1)"/><text x="73" y="239" class="cbig">8</text><text x="73" y="253" class="csml">PHPStan</text></g><g class="chip" style="animation-delay:1.25s"><rect x="164" y="212" width="94" height="48" rx="12" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.1)"/><text x="179" y="239" class="cbig">192</text><text x="179" y="253" class="csml">test</text></g><g class="chip" style="animation-delay:1.35s"><rect x="270" y="212" width="94" height="48" rx="12" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.1)"/><text x="285" y="239" class="cbig">0</text><text x="285" y="253" class="csml">bağımlılık</text></g><g class="chip" style="animation-delay:1.45s"><rect x="376" y="212" width="94" height="48" rx="12" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.1)"/><text x="391" y="239" class="cbig">2</text><text x="391" y="253" class="csml">dil</text></g>
+
+  <!-- MATRIS -->
+  <g class="r" style="animation-delay:.4s">
+    <text x="726" y="64" class="axis">5 × 5 RİSK MATRİSİ</text>
+  </g>
+
+  <rect class="c" x="726" y="80" width="30" height="30" rx="7" fill="#ca8a04" style="animation-delay:0.55s"/><rect class="c" x="763" y="80" width="30" height="30" rx="7" fill="#ea580c" style="animation-delay:0.61s"/><rect class="c" x="800" y="80" width="30" height="30" rx="7" fill="#b91c1c" style="animation-delay:0.66s"/><rect class="c" x="837" y="80" width="30" height="30" rx="7" fill="#b91c1c" style="animation-delay:0.72s"/><rect class="c" x="874" y="80" width="30" height="30" rx="7" fill="#b91c1c" style="animation-delay:0.77s"/><rect class="c" x="726" y="117" width="30" height="30" rx="7" fill="#16a34a" style="animation-delay:0.61s"/><rect class="c" x="763" y="117" width="30" height="30" rx="7" fill="#ca8a04" style="animation-delay:0.66s"/><rect class="c" x="800" y="117" width="30" height="30" rx="7" fill="#ea580c" style="animation-delay:0.72s"/><rect class="c" x="837" y="117" width="30" height="30" rx="7" fill="#b91c1c" style="animation-delay:0.77s"/><rect class="c" x="874" y="117" width="30" height="30" rx="7" fill="#b91c1c" style="animation-delay:0.83s"/><rect class="c" x="726" y="154" width="30" height="30" rx="7" fill="#16a34a" style="animation-delay:0.66s"/><rect class="c" x="763" y="154" width="30" height="30" rx="7" fill="#ca8a04" style="animation-delay:0.72s"/><rect class="c" x="800" y="154" width="30" height="30" rx="7" fill="#ca8a04" style="animation-delay:0.77s"/><rect class="c" x="837" y="154" width="30" height="30" rx="7" fill="#ea580c" style="animation-delay:0.83s"/><rect class="c" x="874" y="154" width="30" height="30" rx="7" fill="#b91c1c" style="animation-delay:0.88s"/><rect class="c" x="726" y="191" width="30" height="30" rx="7" fill="#16a34a" style="animation-delay:0.72s"/><rect class="c" x="763" y="191" width="30" height="30" rx="7" fill="#16a34a" style="animation-delay:0.77s"/><rect class="c" x="800" y="191" width="30" height="30" rx="7" fill="#ca8a04" style="animation-delay:0.83s"/><rect class="c" x="837" y="191" width="30" height="30" rx="7" fill="#ca8a04" style="animation-delay:0.88s"/><rect class="c" x="874" y="191" width="30" height="30" rx="7" fill="#ea580c" style="animation-delay:0.94s"/><rect class="c" x="726" y="228" width="30" height="30" rx="7" fill="#16a34a" style="animation-delay:0.77s"/><rect class="c" x="763" y="228" width="30" height="30" rx="7" fill="#16a34a" style="animation-delay:0.83s"/><rect class="c" x="800" y="228" width="30" height="30" rx="7" fill="#16a34a" style="animation-delay:0.88s"/><rect class="c" x="837" y="228" width="30" height="30" rx="7" fill="#16a34a" style="animation-delay:0.94s"/><rect class="c" x="874" y="228" width="30" height="30" rx="7" fill="#ca8a04" style="animation-delay:0.99s"/>
+
+  <g clip-path="url(#gridclip)">
+    <rect x="692" y="75" width="26" height="188"
+          fill="#23b0f8" opacity="0.14">
+      <animate attributeName="x"
+               values="692;912;912"
+               dur="4.5s" begin="2.2s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <!-- Seviye seridi + uc etiketleri -->
+  <rect class="bar" x="726" y="274" width="178" height="6"
+        rx="3" fill="url(#sev)"/>
+  <g class="r" style="animation-delay:1.9s">
+    <text x="726" y="296" class="tick">düşük</text>
+    <text x="904" y="296" class="tick" text-anchor="end">kritik</text>
+  </g>
+
+  <!-- Eksenler -->
+  <g class="r" style="animation-delay:1.3s">
+    <text x="904" y="64" class="axis" text-anchor="end">ETKİ →</text>
+    <text x="708" y="169" class="axis" text-anchor="middle"
+          transform="rotate(-90 708 169)">OLASILIK →</text>
+  </g>
+</svg>

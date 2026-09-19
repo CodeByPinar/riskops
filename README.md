@@ -1,19 +1,42 @@
 <p align="center">
-  <img src="assets/img/logo-wordmark@2x.png" alt="RiskOps" width="280">
+  <img src="docs/assets/hero.svg" alt="RiskOps — BT ve Siber Güvenlik Risk Yönetimi Platformu" width="100%">
 </p>
 
 <p align="center">
-  <strong>BT ve Siber Güvenlik Risk Yönetimi Platformu</strong><br>
-  Kurumsal risk envanteri, 5×5 değerlendirme, aksiyon takibi ve yönetim raporlaması
+  <strong>Kurumsal risk envanteri · 5×5 değerlendirme · aksiyon takibi · yönetim raporlaması</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/CodeByPinar/riskops/actions/workflows/ci.yml">
+    <img src="https://github.com/CodeByPinar/riskops/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/PHPStan-seviye%208-2a6?logo=php&logoColor=white" alt="PHPStan seviye 8">
+  <img src="https://img.shields.io/badge/baseline-yok-2a6" alt="Baseline yok">
+  <img src="https://img.shields.io/badge/test-192-2a6" alt="192 test">
+  <img src="https://img.shields.io/badge/PSR--12-php--cs--fixer-2a6" alt="PSR-12">
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white" alt="PHP 8.3">
   <img src="https://img.shields.io/badge/MariaDB-10.11-003545?logo=mariadb&logoColor=white" alt="MariaDB 10.11">
-  <img src="https://img.shields.io/badge/framework-yok-lightgrey" alt="Framework yok">
-  <img src="https://img.shields.io/badge/CDN-yok-lightgrey" alt="CDN yok">
   <img src="https://img.shields.io/badge/docker-compose%20up-2496ED?logo=docker&logoColor=white" alt="Docker">
-  <img src="https://img.shields.io/badge/lisans-MIT-green" alt="MIT">
+  <img src="https://img.shields.io/badge/framework-yok-64748b" alt="Framework yok">
+  <img src="https://img.shields.io/badge/CDN-yok-64748b" alt="CDN yok">
+  <img src="https://img.shields.io/badge/arayüz-TR%20%2F%20EN-016ccc" alt="Türkçe / İngilizce">
+  <img src="https://img.shields.io/badge/lisans-MIT-16a34a" alt="MIT">
+</p>
+
+<p align="center">
+  <a href="#riskops-nedir">Nedir</a> ·
+  <a href="#ne-degildir">Ne değildir</a> ·
+  <a href="#ekran-görüntüleri">Ekranlar</a> ·
+  <a href="#öne-çıkan-özellikler">Özellikler</a> ·
+  <a href="#güvenlik-yaklaşımı">Güvenlik</a> ·
+  <a href="#mimari">Mimari</a> ·
+  <a href="#hızlı-başlangıç-docker">Kurulum</a> ·
+  <a href="#mimari-kararlar-adr">ADR</a> ·
+  <a href="#hata-ayıklama-kipi">Hata ayıklama</a> ·
+  <a href="#testler-ve-ci">Testler</a> ·
+  <a href="#yol-haritası">Yol haritası</a>
 </p>
 
 ---
@@ -26,11 +49,11 @@ yönetime sunulabilir belgeler üretmek için yazılmış bir web uygulamasıdı
 
 Risk yaşam döngüsünün tamamını kapsar:
 
-```
-Risk kaydı  →  5×5 değerlendirme  →  Seviye ataması  →  Aksiyon planı
-     ↑                                                        ↓
-     └────────  Yeniden değerlendirme  ←──────  Aksiyon tamamlanır
-```
+<p align="center">
+  <img src="docs/assets/lifecycle.svg" alt="Risk yaşam döngüsü: kayıt → değerlendirme → seviye → aksiyon → yeniden değerlendirme" width="100%">
+</p>
+
+<a id="ne-degildir"></a>
 
 ## RiskOps ne DEĞİLDİR
 
@@ -196,11 +219,26 @@ birlikte yorumlanmış durumda.
 
 ### Veri modeli
 
-12 tablo:
+12 tablo. Oklar yabancı anahtarları, etiketler **silme davranışını**
+gösteriyor — bu davranışlar amaca göre bilinçli olarak ayrışıyor:
 
-`users` · `departments` · `risk_categories` · `risks` · `risk_assessments`
-· `risk_actions` · `risk_comments` · `risk_attachments` · `settings`
-· `audit_logs` · `login_attempts` · `risk_sequences`
+```mermaid
+erDiagram
+    departments    ||--o{ users            : "RESTRICT"
+    departments    ||--o{ risks            : "RESTRICT"
+    risk_categories ||--o{ risks            : "RESTRICT"
+    users          ||--o{ risks            : "SET NULL (sahip)"
+    risks          ||--o{ risk_assessments : "CASCADE"
+    risks          ||--o{ risk_actions     : "CASCADE"
+    risks          ||--o{ risk_comments    : "CASCADE"
+    risks          ||--o{ risk_attachments : "CASCADE"
+    users          ||--o{ risk_assessments : "SET NULL (değerlendiren)"
+    users          ||--o{ risk_actions     : "SET NULL (sorumlu)"
+    users          ||--o{ audit_logs       : "SET NULL"
+```
+
+Bağımsız duran üç tablo: `settings` (ayarlar), `login_attempts` (kilitleme
+sayacı), `risk_sequences` (yıl başına risk kodu sayacı).
 
 Dikkate değer birkaç karar:
 
@@ -225,6 +263,12 @@ Tam şema: [`database/schema.sql`](database/schema.sql)
   ayrıca üçüncü taraf bir sunucunun kullanıcıları izlemesini engeller.
 - Renk paleti `validate_palette.js` ile renk körlüğü açısından doğrulandı;
   durum renkleri her zaman ikon + etiketle birlikte gelir, renk tek başına anlam taşımaz
+- README'deki animasyonlu görseller de kendi deposunda barınıyor; dış bir
+  servise (readme-typing-svg vb.) bağlanmıyor. Üreteçleri
+  [`docs/assets/generate.py`](docs/assets/generate.py) içinde: matris
+  renkleri skordan hesaplandığı için eşikler değişirse tek bir yer değişir.
+  `prefers-reduced-motion` destekleniyor — hareket kapatıldığında animasyon
+  durur, son kare gösterilir.
 
 ---
 
@@ -261,6 +305,8 @@ docker compose down -v && docker compose up
 ---
 
 ## Kurulum (Docker'sız)
+
+
 
 Ubuntu Server 24.04 · PHP 8.3 · MariaDB 10.11 · Apache 2.4
 
@@ -307,7 +353,9 @@ sudo -u www-data php /var/www/riskops/tools/seed_demo.php
 > **tüm risk verisini siler**. Üretim sunucusunda çalıştırmayın; canlıya
 > alırken `tools/` dizinini tamamen kaldırın.
 
-### Canlıya alma kontrolü
+<details>
+<summary><b>Canlıya alma kontrolü</b></summary>
+
 
 ```bash
 sudo -u www-data php /var/www/riskops/tools/go_live_check.php
@@ -317,7 +365,11 @@ Veri değiştirmeyen bir ön kontroldür: dizin izinleri, güvenlik başlıklar�
 ortam değişkeni, varsayılan parola, saat dilimi hizası gibi 31 maddeyi
 denetler ve eksikleri listeler.
 
-### İnternete açık kurulum
+</details>
+
+<details>
+<summary><b>İnternete açık kurulum</b></summary>
+
 
 Adım adım yordam: **[deploy/DEPLOY.md](deploy/DEPLOY.md)** — VPS hazırlığı,
 HTTPS, güvenlik duvarı, gece sıfırlaması ve son kontrol listesi.
@@ -333,6 +385,8 @@ bilgilerini gösterir ve o hesabın parolasını değiştirmesini engeller
 (yoksa bir ziyaretçi demoyu herkese kapatabilirdi). **Yetkilendirmeye
 hiçbir etkisi yoktur**: ziyaretçinin ne yapabileceğini `viewer` rolü
 belirler, bu bayrak değil.
+
+</details>
 
 ---
 
@@ -372,7 +426,9 @@ Geliştirirken "bu sayfa neden yavaş", "bu sorgu neden boş döndü", "bu
 oturumda ne var" sorularını `var_dump()` serpiştirmeden cevaplamak için
 bir hata ayıklama kipi vardır.
 
-### Nasıl açılır
+<details>
+<summary><b>Nasıl açılır</b></summary>
+
 
 **Yönetim ekranından** (önerilen) — kenar çubuğunda
 **Yönetim &rarr; Hata Ayıklama**. Süre seçilir (1 / 4 / 24 saat), kip
@@ -427,13 +483,21 @@ Ayrıca:
 - **`?rkdebug=off`** — araç çubuğunu bu oturum için gizler (ekran
   görüntüsü alırken), kipi kapatmaz.
 
-### Açık unutulamaz
+</details>
+
+<details>
+<summary><b>Açık unutulamaz</b></summary>
+
 
 Yönetim ekranından açılan kip bir **bitiş zamanı** taşır
 (`storage/debug.flag`). Süre dolduğunda dosya silinmemiş olsa bile
 yok sayılır — "geçen ay açmıştım, hâlâ açıkmış" durumu oluşamaz.
 
-### Üretimde kazayla açılamaz
+</details>
+
+<details>
+<summary><b>Üretimde kazayla açılamaz</b></summary>
+
 
 Ortam değişkeni yolunda: `APP_ENV=production` iken `RISKOPS_DEBUG`
 **tek başına yetmez**, ayrıca `RISKOPS_DEBUG_PRODUCTION=1` gerekir.
@@ -450,7 +514,11 @@ Hangi yoldan açılırsa açılsın araç çubuğu üretimde yalnızca `admin`
 rolüne gösterilir, `tools/go_live_check.php` durumu `FAIL` olarak
 raporlar ve nasıl kapatılacağını kaynağına göre söyler.
 
-### Sır basmaz
+</details>
+
+<details>
+<summary><b>Sır basmaz</b></summary>
+
 
 Araç çubuğu istek ve oturum içeriğini gösterdiği için maskeleme
 zorunludur. İki katman çalışır: anahtar adı şüpheliyse (`password`,
@@ -463,7 +531,11 @@ php tools/debug_test.php                  # kip kapalıyken:  109/109
 RISKOPS_DEBUG=1 php tools/debug_test.php  # kip açıkken:     119/119
 ```
 
-### Teşhis raporu
+</details>
+
+<details>
+<summary><b>Teşhis raporu</b></summary>
+
 
 Hata bildirirken ortamı tarif etmek yerine:
 
@@ -475,6 +547,8 @@ PHP sürümü ve eklentileri, MariaDB sürümü ve oturum değişkenleri,
 tablo satır sayıları ve boyutları, dizin izinleri, PHP–MySQL saat
 farkı, disk durumu ve log kuyruğu. Bağlantı bilgisi ve parola çıktıya
 girmez; raporu olduğu gibi paylaşabilirsiniz.
+
+</details>
 
 ---
 
@@ -521,7 +595,9 @@ kalmak, katkı vermenin önünde gereksiz bir engel olurdu. Birim
 yanlışlıkla veritabanına uzanırsa sessizce beklemek yerine nereye ait
 olduğunu söyler.
 
-### Betik testleri
+<details>
+<summary><b>Betik testleri</b></summary>
+
 
 PHPUnit'e taşınmayan, uçtan uca çalışan denetimler:
 
@@ -534,7 +610,11 @@ php tools/go_live_check.php        # üretime alma ön kontrolü
 php tools/debug_report.php         # sistem teşhis raporu
 ```
 
-### Denetlenen proje kuralları
+</details>
+
+<details>
+<summary><b>Denetlenen proje kuralları</b></summary>
+
 
 `tools/check_conventions.php` dosyaları token'larına ayırarak inceler —
 grep değil, çünkü kuralı **anlatan** yorum satırları kuralın ihlali
@@ -547,6 +627,8 @@ sanılıyordu:
 - POST işleyen her uç `csrf_require()` çağırıyor
 - Üretim kodunda unutulmuş `var_dump` / `print_r` yok
 - Her dosya `declare(strict_types=1)` ile başlıyor
+
+</details>
 
 ---
 

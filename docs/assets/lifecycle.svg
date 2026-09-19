@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 250"
+     width="960" height="250" role="img"
+     aria-label="Risk yasam dongusu: kayit, degerlendirme, seviye, aksiyon, yeniden degerlendirme">
+  <title>Risk yaşam döngüsü</title>
+
+  <style>
+    text { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; text-anchor: middle; }
+    .nt  { font-size: 14.5px; font-weight: 700; fill: #eaf3ff; }
+    .ns  { font-size: 11px;   font-weight: 500; fill: #6685a8; }
+    .lbl { font-size: 12.5px; font-weight: 700; fill: #23b0f8; letter-spacing: .3px; }
+    .sml { font-size: 10.5px; font-weight: 500; fill: #9fb8d4; }
+
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); }
+                       to   { opacity: 1; transform: none; } }
+    /* Kesik deseni kayiyor: cizgi boyanmiyor, AKIYOR. */
+    @keyframes march { to { stroke-dashoffset: -28; } }
+    @keyframes fade  { from { opacity: 0; } to { opacity: 1; } }
+
+    .n { opacity: 0; animation: rise .6s cubic-bezier(.2,.7,.3,1) forwards; }
+
+    .flow {
+      stroke: #23b0f8; stroke-width: 2; fill: none; stroke-linecap: round;
+      stroke-dasharray: 6 8; opacity: 0;
+      animation: fade .4s forwards, march 1.2s linear infinite;
+    }
+    .back {
+      stroke: #16a34a; stroke-width: 2; fill: none; stroke-linecap: round;
+      stroke-dasharray: 6 8; opacity: 0;
+      animation: fade .5s 1s forwards, march 1.6s linear infinite reverse;
+    }
+    .head { stroke: #23b0f8; stroke-width: 2; fill: none;
+             stroke-linecap: round; stroke-linejoin: round;
+             opacity: 0; animation: fade .4s .9s forwards; }
+    .t   { opacity: 0; animation: rise .6s 1.15s cubic-bezier(.2,.7,.3,1) forwards; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .n, .flow, .back, .head, .t { animation: none; opacity: 1; transform: none; }
+    }
+  </style>
+
+  <rect width="960" height="250" rx="18" fill="#062949"/>
+
+  <g class="n" style="animation-delay:0.10s"><rect x="52" y="58" width="188" height="62" rx="13" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.13)"/><text x="146" y="84" class="nt">Risk kaydı</text><text x="146" y="102" class="ns">envantere girer</text></g><g class="n" style="animation-delay:0.24s"><rect x="275" y="58" width="188" height="62" rx="13" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.13)"/><text x="369" y="84" class="nt">5×5 değerlendirme</text><text x="369" y="102" class="ns">olasılık × etki</text></g><g class="n" style="animation-delay:0.38s"><rect x="497" y="58" width="188" height="62" rx="13" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.13)"/><text x="591" y="84" class="nt">Seviye ataması</text><text x="591" y="102" class="ns">düşük → kritik</text></g><g class="n" style="animation-delay:0.52s"><rect x="720" y="58" width="188" height="62" rx="13" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.13)"/><text x="814" y="84" class="nt">Aksiyon planı</text><text x="814" y="102" class="ns">sorumlu + termin</text></g>
+  <path class="flow" d="M 246 89 H 263" style="animation-delay:0.50s"/><path class="head" d="M 261 85 l 5 4 l -5 4"/><path class="flow" d="M 469 89 H 485" style="animation-delay:0.64s"/><path class="head" d="M 483 85 l 5 4 l -5 4"/><path class="flow" d="M 691 89 H 708" style="animation-delay:0.78s"/><path class="head" d="M 706 85 l 5 4 l -5 4"/>
+
+  <path class="back" d="M 814 126 V 172 Q 814 186 800 186 H 160 Q 146 186 146 172 V 126"/>
+
+  <g class="t">
+    <rect x="348" y="171" width="264" height="30" rx="15"
+          fill="#062949"/>
+    <text x="480" y="187" class="lbl">Yeniden değerlendirme</text>
+    <text x="480" y="216" class="sml">geçmiş kayıtlar silinmez — seviye düşürülür, risk kapatılmaz</text>
+  </g>
+</svg>
