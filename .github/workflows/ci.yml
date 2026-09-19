@@ -236,6 +236,13 @@ jobs:
       - name: Bağımlılıklar
         run: composer install --no-interaction --no-progress --prefer-dist
 
+      - name: Yapılandırma (çözümleme için)
+        # config/database.php sürüm kontrolünde yok (kimlik bilgisi
+        # taşıyor). PHPStan require() hedeflerini çözdüğü için dosya
+        # olmadan "is not a file" hatası veriyor. Örnek dosya yeterli:
+        # bu iş veritabanına bağlanmıyor, yalnızca çözümleme yapıyor.
+        run: cp config/database.example.php config/database.php
+
       - name: Kod biçimi (php-cs-fixer)
         # Yalnızca DENETLER, dosyaya dokunmaz. Biçim bir tartışma
         # konusu olmaktan çıksın diye: "composer cs:fix" ile düzeltilir.

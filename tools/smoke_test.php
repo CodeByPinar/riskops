@@ -48,7 +48,12 @@ foreach (['pdo', 'pdo_mysql', 'mbstring', 'json', 'curl', 'xml', 'intl', 'gd', '
 /* ------------------------------------------------------------------ */
 section('2. Dizinler ve loglama');
 
-check('APP_ROOT doğru', APP_ROOT === '/var/www/riskops', APP_ROOT);
+/* APP_ROOT'un DEĞERİ değil, DOĞRU DİZİNİ gösterdiği sınanır:
+   kurulum yolu ortama göre değişir (CI deposu /home/runner/work/...
+   altında açılıyor), ama bu betiğin bir üst dizini olmak zorundadır.
+   Sabit yol iddiası, testi yalnızca tek bir makinede geçirir. */
+check('APP_ROOT doğru dizini gösteriyor',
+    realpath(APP_ROOT) === realpath(__DIR__ . '/..'), APP_ROOT);
 check('storage/logs mevcut', is_dir(LOG_PATH));
 check('storage/logs yazilabilir', is_writable(LOG_PATH));
 
