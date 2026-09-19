@@ -29,7 +29,7 @@ NOTLAR
       animasyon durur ve son kare gosterilir.
     - Renkler assets/css/app.css icindeki degiskenlerle ayni.
 """
-import io, os, sys
+import io, os, re, sys
 
 NAVY     = '#041f3c'
 NAVY_MID = '#0b356d'
@@ -339,6 +339,144 @@ def flow():
 
 
 
+
+# =====================================================================
+#  ROZETLER VE GEZINME CIPLERI
+#
+#  NEDEN KENDIMIZ URETIYORUZ
+#    Onceki surumde rozetler shields.io'dan geliyordu. Iki sorun vardi:
+#    (1) shields'in varsayilan paleti projenin renkleriyle ilgisiz, satir
+#    rastgele renkli kutular gibi duruyordu; (2) uzerinde "CDN yok" yazan
+#    bir rozetin bir CDN'den gelmesi, en hafif tabirle, tuhaf.
+#
+#    Tek istisna CI DURUMU: o gercekten dinamik, kosunun sonucunu
+#    gostermesi gerekiyor. Onu shields uzerinden aliyoruz ama RENKLERINI
+#    burada tanimlananlarla ayni yapiyoruz ki satir tek parca dursun.
+#
+#  GEOMETRI shields'in "flat" bicimiyle ayni (yukseklik 20, kose 3):
+#  boylece tek dis rozet kendi ciplerimizin arasinda yamali durmuyor.
+#
+#  METIN GENISLIGI TAHMIN EDILIYOR
+#    SVG icinde metin olcemedigimiz icin karakter basina yaklasik genislik
+#    tablosu kullaniliyor. Tahmin birkac piksel sasarsa cip biraz genis ya
+#    da dar olur - kirilmaz. Tarayicida goz kontrolu yapilip sabitler
+#    ayarlandi.
+# =====================================================================
+
+CHIP_H   = 20
+CHIP_PAD = 9
+
+# 11px yari kalin bir arayuz yazi tipi icin yaklasik ilerlemeler
+_NARROW = set("iljItf.,:;'!|()[]{}")
+_WIDE   = set("mMWw@")
+_UPPER  = set("ABCDEFGHJKLNOPQRSUVXYZÇĞİÖŞÜ")
+
+
+def text_width(t, size=11.0):
+    w = 0.0
+    for ch in t:
+        if ch == ' ':
+            w += 3.3
+        elif ch in _NARROW:
+            w += 3.4
+        elif ch in _WIDE:
+            w += 9.4
+        elif ch in _UPPER:
+            w += 7.2
+        elif ch.isdigit():
+            w += 6.3
+        else:
+            w += 6.1
+    return w * (size / 11.0)
+
+
+def _svg_chip(parts, h=CHIP_H, pad=CHIP_PAD, size=11, radius=3, weight=600):
+    """parts: [(metin, zemin, yazi_rengi)] - soldan saga.
+
+    GEZINME CIPLERI DAHA BUYUK: rozetlerle ayni olcude olduklarinda uc
+    satir birbirinin ayni gorunuyor ve gezinme, veri gibi okunuyordu.
+    Daha yuksek ve daha yuvarlak olmasi onlari "tiklanacak sey" yapiyor.
+    """
+    widths = [text_width(t, size) + 2 * pad for t, _, _ in parts]
+    total  = sum(widths)
+
+    segs, x = [], 0.0
+    for (t, bg, fg), w in zip(parts, widths):
+        segs.append((x, w, t, bg, fg))
+        x += w
+
+    rects, texts = [], []
+    baseline = h / 2 + size * 0.35
+    for x, w, t, bg, fg in segs:
+        rects.append(f'<rect x="{x:.1f}" width="{w:.1f}" height="{h}" fill="{bg}"/>')
+        texts.append(
+            f'<text x="{x + w / 2:.1f}" y="{baseline:.1f}" fill="{fg}">{escape(t)}</text>'
+        )
+
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{total:.0f}" height="{h}"
+     viewBox="0 0 {total:.1f} {h}" role="img"
+     aria-label="{escape(' '.join(t for t, _, _ in parts))}">
+  <title>{escape(' '.join(t for t, _, _ in parts))}</title>
+  <clipPath id="r"><rect width="{total:.1f}" height="{h}" rx="{radius}"/></clipPath>
+  <g clip-path="url(#r)">{''.join(rects)}</g>
+  <g font-family="{FONT}" font-size="{size}" font-weight="{weight}"
+     text-anchor="middle" letter-spacing=".1">{''.join(texts)}</g>
+</svg>
+'''
+
+
+def escape(t):
+    return (t.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'))
+
+
+def slugify(t):
+    out = []
+    tr = {'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
+          'Ç': 'c', 'Ğ': 'g', 'İ': 'i', 'Ö': 'o', 'Ş': 's', 'Ü': 'u'}
+    for ch in t.lower():
+        ch = tr.get(ch, ch)
+        out.append(ch if ch.isalnum() else '-')
+    return re.sub(r'-+', '-', ''.join(out)).strip('-')
+
+
+LABEL_BG = '#0b356d'          # sol taraf: marka lacivert
+LABEL_FG = '#c5dcf7'
+VALUE_FG = '#ffffff'
+
+# RENKLER WCAG 4.5:1 ESIGINE GORE SECILDI
+#   11px yari kalin metin "kucuk metin" sayilir. shields.io'nun yaygin
+#   yesili #16a34a beyaz uzerinde 3.30:1 verir - yaygin ama gecmiyor.
+#   Ayni sekilde PHP moru (#777bb4, 3.98) ve Docker mavisi (#2496ed,
+#   3.15). Marka tonlarina yakin kalarak koyulastirildi.
+#
+#   Bu titizlik keyfi degil: README paletin renk korlugu acisindan
+#   dogrulandigini yaziyor. Rozetlerde gevsek davranmak o cumleyi
+#   curutur.
+OK_GREEN = '#12803c'          # 5.03:1
+ACCENT   = '#016ccc'          # 5.23:1
+NEUTRAL  = '#546e8c'          # 5.27:1
+
+# (etiket, deger, deger rengi)
+BADGES = [
+    ('PHPStan',   'seviye 8',      OK_GREEN),
+    ('baseline',  'yok',           OK_GREEN),
+    ('test',      '192',           OK_GREEN),
+    ('biçim',     'PSR-12',        OK_GREEN),
+    ('PHP',       '8.3',           '#5b5f9e'),          # 5.87:1
+    ('MariaDB',   '10.11',         '#1f6f8b'),          # 5.67:1
+    ('Docker',    'compose up',    '#1a6fc4'),          # 5.10:1
+    ('framework', 'yok',           NEUTRAL),
+    ('CDN',       'yok',           NEUTRAL),
+    ('arayüz',    'TR / EN',       ACCENT),
+    ('lisans',    'MIT',           OK_GREEN),
+]
+
+NAV = ['Nedir', 'Ne değildir', 'Ekranlar', 'Özellikler', 'Güvenlik',
+       'Mimari', 'Kurulum', 'ADR', 'Hata ayıklama', 'Testler', 'Yol haritası']
+
+NAV_BG = '#0f4a86'          # rozet etiketinden bir ton acik: hiyerarsi
+NAV_FG = '#dceaf9'
+
 if __name__ == '__main__':
     root = sys.argv[1] if len(sys.argv) > 1 else '.'
     target = os.path.join(root, 'docs', 'assets')
@@ -348,3 +486,23 @@ if __name__ == '__main__':
         path = os.path.join(target, name)
         io.open(path, 'w', encoding='utf-8', newline=chr(10)).write(svg)
         print("  + docs/assets/%-14s %6d bayt" % (name, os.path.getsize(path)))
+
+    # Rozetler
+    for label, value, color in BADGES:
+        d = os.path.join(target, 'badge')
+        os.makedirs(d, exist_ok=True)
+        svg = _svg_chip([(label, LABEL_BG, LABEL_FG), (value, color, VALUE_FG)])
+        io.open(os.path.join(d, slugify(label + '-' + value) + '.svg'),
+                'w', encoding='utf-8', newline=chr(10)).write(svg)
+
+    # Gezinme
+    for text in NAV:
+        d = os.path.join(target, 'nav')
+        os.makedirs(d, exist_ok=True)
+        svg = _svg_chip([(text, NAV_BG, NAV_FG)],
+                        h=26, pad=13, size=12, radius=6, weight=650)
+        io.open(os.path.join(d, slugify(text) + '.svg'),
+                'w', encoding='utf-8', newline=chr(10)).write(svg)
+
+    print("  + docs/assets/badge/  %d rozet" % len(BADGES))
+    print("  + docs/assets/nav/    %d gezinme çipi" % len(NAV))

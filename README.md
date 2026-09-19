@@ -6,37 +6,42 @@
   <strong>Kurumsal risk envanteri · 5×5 değerlendirme · aksiyon takibi · yönetim raporlaması</strong>
 </p>
 
+<!-- Rozetler docs/assets/badge/ altinda, depoda. Tek dis kaynak
+     asagidaki CI durumu: o gercekten dinamik olmak zorunda ve
+     GitHub'in kendi ucundan geliyor. Uzerinde "CDN yok" yazan bir
+     rozetin bir CDN'den gelmesi tuhaf olurdu. Ureteci:
+     docs/assets/generate.py -->
 <p align="center">
   <a href="https://github.com/CodeByPinar/riskops/actions/workflows/ci.yml">
-    <img src="https://github.com/CodeByPinar/riskops/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <img src="https://img.shields.io/badge/PHPStan-seviye%208-2a6?logo=php&logoColor=white" alt="PHPStan seviye 8">
-  <img src="https://img.shields.io/badge/baseline-yok-2a6" alt="Baseline yok">
-  <img src="https://img.shields.io/badge/test-192-2a6" alt="192 test">
-  <img src="https://img.shields.io/badge/PSR--12-php--cs--fixer-2a6" alt="PSR-12">
+    <img src="https://github.com/CodeByPinar/riskops/actions/workflows/ci.yml/badge.svg" alt="CI durumu"></a>
+  <img src="docs/assets/badge/phpstan-seviye-8.svg" alt="PHPStan seviye 8">
+  <img src="docs/assets/badge/baseline-yok.svg" alt="Baseline yok">
+  <img src="docs/assets/badge/test-192.svg" alt="192 test">
+  <img src="docs/assets/badge/bicim-psr-12.svg" alt="Biçim: PSR-12">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white" alt="PHP 8.3">
-  <img src="https://img.shields.io/badge/MariaDB-10.11-003545?logo=mariadb&logoColor=white" alt="MariaDB 10.11">
-  <img src="https://img.shields.io/badge/docker-compose%20up-2496ED?logo=docker&logoColor=white" alt="Docker">
-  <img src="https://img.shields.io/badge/framework-yok-64748b" alt="Framework yok">
-  <img src="https://img.shields.io/badge/CDN-yok-64748b" alt="CDN yok">
-  <img src="https://img.shields.io/badge/arayüz-TR%20%2F%20EN-016ccc" alt="Türkçe / İngilizce">
-  <img src="https://img.shields.io/badge/lisans-MIT-16a34a" alt="MIT">
+  <img src="docs/assets/badge/php-8-3.svg" alt="PHP 8.3">
+  <img src="docs/assets/badge/mariadb-10-11.svg" alt="MariaDB 10.11">
+  <img src="docs/assets/badge/docker-compose-up.svg" alt="Docker: compose up">
+  <img src="docs/assets/badge/framework-yok.svg" alt="Framework yok">
+  <img src="docs/assets/badge/cdn-yok.svg" alt="CDN yok">
+  <img src="docs/assets/badge/arayuz-tr-en.svg" alt="Arayüz: Türkçe / İngilizce">
+  <img src="docs/assets/badge/lisans-mit.svg" alt="Lisans: MIT">
 </p>
 
 <p align="center">
-  <a href="#riskops-nedir">Nedir</a> ·
-  <a href="#ne-degildir">Ne değildir</a> ·
-  <a href="#ekran-görüntüleri">Ekranlar</a> ·
-  <a href="#öne-çıkan-özellikler">Özellikler</a> ·
-  <a href="#güvenlik-yaklaşımı">Güvenlik</a> ·
-  <a href="#mimari">Mimari</a> ·
-  <a href="#hızlı-başlangıç-docker">Kurulum</a> ·
-  <a href="#mimari-kararlar-adr">ADR</a> ·
-  <a href="#hata-ayıklama-kipi">Hata ayıklama</a> ·
-  <a href="#testler-ve-ci">Testler</a> ·
-  <a href="#yol-haritası">Yol haritası</a>
+  <a href="#riskops-nedir"><img src="docs/assets/nav/nedir.svg" alt="Nedir"></a>
+  <a href="#ne-degildir"><img src="docs/assets/nav/ne-degildir.svg" alt="Ne değildir"></a>
+  <a href="#ekran-görüntüleri"><img src="docs/assets/nav/ekranlar.svg" alt="Ekranlar"></a>
+  <a href="#öne-çıkan-özellikler"><img src="docs/assets/nav/ozellikler.svg" alt="Özellikler"></a>
+  <a href="#güvenlik-yaklaşımı"><img src="docs/assets/nav/guvenlik.svg" alt="Güvenlik"></a>
+  <a href="#mimari"><img src="docs/assets/nav/mimari.svg" alt="Mimari"></a>
+  <a href="#hızlı-başlangıç-docker"><img src="docs/assets/nav/kurulum.svg" alt="Kurulum"></a>
+  <a href="#mimari-kararlar-adr"><img src="docs/assets/nav/adr.svg" alt="ADR"></a>
+  <a href="#hata-ayıklama-kipi"><img src="docs/assets/nav/hata-ayiklama.svg" alt="Hata ayıklama"></a>
+  <a href="#testler-ve-ci"><img src="docs/assets/nav/testler.svg" alt="Testler"></a>
+  <a href="#yol-haritası"><img src="docs/assets/nav/yol-haritasi.svg" alt="Yol haritası"></a>
 </p>
 
 ---
