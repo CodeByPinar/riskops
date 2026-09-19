@@ -73,20 +73,20 @@ if (!isset($printDocCode)) {
     <table class="rk-lh-meta">
         <tbody>
             <tr>
-                <th>Rapor tarihi</th>
+                <th><?= te('Rapor tarihi') ?></th>
                 <td><?= e(format_datetime($generatedAt)) ?></td>
-                <th>Belge no</th>
+                <th><?= te('Belge no') ?></th>
                 <td><?= e($printDocCode) ?></td>
             </tr>
             <tr>
-                <th>Hazırlayan</th>
+                <th><?= te('Hazırlayan') ?></th>
                 <td><?= e(auth_user()['name'] ?? '') ?></td>
-                <th>Sistem</th>
+                <th><?= te('Sistem') ?></th>
                 <td><?= e(app_name()) ?> — IT &amp; Cyber Risk Management</td>
             </tr>
             <?php if (!empty($printScope)): ?>
             <tr>
-                <th>Kapsam</th>
+                <th><?= te('Kapsam') ?></th>
                 <td colspan="3"><?= e($printScope) ?></td>
             </tr>
             <?php endif; ?>

@@ -71,12 +71,12 @@ require LAYOUT_PATH . '/header.php';
                 </a>
                 <a class="rk-btn rk-btn-sm"
                    href="<?= e(url('/reports/export_csv.php?r=' . $key . '&format=excel')) ?>"
-                   title="Türkçe Excel'de çift tıkla açılır">
+                   title="<?= te('Türkçe Excel\'de çift tıkla açılır') ?>">
                     <i class="bi bi-file-earmark-excel"></i> <?= te('Excel') ?>
                 </a>
                 <a class="rk-btn rk-btn-sm"
                    href="<?= e(url('/reports/export_csv.php?r=' . $key . '&format=raw')) ?>"
-                   title="RFC 4180 — sistem entegrasyonu için">
+                   title="<?= te('RFC 4180 — sistem entegrasyonu için') ?>">
                     <i class="bi bi-filetype-csv"></i> <?= te('Ham') ?>
                 </a>
             </div>

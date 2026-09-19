@@ -149,7 +149,9 @@ $myRiskCount = (int)db_value(
 /* ------------------------------------------------------------------ */
 
 $pageTitle    = t('Panel');
-$pageSubtitle = 'Kurumsal IT ve siber risk durumu — ' . format_datetime(date('Y-m-d H:i:s'));
+$pageSubtitle = t('Kurumsal IT ve siber risk durumu — :tarih', [
+    ':tarih' => format_datetime(date('Y-m-d H:i:s')),
+]);
 $activeMenu   = 'dashboard';
 $needsCharts  = true;
 $pageScripts  = '<script src="' . e(url('/assets/js/dashboard.js?v=20260911n')) . '"></script>';
@@ -182,7 +184,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
         <div class="rk-stat-icon"><i class="bi bi-collection"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$stats['total'] ?></div>
-            <div class="rk-stat-label">Toplam Risk</div>
+            <div class="rk-stat-label"><?= te('Toplam Risk') ?></div>
         </div>
     </a>
 
@@ -190,7 +192,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
         <div class="rk-stat-icon"><i class="bi bi-exclamation-octagon-fill"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$stats['critical'] ?></div>
-            <div class="rk-stat-label">Kritik</div>
+            <div class="rk-stat-label"><?= te('Kritik') ?></div>
         </div>
     </a>
 
@@ -198,7 +200,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
         <div class="rk-stat-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$stats['high'] ?></div>
-            <div class="rk-stat-label">Yüksek</div>
+            <div class="rk-stat-label"><?= te('Yüksek') ?></div>
         </div>
     </a>
 
@@ -206,7 +208,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
         <div class="rk-stat-icon"><i class="bi bi-folder2-open"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$stats['open_risks'] ?></div>
-            <div class="rk-stat-label">Açık Risk</div>
+            <div class="rk-stat-label"><?= te('Açık Risk') ?></div>
         </div>
     </a>
 
@@ -215,7 +217,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
         <div class="rk-stat-icon"><i class="bi bi-clock-history"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= $overdueActions ?></div>
-            <div class="rk-stat-label">Geciken Aksiyon</div>
+            <div class="rk-stat-label"><?= te('Geciken Aksiyon') ?></div>
         </div>
     </a>
 
@@ -223,7 +225,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
         <div class="rk-stat-icon"><i class="bi bi-shield-check"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$stats['mitigated'] ?></div>
-            <div class="rk-stat-label">Azaltılmış</div>
+            <div class="rk-stat-label"><?= te('Azaltılmış') ?></div>
         </div>
     </a>
 </div>
@@ -234,8 +236,8 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
     <div class="col-12 col-xl-7">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-grid-3x3"></i> Risk Matrisi (5&times;5)</h2>
-                <div class="rk-card-tools"><span class="rk-help">Etkin olasılık &times; etki</span></div>
+                <h2 class="rk-card-title"><i class="bi bi-grid-3x3"></i> <?= te('Risk Matrisi (5×5)') ?></h2>
+                <div class="rk-card-tools"><span class="rk-help"><?= te('Etkin olasılık × etki') ?></span></div>
             </div>
             <div class="rk-card-body">
                 <div class="rk-matrix-wrap">
@@ -394,7 +396,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
             <table class="rk-table">
                 <thead>
                     <tr><th><?= te('Kod') ?></th><th><?= te('Başlık') ?></th><th><?= te('Departman') ?></th><th><?= te('Sahip') ?></th>
-                        <th>Skor</th><th>Seviye</th><th>Termin</th></tr>
+                        <th><?= te('Skor') ?></th><th><?= te('Seviye') ?></th><th><?= te('Termin') ?></th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($criticalOpen as $r): ?>
@@ -493,7 +495,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
         <?php else: ?>
         <table class="rk-table">
             <thead>
-                <tr><th>Risk</th><th>Aksiyon</th><th>Öncelik</th><th><?= te('Durum') ?></th><th><?= te('Termin') ?></th></tr>
+                <tr><th><?= te('Risk') ?></th><th><?= te('Aksiyon') ?></th><th><?= te('Öncelik') ?></th><th><?= te('Durum') ?></th><th><?= te('Termin') ?></th></tr>
             </thead>
             <tbody>
             <?php foreach ($myActions as $a): ?>

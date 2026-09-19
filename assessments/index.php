@@ -147,21 +147,21 @@ require LAYOUT_PATH . '/header.php';
         <div class="rk-stat-icon"><i class="bi bi-clipboard-data"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$summary['son30'] ?></div>
-            <div class="rk-stat-label">Son 30 Günde</div>
+            <div class="rk-stat-label"><?= te('Son 30 Günde') ?></div>
         </div>
     </div>
     <div class="rk-stat is-neutral">
         <div class="rk-stat-icon"><i class="bi bi-collection"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$summary['risk_sayisi'] ?></div>
-            <div class="rk-stat-label">Toplam Risk</div>
+            <div class="rk-stat-label"><?= te('Toplam Risk') ?></div>
         </div>
     </div>
     <div class="rk-stat <?= (int)$summary['hic_gozden_gecirilmemis'] > 0 ? 'is-high' : 'is-low' ?>">
         <div class="rk-stat-icon"><i class="bi bi-hourglass"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$summary['hic_gozden_gecirilmemis'] ?></div>
-            <div class="rk-stat-label">Hiç Gözden Geçirilmemiş</div>
+            <div class="rk-stat-label"><?= te('Hiç Gözden Geçirilmemiş') ?></div>
         </div>
     </div>
 </div>
@@ -172,7 +172,7 @@ require LAYOUT_PATH . '/header.php';
             <div class="rk-field rk-filter-wide">
                 <label class="rk-label" for="q"><?= te('Arama') ?></label>
                 <input class="rk-input" type="search" id="q" name="q" value="<?= e($f['q'] ?? '') ?>"
-                       placeholder="Risk kodu, başlık veya not">
+                       placeholder="<?= te('Risk kodu, başlık veya not') ?>">
             </div>
             <div class="rk-field">
                 <label class="rk-label" for="type"><?= te('Tür') ?></label>
@@ -219,7 +219,7 @@ require LAYOUT_PATH . '/header.php';
             <?php endif; ?>
             <div class="ms-auto d-flex gap-2">
                 <?php if ($activeFilters > 0): ?>
-                    <a class="rk-btn" href="<?= e(url('/assessments/')) ?>"><i class="bi bi-x-lg"></i> Temizle</a>
+                    <a class="rk-btn" href="<?= e(url('/assessments/')) ?>"><i class="bi bi-x-lg"></i> <?= te('Temizle') ?></a>
                 <?php endif; ?>
                 <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> <?= te('Filtrele') ?></button>
             </div>
@@ -242,11 +242,11 @@ require LAYOUT_PATH . '/header.php';
                         <?= $th('date', 'Tarih') ?>
                         <?= $th('risk', 'Risk') ?>
                         <?= $th('type', 'Tür') ?>
-                        <th>Olasılık × Etki</th>
+                        <th><?= te('Olasılık × Etki') ?></th>
                         <?= $th('score', 'Skor') ?>
                         <?= $th('severity', 'Seviye') ?>
                         <?= $th('assessor', 'Değerlendiren') ?>
-                        <th>Not</th>
+                        <th><?= te('Not') ?></th>
                     </tr>
                 </thead>
                 <tbody>

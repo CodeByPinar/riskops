@@ -44,8 +44,9 @@ $footerNote     = trim((string)setting('report_footer_note', ''));
     <?php endif; ?>
     <?php if ($classification !== ''): ?>
         <p class="rk-print-classline">
-            Bu belge <strong><?= e($classification) ?></strong> sınıfındadır.
-            Yetkisiz kişilerle paylaşılmamalıdır.
+            <?= t('Bu belge :sinif sınıfındadır. Yetkisiz kişilerle paylaşılmamalıdır.', [
+                ':sinif' => '<strong>' . e($classification) . '</strong>',
+            ]) ?>
         </p>
     <?php endif; ?>
 </div>

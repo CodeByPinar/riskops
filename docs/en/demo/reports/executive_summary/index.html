@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Yönetici Risk Özeti - RiskOps</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/riskops/demo/assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/riskops/demo/assets/img/favicon-16.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/riskops/demo/assets/img/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+<link rel="stylesheet" href="/riskops/demo/assets/css/app.css?v=20260912b">
+<style nonce="statik-onizleme">.rk-cat-default{background:var(--rk-muted-light)}.rk-cat-b91c1c{background:#b91c1c}.rk-cat-c2410c{background:#c2410c}.rk-cat-a16207{background:#a16207}.rk-cat-1d4ed8{background:#1d4ed8}.rk-cat-6d28d9{background:#6d28d9}.rk-cat-0f766e{background:#0f766e}.rk-cat-0369a1{background:#0369a1}.rk-cat-9f1239{background:#9f1239}.rk-cat-4338ca{background:#4338ca}.rk-cat-7c2d12{background:#7c2d12}.rk-cat-475569{background:#475569}.rk-cat-166534{background:#166534}.rk-cat-64748b{background:#64748b}</style><link rel="stylesheet" media="print" href="/riskops/demo/assets/css/print.css?v=20260912b">
+  <link rel="stylesheet" href="/riskops/demo/demo.css">
+</head>
+<body class="rk-body">
+<div class="rk-demo-bar"><span class="rk-demo-dot"></span><strong>Static preview</strong><span class="rk-demo-sep">·</span>real output from the running app, with demo data<span class="rk-demo-sep">·</span>saving and filtering do not work<span class="rk-demo-sep">·</span>UI is English; the demo records themselves are Turkish<a class="rk-demo-home" href="/riskops/en/">&larr; about</a><a class="rk-demo-repo" href="https://github.com/CodeByPinar/riskops">GitHub</a></div>
+
+<aside class="rk-sidebar" id="rkSidebar">
+
+    <div class="rk-brand">
+        <a class="rk-brand-link" href="/riskops/en/demo/dashboard/"
+           aria-label="RiskOps - Dashboard">
+            <img class="rk-wordmark-light" src="/riskops/demo/assets/img/logo-wordmark-light.png" srcset="/assets/img/logo-wordmark-light.png 1x, /assets/img/logo-wordmark-light@2x.png 2x" alt="RiskOps" decoding="async">        </a>
+    </div>
+
+    <nav class="rk-nav">
+        <a class="rk-nav-link" href="/riskops/en/demo/dashboard/"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a><div class="rk-nav-section">Risk Management</div><a class="rk-nav-link" href="/riskops/en/demo/risks/"><i class="bi bi-list-columns-reverse"></i><span>Risk Register</span></a><a class="rk-nav-link" href="/riskops/en/demo/risks/create.php"><i class="bi bi-plus-square"></i><span>New Risk</span></a><a class="rk-nav-link" href="/riskops/en/demo/assessments/"><i class="bi bi-clipboard-data"></i><span>Assessments</span></a><a class="rk-nav-link" href="/riskops/en/demo/actions/"><i class="bi bi-check2-square"></i><span>Action Plans</span></a><div class="rk-nav-section">Analysis</div><a class="rk-nav-link active" href="/riskops/en/demo/reports/"><i class="bi bi-bar-chart-line"></i><span>Reports</span></a><div class="rk-nav-section">Administration</div><a class="rk-nav-link" href="/riskops/en/demo/admin/users/"><i class="bi bi-people"></i><span>Users</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/departments/"><i class="bi bi-diagram-3"></i><span>Departments</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/categories/"><i class="bi bi-tags"></i><span>Categories</span></a><a class="rk-nav-link" href="/riskops/en/demo/risks/deleted.php"><i class="bi bi-trash3"></i><span>Deleted Risks</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/audit_logs/"><i class="bi bi-journal-text"></i><span>Audit Logs</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/settings/"><i class="bi bi-gear"></i><span>Settings</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/plugins/"><i class="bi bi-puzzle"></i><span>Plugins</span></a><a class="rk-nav-link" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"><i class="bi bi-bug"></i><span>Debugging</span></a>    </nav>
+
+                <div class="rk-side-locale">
+                    <a class="rk-locale-btn"
+               href="/riskops/demo/reports/executive_summary.php"
+               title="Türkçe">TR</a>
+                    <a class="rk-locale-btn is-active"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="English">EN</a>
+            </div>
+    
+    <div class="rk-side-user">
+                <a class="rk-side-user-link" href="/riskops/en/demo/profile/" title="My profile">
+            <div class="rk-avatar">RA</div>
+            <div class="rk-side-user-info">
+                <div class="rk-side-user-name">RiskOps Administrator</div>
+                <div class="rk-side-user-role">Administrator</div>
+            </div>
+        </a>
+                        <a class="rk-logout-btn" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+           title="Change password" aria-label="Change password">
+            <i class="bi bi-key"></i>
+        </a>
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" class="m-0">
+            <input type="hidden" name="_token" value="">            <button type="submit" class="rk-logout-btn" title="Sign out" aria-label="Sign out">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+    
+</aside>
+
+<div class="rk-backdrop" data-rk-sidebar-close></div>
+
+<div class="rk-main">
+
+    <header class="rk-topbar">
+
+    <button type="button" class="rk-burger" data-rk-sidebar-toggle aria-label="Toggle menu">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <form class="rk-search" method="get" action="/riskops/en/demo/risks/" role="search">
+        <i class="bi bi-search"></i>
+        <input type="search" name="q" autocomplete="off"
+               value=""
+               placeholder="Search risk code, title or asset...">
+    </form>
+
+    <div class="rk-topbar-right">
+                    <span class="rk-env-tag" title="APP_ENV = development">development</span>
+        
+                    <a class="rk-btn rk-btn-primary rk-btn-sm" href="/riskops/en/demo/risks/create.php">
+                <i class="bi bi-plus-lg"></i> New Risk            </a>
+            </div>
+
+</header>
+
+    <main class="rk-content">
+
+                <div class="rk-page-head">
+            <div>
+                <h1 class="rk-page-title">Yönetici Risk Özeti</h1>
+                                    <p class="rk-page-sub">19.09.2026 16:42</p>
+                            </div>
+                            <div class="rk-page-actions"><a class="rk-btn" href="/riskops/en/demo/reports/"><i class="bi bi-arrow-left"></i> Raporlar</a><button type="button" class="rk-btn rk-btn-primary" data-rk-print><i class="bi bi-printer"></i> Yazdır</button></div>
+                    </div>
+        
+        
+<!-- Sınıflandırma bandı: belgenin en üstünde, akışın içinde -->
+<div class="rk-print-only rk-class-band">
+    <span>RiskOps — Yönetici Risk Özeti</span>
+    <span>RO-EXEC-20260919-1642</span>
+            <span class="rk-class-tag">Kuruma Özel</span>
+    </div>
+
+<!-- Belgenin başındaki antet -->
+<div class="rk-print-only rk-letterhead">
+    <div class="rk-lh-top">
+        <div class="rk-lh-brand">
+            <img class="rk-wordmark" src="/riskops/demo/assets/img/logo-wordmark.png" srcset="/assets/img/logo-wordmark.png 1x, /assets/img/logo-wordmark@2x.png 2x" alt="RiskOps" decoding="async">        </div>
+                    <div class="rk-lh-class">Kuruma Özel</div>
+            </div>
+
+    <div class="rk-lh-title">
+        <h1>Yönetici Risk Özeti</h1>
+            </div>
+
+    <table class="rk-lh-meta">
+        <tbody>
+            <tr>
+                <th>Report date</th>
+                <td>19.09.2026 16:42</td>
+                <th>Document no</th>
+                <td>RO-EXEC-20260919-1642</td>
+            </tr>
+            <tr>
+                <th>Prepared by</th>
+                <td>RiskOps Administrator</td>
+                <th>System</th>
+                <td>RiskOps — IT &amp; Cyber Risk Management</td>
+            </tr>
+                        <tr>
+                <th>Scope</th>
+                <td colspan="3">Tüm aktif risk portföyü — 17 risk, 21 aksiyon planı</td>
+            </tr>
+                    </tbody>
+    </table>
+</div>
+        
+<div class="rk-report-meta">
+    <i class="bi bi-file-earmark-bar-graph"></i>
+    <div>
+        Kurumsal IT ve siber risk portföyünün tek sayfalık yönetim özeti.
+        <div class="rk-cell-sub">
+            Tüm seviyeler <strong>etkin seviye</strong>dir: kalan (residual) risk
+            hesaplanmışsa o, yoksa ham (inherent) risk kullanılır.
+        </div>
+    </div>
+</div>
+
+<!-- ===================== Ana göstergeler ===================== -->
+<div class="rk-stats">
+    <div class="rk-stat is-primary">
+        <div class="rk-stat-icon"><i class="bi bi-collection"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">17</div>
+            <div class="rk-stat-label">Total Risk</div>
+        </div>
+    </div>
+    <div class="rk-stat is-critical">
+        <div class="rk-stat-icon"><i class="bi bi-exclamation-octagon-fill"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">2</div>
+            <div class="rk-stat-label">Critical</div>
+        </div>
+    </div>
+    <div class="rk-stat is-high">
+        <div class="rk-stat-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">3</div>
+            <div class="rk-stat-label">High</div>
+        </div>
+    </div>
+    <div class="rk-stat is-neutral">
+        <div class="rk-stat-icon"><i class="bi bi-folder2-open"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">12</div>
+            <div class="rk-stat-label">Open Risk</div>
+        </div>
+    </div>
+    <div class="rk-stat is-critical">
+        <div class="rk-stat-icon"><i class="bi bi-clock-history"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">4</div>
+            <div class="rk-stat-label">Overdue Action</div>
+        </div>
+    </div>
+    <div class="rk-stat is-neutral">
+        <div class="rk-stat-icon"><i class="bi bi-speedometer"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">9.1</div>
+            <div class="rk-stat-label">Average Score</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- ===================== Seviye + durum ===================== -->
+    <div class="col-12 col-lg-6">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-bar-chart-steps"></i> Severity Distribution</h2>
+            </div>
+            <div class="rk-card-body is-flush">
+                <table class="rk-table">
+                    <thead><tr><th>Severity</th><th>Count</th><th>Share</th></tr></thead>
+                    <tbody>
+                                            <tr>
+                            <td><span class="rk-badge sev-critical"><i class="bi bi-exclamation-octagon-fill"></i>Critical</span></td>
+                            <td><strong>2</strong></td>
+                            <td>12%</td>
+                        </tr>
+                                            <tr>
+                            <td><span class="rk-badge sev-high"><i class="bi bi-exclamation-triangle-fill"></i>High</span></td>
+                            <td><strong>3</strong></td>
+                            <td>18%</td>
+                        </tr>
+                                            <tr>
+                            <td><span class="rk-badge sev-medium"><i class="bi bi-dash-circle-fill"></i>Medium</span></td>
+                            <td><strong>8</strong></td>
+                            <td>47%</td>
+                        </tr>
+                                            <tr>
+                            <td><span class="rk-badge sev-low"><i class="bi bi-check-circle-fill"></i>Low</span></td>
+                            <td><strong>4</strong></td>
+                            <td>24%</td>
+                        </tr>
+                                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-flag"></i> Risk Status</h2>
+            </div>
+            <div class="rk-card-body is-flush">
+                <table class="rk-table">
+                    <tbody>
+                        <tr><td>Open (Open / Under Review / In Progress)</td>
+                            <td><strong>12</strong></td></tr>
+                        <tr><td>Mitigated</td>
+                            <td><strong>3</strong></td></tr>
+                        <tr><td>Accepted</td>
+                            <td><strong>1</strong></td></tr>
+                        <tr><td>Transferred</td>
+                            <td><strong>1</strong></td></tr>
+                        <tr><td>Closed</td>
+                            <td><strong>0</strong></td></tr>
+                        <tr><td class="rk-overdue">Open risks past their target date</td>
+                            <td><strong class="rk-overdue">2</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== En yüksek riskler ===================== -->
+<div class="rk-card">
+    <div class="rk-card-head">
+        <h2 class="rk-card-title"><i class="bi bi-list-ol"></i> Risks for Management Attention</h2>
+        <div class="rk-card-tools"><span class="rk-help">Top 10 open risks by effective score</span></div>
+    </div>
+    <div class="rk-card-body is-flush">
+                <div class="rk-table-wrap">
+            <table class="rk-table">
+                <thead>
+                    <tr><th>#</th><th>Code</th><th>Title</th><th>Department</th><th>Owner</th>
+                        <th>Score</th><th>Severity</th><th>Status</th><th>Due date</th><th>Open Action</th></tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td>1</td>
+                        <td class="rk-code">RISK-2026-0001</td>
+                        <td class="rk-cell-wrap">İnternete açık RDP servisleri üzerinden yetkisiz ...</td>
+                        <td>IT</td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-score sev-critical">20</span></td>
+                        <td><span class="rk-badge sev-critical">Critical</span></td>
+                        <td><span class="rk-badge st-open">Open</span></td>
+                        <td>26.10.2026</td>
+                        <td>
+                            1                        </td>
+                    </tr>
+                                    <tr>
+                        <td>2</td>
+                        <td class="rk-code">RISK-2026-0002</td>
+                        <td class="rk-cell-wrap">Ayrıcalıklı hesaplarda MFA eksikliği</td>
+                        <td>Cyber Security</td>
+                        <td>Mert Yilmaz</td>
+                        <td><span class="rk-score sev-critical">20</span></td>
+                        <td><span class="rk-badge sev-critical">Critical</span></td>
+                        <td><span class="rk-badge st-open">Open</span></td>
+                        <td>11.10.2026</td>
+                        <td>
+                            1                        </td>
+                    </tr>
+                                    <tr>
+                        <td>3</td>
+                        <td class="rk-code">RISK-2026-0010</td>
+                        <td class="rk-cell-wrap">Güvenlik olay izleme (SIEM) çözümünün bulunmaması</td>
+                        <td>Cyber Security</td>
+                        <td>Mert Yilmaz</td>
+                        <td><span class="rk-score sev-high">16</span></td>
+                        <td><span class="rk-badge sev-high">High</span></td>
+                        <td><span class="rk-badge st-review">Under Review</span></td>
+                        <td>08.02.2027</td>
+                        <td>
+                            1                        </td>
+                    </tr>
+                                    <tr>
+                        <td>4</td>
+                        <td class="rk-code">RISK-2026-0009</td>
+                        <td class="rk-cell-wrap">Ağ segmentasyonunun yetersizliği</td>
+                        <td>IT</td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-score sev-high">12</span></td>
+                        <td><span class="rk-badge sev-high">High</span></td>
+                        <td><span class="rk-badge st-open">Open</span></td>
+                        <td>10.03.2027</td>
+                        <td>
+                            1                        </td>
+                    </tr>
+                                    <tr>
+                        <td>5</td>
+                        <td class="rk-code">RISK-2026-0017</td>
+                        <td class="rk-cell-wrap">Mobil cihazlarda MDM çözümünün bulunmaması</td>
+                        <td>IT</td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-score sev-medium">9</span></td>
+                        <td><span class="rk-badge sev-medium">Medium</span></td>
+                        <td><span class="rk-badge st-open">Open</span></td>
+                        <td>20.12.2026</td>
+                        <td>
+                            1                        </td>
+                    </tr>
+                                    <tr>
+                        <td>6</td>
+                        <td class="rk-code">RISK-2026-0011</td>
+                        <td class="rk-cell-wrap">Çalışanların oltalama farkındalığının düşük olması</td>
+                        <td>Human Resources</td>
+                        <td>Elif Kaya</td>
+                        <td><span class="rk-score sev-medium">9</span></td>
+                        <td><span class="rk-badge sev-medium">Medium</span></td>
+                        <td><span class="rk-badge st-progress">In Progress</span></td>
+                        <td>21.10.2026</td>
+                        <td>
+                            2                        </td>
+                    </tr>
+                                    <tr>
+                        <td>7</td>
+                        <td class="rk-code">RISK-2026-0003</td>
+                        <td class="rk-cell-wrap">Yedeklerin geri dönüş testinin yapılmaması</td>
+                        <td>IT</td>
+                        <td>Elif Kaya</td>
+                        <td><span class="rk-score sev-medium">8</span></td>
+                        <td><span class="rk-badge sev-medium">Medium</span></td>
+                        <td><span class="rk-badge st-open">Open</span></td>
+                        <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 30.08.2026 <small>(20 gün gecikti)</small></span></td>
+                        <td>
+                            2                        </td>
+                    </tr>
+                                    <tr>
+                        <td>8</td>
+                        <td class="rk-code">RISK-2026-0006</td>
+                        <td class="rk-cell-wrap">Kişisel verilerin şifrelenmeden saklanması</td>
+                        <td>Legal</td>
+                        <td>Mert Yilmaz</td>
+                        <td><span class="rk-score sev-medium">8</span></td>
+                        <td><span class="rk-badge sev-medium">Medium</span></td>
+                        <td><span class="rk-badge st-open">Open</span></td>
+                        <td>10.12.2026</td>
+                        <td>
+                            1                        </td>
+                    </tr>
+                                    <tr>
+                        <td>9</td>
+                        <td class="rk-code">RISK-2026-0004</td>
+                        <td class="rk-cell-wrap">Kritik sunucularda eksik güvenlik yamaları</td>
+                        <td>IT</td>
+                        <td>Burak Demir</td>
+                        <td><span class="rk-score sev-medium">8</span></td>
+                        <td><span class="rk-badge sev-medium">Medium</span></td>
+                        <td><span class="rk-badge st-progress">In Progress</span></td>
+                        <td>01.10.2026</td>
+                        <td>
+                            2                        </td>
+                    </tr>
+                                    <tr>
+                        <td>10</td>
+                        <td class="rk-code">RISK-2026-0007</td>
+                        <td class="rk-cell-wrap">Tedarikçi uzak erişiminin denetlenmemesi</td>
+                        <td>IT</td>
+                        <td>Elif Kaya</td>
+                        <td><span class="rk-score sev-medium">6</span></td>
+                        <td><span class="rk-badge sev-medium">Medium</span></td>
+                        <td><span class="rk-badge st-review">Under Review</span></td>
+                        <td>25.11.2026</td>
+                        <td>
+                            1                        </td>
+                    </tr>
+                                </tbody>
+            </table>
+        </div>
+        <div class="rk-help rk-u-pad-cell">
+            Açık aksiyonu <strong>0</strong> olan yüksek riskler, planı olmayan risklerdir.
+        </div>
+            </div>
+</div>
+
+<div class="row g-3">
+    <!-- ===================== Departman ===================== -->
+    <div class="col-12 col-lg-6">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-diagram-3"></i> Department Load</h2>
+            </div>
+            <div class="rk-card-body is-flush">
+                <table class="rk-table">
+                    <thead><tr><th>Department</th><th>Total</th><th>Critical + High</th></tr></thead>
+                    <tbody>
+                                            <tr>
+                            <td>IT</td>
+                            <td>10</td>
+                            <td><span class="rk-badge sev-high">3</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Cyber Security</td>
+                            <td>2</td>
+                            <td><span class="rk-badge sev-high">2</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Human Resources</td>
+                            <td>1</td>
+                            <td><span class="text-muted">0</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Management</td>
+                            <td>1</td>
+                            <td><span class="text-muted">0</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Finance</td>
+                            <td>1</td>
+                            <td><span class="text-muted">0</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Legal</td>
+                            <td>1</td>
+                            <td><span class="text-muted">0</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Operations</td>
+                            <td>1</td>
+                            <td><span class="text-muted">0</span></td>
+                        </tr>
+                                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== Kategori ===================== -->
+    <div class="col-12 col-lg-6">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-tags"></i> Threat Areas</h2>
+            </div>
+            <div class="rk-card-body is-flush">
+                <table class="rk-table">
+                    <thead><tr><th>Category</th><th>Total</th><th>Critical + High</th></tr></thead>
+                    <tbody>
+                                            <tr>
+                            <td>Cyber Security</td>
+                            <td>3</td>
+                            <td><span class="rk-badge sev-high">2</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Access Control</td>
+                            <td>2</td>
+                            <td><span class="rk-badge sev-high">1</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Infrastructure</td>
+                            <td>2</td>
+                            <td><span class="rk-badge sev-high">1</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Network Security</td>
+                            <td>1</td>
+                            <td><span class="rk-badge sev-high">1</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Compliance</td>
+                            <td>2</td>
+                            <td><span class="text-muted">0</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Business Continuity</td>
+                            <td>1</td>
+                            <td><span class="text-muted">0</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Data Protection</td>
+                            <td>1</td>
+                            <td><span class="text-muted">0</span></td>
+                        </tr>
+                                            <tr>
+                            <td>Operational IT</td>
+                            <td>1</td>
+                            <td><span class="text-muted">0</span></td>
+                        </tr>
+                                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- ===================== Aksiyon durumu ===================== -->
+    <div class="col-12 col-lg-6">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-check2-square"></i> Action Plans</h2>
+            </div>
+            <div class="rk-card-body is-flush">
+                <table class="rk-table">
+                    <tbody>
+                        <tr><td>Total actions</td><td><strong>21</strong></td></tr>
+                        <tr><td>Open</td><td><strong>10</strong></td></tr>
+                        <tr><td>In Progress</td><td><strong>5</strong></td></tr>
+                        <tr><td>Completed</td><td><strong>6</strong></td></tr>
+                        <tr><td>Cancelled</td><td><strong>0</strong></td></tr>
+                        <tr><td class="rk-overdue">Overdue</td>
+                            <td><strong class="rk-overdue">4</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== Trend ===================== -->
+    <div class="col-12 col-lg-6">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-graph-up"></i> Last 6 Months</h2>
+            </div>
+            <div class="rk-card-body is-flush">
+                <table class="rk-table">
+                    <thead><tr><th>Month</th><th>Opened</th><th>Closed</th><th>Net</th></tr></thead>
+                    <tbody>
+                                            <tr>
+                            <td>Nisan 2026</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>
+                                0                            </td>
+                        </tr>
+                                            <tr>
+                            <td>Mayıs 2026</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>
+                                0                            </td>
+                        </tr>
+                                            <tr>
+                            <td>Haziran 2026</td>
+                            <td>4</td>
+                            <td>0</td>
+                            <td class="rk-overdue">
+                                +4                            </td>
+                        </tr>
+                                            <tr>
+                            <td>Temmuz 2026</td>
+                            <td>6</td>
+                            <td>0</td>
+                            <td class="rk-overdue">
+                                +6                            </td>
+                        </tr>
+                                            <tr>
+                            <td>Ağustos 2026</td>
+                            <td>6</td>
+                            <td>0</td>
+                            <td class="rk-overdue">
+                                +6                            </td>
+                        </tr>
+                                            <tr>
+                            <td>Eylül 2026</td>
+                            <td>1</td>
+                            <td>0</td>
+                            <td class="rk-overdue">
+                                +1                            </td>
+                        </tr>
+                                        </tbody>
+                </table>
+                <div class="rk-help rk-u-pad-cell">
+                    Net pozitifse portföy büyüyor: kapatılandan fazla risk açılıyor.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="rk-alert rk-alert-warning">
+    <i class="bi bi-hourglass-split"></i>
+    <div>
+        <strong>5 risk</strong> oluşturulduğundan beri hiç gözden
+        geçirilmemiş (yalnızca ilk değerlendirmesi var). Düzenli gözden geçirme
+        olmadan risk kaydı zamanla gerçeği yansıtmaz.
+        <a href="/riskops/en/demo/assessments/">Assessments</a>
+    </div>
+</div>
+
+<div class="rk-print-only rk-signatures">
+    <div class="rk-sig-title">Approval</div>
+    <table class="rk-sig-table">
+        <thead>
+            <tr>
+                                    <th>Prepared by</th>
+                                    <th>Reviewed by</th>
+                                    <th>Approved by</th>
+                            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                                    <td>
+                                                    <div class="rk-sig-name">RiskOps Administrator</div>
+                            <div class="rk-sig-sub">Administrator</div>
+                                                <div class="rk-sig-line"></div>
+                        <div class="rk-sig-hint">Name / Signature / Date</div>
+                    </td>
+                                    <td>
+                                                    <div class="rk-sig-name">&nbsp;</div>
+                            <div class="rk-sig-sub">&nbsp;</div>
+                                                <div class="rk-sig-line"></div>
+                        <div class="rk-sig-hint">Name / Signature / Date</div>
+                    </td>
+                                    <td>
+                                                    <div class="rk-sig-name">&nbsp;</div>
+                            <div class="rk-sig-sub">&nbsp;</div>
+                                                <div class="rk-sig-line"></div>
+                        <div class="rk-sig-hint">Name / Signature / Date</div>
+                    </td>
+                            </tr>
+        </tbody>
+    </table>
+</div>
+
+        
+<!-- Belgenin sonundaki kapanış notu -->
+<div class="rk-print-only rk-print-closing">
+    <p class="rk-closing-id">
+        RiskOps        &middot; Yönetici Risk Özeti                    &middot; RO-EXEC-20260919-1642                &middot; 19.09.2026 16:42    </p>
+            <p>Bu rapor RiskOps tarafından otomatik üretilmiştir.</p>
+                <p class="rk-print-classline">
+            This document is classified <strong>Kuruma Özel</strong>. It must not be shared with unauthorised parties.        </p>
+    </div>
+    </main><!-- /.rk-content -->
+
+    <footer class="text-center text-muted rk-u-foot-note">
+        RiskOps                &middot; 2026    </footer>
+
+</div><!-- /.rk-main -->
+
+<script src="/riskops/demo/assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/riskops/demo/assets/js/app.js?v=20260912b"></script>
+</body>
+</html>

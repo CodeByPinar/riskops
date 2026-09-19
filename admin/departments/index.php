@@ -146,7 +146,7 @@ require LAYOUT_PATH . '/header.php';
                 <div class="rk-table-wrap">
                     <table class="rk-table">
                         <thead>
-                            <tr><th><?= te('Kod') ?></th><th><?= te('Ad') ?></th><th><?= te('Yönetici') ?></th><th>Kullanım</th>
+                            <tr><th><?= te('Kod') ?></th><th><?= te('Ad') ?></th><th><?= te('Yönetici') ?></th><th><?= te('Kullanım') ?></th>
                                 <th><?= te('Sıra') ?></th><th><?= te('Durum') ?></th><th class="rk-u-shrink"></th></tr>
                         </thead>
                         <tbody>

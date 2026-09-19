@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>RISK-2026-0003 - RiskOps</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/riskops/demo/assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/riskops/demo/assets/img/favicon-16.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/riskops/demo/assets/img/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+<link rel="stylesheet" href="/riskops/demo/assets/css/app.css?v=20260912b">
+<style nonce="statik-onizleme">.rk-cat-default{background:var(--rk-muted-light)}.rk-cat-b91c1c{background:#b91c1c}.rk-cat-c2410c{background:#c2410c}.rk-cat-a16207{background:#a16207}.rk-cat-1d4ed8{background:#1d4ed8}.rk-cat-6d28d9{background:#6d28d9}.rk-cat-0f766e{background:#0f766e}.rk-cat-0369a1{background:#0369a1}.rk-cat-9f1239{background:#9f1239}.rk-cat-4338ca{background:#4338ca}.rk-cat-7c2d12{background:#7c2d12}.rk-cat-475569{background:#475569}.rk-cat-166534{background:#166534}.rk-cat-64748b{background:#64748b}</style><link rel="stylesheet" media="print" href="/riskops/demo/assets/css/print.css?v=20260912b">
+  <link rel="stylesheet" href="/riskops/demo/demo.css">
+</head>
+<body class="rk-body">
+<div class="rk-demo-bar"><span class="rk-demo-dot"></span><strong>Static preview</strong><span class="rk-demo-sep">·</span>real output from the running app, with demo data<span class="rk-demo-sep">·</span>saving and filtering do not work<span class="rk-demo-sep">·</span>UI is English; the demo records themselves are Turkish<a class="rk-demo-home" href="/riskops/en/">&larr; about</a><a class="rk-demo-repo" href="https://github.com/CodeByPinar/riskops">GitHub</a></div>
+
+<aside class="rk-sidebar" id="rkSidebar">
+
+    <div class="rk-brand">
+        <a class="rk-brand-link" href="/riskops/en/demo/dashboard/"
+           aria-label="RiskOps - Dashboard">
+            <img class="rk-wordmark-light" src="/riskops/demo/assets/img/logo-wordmark-light.png" srcset="/assets/img/logo-wordmark-light.png 1x, /assets/img/logo-wordmark-light@2x.png 2x" alt="RiskOps" decoding="async">        </a>
+    </div>
+
+    <nav class="rk-nav">
+        <a class="rk-nav-link" href="/riskops/en/demo/dashboard/"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a><div class="rk-nav-section">Risk Management</div><a class="rk-nav-link active" href="/riskops/en/demo/risks/"><i class="bi bi-list-columns-reverse"></i><span>Risk Register</span></a><a class="rk-nav-link" href="/riskops/en/demo/risks/create.php"><i class="bi bi-plus-square"></i><span>New Risk</span></a><a class="rk-nav-link" href="/riskops/en/demo/assessments/"><i class="bi bi-clipboard-data"></i><span>Assessments</span></a><a class="rk-nav-link" href="/riskops/en/demo/actions/"><i class="bi bi-check2-square"></i><span>Action Plans</span></a><div class="rk-nav-section">Analysis</div><a class="rk-nav-link" href="/riskops/en/demo/reports/"><i class="bi bi-bar-chart-line"></i><span>Reports</span></a><div class="rk-nav-section">Administration</div><a class="rk-nav-link" href="/riskops/en/demo/admin/users/"><i class="bi bi-people"></i><span>Users</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/departments/"><i class="bi bi-diagram-3"></i><span>Departments</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/categories/"><i class="bi bi-tags"></i><span>Categories</span></a><a class="rk-nav-link" href="/riskops/en/demo/risks/deleted.php"><i class="bi bi-trash3"></i><span>Deleted Risks</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/audit_logs/"><i class="bi bi-journal-text"></i><span>Audit Logs</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/settings/"><i class="bi bi-gear"></i><span>Settings</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/plugins/"><i class="bi bi-puzzle"></i><span>Plugins</span></a><a class="rk-nav-link" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"><i class="bi bi-bug"></i><span>Debugging</span></a>    </nav>
+
+                <div class="rk-side-locale">
+                    <a class="rk-locale-btn"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="Türkçe">TR</a>
+                    <a class="rk-locale-btn is-active"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="English">EN</a>
+            </div>
+    
+    <div class="rk-side-user">
+                <a class="rk-side-user-link" href="/riskops/en/demo/profile/" title="My profile">
+            <div class="rk-avatar">RA</div>
+            <div class="rk-side-user-info">
+                <div class="rk-side-user-name">RiskOps Administrator</div>
+                <div class="rk-side-user-role">Administrator</div>
+            </div>
+        </a>
+                        <a class="rk-logout-btn" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+           title="Change password" aria-label="Change password">
+            <i class="bi bi-key"></i>
+        </a>
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" class="m-0">
+            <input type="hidden" name="_token" value="">            <button type="submit" class="rk-logout-btn" title="Sign out" aria-label="Sign out">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+    
+</aside>
+
+<div class="rk-backdrop" data-rk-sidebar-close></div>
+
+<div class="rk-main">
+
+    <header class="rk-topbar">
+
+    <button type="button" class="rk-burger" data-rk-sidebar-toggle aria-label="Toggle menu">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <form class="rk-search" method="get" action="/riskops/en/demo/risks/" role="search">
+        <i class="bi bi-search"></i>
+        <input type="search" name="q" autocomplete="off"
+               value=""
+               placeholder="Search risk code, title or asset...">
+    </form>
+
+    <div class="rk-topbar-right">
+                    <span class="rk-env-tag" title="APP_ENV = development">development</span>
+        
+                    <a class="rk-btn rk-btn-primary rk-btn-sm" href="/riskops/en/demo/risks/create.php">
+                <i class="bi bi-plus-lg"></i> New Risk            </a>
+            </div>
+
+</header>
+
+    <main class="rk-content">
+
+                <div class="rk-page-head">
+            <div>
+                <h1 class="rk-page-title">RISK-2026-0003</h1>
+                                    <p class="rk-page-sub">Yedeklerin geri dönüş testinin yapılmaması</p>
+                            </div>
+                            <div class="rk-page-actions"><a class="rk-btn" href="/riskops/en/demo/risks/"><i class="bi bi-arrow-left"></i> Back to list</a><a class="rk-btn rk-btn-primary" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"><i class="bi bi-pencil"></i> Edit</a></div>
+                    </div>
+        
+        
+<!-- Sınıflandırma bandı: belgenin en üstünde, akışın içinde -->
+<div class="rk-print-only rk-class-band">
+    <span>RiskOps — RISK-2026-0003</span>
+    <span>RO-VIEW-20260919-1642</span>
+            <span class="rk-class-tag">Kuruma Özel</span>
+    </div>
+
+<!-- Belgenin başındaki antet -->
+<div class="rk-print-only rk-letterhead">
+    <div class="rk-lh-top">
+        <div class="rk-lh-brand">
+            <img class="rk-wordmark" src="/riskops/demo/assets/img/logo-wordmark.png" srcset="/assets/img/logo-wordmark.png 1x, /assets/img/logo-wordmark@2x.png 2x" alt="RiskOps" decoding="async">        </div>
+                    <div class="rk-lh-class">Kuruma Özel</div>
+            </div>
+
+    <div class="rk-lh-title">
+        <h1>RISK-2026-0003</h1>
+            </div>
+
+    <table class="rk-lh-meta">
+        <tbody>
+            <tr>
+                <th>Report date</th>
+                <td>19.09.2026 16:42</td>
+                <th>Document no</th>
+                <td>RO-VIEW-20260919-1642</td>
+            </tr>
+            <tr>
+                <th>Prepared by</th>
+                <td>RiskOps Administrator</td>
+                <th>System</th>
+                <td>RiskOps — IT &amp; Cyber Risk Management</td>
+            </tr>
+                    </tbody>
+    </table>
+</div>
+        
+<div class="rk-alert rk-alert-warning">
+    <i class="bi bi-clock-history"></i>
+    <div>
+        Bu riskin hedef tarihi <strong>30.08.2026</strong> idi ve
+        <strong>20 gün</strong> gecikmede.
+        Durum halen &laquo;Open&raquo;.
+    </div>
+</div>
+
+<!-- ===================== Skor özeti ===================== -->
+<div class="rk-stats">
+    <div class="rk-stat is-high">
+        <div class="rk-stat-icon"><i class="bi bi-fire"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">15</div>
+            <div class="rk-stat-label">Inherent (High)</div>
+        </div>
+    </div>
+
+    <div class="rk-stat is-medium">
+        <div class="rk-stat-icon"><i class="bi bi-shield-check"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">8</div>
+            <div class="rk-stat-label">
+                Residual (Medium)            </div>
+        </div>
+    </div>
+
+    <div class="rk-stat is-primary">
+        <div class="rk-stat-icon"><i class="bi bi-check2-square"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">2</div>
+            <div class="rk-stat-label">Open Action</div>
+        </div>
+    </div>
+
+    <div class="rk-stat is-critical">
+        <div class="rk-stat-icon"><i class="bi bi-clock-history"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">2</div>
+            <div class="rk-stat-label">Overdue Action</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== Sekmeler ===================== -->
+<div class="rk-card">
+    <div class="rk-tabs">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-overview"
+                        type="button" role="tab">
+                    <i class="bi bi-info-circle"></i> Overview                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-actions"
+                        type="button" role="tab">
+                    <i class="bi bi-check2-square"></i> Action Plans                    <span class="rk-tab-count">2</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-assessments"
+                        type="button" role="tab">
+                    <i class="bi bi-clipboard-data"></i> Assessment History                    <span class="rk-tab-count">2</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-comments"
+                        type="button" role="tab">
+                    <i class="bi bi-chat-left-text"></i> Comments                    <span class="rk-tab-count">0</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-attachments"
+                        type="button" role="tab">
+                    <i class="bi bi-paperclip"></i> Attachments                    <span class="rk-tab-count">0</span>
+                </button>
+            </li>
+                        <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-audit"
+                        type="button" role="tab">
+                    <i class="bi bi-journal-text"></i> Audit                    <span class="rk-tab-count">1</span>
+                </button>
+            </li>
+                    </ul>
+    </div>
+
+    <div class="tab-content">
+
+        <!-- -------------------- Genel -------------------- -->
+        <div class="tab-pane fade show active" id="tab-overview" role="tabpanel">
+            <div class="rk-card-body">
+                <div class="row g-4">
+
+                    <div class="col-12 col-lg-7">
+                        <dl class="rk-dl">
+                            <div class="rk-dl-row"><dt>Title</dt><dd>Yedeklerin geri dönüş testinin yapılmaması</dd></div><div class="rk-dl-row"><dt>Description</dt><dd>Yedekler alınıyor ancak geri dönüş doğrulanmadığı için kurtarılabilirlik belirsiz.</dd></div><div class="rk-dl-row"><dt>Threat</dt><dd>Veri kaybı / fidye yazılımı</dd></div><div class="rk-dl-row"><dt>Vulnerability</dt><dd>Geri yükleme testi 14 aydır yapılmadı</dd></div><div class="rk-dl-row"><dt>Affected Asset</dt><dd>Veeam yedekleme altyapısı</dd></div>                        </dl>
+                    </div>
+
+                    <div class="col-12 col-lg-5">
+                        <dl class="rk-dl">
+                            <div class="rk-dl-row"><dt>Risk Code</dt><dd><span class="rk-code">RISK-2026-0003</span></dd></div><div class="rk-dl-row"><dt>Category</dt><dd><span class="rk-dot rk-cat-9f1239"></span> Business Continuity</dd></div><div class="rk-dl-row"><dt>Department</dt><dd>IT</dd></div><div class="rk-dl-row"><dt>Risk Owner</dt><dd>Elif Kaya<div class="rk-cell-sub">analyst@riskops.local</div></dd></div><div class="rk-dl-row"><dt>Status</dt><dd><span class="rk-badge st-open">Open</span></dd></div><div class="rk-dl-row"><dt>Effective Severity</dt><dd><span class="rk-badge sev-medium"><i class="bi bi-dash-circle-fill"></i>Medium</span> <span class="rk-score sev-medium">8</span></dd></div><div class="rk-dl-row"><dt>Treatment Strategy</dt><dd><span class="rk-badge sev-none">Mitigate</span></dd></div><div class="rk-dl-row"><dt>Target Date</dt><dd><span class="rk-overdue"><i class="bi bi-clock-history"></i> 30.08.2026 <small>(20 gün gecikti)</small></span></dd></div><div class="rk-dl-row"><dt>Created by</dt><dd>Burak Demir<div class="rk-cell-sub">23.06.2026 16:32</div></dd></div><div class="rk-dl-row"><dt>Last Updated</dt><dd>11.09.2026 16:32</dd></div>                        </dl>
+                    </div>
+
+                </div>
+            </div>
+
+                        <div class="rk-danger-zone">
+                <div>
+                    <strong>Riski sil</strong>
+                    <div class="rk-help">
+                        Kayıt listelerden kaldırılır ancak veritabanından silinmez (soft delete).
+                        İşlem audit log'a yazılır.
+                    </div>
+                </div>
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                      data-rk-confirm="RISK-2026-0003 kodlu risk silinecek. Onaylıyor musunuz?">
+                    <input type="hidden" name="_token" value="">                    <input type="hidden" name="id" value="59">
+                    <button type="submit" class="rk-btn rk-btn-danger">
+                        <i class="bi bi-trash"></i> Delete                    </button>
+                </form>
+            </div>
+                    </div>
+
+        <!-- -------------------- Aksiyonlar -------------------- -->
+        <div class="tab-pane fade" id="tab-actions" role="tabpanel">
+                        <div class="rk-tab-toolbar">
+                <a class="rk-btn rk-btn-primary rk-btn-sm"
+                   href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                    <i class="bi bi-plus-lg"></i> Add Action                </a>
+                <a class="rk-btn rk-btn-sm" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                    <i class="bi bi-list-ul"></i> Manage all                </a>
+            </div>
+            
+            <div class="rk-card-body is-flush">
+                                <div class="rk-table-wrap">
+                    <table class="rk-table">
+                        <thead>
+                            <tr>
+                                <th>Action</th><th>Assignee</th><th>Priority</th>
+                                <th>Status</th><th>Due date</th><th>Completed at</th>
+                                <th class="rk-u-shrink"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                                    <tr>
+                                <td>Aylık geri yükleme testi prosedürünü yazma</td>
+                                <td>RiskOps Administrator</td>
+                                <td><span class="rk-badge pr-high">High</span></td>
+                                <td><span class="rk-badge st-open">Open</span></td>
+                                <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 03.09.2026 <small>(16 gün gecikti)</small></span></td>
+                                <td>-</td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                                  class="d-inline"
+                                                  data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                                <input type="hidden" name="_token" value="">                                                <input type="hidden" name="id" value="74">
+                                                <input type="hidden" name="return" value="risk">
+                                                <button type="submit" class="rk-icon-btn is-good" title="Complete">
+                                                    <i class="bi bi-check2"></i>
+                                                </button>
+                                            </form>
+                                        
+                                                                                    <a class="rk-icon-btn" title="Edit"
+                                               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        
+                                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                                  class="d-inline"
+                                                  data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                                <input type="hidden" name="_token" value="">                                                <input type="hidden" name="id" value="74">
+                                                <input type="hidden" name="return" value="risk">
+                                                <button type="submit" class="rk-icon-btn is-danger" title="Delete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td>İlk tam geri yükleme tatbikatını gerçekleştirme</td>
+                                <td>Mert Yilmaz</td>
+                                <td><span class="rk-badge pr-critical">Critical</span></td>
+                                <td><span class="rk-badge st-open">Open</span></td>
+                                <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 08.09.2026 <small>(11 gün gecikti)</small></span></td>
+                                <td>-</td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                                  class="d-inline"
+                                                  data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                                <input type="hidden" name="_token" value="">                                                <input type="hidden" name="id" value="75">
+                                                <input type="hidden" name="return" value="risk">
+                                                <button type="submit" class="rk-icon-btn is-good" title="Complete">
+                                                    <i class="bi bi-check2"></i>
+                                                </button>
+                                            </form>
+                                        
+                                                                                    <a class="rk-icon-btn" title="Edit"
+                                               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        
+                                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                                  class="d-inline"
+                                                  data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                                <input type="hidden" name="_token" value="">                                                <input type="hidden" name="id" value="75">
+                                                <input type="hidden" name="return" value="risk">
+                                                <button type="submit" class="rk-icon-btn is-danger" title="Delete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                </tbody>
+                    </table>
+                </div>
+                            </div>
+        </div>
+
+        <!-- -------------------- Değerlendirme geçmişi -------------------- -->
+        <div class="tab-pane fade" id="tab-assessments" role="tabpanel">
+                        <div class="rk-tab-toolbar">
+                <a class="rk-btn rk-btn-primary rk-btn-sm"
+                   href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                    <i class="bi bi-plus-lg"></i> Reassess                </a>
+                <a class="rk-btn rk-btn-sm" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                    <i class="bi bi-list-ul"></i> All assessments                </a>
+            </div>
+            
+            <div class="rk-card-body is-flush">
+                                <div class="rk-table-wrap">
+                    <table class="rk-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th><th>Type</th><th>Likelihood</th><th>Impact</th>
+                                <th>Score</th><th>Severity</th><th>Assessed by</th><th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                                    <tr>
+                                <td>10.08.2026 16:32</td>
+                                <td><span class="rk-badge sev-none">Residual</span></td>
+                                <td>2 - Unlikely</td>
+                                <td>4 - Major</td>
+                                <td><span class="rk-score sev-medium">8</span></td>
+                                <td><span class="rk-badge sev-medium">Medium</span></td>
+                                <td>Elif Kaya</td>
+                                <td>Kontroller uygulandıktan sonra kalan risk.</td>
+                            </tr>
+                                                    <tr>
+                                <td>23.06.2026 16:32</td>
+                                <td><span class="rk-badge sev-none">İlk</span></td>
+                                <td>3 - Possible</td>
+                                <td>5 - Severe</td>
+                                <td><span class="rk-score sev-high">15</span></td>
+                                <td><span class="rk-badge sev-high">High</span></td>
+                                <td>Burak Demir</td>
+                                <td>İlk değerlendirme.</td>
+                            </tr>
+                                                </tbody>
+                    </table>
+                </div>
+                            </div>
+        </div>
+
+        
+<!-- -------------------- Yorumlar -------------------- -->
+<div class="tab-pane fade" id="tab-comments" role="tabpanel">
+    <div class="rk-card-body">
+        <span id="yorumlar"></span>
+
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" class="rk-comment-form">
+            <input type="hidden" name="_token" value="">            <input type="hidden" name="type" value="risk">
+            <input type="hidden" name="parent_id" value="59">
+            <div class="rk-field">
+                <label class="rk-label" for="comment_body">Add a comment</label>
+                <textarea class="rk-input" id="comment_body" name="body" rows="3"
+                          maxlength="4000" required
+                          placeholder="Your note about this record..."></textarea>
+            </div>
+            <button type="submit" class="rk-btn rk-btn-primary rk-btn-sm">
+                <i class="bi bi-send"></i> Send            </button>
+        </form>
+        
+                    <div class="rk-empty"><i class="bi bi-chat-left-text"></i><div class="rk-empty-title">No comments yet</div><div class="rk-empty-text">Be the first to comment.</div></div>            </div>
+</div>
+
+<!-- -------------------- Ekler -------------------- -->
+<div class="tab-pane fade" id="tab-attachments" role="tabpanel">
+    <div class="rk-card-body">
+        <span id="ekler"></span>
+
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+              enctype="multipart/form-data" class="rk-upload-form">
+            <input type="hidden" name="_token" value="">            <input type="hidden" name="type" value="risk">
+            <input type="hidden" name="parent_id" value="59">
+            <input type="file" class="rk-input" name="attachment" required
+                   accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.txt,.csv,.doc,.docx,.xls,.xlsx,.zip">
+            <button type="submit" class="rk-btn rk-btn-primary rk-btn-sm">
+                <i class="bi bi-upload"></i> Upload            </button>
+        </form>
+        <div class="rk-help">
+            Up to 10,0 MB, 20 files per record. Allowed types:            pdf, png, jpg, jpeg, gif, webp, txt, csv, doc, docx, xls, xlsx, zip.
+            Dosya içeriği uzantısıyla karşılaştırılır; uyuşmayan dosya reddedilir.
+        </div>
+        
+                    <div class="rk-empty"><i class="bi bi-paperclip"></i><div class="rk-empty-title">No attachments</div><div class="rk-empty-text">You can upload supporting documents here.</div></div>            </div>
+</div>
+
+        <!-- -------------------- Audit -------------------- -->
+                <div class="tab-pane fade" id="tab-audit" role="tabpanel">
+            <div class="rk-card-body is-flush">
+                <div class="rk-table-wrap">
+                    <table class="rk-table">
+                        <thead>
+                            <tr><th>Date</th><th>User</th><th>Action</th><th>Change</th><th>IP</th></tr>
+                        </thead>
+                        <tbody>
+                                                    <tr>
+                                <td>11.09.2026 16:32</td>
+                                <td>Seed</td>
+                                <td><span class="rk-badge sev-none">risk_created</span></td>
+                                <td>
+                                                                            <ul class="rk-diff">
+                                                                                    <li>
+                                                <code>risk_code</code>:
+                                                <span class="rk-diff-old">-</span>
+                                                <i class="bi bi-arrow-right"></i>
+                                                <span class="rk-diff-new">RISK-2026-0003</span>
+                                            </li>
+                                                                                    <li>
+                                                <code>title</code>:
+                                                <span class="rk-diff-old">-</span>
+                                                <i class="bi bi-arrow-right"></i>
+                                                <span class="rk-diff-new">Yedeklerin geri dönüş testi...</span>
+                                            </li>
+                                                                                    <li>
+                                                <code>status</code>:
+                                                <span class="rk-diff-old">-</span>
+                                                <i class="bi bi-arrow-right"></i>
+                                                <span class="rk-diff-new">Open</span>
+                                            </li>
+                                                                                                                        </ul>
+                                                                    </td>
+                                <td class="rk-code">cli</td>
+                            </tr>
+                                                </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+        
+<!-- Belgenin sonundaki kapanış notu -->
+<div class="rk-print-only rk-print-closing">
+    <p class="rk-closing-id">
+        RiskOps        &middot; RISK-2026-0003                    &middot; RO-VIEW-20260919-1642                &middot; 19.09.2026 16:42    </p>
+            <p>Bu rapor RiskOps tarafından otomatik üretilmiştir.</p>
+                <p class="rk-print-classline">
+            This document is classified <strong>Kuruma Özel</strong>. It must not be shared with unauthorised parties.        </p>
+    </div>
+    </main><!-- /.rk-content -->
+
+    <footer class="text-center text-muted rk-u-foot-note">
+        RiskOps                &middot; 2026    </footer>
+
+</div><!-- /.rk-main -->
+
+<script src="/riskops/demo/assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/riskops/demo/assets/js/app.js?v=20260912b"></script>
+</body>
+</html>

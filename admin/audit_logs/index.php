@@ -96,11 +96,11 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
 ?>
 <div class="rk-page-actions">
     <a class="rk-btn" href="<?= e(url('/admin/audit_logs/export_csv.php?format=excel' . $qsStr)) ?>"
-       title="Türkçe Excel'de çift tıkla açılır">
+       title="<?= te('Türkçe Excel\'de çift tıkla açılır') ?>">
         <i class="bi bi-file-earmark-excel"></i> <?= te('Excel') ?>
     </a>
     <a class="rk-btn" href="<?= e(url('/admin/audit_logs/export_csv.php?format=raw' . $qsStr)) ?>"
-       title="RFC 4180 — sistem entegrasyonu için">
+       title="<?= te('RFC 4180 — sistem entegrasyonu için') ?>">
         <i class="bi bi-filetype-csv"></i> <?= te('Ham CSV') ?>
     </a>
     <span class="rk-help rk-u-m0">
@@ -115,7 +115,7 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
             <div class="rk-field rk-filter-wide">
                 <label class="rk-label" for="q"><?= te('Arama') ?></label>
                 <input class="rk-input" type="search" id="q" name="q" value="<?= e($f['q'] ?? '') ?>"
-                       placeholder="Kullanıcı adı, IP veya değişen değer">
+                       placeholder="<?= te('Kullanıcı adı, IP veya değişen değer') ?>">
             </div>
             <div class="rk-field">
                 <label class="rk-label" for="action"><?= te('İşlem') ?></label>
@@ -151,7 +151,7 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
                 <input class="rk-input" type="date" id="from" name="from" value="<?= e($f['from'] ?? '') ?>">
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="to">Bitiş</label>
+                <label class="rk-label" for="to"><?= te('Bitiş') ?></label>
                 <input class="rk-input" type="date" id="to" name="to" value="<?= e($f['to'] ?? '') ?>">
             </div>
         </div>
@@ -178,7 +178,7 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
             <table class="rk-table">
                 <thead>
                     <tr><th><?= te('Zaman') ?></th><th><?= te('Kullanıcı') ?></th><th><?= te('İşlem') ?></th><th><?= te('Varlık') ?></th>
-                        <th><?= te('Değişiklik') ?></th><th>IP</th></tr>
+                        <th><?= te('Değişiklik') ?></th><th><?= te('IP') ?></th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($rows as $log):
@@ -192,7 +192,7 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
                         <td>
                             <?= e((string)($log['user_name_snapshot'] ?? 'Sistem')) ?>
                             <?php if ($log['user_id'] === null && $log['user_name_snapshot'] !== null): ?>
-                                <div class="rk-cell-sub" title="Kullanıcı sonradan silindi">hesap yok</div>
+                                <div class="rk-cell-sub" title="<?= te('Kullanıcı sonradan silindi') ?>">hesap yok</div>
                             <?php endif; ?>
                         </td>
                         <td><span class="rk-badge <?= e($actionClass($log['action'])) ?>">

@@ -77,7 +77,7 @@ $intOrNull = static function (string $v): ?int {
                         <input class="<?= e($cls('title', 'rk-input')) ?>" type="text" id="title" name="title"
                                maxlength="200" required
                                value="<?= e($val('title')) ?>"
-                               placeholder="Örn: Internete açık RDP servisleri üzerinden yetkisiz erişim">
+                               placeholder="<?= te('Örn: Internete açık RDP servisleri üzerinden yetkisiz erişim') ?>">
                         <?= $err('title') ?>
                     </div>
 
@@ -108,7 +108,7 @@ $intOrNull = static function (string $v): ?int {
                         <label class="rk-label" for="asset_name"><?= te('Etkilenen Varlık / Sistem') ?></label>
                         <input class="rk-input" type="text" id="asset_name" name="asset_name" maxlength="200"
                                value="<?= e($val('asset_name')) ?>"
-                               placeholder="Örn: SRV-DC01, Müşteri Portalı, Yedekleme altyapısı">
+                               placeholder="<?= te('Örn: SRV-DC01, Müşteri Portalı, Yedekleme altyapısı') ?>">
                     </div>
 
                 </div>
@@ -212,7 +212,7 @@ $intOrNull = static function (string $v): ?int {
                     <div class="rk-field">
                         <label class="rk-label" for="category_id"><?= te('Kategori') ?> <span class="req">*</span></label>
                         <select class="<?= e($cls('category_id', 'rk-select')) ?>" id="category_id" name="category_id" required>
-                            <option value="">Seçiniz</option>
+                            <option value=""><?= te('Seçiniz') ?></option>
                             <?= options_html(categories_list(), $intOrNull($val('category_id'))) ?>
                         </select>
                         <?= $err('category_id') ?>
@@ -221,7 +221,7 @@ $intOrNull = static function (string $v): ?int {
                     <div class="rk-field">
                         <label class="rk-label" for="department_id"><?= te('Departman') ?> <span class="req">*</span></label>
                         <select class="<?= e($cls('department_id', 'rk-select')) ?>" id="department_id" name="department_id" required>
-                            <option value="">Seçiniz</option>
+                            <option value=""><?= te('Seçiniz') ?></option>
                             <?= options_html(departments_list(), $intOrNull($val('department_id'))) ?>
                         </select>
                         <?= $err('department_id') ?>
@@ -230,11 +230,11 @@ $intOrNull = static function (string $v): ?int {
                     <div class="rk-field">
                         <label class="rk-label" for="owner_id"><?= te('Risk Sahibi') ?> <span class="req">*</span></label>
                         <select class="<?= e($cls('owner_id', 'rk-select')) ?>" id="owner_id" name="owner_id" required>
-                            <option value="">Seçiniz</option>
+                            <option value=""><?= te('Seçiniz') ?></option>
                             <?= options_html(users_list(), $intOrNull($val('owner_id'))) ?>
                         </select>
                         <?= $err('owner_id') ?>
-                        <div class="rk-help">Riskin takibinden sorumlu kişi.</div>
+                        <div class="rk-help"><?= te('Riskin takibinden sorumlu kişi.') ?></div>
                     </div>
 
                 </div>
@@ -255,11 +255,11 @@ $intOrNull = static function (string $v): ?int {
                     </div>
 
                     <div class="rk-field">
-                        <label class="rk-label" for="target_date">Hedef Tarih</label>
+                        <label class="rk-label" for="target_date"><?= te('Hedef Tarih') ?></label>
                         <input class="<?= e($cls('target_date', 'rk-input')) ?>" type="date"
                                id="target_date" name="target_date" value="<?= e($val('target_date')) ?>">
                         <?= $err('target_date') ?>
-                        <div class="rk-help">Riskin kapatılması hedeflenen tarih.</div>
+                        <div class="rk-help"><?= te('Riskin kapatılması hedeflenen tarih.') ?></div>
                     </div>
 
                 </div>

@@ -28,12 +28,12 @@ function assessment_types(): array
 
 function assessment_type_label(string $type): string
 {
-    return match ($type) {
+    return t(match ($type) {
         'initial'  => 'İlk değerlendirme',
         'review'   => 'Gözden geçirme',
         'residual' => 'Residual (kalan risk)',
         default    => $type,
-    };
+    });
 }
 
 /**

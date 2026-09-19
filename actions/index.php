@@ -167,14 +167,14 @@ require LAYOUT_PATH . '/header.php';
         <div class="rk-stat-icon"><i class="bi bi-circle"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$summary['acik'] ?></div>
-            <div class="rk-stat-label">Açık</div>
+            <div class="rk-stat-label"><?= te('Açık') ?></div>
         </div>
     </a>
     <a class="rk-stat is-primary" href="<?= e(url('/actions/?status=' . urlencode('In Progress'))) ?>">
         <div class="rk-stat-icon"><i class="bi bi-hourglass-split"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$summary['devam'] ?></div>
-            <div class="rk-stat-label">Devam Ediyor</div>
+            <div class="rk-stat-label"><?= te('Devam Ediyor') ?></div>
         </div>
     </a>
     <a class="rk-stat <?= (int)$summary['geciken'] > 0 ? 'is-critical' : 'is-neutral' ?>"
@@ -182,14 +182,14 @@ require LAYOUT_PATH . '/header.php';
         <div class="rk-stat-icon"><i class="bi bi-clock-history"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$summary['geciken'] ?></div>
-            <div class="rk-stat-label">Geciken</div>
+            <div class="rk-stat-label"><?= te('Geciken') ?></div>
         </div>
     </a>
     <a class="rk-stat is-low" href="<?= e(url('/actions/?status=Completed')) ?>">
         <div class="rk-stat-icon"><i class="bi bi-check2-circle"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$summary['tamam'] ?></div>
-            <div class="rk-stat-label">Tamamlanan</div>
+            <div class="rk-stat-label"><?= te('Tamamlanan') ?></div>
         </div>
     </a>
     <a class="rk-stat is-primary" href="<?= e(url('/actions/?owner=' . (int)auth_id())) ?>">
@@ -208,7 +208,7 @@ require LAYOUT_PATH . '/header.php';
                 <label class="rk-label" for="q"><?= te('Arama') ?></label>
                 <input class="rk-input" type="search" id="q" name="q"
                        value="<?= e($f['q'] ?? '') ?>"
-                       placeholder="Aksiyon başlığı, açıklama veya risk kodu">
+                       placeholder="<?= te('Aksiyon başlığı, açıklama veya risk kodu') ?>">
             </div>
 
             <div class="rk-field">
@@ -239,7 +239,7 @@ require LAYOUT_PATH . '/header.php';
         <div class="rk-filter-actions">
             <label class="rk-check">
                 <input type="checkbox" name="overdue" value="1" <?= $f['overdue'] ? 'checked' : '' ?>>
-                <span>Yalnızca gecikenler</span>
+                <span><?= te('Yalnızca gecikenler') ?></span>
             </label>
 
             <input type="hidden" name="sort" value="<?= e($sort) ?>">
@@ -250,7 +250,7 @@ require LAYOUT_PATH . '/header.php';
 
             <div class="ms-auto d-flex gap-2">
                 <?php if ($activeFilters > 0): ?>
-                    <a class="rk-btn" href="<?= e(url('/actions/')) ?>"><i class="bi bi-x-lg"></i> Temizle</a>
+                    <a class="rk-btn" href="<?= e(url('/actions/')) ?>"><i class="bi bi-x-lg"></i> <?= te('Temizle') ?></a>
                 <?php endif; ?>
                 <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> <?= te('Filtrele') ?></button>
             </div>

@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RiskOps — IT &amp; Cyber Security Risk Management</title>
+<meta name="description" content="Corporate risk register, 5×5 assessment, action tracking and management reporting. PHP 8.3 + MariaDB, no framework, no CDN. Browse the running application.">
+<meta name="color-scheme" content="dark">
+
+<meta property="og:title" content="RiskOps — IT &amp; Cyber Risk Management">
+<meta property="og:description" content="Browse the running application. Corporate risk register, 5×5 matrix, action tracking, executive report.">
+<meta property="og:image" content="https://codebypinar.github.io/riskops/assets/hero.svg">
+<meta property="og:type" content="website">
+
+<link rel="icon" href="../demo/assets/img/favicon-32.png" sizes="32x32">
+
+<style>
+/* =====================================================================
+   RiskOps tanıtım sayfası
+
+   Uygulamanın kendi paletiyle (assets/css/app.css) aynı değişkenler.
+   Tek dosya, dış bağımlılık yok — projenin geri kalanıyla tutarlı.
+   ===================================================================*/
+
+:root {
+    --navy:      #041f3c;
+    --navy-mid:  #0b356d;
+    --navy-soft: #072a52;
+    --blue:      #016ccc;
+    --blue-lt:   #23b0f8;
+    --fg:        #eaf3ff;
+    --fg-soft:   #9fb8d4;
+    --fg-muted:  #6685a8;
+    --line:      rgba(255, 255, 255, .09);
+    --card:      rgba(255, 255, 255, .045);
+
+    --low:   #16a34a;
+    --med:   #ca8a04;
+    --high:  #ea580c;
+    --crit:  #b91c1c;
+
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+            'Helvetica Neue', Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--navy);
+    color: var(--fg);
+    font: 16px/1.65 var(--font);
+    -webkit-font-smoothing: antialiased;
+    background-image:
+        radial-gradient(900px 480px at 78% -8%, rgba(35,176,248,.16), transparent 60%),
+        radial-gradient(700px 420px at 8% 8%, rgba(1,108,204,.12), transparent 60%);
+    background-repeat: no-repeat;
+}
+
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 20px; }
+
+a { color: var(--blue-lt); }
+
+/* ------------------------------------------------------------- başlık */
+
+.top {
+    position: sticky; top: 0; z-index: 20;
+    backdrop-filter: blur(10px);
+    background: rgba(4, 31, 60, .82);
+    border-bottom: 1px solid var(--line);
+}
+.top .wrap {
+    display: flex; align-items: center; gap: 18px;
+    height: 58px;
+}
+.brand {
+    font-weight: 800; letter-spacing: -.4px; font-size: 17px;
+    color: var(--fg); text-decoration: none;
+}
+.brand span { color: var(--blue-lt); }
+.top nav { margin-left: auto; display: flex; gap: 20px; align-items: center; }
+.top nav a {
+    color: var(--fg-soft); text-decoration: none; font-size: 14px; font-weight: 500;
+}
+.top nav a:hover { color: var(--fg); }
+
+.btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px; border-radius: 10px;
+    font-weight: 650; font-size: 14px; text-decoration: none;
+    border: 1px solid transparent; white-space: nowrap;
+}
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover { background: #0b7ce0; }
+.btn-ghost { border-color: var(--line); color: var(--fg); background: var(--card); }
+.btn-ghost:hover { border-color: rgba(255,255,255,.22); }
+
+/* Dil degistirici: kucuk, sessiz, ama gezinmenin parcasi. */
+.lang {
+    color: var(--fg-soft); text-decoration: none;
+    font-size: 12.5px; font-weight: 700; letter-spacing: .6px;
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: 5px 9px; line-height: 1;
+}
+.lang:hover { color: var(--fg); border-color: rgba(255,255,255,.24); }
+
+/* --------------------------------------------------------------- hero */
+
+/* padding-block, padding DEGIL: bu elemanlar ayni zamanda .wrap ve
+   kisayol yazmak .wrap'in yan bosluklarini SIFIRLIYOR - sayfa dar
+   ekranda kenara yapisiyordu. */
+.hero { padding-block: 46px 8px; }
+.hero-svg { display: block; width: 100%; border-radius: 18px; }
+
+/* DAR EKRANDA AFIS DEGISIYOR
+   hero.svg sabit kompozisyonlu (1000x320). 375px genislikte 120px
+   yukseklige inip yazilari okunamaz hale geliyor. Telefonda SVG yerine
+   ayni icerigin HTML'i gosteriliyor: her boyutta net, ek dosya yok. */
+.hero-text { display: none; }
+.hero-text .kicker { margin-bottom: 6px; }
+.hero-text h1 {
+    font-size: 44px; font-weight: 800; letter-spacing: -1.5px;
+    margin: 0 0 8px; line-height: 1.05;
+}
+.hero-text p { color: var(--fg-soft); margin: 0 0 18px; font-size: 15.5px; }
+.hero-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.hero-stats div {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 12px 14px;
+}
+.hero-stats b { display: block; font-size: 20px; font-weight: 750; }
+.hero-stats span { color: var(--fg-muted); font-size: 12px; }
+
+/* Sema: dar ekranda kucultmek yerine KENDI ICINDE kaydiriliyor.
+   Kucultmek okunmaz yapar; kaydirma en azindan okunur birakir. */
+.scroll-x { overflow-x: auto; border-radius: 14px; }
+.scroll-x img { display: block; min-width: 720px; width: 100%; border-radius: 14px; }
+.hero-cta {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    justify-content: center; margin: 26px 0 8px;
+}
+.hero-note {
+    text-align: center; color: var(--fg-muted);
+    font-size: 13.5px; margin: 0 0 6px;
+}
+
+/* ------------------------------------------------------------ bölümler */
+
+section { padding-block: 54px; border-top: 1px solid var(--line); }
+section:first-of-type { border-top: 0; }
+
+h2 {
+    font-size: 27px; font-weight: 750; letter-spacing: -.5px;
+    margin: 0 0 10px;
+}
+.lead { color: var(--fg-soft); font-size: 16.5px; margin: 0 0 30px; max-width: 70ch; }
+.kicker {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 2.2px;
+    color: var(--blue-lt); margin: 0 0 10px;
+}
+
+.grid { display: grid; gap: 16px; }
+.g2 { grid-template-columns: repeat(2, 1fr); }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+
+.card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px;
+}
+.card h3 {
+    margin: 0 0 8px; font-size: 16px; font-weight: 700;
+    display: flex; align-items: center; gap: 9px;
+}
+.card p { margin: 0; color: var(--fg-soft); font-size: 14.5px; line-height: 1.6; }
+.card ul { margin: 10px 0 0; padding-left: 18px; color: var(--fg-soft); font-size: 14.5px; }
+.card li { margin: 5px 0; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+
+/* ------------------------------------------------------- ne değildir */
+
+table.no { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+table.no th, table.no td {
+    text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line);
+    vertical-align: top;
+}
+table.no th { color: var(--fg-muted); font-weight: 650; font-size: 12.5px;
+              letter-spacing: .6px; text-transform: uppercase; }
+table.no td:first-child { color: var(--fg); font-weight: 600; width: 34%; }
+table.no td:last-child { color: var(--fg-soft); }
+
+/* ---------------------------------------------------------- ekranlar */
+
+.shots { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); }
+.shot {
+    display: block; border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--line); background: var(--navy-soft);
+    text-decoration: none; color: inherit;
+}
+/* Kaynak ekran goruntulerinin en-boy orani cok farkli (2880x1280 ile
+   2720x3988 arasi). Serbest biraktiginda izgara tirtikli duruyor;
+   ortak bir orana kirpiliyor ve UST kisim gosteriliyor - basliklarin
+   ve ozet kartlarinin oldugu, tanitim icin anlamli olan kisim orasi. */
+.shot img {
+    display: block; width: 100%; height: auto;
+    aspect-ratio: 16 / 10; object-fit: cover; object-position: top center;
+}
+.shot figcaption {
+    padding: 11px 14px; font-size: 13.5px; font-weight: 600;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.shot figcaption span { color: var(--fg-muted); font-weight: 500; font-size: 12.5px; }
+.shot:hover { border-color: rgba(35,176,248,.45); }
+
+/* --------------------------------------------------------- kalite */
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips img { height: 20px; }
+
+.figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.fig {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 16px 18px;
+}
+.fig b { display: block; font-size: 25px; font-weight: 750; letter-spacing: -.5px; }
+.fig span { color: var(--fg-muted); font-size: 12.5px; }
+
+/* ------------------------------------------------------------- alt */
+
+footer {
+    border-top: 1px solid var(--line); padding: 30px 0 48px;
+    color: var(--fg-muted); font-size: 13.5px;
+}
+footer .wrap { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+footer a { color: var(--fg-soft); text-decoration: none; }
+footer a:hover { color: var(--blue-lt); }
+footer .sp { margin-left: auto; }
+
+/* ------------------------------------------------------------ dar ekran */
+
+@media (max-width: 860px) {
+    .g2, .g3, .figures, .shots { grid-template-columns: 1fr; }
+    .top nav a.hide-sm { display: none; }
+    h2 { font-size: 23px; }
+}
+
+@media (max-width: 700px) {
+    .hero-svg { display: none; }
+    .hero-text { display: block; }
+    .hero { padding-block: 30px 4px; }
+    .hero-cta { justify-content: stretch; }
+    .hero-cta .btn { flex: 1; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto !important; }
+}
+
+html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./">Risk<span>Ops</span></a>
+    <nav>
+      <a class="hide-sm" href="#what">What it is</a>
+      <a class="hide-sm" href="#screens">Screens</a>
+      <a class="hide-sm" href="#quality">Quality</a>
+      <a class="hide-sm" href="#install">Install</a>
+      <a class="lang" href="../" hreflang="tr" lang="tr">TR</a>
+      <a class="btn btn-primary" href="demo/dashboard/">Live demo →</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap hero">
+  <img class="hero-svg" src="../assets/hero.svg"
+       alt="RiskOps — BT ve siber güvenlik risk yönetimi platformu">
+
+  <div class="hero-text">
+    <p class="kicker">IT &amp; CYBER RISK MANAGEMENT</p>
+    <h1>RiskOps</h1>
+    <p>Risk register · 5×5 assessment · action tracking</p>
+    <div class="hero-stats">
+      <div><b>8</b><span>PHPStan level</span></div>
+      <div><b>192</b><span>tests</span></div>
+      <div><b>0</b><span>dependencies</span></div>
+      <div><b>2</b><span>languages</span></div>
+    </div>
+  </div>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="demo/dashboard/">Browse the running app →</a>
+    <a class="btn btn-ghost" href="https://github.com/CodeByPinar/riskops">Source code</a>
+  </div>
+  <p class="hero-note">
+    The demo is real output captured from the running app — not screenshots.
+    Navigation works; saving and filtering do not.
+  </p>
+</div>
+
+<!-- ================================================================ -->
+<section id="what" class="wrap">
+  <p class="kicker">WHAT IT IS</p>
+  <h2>A risk is not closed — its level is lowered</h2>
+  <p class="lead">
+    RiskOps was written to record an organisation's IT and cyber security
+    risks, score them by likelihood × impact, track mitigating actions and
+    produce documents that can be handed to management.
+  </p>
+
+  <div class="scroll-x" style="margin-bottom:26px">
+    <img src="../assets/lifecycle.svg"
+         alt="Risk lifecycle: record, assessment, severity, action plan, reassessment">
+  </div>
+
+  <div class="grid g3">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--crit)"></span> Register</h3>
+      <p>Automatic risk codes, 5×5 matrix, soft delete. The score is a
+         generated column — the application never computes it, so it cannot
+         drift.</p>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--high)"></span> Actions</h3>
+      <p>Mitigating actions linked to a risk, with an owner and a due date.
+         Overdue actions are flagged on the dashboard and in reports.</p>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--low)"></span> Reports</h3>
+      <p>Six built-in reports and a one-page Executive Summary: letterhead,
+         confidentiality notice and a signature block, ready to print.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section class="wrap">
+  <p class="kicker">SCOPE</p>
+  <h2>What RiskOps is not</h2>
+  <p class="lead">
+    This distinction is the most important design decision, so it is stated up front.
+  </p>
+  <table class="no">
+    <tr><th>Not this</th><th>Why it matters</th></tr>
+    <tr><td>Helpdesk / ticketing</td>
+        <td>There is no “request to close” here — there is an ongoing risk state.</td></tr>
+    <tr><td>ITSM tool</td>
+        <td>Asset inventory, change management and SLA tracking are out of scope.</td></tr>
+    <tr><td>Vulnerability scanner</td>
+        <td>It does not scan; it is where scan <em>results are managed</em>.</td></tr>
+    <tr><td>SIEM</td>
+        <td>It does not collect logs or correlate events.</td></tr>
+  </table>
+</section>
+
+<!-- ================================================================ -->
+<section id="screens" class="wrap">
+  <p class="kicker">SCREENS</p>
+  <h2>Browse the real application</h2>
+  <p class="lead">
+    Each image opens that screen in the demo. The demo is HTML captured
+    from a running installation: same CSS, same data, same layout.
+  </p>
+
+  <div class="shots">
+    <a class="shot" href="demo/dashboard/">
+      <img src="../screenshots/dashboard.png" alt="RiskOps dashboard" loading="lazy">
+      <figcaption>Dashboard <span>matrix · trend · distributions</span></figcaption>
+    </a>
+    <a class="shot" href="demo/risks/view/57/">
+      <img src="screenshots/risk-detail.png" alt="Risk detail screen" loading="lazy">
+      <figcaption>Risk detail <span>assessment history · actions</span></figcaption>
+    </a>
+    <a class="shot" href="demo/reports/executive_summary/">
+      <img src="screenshots/executive-summary.png" alt="Executive summary report" loading="lazy">
+      <figcaption>Executive Summary <span>one page · print ready</span></figcaption>
+    </a>
+    <a class="shot" href="demo/admin/plugins/">
+      <img src="screenshots/plugins.png" alt="Plugin administration screen" loading="lazy">
+      <figcaption>Plugins <span>hooks · no sandbox</span></figcaption>
+    </a>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="quality" class="wrap">
+  <p class="kicker">QUALITY</p>
+  <h2>Measured, not claimed</h2>
+  <p class="lead">
+    These numbers come from tools in the repository and are re-measured by CI on every push.
+  </p>
+
+  <div class="figures">
+    <div class="fig"><b>8</b><span>PHPStan level, no baseline</span></div>
+    <div class="fig"><b>192</b><span>unit + integration tests</span></div>
+    <div class="fig"><b>0</b><span>runtime dependencies</span></div>
+    <div class="fig"><b>12</b><span>architecture decision records</span></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h3>Security defaults</h3>
+      <ul>
+        <li>Passwords via <code>password_hash()</code>, CSRF on every POST</li>
+        <li>Authorisation is server-side; the UI only hides things</li>
+        <li>Deletion requires POST + CSRF + permission</li>
+        <li>No <code>unsafe-inline</code> in CSP — no inline scripts</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Decisions are written down</h3>
+      <p>Why there is no framework, why the translation key is the Turkish
+         source string, why no sandbox is claimed for plugins — each with its
+         reasoning in the
+         <a href="https://github.com/CodeByPinar/riskops/tree/main/docs/architecture">ADRs</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="install" class="wrap">
+  <p class="kicker">INSTALL</p>
+  <h2>Two commands</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>With Docker</h3>
+      <p style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:var(--fg)">
+        git clone https://github.com/CodeByPinar/riskops.git<br>
+        cd riskops &amp;&amp; docker compose up
+      </p>
+      <p style="margin-top:10px">Then open <code>localhost:8080</code>. Demo data
+         is optional and loads with a single command.</p>
+    </div>
+    <div class="card">
+      <h3>Without Docker</h3>
+      <p>Ubuntu 24.04 · PHP 8.3 · MariaDB 10.11 · Apache 2.4.
+         The schema is a single file and can be loaded twice (idempotent).
+         Steps are in the
+         <a href="https://github.com/CodeByPinar/riskops#kurulum-dockersız">README</a>.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>RiskOps · MIT licence</span>
+    <a href="https://github.com/CodeByPinar/riskops">GitHub</a>
+    <a href="https://github.com/CodeByPinar/riskops/tree/main/docs/architecture">Architecture decisions</a>
+    <a href="demo/dashboard/">Demo</a>
+    <span class="sp">Demo data is fictional; the interface is English, the records are Turkish.</span>
+  </div>
+</footer>
+
+</body>
+</html>

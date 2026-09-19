@@ -149,7 +149,7 @@ require LAYOUT_PATH . '/header.php';
                                   placeholder="<?= te('Skorun neden değiştiği, hangi kontrolün devreye girdiği') ?>"><?= e($val('notes')) ?></textarea>
                         <?= $err('notes') ?>
                         <div class="rk-help">
-                            Denetimde en çok sorulan soru budur: skor neden değişti?
+                            <?= te('Denetimde en çok sorulan soru budur: skor neden değişti?') ?>
                         </div>
                     </div>
 
@@ -183,7 +183,7 @@ require LAYOUT_PATH . '/header.php';
                                         O<?= (int)$risk['residual_likelihood'] ?> × E<?= (int)$risk['residual_impact'] ?>
                                     </span>
                                 <?php else: ?>
-                                    <span class="text-muted">Henüz değerlendirilmedi</span>
+                                    <span class="text-muted"><?= te('Henüz değerlendirilmedi') ?></span>
                                 <?php endif; ?>
                             </dd>
                         </div>
@@ -208,7 +208,7 @@ require LAYOUT_PATH . '/header.php';
                                value="<?= e($val('assessed_at', date('Y-m-d'))) ?>"
                                max="<?= e(date('Y-m-d')) ?>">
                         <?= $err('assessed_at') ?>
-                        <div class="rk-help">Geriye dönük kayıt girilebilir, ileri tarih girilemez.</div>
+                        <div class="rk-help"><?= te('Geriye dönük kayıt girilebilir, ileri tarih girilemez.') ?></div>
                     </div>
                 </div>
             </div>

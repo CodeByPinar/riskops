@@ -110,8 +110,10 @@ $dUrl = static fn (string $file): string => url('/discussion/' . $file);
             </button>
         </form>
         <div class="rk-help">
-            En fazla <?= e(attach_format_size(ATTACH_MAX_BYTES)) ?>, kayıt başına
-            <?= ATTACH_MAX_PER_RISK ?> dosya. İzin verilen türler:
+            <?= te('En fazla :boyut, kayıt başına :adet dosya. İzin verilen türler:', [
+                ':boyut' => attach_format_size(ATTACH_MAX_BYTES),
+                ':adet'  => (string)ATTACH_MAX_PER_RISK,
+            ]) ?>
             <?= e(implode(', ', array_keys(attach_allowed_types()))) ?>.
             Dosya içeriği uzantısıyla karşılaştırılır; uyuşmayan dosya reddedilir.
         </div>

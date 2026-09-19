@@ -111,18 +111,21 @@ $pageSubtitle = str_limit($risk['title'], 110);
 $activeMenu   = 'risks';
 
 $pageActions = '<a class="rk-btn" href="' . e(url('/risks/')) . '">'
-             . '<i class="bi bi-arrow-left"></i> Listeye dön</a>';
+             . '<i class="bi bi-arrow-left"></i> ' . te('Listeye dön') . '</a>';
 
 if (can('risk.update')) {
     $pageActions .= '<a class="rk-btn rk-btn-primary" href="' . e(url('/risks/edit.php?id=' . $id)) . '">'
-                  . '<i class="bi bi-pencil"></i> Düzenle</a>';
+                  . '<i class="bi bi-pencil"></i> ' . te('Düzenle') . '</a>';
 }
 
 require LAYOUT_PATH . '/header.php';
 
 /** Tanım listesi satırı. */
 $row = static function (string $label, string $valueHtml, bool $raw = true): void {
-    echo '<div class="rk-dl-row"><dt>' . e($label) . '</dt><dd>'
+    /* te(): ETİKET burada çevrilir. Çağrı yerlerinde t() tekrarlamak
+       yerine sınırda çevirmek, "$label bir kullanıcı etiketidir"
+       sözleşmesini koda yazıyor. */
+    echo '<div class="rk-dl-row"><dt>' . te($label) . '</dt><dd>'
        . ($valueHtml !== '' ? $valueHtml : '<span class="text-muted">-</span>')
        . '</dd></div>';
 };
@@ -189,28 +192,28 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-actions"
                         type="button" role="tab">
-                    <i class="bi bi-check2-square"></i> Aksiyon Planları
+                    <i class="bi bi-check2-square"></i> <?= te('Aksiyon Planları') ?>
                     <span class="rk-tab-count"><?= count($actions) ?></span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-assessments"
                         type="button" role="tab">
-                    <i class="bi bi-clipboard-data"></i> Değerlendirme Geçmişi
+                    <i class="bi bi-clipboard-data"></i> <?= te('Değerlendirme Geçmişi') ?>
                     <span class="rk-tab-count"><?= count($assessments) ?></span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-comments"
                         type="button" role="tab">
-                    <i class="bi bi-chat-left-text"></i> Yorumlar
+                    <i class="bi bi-chat-left-text"></i> <?= te('Yorumlar') ?>
                     <span class="rk-tab-count"><?= count($comments) ?></span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-attachments"
                         type="button" role="tab">
-                    <i class="bi bi-paperclip"></i> Ekler
+                    <i class="bi bi-paperclip"></i> <?= te('Ekler') ?>
                     <span class="rk-tab-count"><?= count($attachments) ?></span>
                 </button>
             </li>
@@ -218,7 +221,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-audit"
                         type="button" role="tab">
-                    <i class="bi bi-journal-text"></i> Audit
+                    <i class="bi bi-journal-text"></i> <?= te('Audit') ?>
                     <span class="rk-tab-count"><?= count($auditRows) ?></span>
                 </button>
             </li>
@@ -331,7 +334,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
                         <thead>
                             <tr>
                                 <th><?= te('Aksiyon') ?></th><th><?= te('Sorumlu') ?></th><th><?= te('Öncelik') ?></th>
-                                <th>Durum</th><th><?= te('Termin') ?></th><th><?= te('Tamamlanma') ?></th>
+                                <th><?= te('Durum') ?></th><th><?= te('Termin') ?></th><th><?= te('Tamamlanma') ?></th>
                                 <th class="rk-u-shrink"></th>
                             </tr>
                         </thead>
@@ -396,10 +399,10 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
             <div class="rk-tab-toolbar">
                 <a class="rk-btn rk-btn-primary rk-btn-sm"
                    href="<?= e(url('/assessments/create.php?risk_id=' . $id)) ?>">
-                    <i class="bi bi-plus-lg"></i> Yeniden Değerlendir
+                    <i class="bi bi-plus-lg"></i> <?= te('Yeniden Değerlendir') ?>
                 </a>
                 <a class="rk-btn rk-btn-sm" href="<?= e(url('/assessments/?risk=' . $id)) ?>">
-                    <i class="bi bi-list-ul"></i> Tüm değerlendirmeler
+                    <i class="bi bi-list-ul"></i> <?= te('Tüm değerlendirmeler') ?>
                 </a>
             </div>
             <?php endif; ?>

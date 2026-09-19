@@ -173,7 +173,7 @@ require LAYOUT_PATH . '/header.php';
                         <label class="rk-check">
                             <input type="checkbox" id="s_<?= e($key) ?>" name="<?= e($key) ?>" value="1"
                                    <?= in_array(strtolower($current), ['1','true','yes','on'], true) ? 'checked' : '' ?>>
-                            <span>Etkin</span>
+                            <span><?= te('Etkin') ?></span>
                         </label>
                         <?= $err($key) ?>
 

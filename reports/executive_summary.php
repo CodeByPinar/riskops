@@ -157,42 +157,42 @@ require LAYOUT_PATH . '/header.php';
         <div class="rk-stat-icon"><i class="bi bi-collection"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$stats['toplam'] ?></div>
-            <div class="rk-stat-label">Toplam Risk</div>
+            <div class="rk-stat-label"><?= te('Toplam Risk') ?></div>
         </div>
     </div>
     <div class="rk-stat is-critical">
         <div class="rk-stat-icon"><i class="bi bi-exclamation-octagon-fill"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$stats['kritik'] ?></div>
-            <div class="rk-stat-label">Kritik</div>
+            <div class="rk-stat-label"><?= te('Kritik') ?></div>
         </div>
     </div>
     <div class="rk-stat is-high">
         <div class="rk-stat-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$stats['yuksek'] ?></div>
-            <div class="rk-stat-label">Yüksek</div>
+            <div class="rk-stat-label"><?= te('Yüksek') ?></div>
         </div>
     </div>
     <div class="rk-stat is-neutral">
         <div class="rk-stat-icon"><i class="bi bi-folder2-open"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$stats['acik'] ?></div>
-            <div class="rk-stat-label">Açık Risk</div>
+            <div class="rk-stat-label"><?= te('Açık Risk') ?></div>
         </div>
     </div>
     <div class="rk-stat <?= (int)$actions['geciken'] > 0 ? 'is-critical' : 'is-low' ?>">
         <div class="rk-stat-icon"><i class="bi bi-clock-history"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= (int)$actions['geciken'] ?></div>
-            <div class="rk-stat-label">Geciken Aksiyon</div>
+            <div class="rk-stat-label"><?= te('Geciken Aksiyon') ?></div>
         </div>
     </div>
     <div class="rk-stat is-neutral">
         <div class="rk-stat-icon"><i class="bi bi-speedometer"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= e((string)($stats['ort_skor'] ?? '—')) ?></div>
-            <div class="rk-stat-label">Ortalama Skor</div>
+            <div class="rk-stat-label"><?= te('Ortalama Skor') ?></div>
         </div>
     </div>
 </div>
@@ -232,15 +232,15 @@ require LAYOUT_PATH . '/header.php';
                     <tbody>
                         <tr><td><?= te('Açık (Open / Under Review / In Progress)') ?></td>
                             <td><strong><?= (int)$stats['acik'] ?></strong></td></tr>
-                        <tr><td>Azaltılmış (Mitigated)</td>
+                        <tr><td><?= te('Azaltılmış (Mitigated)') ?></td>
                             <td><strong><?= (int)$stats['azaltilmis'] ?></strong></td></tr>
-                        <tr><td>Kabul edilmiş (Accepted)</td>
+                        <tr><td><?= te('Kabul edilmiş (Accepted)') ?></td>
                             <td><strong><?= (int)$stats['kabul'] ?></strong></td></tr>
-                        <tr><td>Devredilmiş (Transferred)</td>
+                        <tr><td><?= te('Devredilmiş (Transferred)') ?></td>
                             <td><strong><?= (int)$stats['devredilen'] ?></strong></td></tr>
-                        <tr><td>Kapatılmış (Closed)</td>
+                        <tr><td><?= te('Kapatılmış (Closed)') ?></td>
                             <td><strong><?= (int)$stats['kapali'] ?></strong></td></tr>
-                        <tr><td class="rk-overdue">Termini geçmiş açık risk</td>
+                        <tr><td class="rk-overdue"><?= te('Termini geçmiş açık risk') ?></td>
                             <td><strong class="rk-overdue"><?= (int)$stats['geciken_risk'] ?></strong></td></tr>
                     </tbody>
                 </table>
@@ -263,7 +263,7 @@ require LAYOUT_PATH . '/header.php';
             <table class="rk-table">
                 <thead>
                     <tr><th>#</th><th><?= te('Kod') ?></th><th><?= te('Başlık') ?></th><th><?= te('Departman') ?></th><th><?= te('Sahip') ?></th>
-                        <th>Skor</th><th>Seviye</th><th><?= te('Durum') ?></th><th><?= te('Termin') ?></th><th><?= te('Açık Aksiyon') ?></th></tr>
+                        <th><?= te('Skor') ?></th><th><?= te('Seviye') ?></th><th><?= te('Durum') ?></th><th><?= te('Termin') ?></th><th><?= te('Açık Aksiyon') ?></th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($topRisks as $i => $r): ?>
@@ -357,9 +357,9 @@ require LAYOUT_PATH . '/header.php';
                         <tr><td><?= te('Toplam aksiyon') ?></td><td><strong><?= (int)$actions['toplam'] ?></strong></td></tr>
                         <tr><td><?= te('Açık') ?></td><td><strong><?= (int)$actions['acik'] ?></strong></td></tr>
                         <tr><td><?= te('Devam ediyor') ?></td><td><strong><?= (int)$actions['devam'] ?></strong></td></tr>
-                        <tr><td>Tamamlanan</td><td><strong><?= (int)$actions['tamam'] ?></strong></td></tr>
+                        <tr><td><?= te('Tamamlanan') ?></td><td><strong><?= (int)$actions['tamam'] ?></strong></td></tr>
                         <tr><td><?= te('İptal edilen') ?></td><td><strong><?= (int)$actions['iptal'] ?></strong></td></tr>
-                        <tr><td class="rk-overdue">Geciken</td>
+                        <tr><td class="rk-overdue"><?= te('Geciken') ?></td>
                             <td><strong class="rk-overdue"><?= (int)$actions['geciken'] ?></strong></td></tr>
                     </tbody>
                 </table>

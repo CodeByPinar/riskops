@@ -275,7 +275,7 @@ require LAYOUT_PATH . '/header.php';
         <div class="rk-filter-actions">
             <label class="rk-check">
                 <input type="checkbox" name="overdue" value="1" <?= $f['overdue'] ? 'checked' : '' ?>>
-                <span>Yalnızca gecikenler</span>
+                <span><?= te('Yalnızca gecikenler') ?></span>
             </label>
 
             <input type="hidden" name="sort" value="<?= e($sort) ?>">
@@ -421,7 +421,7 @@ require LAYOUT_PATH . '/header.php';
                                     <i class="bi bi-eye"></i>
                                 </a>
                                 <?php if (can('risk.update')): ?>
-                                <a class="rk-icon-btn" title="Düzenle"
+                                <a class="rk-icon-btn" title="<?= te('Düzenle') ?>"
                                    href="<?= e(url('/risks/edit.php?id=' . (int)$r['id'])) ?>">
                                     <i class="bi bi-pencil"></i>
                                 </a>

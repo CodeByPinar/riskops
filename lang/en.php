@@ -492,4 +492,114 @@ return [
         => 'Risk updated (action) — $riskId, $old, $new',
     'Risk silindi (eylem) — $riskId, $veri'
         => 'Risk deleted (action) — $riskId, $data',
+
+    /* ---------------------------------------------------------------
+     * Risk detail
+     *
+     * Bu etiketler $row() yardımcısından geçiyor, yani çeviri çağrı
+     * yerinde değil yardımcının içinde yapılıyor. tools/i18n_check.php
+     * bunları "kullanılmıyor" diye gösterir — değişken argümanlı
+     * çağrıları göremez; aracın kendi çıktısı bunu söylüyor.
+     * --------------------------------------------------------------- */
+    'Risk Kodu'                   => 'Risk Code',
+    'Etkin Seviye'                => 'Effective Severity',
+    'Hedef Tarih'                 => 'Target Date',
+    'Son Güncelleme'              => 'Last Updated',
+    'Kapanış'                     => 'Closure',
+    'Aksiyon bulunamadı.'         => 'Action not found.',
+    'Bu risk için aksiyon planı yok' => 'No action plan for this risk',
+    'Riski azaltacak somut adımları buradan ekleyin.'
+        => 'Add the concrete steps that will reduce this risk.',
+    'Değerlendirme kaydı yok'     => 'No assessment records',
+    'Gözden geçirme'              => 'Review',
+
+    /* ---------------------------------------------------------------
+     * Print letterhead and signatures
+     * --------------------------------------------------------------- */
+    'Rapor tarihi'                => 'Report date',
+    'Belge no'                    => 'Document no',
+    'Hazırlayan'                  => 'Prepared by',
+    'Gözden Geçiren'              => 'Reviewed by',
+    'Onaylayan'                   => 'Approved by',
+    'Sistem'                      => 'System',
+    'Kapsam'                      => 'Scope',
+    'Bu belge :sinif sınıfındadır. Yetkisiz kişilerle paylaşılmamalıdır.'
+        => 'This document is classified :sinif. It must not be shared with unauthorised parties.',
+
+    'Yeniden Değerlendir'           => 'Reassess',
+    'Tüm değerlendirmeler'          => 'All assessments',
+    'Etkilenen Varlık'              => 'Affected Asset',
+    'İlk değerlendirme'             => 'Initial assessment',
+    'Residual (kalan risk)'         => 'Residual (remaining risk)',
+    'En fazla :boyut, kayıt başına :adet dosya. İzin verilen türler:'
+        => 'Up to :boyut, :adet files per record. Allowed types:',
+
+    /* ---------------------------------------------------------------
+     * Dashboard cards, filters and form help
+     *
+     * Bu grup, sarma aracındaki bayt/karakter hizalama hatası
+     * düzeltilince görünür oldu — metinler hep oradaydı, araç yanlış
+     * yere bakıyordu.
+     * --------------------------------------------------------------- */
+    'Toplam Risk'                 => 'Total Risk',
+    'Açık Risk'                   => 'Open Risk',
+    'Ortalama Skor'               => 'Average Score',
+    'Olasılık × Etki'             => 'Likelihood × Impact',
+    'Son 30 Günde'                => 'In the last 30 days',
+    'Hiç Gözden Geçirilmemiş'     => 'Never Reviewed',
+    'Termini geçmiş açık risk'    => 'Open risks past their target date',
+    'Henüz değerlendirilmedi'     => 'Not assessed yet',
+
+    'Etkin'                       => 'Effective',
+    'Geciken'                     => 'Overdue',
+    'Tamamlanan'                  => 'Completed',
+    'Devam Ediyor'                => 'In Progress',
+    'Kullanım'                    => 'Usage',
+
+    'Azaltılmış'                  => 'Mitigated',
+    'Azaltılmış (Mitigated)'      => 'Mitigated',
+    'Kabul edilmiş (Accepted)'    => 'Accepted',
+    'Devredilmiş (Transferred)'   => 'Transferred',
+    'Kapatılmış (Closed)'         => 'Closed',
+
+    'Yalnızca gecikenler'         => 'Overdue only',
+    'Aksiyon başlığı, açıklama veya risk kodu'
+        => 'Action title, description or risk code',
+    'Risk kodu, başlık veya not'  => 'Risk code, title or note',
+    'Kullanıcı adı, IP veya değişen değer'
+        => 'User name, IP or changed value',
+    'Kullanıcı sonradan silindi'  => 'User was deleted afterwards',
+
+    'Aktif (giriş yapabilir)'     => 'Active (can sign in)',
+    'Giriş için kullanılır, benzersiz olmalıdır.'
+        => 'Used to sign in; must be unique.',
+    'Kendi rolünüzü değiştiremezsiniz.'
+        => 'You cannot change your own role.',
+    'Riskin takibinden sorumlu kişi.'
+        => 'The person responsible for tracking this risk.',
+    'Riskin kapatılması hedeflenen tarih.'
+        => 'The date by which the risk should be closed.',
+    'Geriye dönük kayıt girilebilir, ileri tarih girilemez.'
+        => 'Past dates are allowed; future dates are not.',
+    'Denetimde en çok sorulan soru budur: skor neden değişti?'
+        => 'This is the question auditors ask most: why did the score change?',
+
+    'RFC 4180 — sistem entegrasyonu için'
+        => 'RFC 4180 — for system integration',
+    'Türkçe Excel\'de çift tıkla açılır'
+        => 'Opens on double-click in Turkish Excel',
+
+    /* Örnek metinler: form alanlarının placeholder değerleri. */
+    'Örn: BT Risk Analisti'       => 'e.g. IT Risk Analyst',
+    'Örn: Elif Kaya'              => 'e.g. Jane Doe',
+    'Örn: Internete açık RDP servisleri üzerinden yetkisiz erişim'
+        => 'e.g. Unauthorised access through internet-facing RDP services',
+    'Örn: SRV-DC01, Müşteri Portalı, Yedekleme altyapısı'
+        => 'e.g. SRV-DC01, Customer Portal, Backup infrastructure',
+
+    'Kurumsal IT ve siber risk durumu — :tarih'
+        => 'Corporate IT and cyber risk status — :tarih',
+    'Hoş geldiniz, :ad.'            => 'Welcome, :ad.',
+    'Risk Matrisi (5×5)'            => 'Risk Matrix (5×5)',
+    'Etkin olasılık × etki'         => 'Effective likelihood × impact',
 ];

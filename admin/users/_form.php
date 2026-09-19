@@ -60,7 +60,7 @@ $roleDescriptions = [
                         <label class="rk-label" for="name"><?= te('Ad Soyad') ?> <span class="req">*</span></label>
                         <input class="<?= e($cls('name', 'rk-input')) ?>" type="text" id="name" name="name"
                                maxlength="100" required value="<?= e($val('name')) ?>"
-                               placeholder="Örn: Elif Kaya">
+                               placeholder="<?= te('Örn: Elif Kaya') ?>">
                         <?= $err('name') ?>
                     </div>
 
@@ -70,7 +70,7 @@ $roleDescriptions = [
                                maxlength="150" required value="<?= e($val('email')) ?>"
                                autocomplete="off" placeholder="ornek@kurum.local">
                         <?= $err('email') ?>
-                        <div class="rk-help">Giriş için kullanılır, benzersiz olmalıdır.</div>
+                        <div class="rk-help"><?= te('Giriş için kullanılır, benzersiz olmalıdır.') ?></div>
                     </div>
 
                     <div class="row g-3">
@@ -79,7 +79,7 @@ $roleDescriptions = [
                                 <label class="rk-label" for="title"><?= te('Ünvan') ?></label>
                                 <input class="<?= e($cls('title', 'rk-input')) ?>" type="text" id="title"
                                        name="title" maxlength="100" value="<?= e($val('title')) ?>"
-                                       placeholder="Örn: BT Risk Analisti">
+                                       placeholder="<?= te('Örn: BT Risk Analisti') ?>">
                                 <?= $err('title') ?>
                             </div>
                         </div>
@@ -128,7 +128,7 @@ $roleDescriptions = [
                         </select>
                         <?php if (!empty($isSelf)): ?>
                             <input type="hidden" name="role" value="<?= e($val('role')) ?>">
-                            <div class="rk-help">Kendi rolünüzü değiştiremezsiniz.</div>
+                            <div class="rk-help"><?= te('Kendi rolünüzü değiştiremezsiniz.') ?></div>
                         <?php endif; ?>
                         <?= $err('role') ?>
 
@@ -145,7 +145,7 @@ $roleDescriptions = [
                             <input type="checkbox" name="status" value="1"
                                    <?= $val('status') === '0' ? '' : 'checked' ?>
                                    <?= !empty($isSelf) ? 'disabled' : '' ?>>
-                            <span>Aktif (giriş yapabilir)</span>
+                            <span><?= te('Aktif (giriş yapabilir)') ?></span>
                         </label>
                         <?php if (!empty($isSelf)): ?>
                             <input type="hidden" name="status" value="1">

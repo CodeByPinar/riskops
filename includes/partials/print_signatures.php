@@ -22,7 +22,7 @@ $roles = $printSignatureRoles ?? ['Hazırlayan', 'Gözden Geçiren', 'Onaylayan'
         <thead>
             <tr>
                 <?php foreach ($roles as $r): ?>
-                    <th><?= e($r) ?></th>
+                    <th><?= te($r) ?></th>
                 <?php endforeach; ?>
             </tr>
         </thead>

@@ -101,7 +101,7 @@ require LAYOUT_PATH . '/header.php';
             <div class="ms-auto d-flex gap-2">
                 <?php if ($from !== null || $to !== null): ?>
                     <a class="rk-btn" href="<?= e(url('/reports/view.php?r=' . $key)) ?>">
-                        <i class="bi bi-x-lg"></i> Temizle</a>
+                        <i class="bi bi-x-lg"></i> <?= te('Temizle') ?></a>
                 <?php endif; ?>
                 <button type="submit" class="rk-btn rk-btn-primary">
                     <i class="bi bi-funnel"></i> <?= te('Uygula') ?></button>

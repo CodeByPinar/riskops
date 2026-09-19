@@ -47,7 +47,10 @@ $root = dirname(__DIR__);
  * Ayarlar
  * -------------------------------------------------------------------*/
 
-$opt = getopt('', ['base::', 'host::', 'email::', 'pass::', 'out::', 'approot::']);
+$opt = getopt('', [
+    'base::', 'host::', 'email::', 'pass::', 'out::', 'approot::',
+    'lang::', 'altbase::', 'altlang::', 'assets::', 'skip-assets',
+]);
 
 /**
  * getopt() secenegini metne indirger.
@@ -81,6 +84,27 @@ $OUT   = rtrim(opt_str($opt, 'out', $root . '/docs/demo'), '/');
    ("/home/ali/projeler/riskops-dev") herkese acik bir sayfaya
    dusebilirdi. O yuzden gercek kok, KANONIK yola cevriliyor. */
 $CANON = rtrim(opt_str($opt, 'approot', '/var/www/riskops'), '/');
+
+/* ---------------------------------------------------------------------
+ * DIL
+ *
+ * Uygulamada tam bir TR/EN sozlugu var (ADR-0002). Demo da iki dilde
+ * uretiliyor: ayni sayfalar, ayni veri, farkli arayuz dili.
+ *
+ * ALTBASE, kenar cubugundaki dil degistiricinin isine yariyor. Statik
+ * sitede "?setlocale=en" calismaz; o baglanti, DIGER DILDEKI AYNI
+ * SAYFAYA cevriliyor. Boylece demo icinde dil degistirmek gercekten
+ * calisiyor - devre disi birakilmis bir dugme gostermekten iyi.
+ *
+ * ASSETS paylasilabiliyor: iki dil ayni CSS/JS/font kumesini kullaniyor,
+ * ikinci kopya 1.6 MB'lik gereksiz bir tekrar olurdu.
+ * -------------------------------------------------------------------*/
+
+$LANG     = opt_str($opt, 'lang', 'tr') === 'en' ? 'en' : 'tr';
+$ALTLANG  = $LANG === 'tr' ? 'en' : 'tr';
+$ALTBASE  = rtrim(opt_str($opt, 'altbase', ''), '/');
+$ASSETS   = rtrim(opt_str($opt, 'assets', $BASE . '/assets'), '/');
+$SKIPASSETS = isset($opt['skip-assets']);
 
 /* ---------------------------------------------------------------------
  * HTTP yardimcilari
@@ -158,6 +182,21 @@ if ($auth['code'] !== 302) {
     exit(1);
 }
 say('  giris yapildi');
+
+/* Dili sec. Tercih oturumda VE kullanici kaydinda saklaniyor, yani
+   sonraki butun istekler bu dilde geliyor. */
+http($HOST . '/dashboard/?setlocale=' . $LANG);
+
+/* GIRIS FLASH'INI TUKET
+   Giris "Hos geldiniz, ..." mesajini oturuma yaziyor ve bu mesaj TEK
+   SEFERLIK: ilk sayfa gosteriminde okunup silinir. Yukaridaki dil
+   istegi 302 donuyor ve yonlendirmeyi izlemedigimiz icin mesaj
+   tuketilmeden kaliyordu - yakalanan ilk sayfaya yapisiyordu.
+   Ustelik giris dil secilmeden once yapildigi icin mesaj TURKCE
+   kaliyor ve Ingilizce demoda yamali duruyordu. */
+http($HOST . '/dashboard/');
+
+say('  arayuz dili: ' . $LANG);
 
 /* ---------------------------------------------------------------------
  * Yakalanacak sayfalar
@@ -238,8 +277,13 @@ $captured = array_fill_keys(array_keys($fetched), true);
 /**
  * @param array<string, true> $captured
  */
-function map_link(string $href, array $captured, string $base): ?string
-{
+function map_link(
+    string $href,
+    array $captured,
+    string $base,
+    string $altBase,
+    string $lang
+): ?string {
     if ($href === '' || $href[0] !== '/' || str_starts_with($href, '//')) {
         return null;                       // dis baglanti ya da capa
     }
@@ -254,6 +298,18 @@ function map_link(string $href, array $captured, string $base): ?string
         return isset($captured[$target]) ? $base . $target : '';
     }
 
+    /* Dil degistirici: "/risks/?setlocale=en" -> diger dildeki ayni
+       sayfa. Statik sitede sorgu dizesi calismaz ama bu baglantinin
+       KARSILIGI var, o yuzden devre disi birakilmiyor. */
+    if (preg_match('/^(.*?)\?setlocale=(tr|en)$/', $href, $m)) {
+        if ($altBase === '' || $m[2] === $lang) {
+            return '';
+        }
+        $path = $m[1] === '' ? '/' : $m[1];
+
+        return isset($captured[$path]) ? $altBase . $path : '';
+    }
+
     $clean = strtok($href, '?');
 
     if ($clean !== $href) {
@@ -263,16 +319,41 @@ function map_link(string $href, array $captured, string $base): ?string
     return isset($captured[$clean]) ? $base . $clean : '';
 }
 
+$words = $LANG === 'en'
+    ? [
+        'title' => 'Static preview',
+        'body'  => 'real output from the running app, with demo data',
+        'note'  => 'saving and filtering do not work',
+        'data'  => 'UI is English; the demo records themselves are Turkish',
+        'home'  => '&larr; about',
+    ]
+    : [
+        'title' => 'Statik önizleme',
+        'body'  => 'gerçek uygulamadan alınmış çıktı, demo verisiyle',
+        'note'  => 'kaydetme ve filtreleme çalışmaz',
+        'home'  => '&larr; tanıtım',
+    ];
+
 $banner = '<div class="rk-demo-bar">'
     . '<span class="rk-demo-dot"></span>'
-    . '<strong>Statik önizleme</strong>'
+    . '<strong>' . $words['title'] . '</strong>'
     . '<span class="rk-demo-sep">·</span>'
-    . 'gerçek uygulamadan alınmış çıktı, demo verisiyle'
+    . $words['body']
     . '<span class="rk-demo-sep">·</span>'
-    . 'kaydetme ve filtreleme çalışmaz'
-    . '<a class="rk-demo-home" href="' . htmlspecialchars(dirname($BASE) . '/', ENT_QUOTES) . '">← tanıtım</a>'
+    . $words['note']
+    /* Veri dili arayuz dilinden BAGIMSIZ: sozluk arayuzu cevirir,
+       kurumun kendi kayitlarini degil. Ingilizce demoda bunu
+       soylemek, "yarim cevrilmis" izlenimini onluyor. */
+    . (isset($words['data'])
+        ? '<span class="rk-demo-sep">·</span>' . $words['data']
+        : '')
+    . '<a class="rk-demo-home" href="' . htmlspecialchars(dirname($BASE) . '/', ENT_QUOTES) . '">'
+    . $words['home'] . '</a>'
     . '<a class="rk-demo-repo" href="https://github.com/CodeByPinar/riskops">GitHub</a>'
     . '</div>';
+
+/* demo.css de paylasiliyor: iki dilde ayni. */
+$CSS = $SKIPASSETS ? dirname($ASSETS) . '/demo.css' : $BASE . '/demo.css';
 
 $written = 0;
 $ready   = [];
@@ -280,10 +361,13 @@ foreach ($fetched as $path => $html) {
     /* 1) Baglantilar ve varlik yollari */
     $html = preg_replace_callback(
         '/\b(href|action)="([^"]*)"/',
-        static function (array $m) use ($captured, $BASE): string {
-            $mapped = map_link($m[2], $captured, $BASE);
+        static function (array $m) use ($captured, $BASE, $ALTBASE, $LANG, $ASSETS): string {
+            $mapped = map_link($m[2], $captured, $BASE, $ALTBASE, $LANG);
             if ($mapped === null) {
                 return $m[0];
+            }
+            if (str_starts_with($m[2], '/assets/')) {
+                return $m[1] . '="' . $ASSETS . substr($m[2], 7) . '"';
             }
             if ($mapped === '') {
                 return $m[1] . '="#" class="rk-demo-off" '
@@ -295,7 +379,7 @@ foreach ($fetched as $path => $html) {
         $html
     ) ?? $html;
 
-    $html = preg_replace('#\b(src)="(/assets/[^"]*)"#', '$1="' . $BASE . '$2"', $html) ?? $html;
+    $html = preg_replace('#\b(src)="/assets/([^"]*)"#', '$1="' . $ASSETS . '/$2"', $html) ?? $html;
 
     /* 2) Grafik ucu: canli API yerine yakalanan JSON */
     $html = str_replace(
@@ -323,7 +407,7 @@ foreach ($fetched as $path => $html) {
     /* 6) Demo seridi ve ek bicem */
     $html = str_replace(
         '</head>',
-        '  <link rel="stylesheet" href="' . $BASE . '/demo.css">' . "\n</head>",
+        '  <link rel="stylesheet" href="' . $CSS . '">' . "\n</head>",
         $html
     );
     $html = preg_replace('/(<body[^>]*>)/', '$1' . "\n" . $banner, $html, 1) ?? $html;
@@ -450,8 +534,12 @@ function copy_tree(string $from, string $to): int
     return $n;
 }
 
-$assetCount = copy_tree($root . '/assets', $OUT . '/assets');
-say("  {$assetCount} varlik kopyalandi");
+if ($SKIPASSETS) {
+    say('  varliklar atlandi (paylasilan kopya: ' . $ASSETS . ')');
+} else {
+    $assetCount = copy_tree($root . '/assets', $OUT . '/assets');
+    say("  {$assetCount} varlik kopyalandi");
+}
 
 if ($charts['code'] === 200) {
     if (!is_dir($OUT . '/api')) {
@@ -462,7 +550,8 @@ if ($charts['code'] === 200) {
 }
 
 /* Demo bicemi: uygulamanin CSS'ine dokunmadan, ayri dosya */
-file_put_contents($OUT . '/demo.css', <<<'CSS'
+if (!$SKIPASSETS) {
+    file_put_contents($OUT . '/demo.css', <<<'CSS'
 /* RiskOps statik önizleme — yalnızca demo sitesine özgü.
    Uygulamanın kendi CSS'i değiştirilmez: demo, ürünü kirletmemeli. */
 
@@ -493,6 +582,12 @@ a.rk-demo-off,
 button.rk-demo-off { opacity: .45; cursor: not-allowed; }
 a.rk-demo-off:hover { text-decoration: none; }
 CSS);
+}
 
 say("  demo.css yazildi\n");
+
+/* Dil tercihi kullanici kaydinda kaliyor; kurulumu birakip gittigimiz
+   gibi birakiyoruz. */
+http($HOST . '/dashboard/?setlocale=tr');
+
 say('  bitti.');

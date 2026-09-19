@@ -186,7 +186,7 @@ try {
 
 audit('login', 'user', (int)$user['id'], null, ['email' => $email, 'role' => $user['role']]);
 
-flash('success', 'Hoş geldiniz, ' . $user['name'] . '.');
+flash('success', t('Hoş geldiniz, :ad.', [':ad' => (string)$user['name']]));
 
 // Giriş öncesi gitmek istediği sayfaya dön (yalnızca site içi yol)
 $intended = $_SESSION['_intended'] ?? null;

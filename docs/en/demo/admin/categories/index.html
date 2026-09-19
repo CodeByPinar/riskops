@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Risk Kategorileri - RiskOps</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/riskops/demo/assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/riskops/demo/assets/img/favicon-16.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/riskops/demo/assets/img/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+<link rel="stylesheet" href="/riskops/demo/assets/css/app.css?v=20260912b">
+<style nonce="statik-onizleme">.rk-cat-default{background:var(--rk-muted-light)}.rk-cat-b91c1c{background:#b91c1c}.rk-cat-c2410c{background:#c2410c}.rk-cat-a16207{background:#a16207}.rk-cat-1d4ed8{background:#1d4ed8}.rk-cat-6d28d9{background:#6d28d9}.rk-cat-0f766e{background:#0f766e}.rk-cat-0369a1{background:#0369a1}.rk-cat-9f1239{background:#9f1239}.rk-cat-4338ca{background:#4338ca}.rk-cat-7c2d12{background:#7c2d12}.rk-cat-475569{background:#475569}.rk-cat-166534{background:#166534}.rk-cat-64748b{background:#64748b}</style><link rel="stylesheet" media="print" href="/riskops/demo/assets/css/print.css?v=20260912b">
+  <link rel="stylesheet" href="/riskops/demo/demo.css">
+</head>
+<body class="rk-body">
+<div class="rk-demo-bar"><span class="rk-demo-dot"></span><strong>Static preview</strong><span class="rk-demo-sep">·</span>real output from the running app, with demo data<span class="rk-demo-sep">·</span>saving and filtering do not work<span class="rk-demo-sep">·</span>UI is English; the demo records themselves are Turkish<a class="rk-demo-home" href="/riskops/en/">&larr; about</a><a class="rk-demo-repo" href="https://github.com/CodeByPinar/riskops">GitHub</a></div>
+
+<aside class="rk-sidebar" id="rkSidebar">
+
+    <div class="rk-brand">
+        <a class="rk-brand-link" href="/riskops/en/demo/dashboard/"
+           aria-label="RiskOps - Dashboard">
+            <img class="rk-wordmark-light" src="/riskops/demo/assets/img/logo-wordmark-light.png" srcset="/assets/img/logo-wordmark-light.png 1x, /assets/img/logo-wordmark-light@2x.png 2x" alt="RiskOps" decoding="async">        </a>
+    </div>
+
+    <nav class="rk-nav">
+        <a class="rk-nav-link" href="/riskops/en/demo/dashboard/"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a><div class="rk-nav-section">Risk Management</div><a class="rk-nav-link" href="/riskops/en/demo/risks/"><i class="bi bi-list-columns-reverse"></i><span>Risk Register</span></a><a class="rk-nav-link" href="/riskops/en/demo/risks/create.php"><i class="bi bi-plus-square"></i><span>New Risk</span></a><a class="rk-nav-link" href="/riskops/en/demo/assessments/"><i class="bi bi-clipboard-data"></i><span>Assessments</span></a><a class="rk-nav-link" href="/riskops/en/demo/actions/"><i class="bi bi-check2-square"></i><span>Action Plans</span></a><div class="rk-nav-section">Analysis</div><a class="rk-nav-link" href="/riskops/en/demo/reports/"><i class="bi bi-bar-chart-line"></i><span>Reports</span></a><div class="rk-nav-section">Administration</div><a class="rk-nav-link" href="/riskops/en/demo/admin/users/"><i class="bi bi-people"></i><span>Users</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/departments/"><i class="bi bi-diagram-3"></i><span>Departments</span></a><a class="rk-nav-link active" href="/riskops/en/demo/admin/categories/"><i class="bi bi-tags"></i><span>Categories</span></a><a class="rk-nav-link" href="/riskops/en/demo/risks/deleted.php"><i class="bi bi-trash3"></i><span>Deleted Risks</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/audit_logs/"><i class="bi bi-journal-text"></i><span>Audit Logs</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/settings/"><i class="bi bi-gear"></i><span>Settings</span></a><a class="rk-nav-link" href="/riskops/en/demo/admin/plugins/"><i class="bi bi-puzzle"></i><span>Plugins</span></a><a class="rk-nav-link" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"><i class="bi bi-bug"></i><span>Debugging</span></a>    </nav>
+
+                <div class="rk-side-locale">
+                    <a class="rk-locale-btn"
+               href="/riskops/demo/admin/categories/"
+               title="Türkçe">TR</a>
+                    <a class="rk-locale-btn is-active"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="English">EN</a>
+            </div>
+    
+    <div class="rk-side-user">
+                <a class="rk-side-user-link" href="/riskops/en/demo/profile/" title="My profile">
+            <div class="rk-avatar">RA</div>
+            <div class="rk-side-user-info">
+                <div class="rk-side-user-name">RiskOps Administrator</div>
+                <div class="rk-side-user-role">Administrator</div>
+            </div>
+        </a>
+                        <a class="rk-logout-btn" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+           title="Change password" aria-label="Change password">
+            <i class="bi bi-key"></i>
+        </a>
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" class="m-0">
+            <input type="hidden" name="_token" value="">            <button type="submit" class="rk-logout-btn" title="Sign out" aria-label="Sign out">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+    
+</aside>
+
+<div class="rk-backdrop" data-rk-sidebar-close></div>
+
+<div class="rk-main">
+
+    <header class="rk-topbar">
+
+    <button type="button" class="rk-burger" data-rk-sidebar-toggle aria-label="Toggle menu">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <form class="rk-search" method="get" action="/riskops/en/demo/risks/" role="search">
+        <i class="bi bi-search"></i>
+        <input type="search" name="q" autocomplete="off"
+               value=""
+               placeholder="Search risk code, title or asset...">
+    </form>
+
+    <div class="rk-topbar-right">
+                    <span class="rk-env-tag" title="APP_ENV = development">development</span>
+        
+                    <a class="rk-btn rk-btn-primary rk-btn-sm" href="/riskops/en/demo/risks/create.php">
+                <i class="bi bi-plus-lg"></i> New Risk            </a>
+            </div>
+
+</header>
+
+    <main class="rk-content">
+
+                <div class="rk-page-head">
+            <div>
+                <h1 class="rk-page-title">Risk Kategorileri</h1>
+                                    <p class="rk-page-sub">13 kategori</p>
+                            </div>
+                    </div>
+        
+        
+<!-- Sınıflandırma bandı: belgenin en üstünde, akışın içinde -->
+<div class="rk-print-only rk-class-band">
+    <span>RiskOps — Risk Kategorileri</span>
+    <span>RO-CATE-20260919-1642</span>
+            <span class="rk-class-tag">Kuruma Özel</span>
+    </div>
+
+<!-- Belgenin başındaki antet -->
+<div class="rk-print-only rk-letterhead">
+    <div class="rk-lh-top">
+        <div class="rk-lh-brand">
+            <img class="rk-wordmark" src="/riskops/demo/assets/img/logo-wordmark.png" srcset="/assets/img/logo-wordmark.png 1x, /assets/img/logo-wordmark@2x.png 2x" alt="RiskOps" decoding="async">        </div>
+                    <div class="rk-lh-class">Kuruma Özel</div>
+            </div>
+
+    <div class="rk-lh-title">
+        <h1>Risk Kategorileri</h1>
+            </div>
+
+    <table class="rk-lh-meta">
+        <tbody>
+            <tr>
+                <th>Report date</th>
+                <td>19.09.2026 16:42</td>
+                <th>Document no</th>
+                <td>RO-CATE-20260919-1642</td>
+            </tr>
+            <tr>
+                <th>Prepared by</th>
+                <td>RiskOps Administrator</td>
+                <th>System</th>
+                <td>RiskOps — IT &amp; Cyber Risk Management</td>
+            </tr>
+                    </tbody>
+    </table>
+</div>
+        
+<div class="row g-3">
+
+    <div class="col-12 col-xl-4">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title">
+                    <i class="bi bi-plus-square"></i>
+                    Yeni Kategori                </h2>
+            </div>
+            <div class="rk-card-body">
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" novalidate>
+                    <input type="hidden" name="_token" value="">                    
+                    <div class="rk-field">
+                        <label class="rk-label" for="name">Name <span class="req">*</span></label>
+                        <input class="rk-input" type="text" id="name" name="name"
+                               maxlength="100" required value=""
+                               placeholder="e.g. Application Security">
+                                            </div>
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="code">Code <span class="req">*</span></label>
+                        <input class="rk-input" type="text" id="code" name="code"
+                               maxlength="20" required value=""
+                               placeholder="e.g. APPSEC" class="rk-u-upper">
+                                            </div>
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="description">Description</label>
+                        <textarea class="rk-textarea rk-u-minh60" id="description" name="description" rows="2"></textarea>
+                    </div>
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="color">Color</label>
+                        <div class="rk-color-field">
+                            <input type="color" id="color" name="color" data-rk-color-sync="color_text"
+                                   value="#64748b">
+                            <input class="rk-input" type="text" name="color_text"
+                                   value="#64748b" maxlength="7"
+                                   pattern="#[0-9a-fA-F]{6}" aria-label="Color code">
+                        </div>
+                                                <div class="rk-help">
+                            Yalnızca listelerdeki küçük nokta için kullanılır; risk seviyesi
+                            renkleriyle karışmaması adına ayırt edici bir ton seçin.
+                        </div>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="rk-field">
+                                <label class="rk-label" for="sort_order">Order</label>
+                                <input class="rk-input" type="number" id="sort_order" name="sort_order"
+                                       value="0" min="0" max="9999">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="rk-field">
+                                <label class="rk-label">Status</label>
+                                <label class="rk-check rk-u-h34">
+                                    <input type="checkbox" name="is_active" value="1"
+                                           checked>
+                                    <span>Active</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rk-form-actions rk-u-mb0">
+                        <button type="submit" class="rk-btn rk-btn-primary">
+                            <i class="bi bi-check-lg"></i> Ekle                        </button>
+                                            </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-8">
+        <div class="rk-card">
+            <div class="rk-card-body is-flush">
+                                <div class="rk-table-wrap">
+                    <table class="rk-table">
+                        <thead>
+                            <tr><th>Code</th><th>Name</th><th>Risk</th><th>Order</th>
+                                <th>Status</th><th class="rk-u-shrink"></th></tr>
+                        </thead>
+                        <tbody>
+                                                    <tr>
+                                <td class="rk-code">CYBER</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-b91c1c"></span>                                    <span class="rk-link-strong">Cyber Security</span>
+                                                                            <div class="rk-cell-sub">Siber saldiri, kotu amacli yazilim, veri sizintisi</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            3</a>
+                                                                    </td>
+                                <td>10</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="1">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">NETWORK</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-c2410c"></span>                                    <span class="rk-link-strong">Network Security</span>
+                                                                            <div class="rk-cell-sub">Ag mimarisi, firewall, segmentasyon, uzak erisim</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            1</a>
+                                                                    </td>
+                                <td>20</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="2">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">APPSEC</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-a16207"></span>                                    <span class="rk-link-strong">Application Security</span>
+                                                                            <div class="rk-cell-sub">Uygulama zafiyetleri, guvenli yazilim gelistirme</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            1</a>
+                                                                    </td>
+                                <td>30</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="3">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">DATA</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-1d4ed8"></span>                                    <span class="rk-link-strong">Data Protection</span>
+                                                                            <div class="rk-cell-sub">Kisisel veri, sifreleme, veri siniflandirma, KVKK/GDPR</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            1</a>
+                                                                    </td>
+                                <td>40</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="4">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">ACCESS</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-6d28d9"></span>                                    <span class="rk-link-strong">Access Control</span>
+                                                                            <div class="rk-cell-sub">Kimlik dogrulama, yetkilendirme, ayricalikli hesaplar</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            2</a>
+                                                                    </td>
+                                <td>50</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="5">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">INFRA</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-0f766e"></span>                                    <span class="rk-link-strong">Infrastructure</span>
+                                                                            <div class="rk-cell-sub">Sunucu, depolama, sanallastirma, yedekleme</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            2</a>
+                                                                    </td>
+                                <td>60</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="6">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">CLOUD</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-0369a1"></span>                                    <span class="rk-link-strong">Cloud</span>
+                                                                            <div class="rk-cell-sub">Bulut yapilandirmasi, SaaS/IaaS, paylasimli sorumluluk</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            1</a>
+                                                                    </td>
+                                <td>70</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="7">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">BCM</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-9f1239"></span>                                    <span class="rk-link-strong">Business Continuity</span>
+                                                                            <div class="rk-cell-sub">Is surekliligi, felaket kurtarma, RTO/RPO</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            1</a>
+                                                                    </td>
+                                <td>80</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="8">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">COMPLY</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-4338ca"></span>                                    <span class="rk-link-strong">Compliance</span>
+                                                                            <div class="rk-cell-sub">Yasal duzenlemeler, standartlar, denetim bulgulari</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            2</a>
+                                                                    </td>
+                                <td>90</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="9">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">THIRD</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-7c2d12"></span>                                    <span class="rk-link-strong">Third Party</span>
+                                                                            <div class="rk-cell-sub">Tedarikci, outsourcing, tedarik zinciri riski</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            1</a>
+                                                                    </td>
+                                <td>100</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="10">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">OPSIT</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-475569"></span>                                    <span class="rk-link-strong">Operational IT</span>
+                                                                            <div class="rk-cell-sub">Degisiklik yonetimi, izleme, kapasite, insan hatasi</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            1</a>
+                                                                    </td>
+                                <td>110</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="11">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">PHYSICAL</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-166534"></span>                                    <span class="rk-link-strong">Physical Security</span>
+                                                                            <div class="rk-cell-sub">Veri merkezi, fiziksel erisim, cevresel tehditler</div>
+                                                                    </td>
+                                <td>
+                                                                            <a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            1</a>
+                                                                    </td>
+                                <td>120</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="12">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                    <span class="rk-icon-btn is-disabled"
+                                                  title="In use, so it cannot be deleted — deactivate it instead">
+                                                <i class="bi bi-lock"></i></span>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                    <tr>
+                                <td class="rk-code">OTHER</td>
+                                <td>
+                                    <span class="rk-dot rk-cat-64748b"></span>                                    <span class="rk-link-strong">Other</span>
+                                                                            <div class="rk-cell-sub">Diger / siniflandirilmamis</div>
+                                                                    </td>
+                                <td>
+                                                                            <span class="text-muted">0</span>
+                                                                    </td>
+                                <td>999</td>
+                                <td>
+                                                                            <span class="rk-badge sev-low">Active</span>
+                                                                    </td>
+                                <td>
+                                    <div class="rk-row-actions">
+                                        <a class="rk-icon-btn" title="Edit"
+                                           href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                            <i class="bi bi-pencil"></i></a>
+
+                                        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="13">
+                                            <button type="submit" class="rk-icon-btn"
+                                                    title="Pasifleştir">
+                                                <i class="bi bi-toggle-on"></i>
+                                            </button>
+                                        </form>
+
+                                                                                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                              class="d-inline"
+                                              data-rk-confirm="Other silinecek. Onaylıyor musunuz?">
+                                            <input type="hidden" name="_token" value="">                                            <input type="hidden" name="id" value="13">
+                                            <button type="submit" class="rk-icon-btn is-danger" title="Delete">
+                                                <i class="bi bi-trash"></i></button>
+                                        </form>
+                                                                            </div>
+                                </td>
+                            </tr>
+                                                </tbody>
+                    </table>
+                </div>
+                            </div>
+        </div>
+
+        <div class="rk-alert rk-alert-info">
+            <i class="bi bi-info-circle-fill"></i>
+            <div>
+                Kullanımda olan bir kategori <strong>silinemez</strong>. Kullanımdan kaldırmak
+                için <strong>pasifleştirin</strong>: yeni risklerde seçilemez, mevcut riskler
+                kategorisiz kalmaz.
+            </div>
+        </div>
+    </div>
+
+</div>
+        
+<!-- Belgenin sonundaki kapanış notu -->
+<div class="rk-print-only rk-print-closing">
+    <p class="rk-closing-id">
+        RiskOps        &middot; Risk Kategorileri                    &middot; RO-CATE-20260919-1642                &middot; 19.09.2026 16:42    </p>
+            <p>Bu rapor RiskOps tarafından otomatik üretilmiştir.</p>
+                <p class="rk-print-classline">
+            This document is classified <strong>Kuruma Özel</strong>. It must not be shared with unauthorised parties.        </p>
+    </div>
+    </main><!-- /.rk-content -->
+
+    <footer class="text-center text-muted rk-u-foot-note">
+        RiskOps                &middot; 2026    </footer>
+
+</div><!-- /.rk-main -->
+
+<script src="/riskops/demo/assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/riskops/demo/assets/js/app.js?v=20260912b"></script>
+</body>
+</html>

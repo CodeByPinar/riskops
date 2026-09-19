@@ -40,7 +40,7 @@ $action = db_row(
 );
 
 if ($action === null) {
-    flash('error', 'Aksiyon bulunamadı.');
+    flash('error', t('Aksiyon bulunamadı.'));
     redirect('/actions/');
 }
 

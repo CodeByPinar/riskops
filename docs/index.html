@@ -95,6 +95,15 @@ a { color: var(--blue-lt); }
 .btn-ghost { border-color: var(--line); color: var(--fg); background: var(--card); }
 .btn-ghost:hover { border-color: rgba(255,255,255,.22); }
 
+/* Dil degistirici: kucuk, sessiz, ama gezinmenin parcasi. */
+.lang {
+    color: var(--fg-soft); text-decoration: none;
+    font-size: 12.5px; font-weight: 700; letter-spacing: .6px;
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: 5px 9px; line-height: 1;
+}
+.lang:hover { color: var(--fg); border-color: rgba(255,255,255,.24); }
+
 /* --------------------------------------------------------------- hero */
 
 /* padding-block, padding DEGIL: bu elemanlar ayni zamanda .wrap ve
@@ -260,6 +269,7 @@ html { scroll-behavior: smooth; }
       <a class="hide-sm" href="#ekranlar">Ekranlar</a>
       <a class="hide-sm" href="#kalite">Kalite</a>
       <a class="hide-sm" href="#kurulum">Kurulum</a>
+      <a class="lang" href="en/" hreflang="en" lang="en">EN</a>
       <a class="btn btn-primary" href="demo/dashboard/">Demoyu gez →</a>
     </nav>
   </div>
