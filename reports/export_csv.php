@@ -95,6 +95,15 @@ header('Pragma: no-cache');
 
 $out = fopen('php://output', 'wb');
 
+/* php://output pratikte acilmaz degil - ama fopen() imzasi false
+   dondurebiliyor ve buradan sonraki her fwrite() ona guveniyor.
+   Basliklar zaten gonderildi; yapilabilecek en durust sey, yarim bir
+   CSV uretmek yerine burada durmak. */
+if ($out === false) {
+    http_response_code(500);
+    exit('Cikti akisi acilamadi.');
+}
+
 if ($isExcel) {
     fwrite($out, "\xEF\xBB\xBF");   // BOM
     fwrite($out, "sep=;\r\n");      // Excel'e ayracı bildir
@@ -199,7 +208,9 @@ foreach ($rows as $row) {
         $line[] = (string)(++$i);
     }
     foreach (array_keys($def['columns']) as $col) {
-        $line[] = $formatValue($col, $row[$col] ?? null);
+        /* array_keys() int|string doner; sutun adlari her zaman metin
+           ama "12" gibi bir ad PHP tarafindan int'e cevrilir. */
+        $line[] = $formatValue((string)$col, $row[$col] ?? null);
     }
     $writeRow($line);
 }

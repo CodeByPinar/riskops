@@ -210,7 +210,13 @@ function input_int_range(string $key, int $min, int $max, ?int $default = null):
 /**
  * Deger yalnızca izin verilen listedeyse kabul edilir (ENUM guvenligi).
  *
- * @param list<string> $allowed
+ * VARSAYILAN VERİLİRSE DÖNÜŞ NULL OLAMAZ. Sıralama sütunu seçen her
+ * ekran bunu varsayıyordu ($sortMap[$sort] doğrudan kullanılıyor) ama
+ * imza bunu söylemiyordu; koşullu dönüş tipi o varsayımı yazıya
+ * döküyor. Yanlış olsaydı dört ekranda tanımsız dizi anahtarı olurdu.
+ *
+ * @param  list<string> $allowed
+ * @return ($default is null ? string|null : string)
  */
 function input_enum(string $key, array $allowed, ?string $default = null): ?string
 {
@@ -358,7 +364,23 @@ function flash_take(): array
 {
     $messages = $_SESSION['_flash'] ?? [];
     unset($_SESSION['_flash']);
-    return is_array($messages) ? $messages : [];
+
+    /* Oturumdan gelen her sey guvenilmez: oturum dosyasi bozulmus ya
+       da eski bir surumden kalmis olabilir. Sekle uymayan girdiyi
+       atiyoruz - layout'un yarim bir diziye uzanmasindansa mesajin
+       kaybolmasi iyidir. */
+    if (!is_array($messages)) {
+        return [];
+    }
+
+    $out = [];
+    foreach ($messages as $m) {
+        if (is_array($m) && isset($m['type'], $m['message'])) {
+            $out[] = ['type' => (string)$m['type'], 'message' => (string)$m['message']];
+        }
+    }
+
+    return $out;
 }
 
 /* =====================================================================

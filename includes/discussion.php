@@ -150,7 +150,7 @@ function discussion_comments(string $type, int $parentId): array
 {
     $cfg = discussion_config($type);
 
-    $stmt = db_stmt(
+    return db_all(
         'SELECT c.id, c.body, c.created_at, c.user_id, u.name AS author_name
            FROM ' . $cfg['comments'] . ' c
            LEFT JOIN users u ON u.id = c.user_id
@@ -158,8 +158,6 @@ function discussion_comments(string $type, int $parentId): array
           ORDER BY c.created_at DESC',
         [':id' => $parentId]
     );
-
-    return $stmt->fetchAll();
 }
 
 /**
@@ -171,7 +169,7 @@ function discussion_attachments(string $type, int $parentId): array
 {
     $cfg = discussion_config($type);
 
-    $stmt = db_stmt(
+    return db_all(
         'SELECT a.id, a.original_name, a.mime_type, a.size_bytes, a.created_at,
                 a.uploaded_by, u.name AS uploader_name
            FROM ' . $cfg['attachments'] . ' a
@@ -180,8 +178,6 @@ function discussion_attachments(string $type, int $parentId): array
           ORDER BY a.created_at DESC',
         [':id' => $parentId]
     );
-
-    return $stmt->fetchAll();
 }
 
 /**

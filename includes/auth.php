@@ -230,7 +230,11 @@ function auth_destroy(): void
 
     if (ini_get('session.use_cookies')) {
         $p = session_get_cookie_params();
-        setcookie(session_name(), '', [
+
+        /* session_name() yalnizca gecersiz bir ad ATAMAYA calisirken
+           false doner; okurken degil. (string) cast bu gercegi
+           yaziya dokuyor. */
+        setcookie((string)session_name(), '', [
             'expires'  => time() - 42000,
             'path'     => $p['path'],
             'domain'   => $p['domain'],

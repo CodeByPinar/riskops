@@ -63,6 +63,15 @@ while (ob_get_level() > 0) {
 
 $out = fopen('php://output', 'wb');
 
+/* php://output pratikte acilmaz degil - ama fopen() imzasi false
+   dondurebiliyor ve buradan sonraki her fwrite() ona guveniyor.
+   Basliklar zaten gonderildi; yapilabilecek en durust sey, yarim bir
+   CSV uretmek yerine burada durmak. */
+if ($out === false) {
+    http_response_code(500);
+    exit('Cikti akisi acilamadi.');
+}
+
 if ($isExcel) {
     fwrite($out, "\xEF\xBB\xBF");   // BOM: Excel BOM'suz UTF-8'i Windows-1254 sanar
     fwrite($out, "sep=;\r\n");      // ayraci acikca bildir

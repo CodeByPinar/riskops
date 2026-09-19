@@ -142,7 +142,7 @@ try {
 
     sec('tablolar');
 
-    $tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+    $tables = db_column('SHOW TABLES');
     printf("  %-28s %10s %12s %12s\n", 'TABLO', 'SATIR', 'VERİ', 'İNDEKS');
     echo '  ' . str_repeat('-', 66) . "\n";
 

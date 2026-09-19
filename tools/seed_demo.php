@@ -363,9 +363,9 @@ foreach ($actions as $j => [$titlePart, $actionTitle, $priority, $aStatus, $dueO
         ':owner'  => $userIds[$j % count($userIds)],
         ':pri'    => $priority,
         ':status' => $aStatus,
-        ':due'    => date('Y-m-d', strtotime("{$dueOffset} days")),
+        ':due'    => date('Y-m-d', (int)strtotime("{$dueOffset} days")),
         ':done'   => $aStatus === 'Completed'
-                       ? date('Y-m-d H:i:s', strtotime(($dueOffset - 2) . ' days'))
+                       ? date('Y-m-d H:i:s', (int)strtotime(($dueOffset - 2) . ' days'))
                        : null,
         ':cby'    => 1,
     ]);

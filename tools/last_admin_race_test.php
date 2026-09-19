@@ -128,7 +128,7 @@ PHP;
     check('YARIS SONRASI: en az 1 aktif admin kaldi (invariant)', $after >= 1, "$after aktif admin");
     check('tam olarak 1 isci guncelledi', substr_count($ra . $rb, '"updated":true') === 1);
 
-    array_map('unlink', glob("$dir/*"));
+    array_map('unlink', glob("$dir/*") ?: []);
     rmdir($dir);
 } finally {
     $restore();

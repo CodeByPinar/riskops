@@ -218,14 +218,10 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
                                     <li>
                                         <code><?= e($k) ?></code>:
                                         <?php if (array_key_exists($k, $old)): ?>
-                                            <span class="rk-diff-old"><?= e(str_limit(
-                                                is_scalar($old[$k]) ? (string)$old[$k] : json_encode($old[$k]), 26)) ?></span>
+                                            <span class="rk-diff-old"><?= e(audit_value_short($old[$k])) ?></span>
                                             <i class="bi bi-arrow-right"></i>
                                         <?php endif; ?>
-                                        <span class="rk-diff-new"><?= e(str_limit(
-                                            array_key_exists($k, $new) && is_scalar($new[$k])
-                                                ? (string)$new[$k]
-                                                : (array_key_exists($k, $new) ? json_encode($new[$k]) : '—'), 26)) ?></span>
+                                        <span class="rk-diff-new"><?= e(array_key_exists($k, $new) ? audit_value_short($new[$k]) : '—') ?></span>
                                     </li>
                                 <?php endforeach; ?>
                                 <?php if (count($keys) > 4): ?>

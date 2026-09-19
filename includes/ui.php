@@ -308,3 +308,21 @@ function priority_label(?string $v): string
 {
     return severity_label($v);
 }
+
+/**
+ * Denetim farkindaki bir degeri kisa metne indirger.
+ *
+ * Skaler ise kendisi, degilse JSON. json_encode() gecersiz UTF-8'de
+ * false donebiliyor; o durumda bos metin basmak yerine yerini belli
+ * ediyoruz - bos bir hucre "alan bostu" gibi okunurdu.
+ */
+function audit_value_short(mixed $value, int $limit = 26): string
+{
+    if (is_scalar($value)) {
+        return str_limit((string)$value, $limit);
+    }
+
+    $json = json_encode($value, JSON_UNESCAPED_UNICODE);
+
+    return str_limit($json === false ? '(gosterilemedi)' : $json, $limit);
+}

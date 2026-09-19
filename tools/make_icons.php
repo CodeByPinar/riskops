@@ -65,14 +65,47 @@ function load_png(string $path): GdImage
     return $img;
 }
 
+/**
+ * Renk ayirir; GD basarisiz olursa betik durur.
+ *
+ * imagecolorallocatealpha() palet dolarsa false doner ve o deger
+ * dogrudan imagesetpixel()'e giriyor - false sessizce "renk 0" diye
+ * yorumlanip ciktiyi bozardi. Bilesenler ayrica araliga kirpiliyor:
+ * yuvarlamadan 256 cikmasi gecerli bir renk degil.
+ */
+function color(GdImage $img, int $r, int $g, int $b, int $a): int
+{
+    $c = imagecolorallocatealpha(
+        $img,
+        max(0, min(255, $r)),
+        max(0, min(255, $g)),
+        max(0, min(255, $b)),
+        max(0, min(127, $a))
+    );
+
+    if ($c === false) {
+        fwrite(STDERR, "HATA: renk ayrilamadi\n");
+        exit(1);
+    }
+
+    return $c;
+}
+
 /** Saydamligi koruyarak yeniden boyutlandirir ve yazar. */
 function write_resized(GdImage $src, string $path, int $width, int $height): void
 {
+    /* 0 ya da negatif boyutlu bir ikon istenmis olamaz; istenmisse
+       cagiran taraf bozuk ve sessizce bos PNG uretmek yanlis olur. */
+    if ($width < 1 || $height < 1) {
+        fwrite(STDERR, "HATA: gecersiz ikon boyutu {$width}x{$height}\n");
+        exit(1);
+    }
+
     $dst = imagecreatetruecolor($width, $height);
 
     imagealphablending($dst, false);
     imagesavealpha($dst, true);
-    $transparent = imagecolorallocatealpha($dst, 0, 0, 0, 127);
+    $transparent = color($dst, 0, 0, 0, 127);
     imagefilledrectangle($dst, 0, 0, $width, $height, $transparent);
     imagealphablending($dst, true);
 
@@ -159,7 +192,7 @@ for ($y = 0; $y < $wH; $y++) {
         $a = ($rgba >> 24) & 0x7F;
 
         if ($a === 127) {
-            imagesetpixel($light, $x, $y, imagecolorallocatealpha($light, 0, 0, 0, 127));
+            imagesetpixel($light, $x, $y, color($light, 0, 0, 0, 127));
             continue;
         }
 
@@ -176,7 +209,7 @@ for ($y = 0; $y < $wH; $y++) {
         // t=0 -> tam beyaz ; t=1 -> orijinal renk + %18 beyaz
         $mix = 1.0 - (0.82 * $t);
 
-        imagesetpixel($light, $x, $y, imagecolorallocatealpha(
+        imagesetpixel($light, $x, $y, color(
             $light,
             (int)round($r + (255 - $r) * $mix),
             (int)round($g + (255 - $g) * $mix),

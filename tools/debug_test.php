@@ -254,7 +254,7 @@ if (APP_DEBUG) {
 
     $q = debug_store()['queries'][$after - 1];
     ok(str_contains($q['sql'], 'FROM risks'), 'SQL metni kaydedildi');
-    ok($q['params'] === [0], 'parametreler kaydedildi', json_encode($q['params']));
+    ok($q['params'] === [0], 'parametreler kaydedildi', (string)json_encode($q['params']));
     ok($q['ms'] >= 0, 'süre ölçüldü');
     /* Kaydedilen kaynak, db.php/db_debug.php degil, sorguyu ACAN
        dosya olmali - "bu sorguyu hangi sayfa calistirdi" sorusunun

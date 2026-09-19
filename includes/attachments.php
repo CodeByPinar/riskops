@@ -116,11 +116,15 @@ function attach_error_message(int $code): string
 /**
  * Yüklenen dosyayı doğrular ve diske yazar.
  *
- * @param array $file $_FILES['...'] dizisi
- * @return array{ok:bool, error?:string, stored?:string, original?:string,
- *                mime?:string, size?:int}
+ * DÖNÜŞ İKİ AYRI ŞEKİLDİR, tek bir "bazı alanlar olabilir" şekli
+ * değil: başarıda dosya alanları HER ZAMAN dolu, hatada error HER
+ * ZAMAN dolu. Böyle yazıldığında `if ($r['ok'])` kontrolü tipi de
+ * daraltıyor ve çağıranın olmayan bir alana uzanması derlemeden önce
+ * yakalanıyor.
  *
- * @param array<string, mixed> $file
+ * @param  array<string, mixed> $file $_FILES['...'] dizisi
+ * @return array{ok: true, stored: string, original: string, mime: string, size: int}
+ *         |array{ok: false, error: string}
  */
 function attach_store(array $file): array
 {

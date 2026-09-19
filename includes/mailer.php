@@ -21,7 +21,13 @@ declare(strict_types=1);
 /**
  * Gönderen ayarlarını okur ve doğrular.
  *
- * @return array{ok:bool, error?:string, email?:string, name?:string}
+ * Dönüş İKİ AYRI ŞEKİLDİR: doğrulama geçtiyse email ve name HER ZAMAN
+ * dolu, geçmediyse error HER ZAMAN dolu. Tek bir "hepsi olabilir"
+ * şekli yazmak, `if (!$sender['ok'])` kontrolünden sonra bile
+ * çağıranı belirsizlikte bırakıyordu.
+ *
+ * @return array{ok: true, email: string, name: string}
+ *         |array{ok: false, error: string}
  */
 function mail_sender(): array
 {

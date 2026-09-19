@@ -251,10 +251,9 @@ function report_run(array $def, ?string $from, ?string $to): array
         }
     }
 
-    $sql  = str_replace('%DATE%', $dateSql, $def['sql']);
-    $stmt = db_stmt($sql, $params);
+    $sql = (string)str_replace('%DATE%', $dateSql, (string)$def['sql']);
 
-    return ['rows' => $stmt->fetchAll(), 'sql' => $sql];
+    return ['rows' => db_all($sql, $params), 'sql' => $sql];
 }
 
 /**

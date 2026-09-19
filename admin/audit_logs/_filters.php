@@ -26,10 +26,10 @@ function audit_filters(): array
     );
     $actionOptions = array_column($actionCounts, 'action');
 
-    $entityOptions = db()->query(
+    $entityOptions = db_column(
         'SELECT entity_type FROM audit_logs WHERE entity_type IS NOT NULL
          GROUP BY entity_type ORDER BY entity_type'
-    )->fetchAll(PDO::FETCH_COLUMN);
+    );
 
     $f = [
         'action' => input_enum('action', $actionOptions),

@@ -71,7 +71,7 @@ $expected = ['action_attachments', 'action_comments', 'audit_logs', 'departments
              'login_attempts', 'risk_actions', 'risk_assessments',
              'risk_attachments', 'risk_categories', 'risk_comments',
              'risk_sequences', 'risks', 'settings', 'users'];
-$tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+$tables = db_column('SHOW TABLES');
 sort($tables);
 check(count($expected) . ' tablo mevcut', $tables === $expected,
     count($tables) . ' tablo: ' . implode(', ', array_diff($tables, $expected))
@@ -219,7 +219,7 @@ section('10. audit_diff');
     ['title' => 'Yeni', 'status' => 'Open',        'updated_at' => 'y']
 );
 check('sadece degisen alan yakalandi', $old === ['title' => 'Eski'] && $new === ['title' => 'Yeni'],
-    json_encode($new, JSON_UNESCAPED_UNICODE));
+    (string)json_encode($new, JSON_UNESCAPED_UNICODE));
 
 /* ------------------------------------------------------------------ */
 echo "\n" . str_repeat('=', 72) . "\n";

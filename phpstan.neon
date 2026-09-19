@@ -37,11 +37,11 @@
 #  yazıldı. Seviye buradan kademeli yükseltilecek - her yükseltme kendi
 #  commit'inde, kendi düzeltmeleriyle.
 #
-#  Sıradaki: seviye 7 (birleşim tipleri) -> 8 (null güvenliği).
+#  Sıradaki: seviye 8 (null güvenliği).
 # =====================================================================
 
 parameters:
-    level: 6
+    level: 7
 
     paths:
         - includes

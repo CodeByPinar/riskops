@@ -18,11 +18,13 @@ use PHPUnit\Framework\TestCase;
  */
 final class SchemaTest extends TestCase
 {
-    private static PDO $pdo;
-
     public static function setUpBeforeClass(): void
     {
-        self::$pdo = db();
+        /* Baglantiyi burada acmak, semanin yoklugunda testin
+           "baglanamadim" diye acikca patlamasini sagliyor. Sorgular
+           artik sorgu katmanindan geciyor, saklanan bir PDO alanina
+           gerek kalmadi. */
+        db();
     }
 
     #[Test]
@@ -35,7 +37,7 @@ final class SchemaTest extends TestCase
             'settings', 'users',
         ];
 
-        $actual = self::$pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+        $actual = db_column('SHOW TABLES');
         sort($actual);
 
         self::assertSame($expected, $actual, 'şema beklenen tablo kümesiyle eşleşmiyor');
@@ -76,12 +78,12 @@ final class SchemaTest extends TestCase
         /* Yorumun yazarı silinse bile yorum kalmalı (SET NULL).
            CASCADE olsaydı bir kullanıcıyı silmek tartışma geçmişini
            sessizce yok ederdi. */
-        $fk = self::$pdo->query(
+        $fk = db_column(
             "SELECT DELETE_RULE
                FROM information_schema.REFERENTIAL_CONSTRAINTS
               WHERE CONSTRAINT_SCHEMA = DATABASE()
                 AND TABLE_NAME = 'risk_comments'"
-        )->fetchAll(PDO::FETCH_COLUMN);
+        );
 
         self::assertNotEmpty($fk, 'risk_comments üzerinde yabancı anahtar yok');
         self::assertContains('SET NULL', $fk, 'yazar silindiğinde yorum da siliniyor');

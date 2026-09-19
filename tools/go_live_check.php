@@ -141,11 +141,11 @@ if (is_file(LOG_FILE)) {
 /* ------------------------------------------------------------------ */
 section('2. Varsayılan kimlik bilgileri');
 
-$stmt = db()->query("SELECT id, name, email, password FROM users WHERE role = 'admin' AND status = 1");
+$admins   = db_all("SELECT id, name, email, password FROM users WHERE role = 'admin' AND status = 1");
 $defaults = ['Admin123456', 'admin', 'password', '123456', 'RiskOps2026Demo'];
 $weak = [];
 
-foreach ($stmt->fetchAll() as $u) {
+foreach ($admins as $u) {
     foreach ($defaults as $candidate) {
         if (password_verify($candidate, (string)$u['password'])) {
             $weak[] = $u['email'] . ' (' . $candidate . ')';
@@ -173,8 +173,7 @@ if ($foundDemo !== []) {
     result('OK', 'Demo kullanıcı hesabı', 'yok');
 }
 
-$mustChange = (int)db()->query('SELECT COUNT(*) FROM users WHERE must_change_password = 1 AND status = 1')
-    ->fetchColumn();
+$mustChange = db_int('SELECT COUNT(*) FROM users WHERE must_change_password = 1 AND status = 1');
 result($mustChange > 0 ? 'WARN' : 'OK', 'Parola değiştirmesi bekleyen', $mustChange . ' kullanıcı');
 
 /* ------------------------------------------------------------------ */
@@ -218,7 +217,7 @@ result(in_array($dbPerm, ['600', '640'], true) ? 'OK' : 'WARN',
     'config/database.php izni', $dbPerm, 'chmod 640 config/database.php');
 
 if (is_dir(APP_ROOT . '/tools')) {
-    result('WARN', 'tools/ dizini sunucuda', count(glob(APP_ROOT . '/tools/*.php')) . ' dosya',
+    result('WARN', 'tools/ dizini sunucuda', count(glob(APP_ROOT . '/tools/*.php') ?: []) . ' dosya',
         'Üretimde kaldırın: seed_demo.php --purge tüm risk verisini siler');
 } else {
     result('OK', 'tools/ dizini', 'kaldırılmış');
@@ -254,8 +253,11 @@ result($live === 10 ? 'OK' : 'WARN', 'Tablo sayısı', $live . ' (beklenen 10)')
 
 $liveSettings = (int)db_value('SELECT COUNT(*) FROM settings');
 $seedFile     = APP_ROOT . '/database/seed.sql';
+/* is_file() gecse bile okuma izinsizlikten basarisiz olabilir;
+   o durumda (string) bos metin verir, sayim 0 cikar ve asagidaki
+   karsilastirma zaten FAIL der - sessizce dogru gorunmez. */
 $seedSettings = is_file($seedFile)
-    ? preg_match_all("/^\('[a-z_]+',/m", file_get_contents($seedFile))
+    ? (int)preg_match_all("/^\('[a-z_]+',/m", (string)file_get_contents($seedFile))
     : 0;
 result($seedSettings >= $liveSettings ? 'OK' : 'FAIL',
     'seed.sql ayar kapsaması', $seedSettings . ' / ' . $liveSettings . ' canlı',
