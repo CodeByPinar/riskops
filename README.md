@@ -607,7 +607,8 @@ Sırada:
       düzeltmeleriyle, baseline'sız. Seviye 9 açılmadı (ADR-0012)
 - [x] İnce bir **sorgu katmanı** — ORM değil: `prepare/execute/fetch`
       üçlüsü tek yere indi, SQL çağrı yerinde kaldı (ADR-0011)
-- [ ] Kalan ekranların çevirisi (mekanik iş; bkz. aşağıdaki tablo)
+- [x] Kalan ekranların çevirisi — tüm ekranlar İngilizce; sözlük
+      tutarlılığı `tools/i18n_check.php` ile CI'da denetleniyor
 
 ### Çok dilli arayüz: durum
 
@@ -620,19 +621,29 @@ pratik sonucu: sözlükte karşılığı olmayan bir metin bozulmaz, doğru
 Türkçesiyle görünür. Yani kısmi çeviri kullanılabilir bir durumdur,
 kırık bir durum değil.
 
-Şu an İngilizceye çevrilmiş olanlar:
+Tüm ekranlar çevrilmiştir. Sözlükte **326 kayıt** var; `t()`/`te()`
+ile sarılmış 311 anahtarın tamamının karşılığı mevcut
+(`php tools/i18n_check.php` ile doğrulanır, CI'da da koşar).
 
-| Çevrildi | Henüz çevrilmedi |
+| Çevrildi | Kapsam dışı |
 |---|---|
-| Kenar çubuğu ve üst bilgi (tüm menü) | Risk listesi ve formu |
-| Giriş ekranı | Risk detayı |
-| Profil sayfası | Raporlar ve yönetici özeti |
-| Silinen riskler | Yönetim ekranları (kullanıcı, departman, kategori, ayarlar) |
-| Yorumlar ve ekler | Değerlendirme ekranları |
-| Aksiyon detayı | Denetim kaydı ekranı |
+| Panel, risk listesi/formu/detayı | Yardım metinlerinin uzun paragrafları |
+| Aksiyonlar, değerlendirmeler | `tools/` altındaki operatör betikleri |
+| Raporlar ve yönetici özeti | Hata ayıklama araç çubuğu |
+| Yönetim ekranlarının tamamı | Denetim kaydındaki veri değerleri |
+| Denetim kaydı, eklentiler | |
+| Giriş, profil, yorumlar, ekler | |
 
-Kalanları çevirmek mekanik bir iştir: metni `t('...')` ile sarıp
-`lang/en.php` dosyasına bir satır eklemek. Sözlükte 124 kayıt var.
+**Uzun yardım paragrafları neden kapsam dışı:** bunlar `<strong>` ve
+`<?= ?>` parçalarıyla bölünmüş cümlelerdir. Parça parça çevirmek —
+"Inherent (", ") × Etki" gibi — kelime sırası dillere göre değiştiği
+için bozuk İngilizce üretir. Yarım çevrilmiş bir cümle, hiç
+çevrilmemiş olandan kötüdür; bu yüzden Türkçe bırakıldılar.
+
+**Sarma işi elle yapılmadı:** metin düğümlerini `te()` ile saran bir
+araç yazıldı. Kuralı dar tutuldu — bir metin ancak bir elemanın
+**tamamı** ise sarılıyor (öncesi açılış etiketi, sonrası kapanış
+etiketi). İlk sürüm bu kural olmadan cümle parçalarını da yakalamıştı.
 
 **Bilinen sınır:** aynı Türkçe kelime farklı bağlamlarda farklı
 çevrilmesi gerektiğinde tek anahtar yetmez. Giriş ekranındaki

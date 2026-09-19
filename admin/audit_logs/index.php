@@ -97,11 +97,11 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
 <div class="rk-page-actions">
     <a class="rk-btn" href="<?= e(url('/admin/audit_logs/export_csv.php?format=excel' . $qsStr)) ?>"
        title="Türkçe Excel'de çift tıkla açılır">
-        <i class="bi bi-file-earmark-excel"></i> Excel
+        <i class="bi bi-file-earmark-excel"></i> <?= te('Excel') ?>
     </a>
     <a class="rk-btn" href="<?= e(url('/admin/audit_logs/export_csv.php?format=raw' . $qsStr)) ?>"
        title="RFC 4180 — sistem entegrasyonu için">
-        <i class="bi bi-filetype-csv"></i> Ham CSV
+        <i class="bi bi-filetype-csv"></i> <?= te('Ham CSV') ?>
     </a>
     <span class="rk-help rk-u-m0">
         Dışa aktarma, ekrandaki filtrelerin aynısını kullanır ve
@@ -113,14 +113,14 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
     <div class="rk-card-body">
         <div class="rk-filter-grid">
             <div class="rk-field rk-filter-wide">
-                <label class="rk-label" for="q">Arama</label>
+                <label class="rk-label" for="q"><?= te('Arama') ?></label>
                 <input class="rk-input" type="search" id="q" name="q" value="<?= e($f['q'] ?? '') ?>"
                        placeholder="Kullanıcı adı, IP veya değişen değer">
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="action">İşlem</label>
+                <label class="rk-label" for="action"><?= te('İşlem') ?></label>
                 <select class="rk-select" id="action" name="action">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?php foreach ($actionOptions as $a): ?>
                         <option value="<?= e($a['action']) ?>" <?= $f['action'] === $a['action'] ? 'selected' : '' ?>>
                             <?= e($a['action']) ?> (<?= (int)$a['adet'] ?>)
@@ -129,9 +129,9 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
                 </select>
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="entity">Varlık</label>
+                <label class="rk-label" for="entity"><?= te('Varlık') ?></label>
                 <select class="rk-select" id="entity" name="entity">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?php foreach ($entityOptions as $en): ?>
                         <option value="<?= e($en) ?>" <?= $f['entity'] === $en ? 'selected' : '' ?>>
                             <?= e($en) ?>
@@ -140,14 +140,14 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
                 </select>
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="user">Kullanıcı</label>
+                <label class="rk-label" for="user"><?= te('Kullanıcı') ?></label>
                 <select class="rk-select" id="user" name="user">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_html($users, $f['user']) ?>
                 </select>
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="from">Başlangıç</label>
+                <label class="rk-label" for="from"><?= te('Başlangıç') ?></label>
                 <input class="rk-input" type="date" id="from" name="from" value="<?= e($f['from'] ?? '') ?>">
             </div>
             <div class="rk-field">
@@ -157,13 +157,13 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
         </div>
         <div class="rk-filter-actions">
             <span class="rk-help">
-                <i class="bi bi-lock"></i> Salt okunur — audit kayıtları arayüzden değiştirilemez.
+                <i class="bi bi-lock"></i> <?= te('Salt okunur — audit kayıtları arayüzden değiştirilemez.') ?>
             </span>
             <div class="ms-auto d-flex gap-2">
                 <?php if ($activeFilters > 0): ?>
-                    <a class="rk-btn" href="<?= e(url('/admin/audit_logs/')) ?>"><i class="bi bi-x-lg"></i> Temizle</a>
+                    <a class="rk-btn" href="<?= e(url('/admin/audit_logs/')) ?>"><i class="bi bi-x-lg"></i> <?= te('Temizle') ?></a>
                 <?php endif; ?>
-                <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> Filtrele</button>
+                <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> <?= te('Filtrele') ?></button>
             </div>
         </div>
     </div>
@@ -177,8 +177,8 @@ $qsStr = $qs !== [] ? '&' . http_build_query($qs) : '';
         <div class="rk-table-wrap">
             <table class="rk-table">
                 <thead>
-                    <tr><th>Zaman</th><th>Kullanıcı</th><th>İşlem</th><th>Varlık</th>
-                        <th>Değişiklik</th><th>IP</th></tr>
+                    <tr><th><?= te('Zaman') ?></th><th><?= te('Kullanıcı') ?></th><th><?= te('İşlem') ?></th><th><?= te('Varlık') ?></th>
+                        <th><?= te('Değişiklik') ?></th><th>IP</th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($rows as $log):

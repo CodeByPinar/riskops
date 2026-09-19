@@ -49,7 +49,7 @@ require __DIR__ . '/_form.php';
 
 <div class="rk-card">
     <div class="rk-card-head">
-        <h2 class="rk-card-title"><i class="bi bi-key"></i> Parola</h2>
+        <h2 class="rk-card-title"><i class="bi bi-key"></i> <?= te('Parola') ?></h2>
     </div>
     <div class="rk-card-body">
         <div class="rk-danger-zone rk-u-panel-soft">
@@ -67,7 +67,7 @@ require __DIR__ . '/_form.php';
                   data-rk-confirm="<?= e($user['name'] . ' için yeni geçici parola üretilecek. Onaylıyor musunuz?') ?>">
                 <?= csrf_field() ?>
                 <input type="hidden" name="id" value="<?= $id ?>">
-                <button type="submit" class="rk-btn"><i class="bi bi-arrow-repeat"></i> Sıfırla</button>
+                <button type="submit" class="rk-btn"><i class="bi bi-arrow-repeat"></i> <?= te('Sıfırla') ?></button>
             </form>
         </div>
     </div>

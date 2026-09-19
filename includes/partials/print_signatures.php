@@ -17,7 +17,7 @@ if (!defined('RISKOPS_BOOTSTRAPPED')) {
 $roles = $printSignatureRoles ?? ['Hazırlayan', 'Gözden Geçiren', 'Onaylayan'];
 ?>
 <div class="rk-print-only rk-signatures">
-    <div class="rk-sig-title">Onay</div>
+    <div class="rk-sig-title"><?= te('Onay') ?></div>
     <table class="rk-sig-table">
         <thead>
             <tr>
@@ -32,13 +32,13 @@ $roles = $printSignatureRoles ?? ['Hazırlayan', 'Gözden Geçiren', 'Onaylayan'
                     <td>
                         <?php if ($i === 0): ?>
                             <div class="rk-sig-name"><?= e(auth_user()['name'] ?? '') ?></div>
-                            <div class="rk-sig-sub"><?= e(role_label(auth_role())) ?></div>
+                            <div class="rk-sig-sub"><?= te(role_label(auth_role())) ?></div>
                         <?php else: ?>
                             <div class="rk-sig-name">&nbsp;</div>
                             <div class="rk-sig-sub">&nbsp;</div>
                         <?php endif; ?>
                         <div class="rk-sig-line"></div>
-                        <div class="rk-sig-hint">Ad Soyad / İmza / Tarih</div>
+                        <div class="rk-sig-hint"><?= te('Ad Soyad / İmza / Tarih') ?></div>
                     </td>
                 <?php endforeach; ?>
             </tr>

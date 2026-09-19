@@ -163,7 +163,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
         <div class="rk-stat-icon"><i class="bi bi-check2-square"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= $openActions ?></div>
-            <div class="rk-stat-label">Açık Aksiyon</div>
+            <div class="rk-stat-label"><?= te('Açık Aksiyon') ?></div>
         </div>
     </div>
 
@@ -171,7 +171,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
         <div class="rk-stat-icon"><i class="bi bi-clock-history"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><?= $overdueActions ?></div>
-            <div class="rk-stat-label">Geciken Aksiyon</div>
+            <div class="rk-stat-label"><?= te('Geciken Aksiyon') ?></div>
         </div>
     </div>
 </div>
@@ -183,7 +183,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-overview"
                         type="button" role="tab">
-                    <i class="bi bi-info-circle"></i> Genel
+                    <i class="bi bi-info-circle"></i> <?= te('Genel') ?>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -292,7 +292,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
                     <?= csrf_field() ?>
                     <input type="hidden" name="id" value="<?= $id ?>">
                     <button type="submit" class="rk-btn rk-btn-danger">
-                        <i class="bi bi-trash"></i> Sil
+                        <i class="bi bi-trash"></i> <?= te('Sil') ?>
                     </button>
                 </form>
             </div>
@@ -305,10 +305,10 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
             <div class="rk-tab-toolbar">
                 <a class="rk-btn rk-btn-primary rk-btn-sm"
                    href="<?= e(url('/actions/create.php?risk_id=' . $id)) ?>">
-                    <i class="bi bi-plus-lg"></i> Aksiyon Ekle
+                    <i class="bi bi-plus-lg"></i> <?= te('Aksiyon Ekle') ?>
                 </a>
                 <a class="rk-btn rk-btn-sm" href="<?= e(url('/actions/?risk=' . $id)) ?>">
-                    <i class="bi bi-list-ul"></i> Tümünü yönet
+                    <i class="bi bi-list-ul"></i> <?= te('Tümünü yönet') ?>
                 </a>
             </div>
             <?php endif; ?>
@@ -330,8 +330,8 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
                     <table class="rk-table">
                         <thead>
                             <tr>
-                                <th>Aksiyon</th><th>Sorumlu</th><th>Öncelik</th>
-                                <th>Durum</th><th>Termin</th><th>Tamamlanma</th>
+                                <th><?= te('Aksiyon') ?></th><th><?= te('Sorumlu') ?></th><th><?= te('Öncelik') ?></th>
+                                <th>Durum</th><th><?= te('Termin') ?></th><th><?= te('Tamamlanma') ?></th>
                                 <th class="rk-u-shrink"></th>
                             </tr>
                         </thead>
@@ -354,14 +354,14 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
                                                 <?= csrf_field() ?>
                                                 <input type="hidden" name="id" value="<?= (int)$a['id'] ?>">
                                                 <input type="hidden" name="return" value="risk">
-                                                <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                                <button type="submit" class="rk-icon-btn is-good" title="<?= te('Tamamla') ?>">
                                                     <i class="bi bi-check2"></i>
                                                 </button>
                                             </form>
                                         <?php endif; ?>
 
                                         <?php if (can('action.update')): ?>
-                                            <a class="rk-icon-btn" title="Düzenle"
+                                            <a class="rk-icon-btn" title="<?= te('Düzenle') ?>"
                                                href="<?= e(url('/actions/edit.php?id=' . (int)$a['id'])) ?>">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
@@ -374,7 +374,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
                                                 <?= csrf_field() ?>
                                                 <input type="hidden" name="id" value="<?= (int)$a['id'] ?>">
                                                 <input type="hidden" name="return" value="risk">
-                                                <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                                <button type="submit" class="rk-icon-btn is-danger" title="<?= te('Sil') ?>">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>
@@ -412,8 +412,8 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
                     <table class="rk-table">
                         <thead>
                             <tr>
-                                <th>Tarih</th><th>Tip</th><th>Olasılık</th><th>Etki</th>
-                                <th>Skor</th><th>Seviye</th><th>Değerlendiren</th><th>Not</th>
+                                <th><?= te('Tarih') ?></th><th><?= te('Tip') ?></th><th><?= te('Olasılık') ?></th><th><?= te('Etki') ?></th>
+                                <th><?= te('Skor') ?></th><th><?= te('Seviye') ?></th><th><?= te('Değerlendiren') ?></th><th><?= te('Not') ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -447,7 +447,7 @@ $row = static function (string $label, string $valueHtml, bool $raw = true): voi
                 <div class="rk-table-wrap">
                     <table class="rk-table">
                         <thead>
-                            <tr><th>Tarih</th><th>Kullanıcı</th><th>İşlem</th><th>Değişiklik</th><th>IP</th></tr>
+                            <tr><th><?= te('Tarih') ?></th><th><?= te('Kullanıcı') ?></th><th><?= te('İşlem') ?></th><th><?= te('Değişiklik') ?></th><th><?= te('IP') ?></th></tr>
                         </thead>
                         <tbody>
                         <?php foreach ($auditRows as $log):

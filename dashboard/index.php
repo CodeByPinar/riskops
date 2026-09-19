@@ -239,7 +239,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
             </div>
             <div class="rk-card-body">
                 <div class="rk-matrix-wrap">
-                    <div class="rk-matrix-yaxis"><span>Etki</span></div>
+                    <div class="rk-matrix-yaxis"><span><?= te('Etki') ?></span></div>
                     <table class="rk-matrix">
                         <tbody>
                         <?php for ($i = 5; $i >= 1; $i--): ?>
@@ -268,7 +268,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
                         </tbody>
                     </table>
                 </div>
-                <div class="rk-matrix-xaxis">Olasılık</div>
+                <div class="rk-matrix-xaxis"><?= te('Olasılık') ?></div>
 
                 <div class="rk-matrix-legend">
                     <?php foreach (['Low', 'Medium', 'High', 'Critical'] as $sev): ?>
@@ -287,7 +287,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
     <div class="col-12 col-xl-5">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-bar-chart-steps"></i> Seviyeye Göre</h2>
+                <h2 class="rk-card-title"><i class="bi bi-bar-chart-steps"></i> <?= te('Seviyeye Göre') ?></h2>
             </div>
             <div class="rk-card-body">
                 <?php if ((int)$stats['total'] === 0): ?>
@@ -308,7 +308,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
 
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-flag"></i> Duruma Göre</h2>
+                <h2 class="rk-card-title"><i class="bi bi-flag"></i> <?= te('Duruma Göre') ?></h2>
             </div>
             <div class="rk-card-body">
                 <?php if ($statusCounts === []): ?>
@@ -333,12 +333,12 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
 <!-- ===================== Trend ===================== -->
 <div class="rk-card">
     <div class="rk-card-head">
-        <h2 class="rk-card-title"><i class="bi bi-graph-up"></i> Risk Trendi</h2>
-        <div class="rk-card-tools"><span class="rk-help">Son 12 ay</span></div>
+        <h2 class="rk-card-title"><i class="bi bi-graph-up"></i> <?= te('Risk Trendi') ?></h2>
+        <div class="rk-card-tools"><span class="rk-help"><?= te('Son 12 ay') ?></span></div>
     </div>
     <div class="rk-card-body">
         <div class="rk-chart rk-chart-lg" data-rk-chart>
-            <canvas id="rkTrendChart" aria-label="Aylara göre açılan ve kapanan risk sayısı"></canvas>
+            <canvas id="rkTrendChart" aria-label="<?= te('Aylara göre açılan ve kapanan risk sayısı') ?>"></canvas>
         </div>
     </div>
 </div>
@@ -349,11 +349,11 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
     <div class="col-12 <?= $isExec ? 'col-xl-6' : '' ?>">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-tags"></i> Kategoriye Göre</h2>
+                <h2 class="rk-card-title"><i class="bi bi-tags"></i> <?= te('Kategoriye Göre') ?></h2>
             </div>
             <div class="rk-card-body">
                 <div class="rk-chart rk-chart-tall" data-rk-chart>
-                    <canvas id="rkCategoryChart" aria-label="Kategoriye göre risk sayısı"></canvas>
+                    <canvas id="rkCategoryChart" aria-label="<?= te('Kategoriye göre risk sayısı') ?>"></canvas>
                 </div>
             </div>
         </div>
@@ -364,12 +364,12 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
     <div class="col-12 col-xl-6">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-diagram-3"></i> Departmana Göre</h2>
-                <div class="rk-card-tools"><span class="rk-help">Kritik + Yüksek sayısı ipucunda</span></div>
+                <h2 class="rk-card-title"><i class="bi bi-diagram-3"></i> <?= te('Departmana Göre') ?></h2>
+                <div class="rk-card-tools"><span class="rk-help"><?= te('Kritik + Yüksek sayısı ipucunda') ?></span></div>
             </div>
             <div class="rk-card-body">
                 <div class="rk-chart rk-chart-tall" data-rk-chart>
-                    <canvas id="rkDepartmentChart" aria-label="Departmana göre risk sayısı"></canvas>
+                    <canvas id="rkDepartmentChart" aria-label="<?= te('Departmana göre risk sayısı') ?>"></canvas>
                 </div>
             </div>
         </div>
@@ -380,9 +380,9 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
 <!-- ===================== Acil aksiyon ===================== -->
 <div class="rk-card">
     <div class="rk-card-head">
-        <h2 class="rk-card-title"><i class="bi bi-exclamation-octagon"></i> Acil Aksiyon Gerektiren Riskler</h2>
+        <h2 class="rk-card-title"><i class="bi bi-exclamation-octagon"></i> <?= te('Acil Aksiyon Gerektiren Riskler') ?></h2>
         <div class="rk-card-tools">
-            <a class="rk-btn rk-btn-sm" href="<?= e(url('/risks/?severity=Critical')) ?>">Tümü</a>
+            <a class="rk-btn rk-btn-sm" href="<?= e(url('/risks/?severity=Critical')) ?>"><?= te('Tümü') ?></a>
         </div>
     </div>
     <div class="rk-card-body is-flush">
@@ -393,7 +393,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
         <div class="rk-table-wrap">
             <table class="rk-table">
                 <thead>
-                    <tr><th>Kod</th><th>Başlık</th><th>Departman</th><th>Sahip</th>
+                    <tr><th><?= te('Kod') ?></th><th><?= te('Başlık') ?></th><th><?= te('Departman') ?></th><th><?= te('Sahip') ?></th>
                         <th>Skor</th><th>Seviye</th><th>Termin</th></tr>
                 </thead>
                 <tbody>
@@ -421,7 +421,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
     <div class="col-12 col-xl-6">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-calendar-event"></i> Yaklaşan Terminler</h2>
+                <h2 class="rk-card-title"><i class="bi bi-calendar-event"></i> <?= te('Yaklaşan Terminler') ?></h2>
                 <div class="rk-card-tools"><span class="rk-help"><?= $warnDays ?> gün içinde</span></div>
             </div>
             <div class="rk-card-body is-flush">
@@ -451,7 +451,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
     <div class="col-12 col-xl-6">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-clock-history"></i> Geciken Aksiyonlar</h2>
+                <h2 class="rk-card-title"><i class="bi bi-clock-history"></i> <?= te('Geciken Aksiyonlar') ?></h2>
             </div>
             <div class="rk-card-body is-flush">
                 <?php if ($lateActions === []): ?>
@@ -480,7 +480,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
 <!-- ===================== Bana atananlar ===================== -->
 <div class="rk-card">
     <div class="rk-card-head">
-        <h2 class="rk-card-title"><i class="bi bi-person-check"></i> Bana Atananlar</h2>
+        <h2 class="rk-card-title"><i class="bi bi-person-check"></i> <?= te('Bana Atananlar') ?></h2>
         <div class="rk-card-tools">
             <a class="rk-btn rk-btn-sm" href="<?= e(url('/risks/?owner=' . $me)) ?>">
                 <?= $myRiskCount ?> açık risk
@@ -493,7 +493,7 @@ $barRow = static function (string $label, int $count, int $total, string $cls, s
         <?php else: ?>
         <table class="rk-table">
             <thead>
-                <tr><th>Risk</th><th>Aksiyon</th><th>Öncelik</th><th>Durum</th><th>Termin</th></tr>
+                <tr><th>Risk</th><th>Aksiyon</th><th>Öncelik</th><th><?= te('Durum') ?></th><th><?= te('Termin') ?></th></tr>
             </thead>
             <tbody>
             <?php foreach ($myActions as $a): ?>

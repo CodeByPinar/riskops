@@ -72,34 +72,34 @@ require LAYOUT_PATH . '/header.php';
                     <?php endif; ?>
 
                     <div class="rk-field">
-                        <label class="rk-label" for="name">Ad <span class="req">*</span></label>
+                        <label class="rk-label" for="name"><?= te('Ad') ?> <span class="req">*</span></label>
                         <input class="<?= e($cls('name', 'rk-input')) ?>" type="text" id="name" name="name"
                                maxlength="100" required value="<?= e($val('name')) ?>"
-                               placeholder="Örn: Uygulama Güvenliği">
+                               placeholder="<?= te('Örn: Uygulama Güvenliği') ?>">
                         <?= $err('name') ?>
                     </div>
 
                     <div class="rk-field">
-                        <label class="rk-label" for="code">Kod <span class="req">*</span></label>
+                        <label class="rk-label" for="code"><?= te('Kod') ?> <span class="req">*</span></label>
                         <input class="<?= e($cls('code', 'rk-input')) ?>" type="text" id="code" name="code"
                                maxlength="20" required value="<?= e($val('code')) ?>"
-                               placeholder="Örn: APPSEC" class="rk-u-upper">
+                               placeholder="<?= te('Örn: APPSEC') ?>" class="rk-u-upper">
                         <?= $err('code') ?>
                     </div>
 
                     <div class="rk-field">
-                        <label class="rk-label" for="description">Açıklama</label>
+                        <label class="rk-label" for="description"><?= te('Açıklama') ?></label>
                         <textarea class="rk-textarea rk-u-minh60" id="description" name="description" rows="2"><?= e($val('description')) ?></textarea>
                     </div>
 
                     <div class="rk-field">
-                        <label class="rk-label" for="color">Renk</label>
+                        <label class="rk-label" for="color"><?= te('Renk') ?></label>
                         <div class="rk-color-field">
                             <input type="color" id="color" name="color" data-rk-color-sync="color_text"
                                    value="<?= e($val('color', '#64748b')) ?>">
                             <input class="<?= e($cls('color', 'rk-input')) ?>" type="text" name="color_text"
                                    value="<?= e($val('color', '#64748b')) ?>" maxlength="7"
-                                   pattern="#[0-9a-fA-F]{6}" aria-label="Renk kodu">
+                                   pattern="#[0-9a-fA-F]{6}" aria-label="<?= te('Renk kodu') ?>">
                         </div>
                         <?= $err('color') ?>
                         <div class="rk-help">
@@ -111,18 +111,18 @@ require LAYOUT_PATH . '/header.php';
                     <div class="row g-2">
                         <div class="col-6">
                             <div class="rk-field">
-                                <label class="rk-label" for="sort_order">Sıra</label>
+                                <label class="rk-label" for="sort_order"><?= te('Sıra') ?></label>
                                 <input class="rk-input" type="number" id="sort_order" name="sort_order"
                                        value="<?= e($val('sort_order', '0')) ?>" min="0" max="9999">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="rk-field">
-                                <label class="rk-label">Durum</label>
+                                <label class="rk-label"><?= te('Durum') ?></label>
                                 <label class="rk-check rk-u-h34">
                                     <input type="checkbox" name="is_active" value="1"
                                            <?= $val('is_active', '1') === '0' ? '' : 'checked' ?>>
-                                    <span>Aktif</span>
+                                    <span><?= te('Aktif') ?></span>
                                 </label>
                             </div>
                         </div>
@@ -150,8 +150,8 @@ require LAYOUT_PATH . '/header.php';
                 <div class="rk-table-wrap">
                     <table class="rk-table">
                         <thead>
-                            <tr><th>Kod</th><th>Ad</th><th>Risk</th><th>Sıra</th>
-                                <th>Durum</th><th class="rk-u-shrink"></th></tr>
+                            <tr><th><?= te('Kod') ?></th><th><?= te('Ad') ?></th><th><?= te('Risk') ?></th><th><?= te('Sıra') ?></th>
+                                <th><?= te('Durum') ?></th><th class="rk-u-shrink"></th></tr>
                         </thead>
                         <tbody>
                         <?php foreach ($rows as $c): ?>
@@ -175,14 +175,14 @@ require LAYOUT_PATH . '/header.php';
                                 <td><?= (int)$c['sort_order'] ?></td>
                                 <td>
                                     <?php if ((int)$c['is_active'] === 1): ?>
-                                        <span class="rk-badge sev-low">Aktif</span>
+                                        <span class="rk-badge sev-low"><?= te('Aktif') ?></span>
                                     <?php else: ?>
-                                        <span class="rk-badge st-closed">Pasif</span>
+                                        <span class="rk-badge st-closed"><?= te('Pasif') ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
                                     <div class="rk-row-actions">
-                                        <a class="rk-icon-btn" title="Düzenle"
+                                        <a class="rk-icon-btn" title="<?= te('Düzenle') ?>"
                                            href="<?= e(url('/admin/categories/?edit=' . (int)$c['id'])) ?>">
                                             <i class="bi bi-pencil"></i></a>
 
@@ -202,12 +202,12 @@ require LAYOUT_PATH . '/header.php';
                                               data-rk-confirm="<?= e($c['name'] . ' silinecek. Onaylıyor musunuz?') ?>">
                                             <?= csrf_field() ?>
                                             <input type="hidden" name="id" value="<?= (int)$c['id'] ?>">
-                                            <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <button type="submit" class="rk-icon-btn is-danger" title="<?= te('Sil') ?>">
                                                 <i class="bi bi-trash"></i></button>
                                         </form>
                                         <?php else: ?>
                                             <span class="rk-icon-btn is-disabled"
-                                                  title="Kullanımda olduğu için silinemez — pasifleştirebilirsiniz">
+                                                  title="<?= te('Kullanımda olduğu için silinemez — pasifleştirebilirsiniz') ?>">
                                                 <i class="bi bi-lock"></i></span>
                                         <?php endif; ?>
                                     </div>

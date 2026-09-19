@@ -65,7 +65,7 @@ require LAYOUT_PATH . '/header.php';
         <i class="bi bi-arrow-left"></i> <?= te('Listeye dön') ?>
     </a>
     <a class="rk-btn" href="<?= e(url('/risks/view.php?id=' . (int)$action['risk_id'])) ?>">
-        <i class="bi bi-shield-exclamation"></i> Riski aç
+        <i class="bi bi-shield-exclamation"></i> <?= te('Riski aç') ?>
     </a>
     <?php if ($canWrite): ?>
     <a class="rk-btn rk-btn-primary" href="<?= e(url('/actions/edit.php?id=' . $dParentId)) ?>">
@@ -128,7 +128,7 @@ require LAYOUT_PATH . '/header.php';
                                     : '<span class="rk-muted">-</span>' ?>
                             </dd>
 
-                            <dt>Bağlı risk</dt>
+                            <dt><?= te('Bağlı risk') ?></dt>
                             <dd>
                                 <a class="rk-link-strong"
                                    href="<?= e(url('/risks/view.php?id=' . (int)$action['risk_id'])) ?>">

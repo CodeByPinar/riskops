@@ -202,11 +202,11 @@ require LAYOUT_PATH . '/header.php';
     <div class="col-12 col-lg-6">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-bar-chart-steps"></i> Seviye Dağılımı</h2>
+                <h2 class="rk-card-title"><i class="bi bi-bar-chart-steps"></i> <?= te('Seviye Dağılımı') ?></h2>
             </div>
             <div class="rk-card-body is-flush">
                 <table class="rk-table">
-                    <thead><tr><th>Seviye</th><th>Adet</th><th>Oran</th></tr></thead>
+                    <thead><tr><th><?= te('Seviye') ?></th><th><?= te('Adet') ?></th><th><?= te('Oran') ?></th></tr></thead>
                     <tbody>
                     <?php foreach ([['Critical','kritik'],['High','yuksek'],['Medium','orta'],['Low','dusuk']] as [$sev,$k]):
                         $n = (int)$stats[$k]; ?>
@@ -225,12 +225,12 @@ require LAYOUT_PATH . '/header.php';
     <div class="col-12 col-lg-6">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-flag"></i> Risk Durumu</h2>
+                <h2 class="rk-card-title"><i class="bi bi-flag"></i> <?= te('Risk Durumu') ?></h2>
             </div>
             <div class="rk-card-body is-flush">
                 <table class="rk-table">
                     <tbody>
-                        <tr><td>Açık (Open / Under Review / In Progress)</td>
+                        <tr><td><?= te('Açık (Open / Under Review / In Progress)') ?></td>
                             <td><strong><?= (int)$stats['acik'] ?></strong></td></tr>
                         <tr><td>Azaltılmış (Mitigated)</td>
                             <td><strong><?= (int)$stats['azaltilmis'] ?></strong></td></tr>
@@ -252,8 +252,8 @@ require LAYOUT_PATH . '/header.php';
 <!-- ===================== En yüksek riskler ===================== -->
 <div class="rk-card">
     <div class="rk-card-head">
-        <h2 class="rk-card-title"><i class="bi bi-list-ol"></i> Yönetim Dikkatine Sunulan Riskler</h2>
-        <div class="rk-card-tools"><span class="rk-help">En yüksek etkin skorlu 10 açık risk</span></div>
+        <h2 class="rk-card-title"><i class="bi bi-list-ol"></i> <?= te('Yönetim Dikkatine Sunulan Riskler') ?></h2>
+        <div class="rk-card-tools"><span class="rk-help"><?= te('En yüksek etkin skorlu 10 açık risk') ?></span></div>
     </div>
     <div class="rk-card-body is-flush">
         <?php if ($topRisks === []): ?>
@@ -262,8 +262,8 @@ require LAYOUT_PATH . '/header.php';
         <div class="rk-table-wrap">
             <table class="rk-table">
                 <thead>
-                    <tr><th>#</th><th>Kod</th><th>Başlık</th><th>Departman</th><th>Sahip</th>
-                        <th>Skor</th><th>Seviye</th><th>Durum</th><th>Termin</th><th>Açık Aksiyon</th></tr>
+                    <tr><th>#</th><th><?= te('Kod') ?></th><th><?= te('Başlık') ?></th><th><?= te('Departman') ?></th><th><?= te('Sahip') ?></th>
+                        <th>Skor</th><th>Seviye</th><th><?= te('Durum') ?></th><th><?= te('Termin') ?></th><th><?= te('Açık Aksiyon') ?></th></tr>
                 </thead>
                 <tbody>
                 <?php foreach ($topRisks as $i => $r): ?>
@@ -297,11 +297,11 @@ require LAYOUT_PATH . '/header.php';
     <div class="col-12 col-lg-6">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-diagram-3"></i> Departman Yoğunluğu</h2>
+                <h2 class="rk-card-title"><i class="bi bi-diagram-3"></i> <?= te('Departman Yoğunluğu') ?></h2>
             </div>
             <div class="rk-card-body is-flush">
                 <table class="rk-table">
-                    <thead><tr><th>Departman</th><th>Toplam</th><th>Kritik + Yüksek</th></tr></thead>
+                    <thead><tr><th><?= te('Departman') ?></th><th><?= te('Toplam') ?></th><th><?= te('Kritik + Yüksek') ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($byDept as $d): ?>
                         <tr>
@@ -322,11 +322,11 @@ require LAYOUT_PATH . '/header.php';
     <div class="col-12 col-lg-6">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-tags"></i> Tehdit Alanları</h2>
+                <h2 class="rk-card-title"><i class="bi bi-tags"></i> <?= te('Tehdit Alanları') ?></h2>
             </div>
             <div class="rk-card-body is-flush">
                 <table class="rk-table">
-                    <thead><tr><th>Kategori</th><th>Toplam</th><th>Kritik + Yüksek</th></tr></thead>
+                    <thead><tr><th><?= te('Kategori') ?></th><th><?= te('Toplam') ?></th><th><?= te('Kritik + Yüksek') ?></th></tr></thead>
                     <tbody>
                     <?php foreach ($byCat as $c): ?>
                         <tr>
@@ -349,16 +349,16 @@ require LAYOUT_PATH . '/header.php';
     <div class="col-12 col-lg-6">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-check2-square"></i> Aksiyon Planları</h2>
+                <h2 class="rk-card-title"><i class="bi bi-check2-square"></i> <?= te('Aksiyon Planları') ?></h2>
             </div>
             <div class="rk-card-body is-flush">
                 <table class="rk-table">
                     <tbody>
-                        <tr><td>Toplam aksiyon</td><td><strong><?= (int)$actions['toplam'] ?></strong></td></tr>
-                        <tr><td>Açık</td><td><strong><?= (int)$actions['acik'] ?></strong></td></tr>
-                        <tr><td>Devam ediyor</td><td><strong><?= (int)$actions['devam'] ?></strong></td></tr>
+                        <tr><td><?= te('Toplam aksiyon') ?></td><td><strong><?= (int)$actions['toplam'] ?></strong></td></tr>
+                        <tr><td><?= te('Açık') ?></td><td><strong><?= (int)$actions['acik'] ?></strong></td></tr>
+                        <tr><td><?= te('Devam ediyor') ?></td><td><strong><?= (int)$actions['devam'] ?></strong></td></tr>
                         <tr><td>Tamamlanan</td><td><strong><?= (int)$actions['tamam'] ?></strong></td></tr>
-                        <tr><td>İptal edilen</td><td><strong><?= (int)$actions['iptal'] ?></strong></td></tr>
+                        <tr><td><?= te('İptal edilen') ?></td><td><strong><?= (int)$actions['iptal'] ?></strong></td></tr>
                         <tr><td class="rk-overdue">Geciken</td>
                             <td><strong class="rk-overdue"><?= (int)$actions['geciken'] ?></strong></td></tr>
                     </tbody>
@@ -371,11 +371,11 @@ require LAYOUT_PATH . '/header.php';
     <div class="col-12 col-lg-6">
         <div class="rk-card">
             <div class="rk-card-head">
-                <h2 class="rk-card-title"><i class="bi bi-graph-up"></i> Son 6 Ay</h2>
+                <h2 class="rk-card-title"><i class="bi bi-graph-up"></i> <?= te('Son 6 Ay') ?></h2>
             </div>
             <div class="rk-card-body is-flush">
                 <table class="rk-table">
-                    <thead><tr><th>Ay</th><th>Açılan</th><th>Kapanan</th><th>Net</th></tr></thead>
+                    <thead><tr><th><?= te('Ay') ?></th><th><?= te('Açılan') ?></th><th><?= te('Kapanan') ?></th><th><?= te('Net') ?></th></tr></thead>
                     <tbody>
                     <?php
                     $aylar = ['01'=>'Ocak','02'=>'Şubat','03'=>'Mart','04'=>'Nisan','05'=>'Mayıs',
@@ -410,7 +410,7 @@ require LAYOUT_PATH . '/header.php';
         <strong><?= $neverReviewed ?> risk</strong> oluşturulduğundan beri hiç gözden
         geçirilmemiş (yalnızca ilk değerlendirmesi var). Düzenli gözden geçirme
         olmadan risk kaydı zamanla gerçeği yansıtmaz.
-        <a href="<?= e(url('/assessments/')) ?>">Değerlendirmeler</a>
+        <a href="<?= e(url('/assessments/')) ?>"><?= te('Değerlendirmeler') ?></a>
     </div>
 </div>
 <?php endif; ?>

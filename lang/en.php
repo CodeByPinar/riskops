@@ -311,4 +311,185 @@ return [
     'dinleyici'                   => 'listener(s)',
     'storage/ dizini yazılabilir değil; eklentiler bu ekrandan açılıp kapatılamaz.'
         => 'The storage/ directory is not writable; plugins cannot be toggled here.',
+
+    /* ---------------------------------------------------------------
+     * Dashboard
+     * --------------------------------------------------------------- */
+    'Acil Aksiyon Gerektiren Riskler' => 'Risks Requiring Immediate Action',
+    'Seviye Dağılımı'             => 'Severity Distribution',
+    'Risk Trendi'                 => 'Risk Trend',
+    'Departman Yoğunluğu'         => 'Department Load',
+    'Tehdit Alanları'             => 'Threat Areas',
+    'Yaklaşan Terminler'          => 'Upcoming Due Dates',
+    'Geciken Aksiyonlar'          => 'Overdue Actions',
+    'Geciken Aksiyon'             => 'Overdue Action',
+    'Açık Aksiyon'                => 'Open Action',
+    'Bana Atananlar'              => 'Assigned to Me',
+    'Mevcut Durum'                => 'Current Status',
+    'Kritik + Yüksek'             => 'Critical + High',
+    'Kritik + Yüksek sayısı ipucunda' => 'Critical + High counts shown in the tooltip',
+    'En yüksek etkin skorlu 10 açık risk' => 'Top 10 open risks by effective score',
+    'Aylara göre açılan ve kapanan risk sayısı' => 'Risks opened and closed by month',
+    'Departmana göre risk sayısı' => 'Risk count by department',
+    'Kategoriye göre risk sayısı' => 'Risk count by category',
+    'Son 6 Ay'                    => 'Last 6 Months',
+    'Son 12 ay'                   => 'Last 12 months',
+    'Açılan'                      => 'Opened',
+    'Kapanan'                     => 'Closed',
+    'Net'                         => 'Net',
+    'Toplam'                      => 'Total',
+    'Toplam aksiyon'              => 'Total actions',
+    'Adet'                        => 'Count',
+    'Oran'                        => 'Share',
+    'Yük'                         => 'Load',
+
+    /* ---------------------------------------------------------------
+     * Risk form and detail
+     * --------------------------------------------------------------- */
+    'Risk'                        => 'Risk',
+    'Risk Tanımı'                 => 'Risk Definition',
+    'Riskin ne olduğu, hangi koşullarda gerçekleşebileceği'
+        => 'What the risk is and under what conditions it could occur',
+    'Etkilenen Varlık / Sistem'   => 'Affected Asset / System',
+    'Tehdit'                      => 'Threat',
+    'Tehdit kaynağı / aktörü'     => 'Threat source / actor',
+    'Zafiyet'                     => 'Vulnerability',
+    'İstismar edilebilecek zayıflık' => 'The weakness that could be exploited',
+    'Olasılık'                    => 'Likelihood',
+    'Etki'                        => 'Impact',
+    'Inherent'                    => 'Inherent',
+    'Inherent Skor'               => 'Inherent Score',
+    'Residual'                    => 'Residual',
+    'Residual Olasılık'           => 'Residual Likelihood',
+    'Residual Etki'               => 'Residual Impact',
+    'Residual Skor'               => 'Residual Score',
+    'Önizleme (5×5 matris)'       => 'Preview (5×5 matrix)',
+    'Sınıflandırma'               => 'Classification',
+    'Strateji'                    => 'Strategy',
+    'Treatment Strategy'          => 'Treatment Strategy',
+    'Risk Sahibi'                 => 'Risk Owner',
+    'Risk Durumu'                 => 'Risk Status',
+    'Risk kodu, başlık veya varlık' => 'Risk code, title or asset',
+    'Termin (başlangıç)'          => 'Due from',
+    'Termin (bitiş)'              => 'Due to',
+    'Riske git'                   => 'Go to risk',
+    'Riski aç'                    => 'Open risk',
+    'Bağlı Risk'                  => 'Linked Risk',
+    'Bağlı risk'                  => 'Linked risk',
+    'Açık (Open / Under Review / In Progress)'
+        => 'Open (Open / Under Review / In Progress)',
+
+    /* ---------------------------------------------------------------
+     * Actions
+     * --------------------------------------------------------------- */
+    'Aksiyon'                     => 'Action',
+    'Aksiyon Ekle'                => 'Add Action',
+    'Aksiyon Başlığı'             => 'Action Title',
+    'Yapılacak işin kapsamı, bağımlılıklar, kabul kriteri'
+        => 'Scope of work, dependencies, acceptance criteria',
+    'Tamamla'                     => 'Complete',
+    'İptal edilen'                => 'Cancelled',
+
+    /* ---------------------------------------------------------------
+     * Assessments
+     * --------------------------------------------------------------- */
+    'Değerlendirme'               => 'Assessment',
+    'Risk Değerlendirmesi'        => 'Risk Assessment',
+    'Değerlendirme Tarihi'        => 'Assessment Date',
+    'Değerlendiren'               => 'Assessed by',
+    'Değerlendirmeyi Kaydet'      => 'Save Assessment',
+    'Gerekçe / Not'               => 'Rationale / Note',
+    'Skorun neden değiştiği, hangi kontrolün devreye girdiği'
+        => 'Why the score changed and which control took effect',
+    'Tür'                         => 'Type',
+    'Tip'                         => 'Type',
+
+    /* ---------------------------------------------------------------
+     * Reports
+     * --------------------------------------------------------------- */
+    'Yönetici Risk Özeti'         => 'Executive Risk Summary',
+    'Yönetim Dikkatine Sunulan Riskler' => 'Risks for Management Attention',
+    'Seviyeye Göre'               => 'By Severity',
+    'Duruma Göre'                 => 'By Status',
+    'Departmana Göre'             => 'By Department',
+    'Kategoriye Göre'             => 'By Category',
+    'Ham'                         => 'Raw',
+    'Ad Soyad / İmza / Tarih'     => 'Name / Signature / Date',
+    'Onay'                        => 'Approval',
+
+    /* ---------------------------------------------------------------
+     * Users
+     * --------------------------------------------------------------- */
+    'Ad'                          => 'Name',
+    'Ad, e-posta veya ünvan'      => 'Name, e-mail or title',
+    'Ünvan'                       => 'Title',
+    'Hesap Durumu'                => 'Account Status',
+    'İlk girişte parola değiştirmeli' => 'Must change password at first login',
+    'Sıfırla'                     => 'Reset',
+    'Yetki'                       => 'Permission',
+    'Kimlik'                      => 'Identity',
+
+    /* ---------------------------------------------------------------
+     * Categories and departments
+     * --------------------------------------------------------------- */
+    'Renk'                        => 'Color',
+    'Renk kodu'                   => 'Color code',
+    'Kısa, benzersiz tanımlayıcı. Büyük harfe çevrilir.'
+        => 'Short, unique identifier. Converted to upper case.',
+    'Kullanımda olduğu için silinemez — pasifleştirebilirsiniz'
+        => 'In use, so it cannot be deleted — deactivate it instead',
+    'Örn: Uygulama Güvenliği'     => 'e.g. Application Security',
+    'Örn: APPSEC'                 => 'e.g. APPSEC',
+    'Örn: Bilgi Teknolojileri'    => 'e.g. Information Technology',
+    'Örn: IT'                     => 'e.g. IT',
+    'Örn: RDP erişimini VPN arkasına alma'
+        => 'e.g. Move RDP access behind the VPN',
+
+    /* ---------------------------------------------------------------
+     * Settings and audit log
+     * --------------------------------------------------------------- */
+    'Ayarları Kaydet'             => 'Save Settings',
+    'Kod tarafından yönetilir.'   => 'Managed in code.',
+    'Salt okunur — audit kayıtları arayüzden değiştirilemez.'
+        => 'Read-only — audit records cannot be changed from the interface.',
+    'Değişiklik'                  => 'Change',
+    'IP'                          => 'IP',
+    'Arama'                       => 'Search',
+    'Uygula'                      => 'Apply',
+    'Not'                         => 'Note',
+    'Belirlenmedi'                => 'Not set',
+    'Belirtilmedi'                => 'Not specified',
+    'Başlangıç'                   => 'Start',
+    'Vazgeç'                      => 'Cancel',
+    'Tümünü yönet'                => 'Manage all',
+    'Seçiniz'                     => 'Select...',
+    'Ay'                          => 'Month',
+    'Sıra'                        => 'Order',
+    'Zaman'                       => 'Time',
+
+    /* ---------------------------------------------------------------
+     * Plugins screen
+     *
+     * The long paragraphs are security statements, not decoration:
+     * they say what a plugin can do and why there is no upload form.
+     * Translating them loosely would weaken the warning, so they are
+     * kept as full sentences rather than reused fragments.
+     * --------------------------------------------------------------- */
+    'Eklenti, uygulamanın kendi yetkileriyle çalışan PHP kodudur: veritabanına erişebilir, dosya yazabilir, ağa çıkabilir. PHP\'de gerçek bir kum havuzu yoktur; bu yüzden kısıtlandığı iddia edilmiyor.'
+        => 'A plugin is PHP code running with the application\'s own privileges: it can reach the database, write files and open network connections. PHP has no real sandbox, so no claim is made that it is confined.',
+    'Bu ekrandan dosya YÜKLENEMEZ ve bu bilinçli bir karardır: yükleme ucu olsaydı, ele geçirilmiş tek bir yönetici hesabı doğrudan uzaktan kod çalıştırmaya dönüşürdü. Kurulum sunucuda yapılır:'
+        => 'Files CANNOT be uploaded from this screen, and that is deliberate: an upload endpoint would turn a single compromised admin account straight into remote code execution. Installation happens on the server:',
+    'Dosyalar yerine konduktan sonra eklenti bu listede görünür ve buradan açılabilir. Yazma yetkisi gerektirmez; yalnızca açık eklenti listesi storage/plugins.json içinde tutulur.'
+        => 'Once the files are in place the plugin appears in this list and can be enabled here. No write access to the code is needed; only the list of enabled plugins is stored in storage/plugins.json.',
+    'Örnek eklenti: plugins/ornek-kayit-defteri/ — hem eylem hem filtre kancası kullanıyor ve yorumlarla açıklıyor.'
+        => 'Example plugin: plugins/ornek-kayit-defteri/ — it uses both an action and a filter hook, and explains each in comments.',
+    'Sol menü (filtre) — menü dizisi' => 'Sidebar (filter) — the menu array',
+    'Rapor kayıt defteri (filtre) — rapor tanımları'
+        => 'Report registry (filter) — report definitions',
+    'Risk oluşturuldu (eylem) — $riskId, $veri'
+        => 'Risk created (action) — $riskId, $data',
+    'Risk güncellendi (eylem) — $riskId, $eski, $yeni'
+        => 'Risk updated (action) — $riskId, $old, $new',
+    'Risk silindi (eylem) — $riskId, $veri'
+        => 'Risk deleted (action) — $riskId, $data',
 ];

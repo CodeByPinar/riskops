@@ -66,24 +66,24 @@ require LAYOUT_PATH . '/header.php';
         <div class="col-12 col-xl-7">
             <div class="rk-card">
                 <div class="rk-card-head">
-                    <h2 class="rk-card-title"><i class="bi bi-clipboard-data"></i> Değerlendirme</h2>
+                    <h2 class="rk-card-title"><i class="bi bi-clipboard-data"></i> <?= te('Değerlendirme') ?></h2>
                 </div>
                 <div class="rk-card-body">
 
                     <div class="rk-field">
-                        <label class="rk-label" for="risk_id">Risk <span class="req">*</span></label>
+                        <label class="rk-label" for="risk_id"><?= te('Risk') ?> <span class="req">*</span></label>
                         <?php if ($risk !== null): ?>
                             <input type="hidden" name="risk_id" value="<?= (int)$risk['id'] ?>">
                             <div class="rk-locked-field">
                                 <span class="rk-code"><?= e($risk['risk_code']) ?></span>
                                 <span><?= e(str_limit($risk['title'], 62)) ?></span>
                                 <a class="rk-btn rk-btn-sm" href="<?= e(url('/risks/view.php?id=' . (int)$risk['id'])) ?>">
-                                    <i class="bi bi-box-arrow-up-right"></i> Riske git
+                                    <i class="bi bi-box-arrow-up-right"></i> <?= te('Riske git') ?>
                                 </a>
                             </div>
                         <?php else: ?>
                             <select class="<?= e($cls('risk_id', 'rk-select')) ?>" id="risk_id" name="risk_id" required>
-                                <option value="">Seçiniz</option>
+                                <option value=""><?= te('Seçiniz') ?></option>
                                 <?php $sel = $intOrNull($val('risk_id'));
                                 foreach ($risks as $r): ?>
                                     <option value="<?= (int)$r['id'] ?>" <?= $sel === (int)$r['id'] ? 'selected' : '' ?>>
@@ -96,7 +96,7 @@ require LAYOUT_PATH . '/header.php';
                     </div>
 
                     <div class="rk-field">
-                        <label class="rk-label" for="assessment_type">Tür <span class="req">*</span></label>
+                        <label class="rk-label" for="assessment_type"><?= te('Tür') ?> <span class="req">*</span></label>
                         <select class="<?= e($cls('assessment_type', 'rk-select')) ?>"
                                 id="assessment_type" name="assessment_type" required>
                             <?php $selType = $val('assessment_type', 'review');
@@ -116,37 +116,37 @@ require LAYOUT_PATH . '/header.php';
 
                     <div class="rk-score-row" data-rk-score-scope>
                         <div class="rk-field">
-                            <label class="rk-label" for="likelihood">Olasılık <span class="req">*</span></label>
+                            <label class="rk-label" for="likelihood"><?= te('Olasılık') ?> <span class="req">*</span></label>
                             <select class="<?= e($cls('likelihood', 'rk-select')) ?>" id="likelihood"
                                     name="likelihood" data-rk-score="likelihood" required>
-                                <option value="">Seçiniz</option>
+                                <option value=""><?= te('Seçiniz') ?></option>
                                 <?= options_from_scale(likelihood_labels(), $intOrNull($val('likelihood'))) ?>
                             </select>
                             <?= $err('likelihood') ?>
                         </div>
 
                         <div class="rk-field">
-                            <label class="rk-label" for="impact">Etki <span class="req">*</span></label>
+                            <label class="rk-label" for="impact"><?= te('Etki') ?> <span class="req">*</span></label>
                             <select class="<?= e($cls('impact', 'rk-select')) ?>" id="impact"
                                     name="impact" data-rk-score="impact" required>
-                                <option value="">Seçiniz</option>
+                                <option value=""><?= te('Seçiniz') ?></option>
                                 <?= options_from_scale(impact_labels(), $intOrNull($val('impact'))) ?>
                             </select>
                             <?= $err('impact') ?>
                         </div>
 
                         <div class="rk-score-out">
-                            <span class="rk-label">Skor</span>
+                            <span class="rk-label"><?= te('Skor') ?></span>
                             <span class="rk-score sev-none" data-rk-score-out
                                   data-rk-thresholds='<?= e($thresholdsJson) ?>'>-</span>
                         </div>
                     </div>
 
                     <div class="rk-field">
-                        <label class="rk-label" for="notes">Gerekçe / Not</label>
+                        <label class="rk-label" for="notes"><?= te('Gerekçe / Not') ?></label>
                         <textarea class="<?= e($cls('notes', 'rk-textarea')) ?>" id="notes" name="notes"
                                   rows="4" maxlength="2000"
-                                  placeholder="Skorun neden değiştiği, hangi kontrolün devreye girdiği"><?= e($val('notes')) ?></textarea>
+                                  placeholder="<?= te('Skorun neden değiştiği, hangi kontrolün devreye girdiği') ?>"><?= e($val('notes')) ?></textarea>
                         <?= $err('notes') ?>
                         <div class="rk-help">
                             Denetimde en çok sorulan soru budur: skor neden değişti?
@@ -161,12 +161,12 @@ require LAYOUT_PATH . '/header.php';
             <?php if ($risk !== null): ?>
             <div class="rk-card">
                 <div class="rk-card-head">
-                    <h2 class="rk-card-title"><i class="bi bi-clock-history"></i> Mevcut Durum</h2>
+                    <h2 class="rk-card-title"><i class="bi bi-clock-history"></i> <?= te('Mevcut Durum') ?></h2>
                 </div>
                 <div class="rk-card-body">
                     <dl class="rk-dl">
                         <div class="rk-dl-row">
-                            <dt>Inherent</dt>
+                            <dt><?= te('Inherent') ?></dt>
                             <dd>
                                 <?= score_chip((int)$risk['inherent_score']) ?>
                                 <span class="rk-cell-sub">
@@ -175,7 +175,7 @@ require LAYOUT_PATH . '/header.php';
                             </dd>
                         </div>
                         <div class="rk-dl-row">
-                            <dt>Residual</dt>
+                            <dt><?= te('Residual') ?></dt>
                             <dd>
                                 <?php if ($risk['residual_likelihood'] !== null && $risk['residual_impact'] !== null): ?>
                                     <?= score_chip((int)$risk['residual_likelihood'] * (int)$risk['residual_impact']) ?>
@@ -188,7 +188,7 @@ require LAYOUT_PATH . '/header.php';
                             </dd>
                         </div>
                         <div class="rk-dl-row">
-                            <dt>Durum</dt>
+                            <dt><?= te('Durum') ?></dt>
                             <dd><?= status_badge($risk['status']) ?></dd>
                         </div>
                     </dl>
@@ -198,11 +198,11 @@ require LAYOUT_PATH . '/header.php';
 
             <div class="rk-card">
                 <div class="rk-card-head">
-                    <h2 class="rk-card-title"><i class="bi bi-calendar-event"></i> Tarih</h2>
+                    <h2 class="rk-card-title"><i class="bi bi-calendar-event"></i> <?= te('Tarih') ?></h2>
                 </div>
                 <div class="rk-card-body">
                     <div class="rk-field rk-u-mb0">
-                        <label class="rk-label" for="assessed_at">Değerlendirme Tarihi</label>
+                        <label class="rk-label" for="assessed_at"><?= te('Değerlendirme Tarihi') ?></label>
                         <input class="<?= e($cls('assessed_at', 'rk-input')) ?>" type="date"
                                id="assessed_at" name="assessed_at"
                                value="<?= e($val('assessed_at', date('Y-m-d'))) ?>"
@@ -223,7 +223,7 @@ require LAYOUT_PATH . '/header.php';
 
             <div class="rk-form-actions">
                 <button type="submit" class="rk-btn rk-btn-primary">
-                    <i class="bi bi-check-lg"></i> Değerlendirmeyi Kaydet
+                    <i class="bi bi-check-lg"></i> <?= te('Değerlendirmeyi Kaydet') ?>
                 </button>
                 <a class="rk-btn" href="<?= e($risk !== null
                     ? url('/risks/view.php?id=' . (int)$risk['id'])

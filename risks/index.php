@@ -206,67 +206,67 @@ require LAYOUT_PATH . '/header.php';
         <div class="rk-filter-grid">
 
             <div class="rk-field rk-filter-wide">
-                <label class="rk-label" for="q">Arama</label>
+                <label class="rk-label" for="q"><?= te('Arama') ?></label>
                 <input class="rk-input" type="search" id="q" name="q"
                        value="<?= e($f['q'] ?? '') ?>"
-                       placeholder="Risk kodu, başlık veya varlık">
+                       placeholder="<?= te('Risk kodu, başlık veya varlık') ?>">
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="severity">Seviye</label>
+                <label class="rk-label" for="severity"><?= te('Seviye') ?></label>
                 <select class="rk-select" id="severity" name="severity">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_from_values(severities(), $f['severity']) ?>
                 </select>
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="status">Durum</label>
+                <label class="rk-label" for="status"><?= te('Durum') ?></label>
                 <select class="rk-select" id="status" name="status">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_from_values(risk_statuses(), $f['status']) ?>
                 </select>
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="category">Kategori</label>
+                <label class="rk-label" for="category"><?= te('Kategori') ?></label>
                 <select class="rk-select" id="category" name="category">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_html($categories, $f['category']) ?>
                 </select>
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="department">Departman</label>
+                <label class="rk-label" for="department"><?= te('Departman') ?></label>
                 <select class="rk-select" id="department" name="department">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_html($departments, $f['department']) ?>
                 </select>
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="owner">Risk Sahibi</label>
+                <label class="rk-label" for="owner"><?= te('Risk Sahibi') ?></label>
                 <select class="rk-select" id="owner" name="owner">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_html($users, $f['owner']) ?>
                 </select>
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="treatment">Strateji</label>
+                <label class="rk-label" for="treatment"><?= te('Strateji') ?></label>
                 <select class="rk-select" id="treatment" name="treatment">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_from_values(treatment_strategies(), $f['treatment']) ?>
                 </select>
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="from">Termin (başlangıç)</label>
+                <label class="rk-label" for="from"><?= te('Termin (başlangıç)') ?></label>
                 <input class="rk-input" type="date" id="from" name="from" value="<?= e($f['from'] ?? '') ?>">
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="to">Termin (bitiş)</label>
+                <label class="rk-label" for="to"><?= te('Termin (bitiş)') ?></label>
                 <input class="rk-input" type="date" id="to" name="to" value="<?= e($f['to'] ?? '') ?>">
             </div>
 
@@ -284,11 +284,11 @@ require LAYOUT_PATH . '/header.php';
             <div class="ms-auto d-flex gap-2">
                 <?php if ($activeFilters > 0): ?>
                     <a class="rk-btn" href="<?= e(url('/risks/')) ?>">
-                        <i class="bi bi-x-lg"></i> Temizle
+                        <i class="bi bi-x-lg"></i> <?= te('Temizle') ?>
                     </a>
                 <?php endif; ?>
                 <button type="submit" class="rk-btn rk-btn-primary">
-                    <i class="bi bi-funnel"></i> Filtrele
+                    <i class="bi bi-funnel"></i> <?= te('Filtrele') ?>
                 </button>
             </div>
         </div>
@@ -330,27 +330,27 @@ require LAYOUT_PATH . '/header.php';
 
                 <div class="rk-bulk-actions">
                     <select class="rk-input rk-input-sm" name="bulk_owner_id" data-rk-bulk-input="assign">
-                        <option value="">Sahip seç...</option>
+                        <option value=""><?= te('Sahip seç...') ?></option>
                         <?= options_html(users_list(), null) ?>
                     </select>
                     <button type="submit" class="rk-btn rk-btn-sm"
                             name="bulk_action" value="assign">
-                        <i class="bi bi-person-check"></i> Ata
+                        <i class="bi bi-person-check"></i> <?= te('Ata') ?>
                     </button>
 
                     <select class="rk-input rk-input-sm" name="bulk_status" data-rk-bulk-input="status">
-                        <option value="">Durum seç...</option>
+                        <option value=""><?= te('Durum seç...') ?></option>
                         <?= options_from_values(risk_statuses(), null) ?>
                     </select>
                     <button type="submit" class="rk-btn rk-btn-sm"
                             name="bulk_action" value="status">
-                        <i class="bi bi-arrow-repeat"></i> Değiştir
+                        <i class="bi bi-arrow-repeat"></i> <?= te('Değiştir') ?>
                     </button>
 
                     <button type="submit" class="rk-btn rk-btn-sm"
                             name="bulk_action" value="close"
                             data-rk-confirm="Seçili riskler kapatılacak. Onaylıyor musunuz?">
-                        <i class="bi bi-check2-circle"></i> Kapat
+                        <i class="bi bi-check2-circle"></i> <?= te('Kapat') ?>
                     </button>
                 </div>
             </div>
@@ -363,7 +363,7 @@ require LAYOUT_PATH . '/header.php';
                         <?php if ($canBulk): ?>
                         <th class="rk-u-shrink">
                             <input type="checkbox" class="rk-check" data-rk-bulk-all
-                                   aria-label="Tümünü seç">
+                                   aria-label="<?= te('Tümünü seç') ?>">
                         </th>
                         <?php endif; ?>
                         <?= $th('code', 'Kod') ?>
@@ -416,7 +416,7 @@ require LAYOUT_PATH . '/header.php';
                         <td><?= due_date_cell($r['target_date'], $r['status'], risk_open_statuses()) ?></td>
                         <td>
                             <div class="rk-row-actions">
-                                <a class="rk-icon-btn" title="Detay"
+                                <a class="rk-icon-btn" title="<?= te('Detay') ?>"
                                    href="<?= e(url('/risks/view.php?id=' . (int)$r['id'])) ?>">
                                     <i class="bi bi-eye"></i>
                                 </a>

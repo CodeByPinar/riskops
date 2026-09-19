@@ -88,11 +88,11 @@ require LAYOUT_PATH . '/header.php';
         <input type="hidden" name="r" value="<?= e($key) ?>">
         <div class="rk-filter-grid">
             <div class="rk-field">
-                <label class="rk-label" for="from">Başlangıç</label>
+                <label class="rk-label" for="from"><?= te('Başlangıç') ?></label>
                 <input class="rk-input" type="date" id="from" name="from" value="<?= e($from ?? '') ?>">
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="to">Bitiş</label>
+                <label class="rk-label" for="to"><?= te('Bitiş') ?></label>
                 <input class="rk-input" type="date" id="to" name="to" value="<?= e($to ?? '') ?>">
             </div>
         </div>
@@ -104,7 +104,7 @@ require LAYOUT_PATH . '/header.php';
                         <i class="bi bi-x-lg"></i> Temizle</a>
                 <?php endif; ?>
                 <button type="submit" class="rk-btn rk-btn-primary">
-                    <i class="bi bi-funnel"></i> Uygula</button>
+                    <i class="bi bi-funnel"></i> <?= te('Uygula') ?></button>
             </div>
         </div>
     </div>

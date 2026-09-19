@@ -93,7 +93,7 @@ require LAYOUT_PATH . '/header.php';
                 <div class="rk-setting-control">
                     <?php if (!$editable): ?>
                         <input class="rk-input" type="text" value="<?= e($current) ?>" disabled>
-                        <div class="rk-help"><i class="bi bi-lock"></i> Kod tarafından yönetilir.</div>
+                        <div class="rk-help"><i class="bi bi-lock"></i> <?= te('Kod tarafından yönetilir.') ?></div>
 
                     <?php elseif ($key === 'severity_thresholds'): ?>
                         <div class="rk-threshold-editor" id="rkThresholds" data-rk-threshold-editor="rkThresholdPreview">
@@ -121,7 +121,7 @@ require LAYOUT_PATH . '/header.php';
                         </div>
 
                         <div class="rk-threshold-preview" id="rkThresholdPreview">
-                            <div class="rk-help rk-u-mb6">Önizleme (5×5 matris)</div>
+                            <div class="rk-help rk-u-mb6"><?= te('Önizleme (5×5 matris)') ?></div>
                             <table class="rk-matrix rk-matrix-mini">
                                 <tbody>
                                 <?php for ($i = 5; $i >= 1; $i--): ?>
@@ -216,7 +216,7 @@ require LAYOUT_PATH . '/header.php';
             <?php endif; ?>
 
             <button type="submit" class="rk-btn rk-btn-primary">
-                <i class="bi bi-check-lg"></i> Ayarları Kaydet
+                <i class="bi bi-check-lg"></i> <?= te('Ayarları Kaydet') ?>
             </button>
             <a class="rk-btn" href="<?= e(url('/admin/settings/')) ?>">Sıfırla</a>
         </div>

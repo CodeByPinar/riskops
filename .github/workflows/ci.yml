@@ -248,6 +248,12 @@ jobs:
         # ya da neden yok sayıldığı phpstan.neon içinde yazılı.
         run: vendor/bin/phpstan analyse --no-progress
 
+      - name: Çeviri sözlüğü
+        # Tekrar eden anahtar HATA: PHP aynı anahtarı sessizce ezer,
+        # yani iki farklı ekranın çevirisinden biri kaybolur ve ekran
+        # yine İngilizce göründüğü için kimse fark etmez.
+        run: php tools/i18n_check.php
+
       - name: Kural denetimi
         # SQL'e doğrudan kullanıcı girdisi, satır içi script/stil,
         # GET ile silme, CSRF'siz POST ucu, unutulmuş var_dump,

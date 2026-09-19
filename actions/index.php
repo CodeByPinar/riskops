@@ -196,7 +196,7 @@ require LAYOUT_PATH . '/header.php';
         <div class="rk-stat-icon"><i class="bi bi-person-check"></i></div>
         <div class="rk-stat-body">
             <div class="rk-stat-value"><i class="bi bi-arrow-right-short"></i></div>
-            <div class="rk-stat-label">Bana Atananlar</div>
+            <div class="rk-stat-label"><?= te('Bana Atananlar') ?></div>
         </div>
     </a>
 </div>
@@ -205,32 +205,32 @@ require LAYOUT_PATH . '/header.php';
     <div class="rk-card-body">
         <div class="rk-filter-grid">
             <div class="rk-field rk-filter-wide">
-                <label class="rk-label" for="q">Arama</label>
+                <label class="rk-label" for="q"><?= te('Arama') ?></label>
                 <input class="rk-input" type="search" id="q" name="q"
                        value="<?= e($f['q'] ?? '') ?>"
                        placeholder="Aksiyon başlığı, açıklama veya risk kodu">
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="status">Durum</label>
+                <label class="rk-label" for="status"><?= te('Durum') ?></label>
                 <select class="rk-select" id="status" name="status">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_from_values(action_statuses(), $f['status']) ?>
                 </select>
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="priority">Öncelik</label>
+                <label class="rk-label" for="priority"><?= te('Öncelik') ?></label>
                 <select class="rk-select" id="priority" name="priority">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_from_values(action_priorities(), $f['priority']) ?>
                 </select>
             </div>
 
             <div class="rk-field">
-                <label class="rk-label" for="owner">Sorumlu</label>
+                <label class="rk-label" for="owner"><?= te('Sorumlu') ?></label>
                 <select class="rk-select" id="owner" name="owner">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_html($users, $f['owner']) ?>
                 </select>
             </div>
@@ -252,7 +252,7 @@ require LAYOUT_PATH . '/header.php';
                 <?php if ($activeFilters > 0): ?>
                     <a class="rk-btn" href="<?= e(url('/actions/')) ?>"><i class="bi bi-x-lg"></i> Temizle</a>
                 <?php endif; ?>
-                <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> Filtrele</button>
+                <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> <?= te('Filtrele') ?></button>
             </div>
         </div>
     </div>
@@ -312,18 +312,18 @@ require LAYOUT_PATH . '/header.php';
                                           data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
                                         <?= csrf_field() ?>
                                         <input type="hidden" name="id" value="<?= (int)$a['id'] ?>">
-                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                        <button type="submit" class="rk-icon-btn is-good" title="<?= te('Tamamla') ?>">
                                             <i class="bi bi-check2"></i>
                                         </button>
                                     </form>
                                 <?php endif; ?>
 
                                 <?php if (can('action.update')): ?>
-                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                    <a class="rk-btn rk-btn-icon" title="<?= te('Detay') ?>"
                                        href="<?= e(url('/actions/view.php?id=' . (int)$a['id'])) ?>">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a class="rk-icon-btn" title="Düzenle"
+                                    <a class="rk-icon-btn" title="<?= te('Düzenle') ?>"
                                        href="<?= e(url('/actions/edit.php?id=' . (int)$a['id'])) ?>">
                                         <i class="bi bi-pencil"></i>
                                     </a>
@@ -335,7 +335,7 @@ require LAYOUT_PATH . '/header.php';
                                           data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
                                         <?= csrf_field() ?>
                                         <input type="hidden" name="id" value="<?= (int)$a['id'] ?>">
-                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="<?= te('Sil') ?>">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>

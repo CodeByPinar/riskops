@@ -170,14 +170,14 @@ require LAYOUT_PATH . '/header.php';
     <div class="rk-card-body">
         <div class="rk-filter-grid">
             <div class="rk-field rk-filter-wide">
-                <label class="rk-label" for="q">Arama</label>
+                <label class="rk-label" for="q"><?= te('Arama') ?></label>
                 <input class="rk-input" type="search" id="q" name="q" value="<?= e($f['q'] ?? '') ?>"
                        placeholder="Risk kodu, başlık veya not">
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="type">Tür</label>
+                <label class="rk-label" for="type"><?= te('Tür') ?></label>
                 <select class="rk-select" id="type" name="type">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?php foreach (['initial', 'review', 'residual'] as $t): ?>
                         <option value="<?= e($t) ?>" <?= $f['type'] === $t ? 'selected' : '' ?>>
                             <?= e($typeShort[$t]) ?>
@@ -186,25 +186,25 @@ require LAYOUT_PATH . '/header.php';
                 </select>
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="severity">Seviye</label>
+                <label class="rk-label" for="severity"><?= te('Seviye') ?></label>
                 <select class="rk-select" id="severity" name="severity">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_from_values(severities(), $f['severity']) ?>
                 </select>
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="assessor">Değerlendiren</label>
+                <label class="rk-label" for="assessor"><?= te('Değerlendiren') ?></label>
                 <select class="rk-select" id="assessor" name="assessor">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_html($users, $f['assessor']) ?>
                 </select>
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="from">Başlangıç</label>
+                <label class="rk-label" for="from"><?= te('Başlangıç') ?></label>
                 <input class="rk-input" type="date" id="from" name="from" value="<?= e($f['from'] ?? '') ?>">
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="to">Bitiş</label>
+                <label class="rk-label" for="to"><?= te('Bitiş') ?></label>
                 <input class="rk-input" type="date" id="to" name="to" value="<?= e($f['to'] ?? '') ?>">
             </div>
         </div>
@@ -221,7 +221,7 @@ require LAYOUT_PATH . '/header.php';
                 <?php if ($activeFilters > 0): ?>
                     <a class="rk-btn" href="<?= e(url('/assessments/')) ?>"><i class="bi bi-x-lg"></i> Temizle</a>
                 <?php endif; ?>
-                <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> Filtrele</button>
+                <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> <?= te('Filtrele') ?></button>
             </div>
         </div>
     </div>

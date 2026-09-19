@@ -121,14 +121,14 @@ require LAYOUT_PATH . '/header.php';
     <div class="rk-card-body">
         <div class="rk-filter-grid">
             <div class="rk-field rk-filter-wide">
-                <label class="rk-label" for="q">Arama</label>
+                <label class="rk-label" for="q"><?= te('Arama') ?></label>
                 <input class="rk-input" type="search" id="q" name="q" value="<?= e($f['q'] ?? '') ?>"
-                       placeholder="Ad, e-posta veya ünvan">
+                       placeholder="<?= te('Ad, e-posta veya ünvan') ?>">
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="role">Rol</label>
+                <label class="rk-label" for="role"><?= te('Rol') ?></label>
                 <select class="rk-select" id="role" name="role">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?php foreach (all_roles() as $r): ?>
                         <option value="<?= e($r) ?>" <?= $f['role'] === $r ? 'selected' : '' ?>>
                             <?= e(role_label($r)) ?>
@@ -137,16 +137,16 @@ require LAYOUT_PATH . '/header.php';
                 </select>
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="department">Departman</label>
+                <label class="rk-label" for="department"><?= te('Departman') ?></label>
                 <select class="rk-select" id="department" name="department">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <?= options_html($departments, $f['department']) ?>
                 </select>
             </div>
             <div class="rk-field">
-                <label class="rk-label" for="status">Durum</label>
+                <label class="rk-label" for="status"><?= te('Durum') ?></label>
                 <select class="rk-select" id="status" name="status">
-                    <option value="">Tümü</option>
+                    <option value=""><?= te('Tümü') ?></option>
                     <option value="1" <?= $f['status'] === '1' ? 'selected' : '' ?>>Aktif</option>
                     <option value="0" <?= $f['status'] === '0' ? 'selected' : '' ?>>Pasif</option>
                 </select>
@@ -157,9 +157,9 @@ require LAYOUT_PATH . '/header.php';
             <input type="hidden" name="dir" value="<?= e($dir) ?>">
             <div class="ms-auto d-flex gap-2">
                 <?php if ($activeFilters > 0): ?>
-                    <a class="rk-btn" href="<?= e(url('/admin/users/')) ?>"><i class="bi bi-x-lg"></i> Temizle</a>
+                    <a class="rk-btn" href="<?= e(url('/admin/users/')) ?>"><i class="bi bi-x-lg"></i> <?= te('Temizle') ?></a>
                 <?php endif; ?>
-                <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> Filtrele</button>
+                <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> <?= te('Filtrele') ?></button>
             </div>
         </div>
     </div>
@@ -178,7 +178,7 @@ require LAYOUT_PATH . '/header.php';
                         <?= $th('email', 'E-posta') ?>
                         <?= $th('role', 'Rol') ?>
                         <?= $th('department', 'Departman') ?>
-                        <th>Yük</th>
+                        <th><?= te('Yük') ?></th>
                         <?= $th('last_login', 'Son Giriş') ?>
                         <?= $th('status', 'Durum') ?>
                         <th class="rk-u-shrink"></th>
@@ -198,7 +198,7 @@ require LAYOUT_PATH . '/header.php';
                                         <?= e($u['name']) ?></a>
                                     <?php if ($isSelf): ?><span class="rk-badge sev-none">siz</span><?php endif; ?>
                                     <?php if ((int)$u['must_change_password'] === 1): ?>
-                                        <span class="rk-badge st-accepted" title="İlk girişte parola değiştirmeli">
+                                        <span class="rk-badge st-accepted" title="<?= te('İlk girişte parola değiştirmeli') ?>">
                                             <i class="bi bi-key"></i> parola bekliyor</span>
                                     <?php endif; ?>
                                     <?php if (($u['title'] ?? '') !== ''): ?>
@@ -221,14 +221,14 @@ require LAYOUT_PATH . '/header.php';
                                 : '<span class="text-muted">hiç</span>' ?></td>
                         <td>
                             <?php if ((int)$u['status'] === 1): ?>
-                                <span class="rk-badge sev-low">Aktif</span>
+                                <span class="rk-badge sev-low"><?= te('Aktif') ?></span>
                             <?php else: ?>
-                                <span class="rk-badge st-closed">Pasif</span>
+                                <span class="rk-badge st-closed"><?= te('Pasif') ?></span>
                             <?php endif; ?>
                         </td>
                         <td>
                             <div class="rk-row-actions">
-                                <a class="rk-icon-btn" title="Düzenle"
+                                <a class="rk-icon-btn" title="<?= te('Düzenle') ?>"
                                    href="<?= e(url('/admin/users/edit.php?id=' . (int)$u['id'])) ?>">
                                     <i class="bi bi-pencil"></i>
                                 </a>

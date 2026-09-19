@@ -39,7 +39,7 @@ require LAYOUT_PATH . '/header.php';
         <a class="rk-report-card is-featured" href="<?= e(url('/reports/executive_summary.php')) ?>">
             <div class="rk-report-icon"><i class="bi bi-file-earmark-bar-graph"></i></div>
             <div class="rk-report-body">
-                <h3>Yönetici Risk Özeti</h3>
+                <h3><?= te('Yönetici Risk Özeti') ?></h3>
                 <p>
                     Tek sayfalık yönetim özeti: seviye dağılımı, en yüksek 10 açık risk,
                     departman ve tehdit alanı yoğunluğu, aksiyon durumu ve 6 aylık trend.
@@ -67,17 +67,17 @@ require LAYOUT_PATH . '/header.php';
             </a>
             <div class="rk-report-actions">
                 <a class="rk-btn rk-btn-sm" href="<?= e(url('/reports/view.php?r=' . $key)) ?>">
-                    <i class="bi bi-table"></i> Görüntüle
+                    <i class="bi bi-table"></i> <?= te('Görüntüle') ?>
                 </a>
                 <a class="rk-btn rk-btn-sm"
                    href="<?= e(url('/reports/export_csv.php?r=' . $key . '&format=excel')) ?>"
                    title="Türkçe Excel'de çift tıkla açılır">
-                    <i class="bi bi-file-earmark-excel"></i> Excel
+                    <i class="bi bi-file-earmark-excel"></i> <?= te('Excel') ?>
                 </a>
                 <a class="rk-btn rk-btn-sm"
                    href="<?= e(url('/reports/export_csv.php?r=' . $key . '&format=raw')) ?>"
                    title="RFC 4180 — sistem entegrasyonu için">
-                    <i class="bi bi-filetype-csv"></i> Ham
+                    <i class="bi bi-filetype-csv"></i> <?= te('Ham') ?>
                 </a>
             </div>
         </div>
