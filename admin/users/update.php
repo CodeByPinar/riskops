@@ -19,11 +19,9 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing user id');
 }
 
-$stmt = db()->prepare('SELECT * FROM users WHERE id = :id LIMIT 1');
-$stmt->execute([':id' => $id]);
-$before = $stmt->fetch();
+$before = db_row('SELECT * FROM users WHERE id = :id LIMIT 1', [':id' => $id]);
 
-if ($before === false) {
+if ($before === null) {
     flash('error', 'Kullanıcı bulunamadı.');
     redirect('/admin/users/');
 }

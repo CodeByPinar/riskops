@@ -26,11 +26,11 @@ if ($errors !== []) {
 $completedAt = action_completed_at(null, 'Open', (string)$data['status']);
 
 try {
-    db()->prepare(
+    db_run(
         'INSERT INTO risk_actions
             (risk_id, title, description, owner_id, priority, status, due_date, completed_at, created_by)
-         VALUES (:rid, :title, :desc, :owner, :pri, :status, :due, :done, :cby)'
-    )->execute([
+         VALUES (:rid, :title, :desc, :owner, :pri, :status, :due, :done, :cby)',
+        [
         ':rid'    => $data['risk_id'],
         ':title'  => $data['title'],
         ':desc'   => $data['description'],
@@ -40,7 +40,8 @@ try {
         ':due'    => $data['due_date'],
         ':done'   => $completedAt,
         ':cby'    => auth_id(),
-    ]);
+    ]
+    );
 
     $actionId = (int)db()->lastInsertId();
 } catch (Throwable $ex) {

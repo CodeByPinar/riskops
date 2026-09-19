@@ -17,11 +17,11 @@ function departments_list(bool $onlyActive = true): array
     $key = $onlyActive ? 'active' : 'all';
 
     if (!isset($cache[$key])) {
-        $cache[$key] = db()->query(
+        $cache[$key] = db_all(
             'SELECT id, name, code, is_active FROM departments'
             . ($onlyActive ? ' WHERE is_active = 1' : '')
             . ' ORDER BY sort_order, name'
-        )->fetchAll();
+        );
     }
     return $cache[$key];
 }
@@ -33,11 +33,11 @@ function categories_list(bool $onlyActive = true): array
     $key = $onlyActive ? 'active' : 'all';
 
     if (!isset($cache[$key])) {
-        $cache[$key] = db()->query(
+        $cache[$key] = db_all(
             'SELECT id, name, code, color, is_active FROM risk_categories'
             . ($onlyActive ? ' WHERE is_active = 1' : '')
             . ' ORDER BY sort_order, name'
-        )->fetchAll();
+        );
     }
     return $cache[$key];
 }
@@ -54,13 +54,13 @@ function users_list(bool $onlyActive = true): array
     $key = $onlyActive ? 'active' : 'all';
 
     if (!isset($cache[$key])) {
-        $cache[$key] = db()->query(
+        $cache[$key] = db_all(
             'SELECT u.id, u.name, u.email, u.role, u.status, d.name AS department
              FROM users u
              LEFT JOIN departments d ON d.id = u.department_id'
             . ($onlyActive ? ' WHERE u.status = 1' : '')
             . ' ORDER BY u.name'
-        )->fetchAll();
+        );
     }
     return $cache[$key];
 }

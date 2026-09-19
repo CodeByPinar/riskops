@@ -17,11 +17,9 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing risk id');
 }
 
-$stmt = db()->prepare('SELECT * FROM risks WHERE id = :id AND deleted_at IS NULL LIMIT 1');
-$stmt->execute([':id' => $id]);
-$risk = $stmt->fetch();
+$risk = db_row('SELECT * FROM risks WHERE id = :id AND deleted_at IS NULL LIMIT 1', [':id' => $id]);
 
-if ($risk === false) {
+if ($risk === null) {
     app_abort(404, 'Risk not found: ' . $id);
 }
 

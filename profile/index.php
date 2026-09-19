@@ -21,19 +21,18 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 
 require_login();
 
-$stmt = db()->prepare(
+$me = db_row(
     'SELECT u.id, u.name, u.email, u.role, u.title, u.phone, u.status,
             u.last_login_at, u.password_changed_at, u.created_at,
             d.name AS department_name
        FROM users u
        LEFT JOIN departments d ON d.id = u.department_id
       WHERE u.id = :id
-      LIMIT 1'
+      LIMIT 1',
+    [':id' => auth_id()]
 );
-$stmt->execute([':id' => auth_id()]);
-$me = $stmt->fetch();
 
-if ($me === false) {
+if ($me === null) {
     app_abort(404, 'User not found');
 }
 

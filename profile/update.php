@@ -20,11 +20,9 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 csrf_require();
 require_login();
 
-$stmt = db()->prepare('SELECT id, name, email, title, phone FROM users WHERE id = :id LIMIT 1');
-$stmt->execute([':id' => auth_id()]);
-$before = $stmt->fetch();
+$before = db_row('SELECT id, name, email, title, phone FROM users WHERE id = :id LIMIT 1', [':id' => auth_id()]);
 
-if ($before === false) {
+if ($before === null) {
     app_abort(404, 'User not found');
 }
 
@@ -74,14 +72,15 @@ $data = [
 /* SET listesinde role / department_id / status / email YOK.
    WHERE id = kendi id'si. Ikisi birlikte, istemciden ne gelirse
    gelsin yetki yukseltmeyi imkansiz kilar. */
-db()->prepare(
-    'UPDATE users SET name = :n, title = :t, phone = :p WHERE id = :id'
-)->execute([
+db_run(
+    'UPDATE users SET name = :n, title = :t, phone = :p WHERE id = :id',
+    [
     ':n'  => $data['name'],
     ':t'  => $data['title'],
     ':p'  => $data['phone'],
     ':id' => auth_id(),
-]);
+]
+);
 
 /* Kenar cubugundaki ad oturumdan okunuyor; tazelenmezse kullanici
    degisikligi gormez ve kaydin calismadigini sanir. */

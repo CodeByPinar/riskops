@@ -24,9 +24,9 @@ function settings_all(bool $refresh = false): array
 
     $cache = [];
     try {
-        $rows = db()->query(
+        $rows = db_all(
             'SELECT setting_key, setting_value, setting_type FROM settings'
-        )->fetchAll();
+        );
 
         foreach ($rows as $row) {
             $cache[$row['setting_key']] = settings_cast(
@@ -62,11 +62,9 @@ function setting(string $key, mixed $default = null): mixed
 /** Var olan bir ayari gunceller. Yeni anahtar OLUSTURMAZ. */
 function setting_save(string $key, mixed $value, ?int $userId = null): bool
 {
-    $stmt = db()->prepare('SELECT setting_type, is_editable FROM settings WHERE setting_key = :k LIMIT 1');
-    $stmt->execute([':k' => $key]);
-    $row = $stmt->fetch();
+    $row = db_row('SELECT setting_type, is_editable FROM settings WHERE setting_key = :k LIMIT 1', [':k' => $key]);
 
-    if ($row === false || (int)$row['is_editable'] !== 1) {
+    if ($row === null || (int)$row['is_editable'] !== 1) {
         return false;
     }
 
@@ -77,10 +75,10 @@ function setting_save(string $key, mixed $value, ?int $userId = null): bool
         default => (string)$value,
     };
 
-    $upd = db()->prepare(
-        'UPDATE settings SET setting_value = :v, updated_by = :u WHERE setting_key = :k'
+    db_run(
+        'UPDATE settings SET setting_value = :v, updated_by = :u WHERE setting_key = :k',
+        [':v' => $raw, ':u' => $userId, ':k' => $key]
     );
-    $upd->execute([':v' => $raw, ':u' => $userId, ':k' => $key]);
 
     settings_all(true); // onbellegi tazele
     return true;

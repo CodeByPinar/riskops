@@ -31,14 +31,13 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing attachment id');
 }
 
-$stmt = db()->prepare(
+$att = db_row(
     'SELECT id, ' . $cfg['fk'] . ' AS parent_id, uploaded_by, original_name, stored_name'
-    . ' FROM ' . $cfg['attachments'] . ' WHERE id = :id LIMIT 1'
+    . ' FROM ' . $cfg['attachments'] . ' WHERE id = :id LIMIT 1',
+    [':id' => $id]
 );
-$stmt->execute([':id' => $id]);
-$att = $stmt->fetch();
 
-if ($att === false) {
+if ($att === null) {
     flash('error', 'Ek bulunamadi.');
     redirect($type === 'risk' ? '/risks/' : '/actions/');
 }
@@ -54,7 +53,7 @@ if (!discussion_may_delete($att['uploaded_by'] !== null ? (int)$att['uploaded_by
    silme basarisiz olsaydi, arayuzde gorunen ama diskte olmayan bir ek
    kalir, tiklayan herkes 404 alirdi. Bu sirada en kotu ihtimal yetim
    bir dosya: gorunmez ve zararsiz. */
-db()->prepare('DELETE FROM ' . $cfg['attachments'] . ' WHERE id = :id')->execute([':id' => $id]);
+db_run('DELETE FROM ' . $cfg['attachments'] . ' WHERE id = :id', [':id' => $id]);
 
 if (!attach_delete_file((string)$att['stored_name'])) {
     app_log('warning', 'Attachment file could not be deleted', [

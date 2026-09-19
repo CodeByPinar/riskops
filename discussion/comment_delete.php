@@ -29,14 +29,13 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing comment id');
 }
 
-$stmt = db()->prepare(
+$comment = db_row(
     'SELECT id, ' . $cfg['fk'] . ' AS parent_id, user_id'
-    . ' FROM ' . $cfg['comments'] . ' WHERE id = :id LIMIT 1'
+    . ' FROM ' . $cfg['comments'] . ' WHERE id = :id LIMIT 1',
+    [':id' => $id]
 );
-$stmt->execute([':id' => $id]);
-$comment = $stmt->fetch();
 
-if ($comment === false) {
+if ($comment === null) {
     flash('error', 'Yorum bulunamadi.');
     redirect($type === 'risk' ? '/risks/' : '/actions/');
 }
@@ -48,7 +47,7 @@ if (!discussion_may_delete($comment['user_id'] !== null ? (int)$comment['user_id
     redirect($back);
 }
 
-db()->prepare('DELETE FROM ' . $cfg['comments'] . ' WHERE id = :id')->execute([':id' => $id]);
+db_run('DELETE FROM ' . $cfg['comments'] . ' WHERE id = :id', [':id' => $id]);
 
 audit($type . '_comment_deleted', $type, (int)$comment['parent_id'],
     ['comment_id' => $id, 'author_id' => $comment['user_id']], null);

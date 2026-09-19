@@ -18,22 +18,20 @@ $editId  = input_int('edit');
 $editing = null;
 
 if ($editId !== null) {
-    $stmt = db()->prepare('SELECT * FROM risk_categories WHERE id = :id LIMIT 1');
-    $stmt->execute([':id' => $editId]);
-    $editing = $stmt->fetch() ?: null;
+    $editing = db_row('SELECT * FROM risk_categories WHERE id = :id LIMIT 1', [':id' => $editId]) ?: null;
     if ($editing === null) {
         flash('error', 'Kategori bulunamadı.');
         redirect('/admin/categories/');
     }
 }
 
-$rows = db()->query(
+$rows = db_all(
     'SELECT c.*,
             (SELECT COUNT(*) FROM risks r WHERE r.category_id = c.id AND r.deleted_at IS NULL) AS risk_sayisi,
             (SELECT COUNT(*) FROM risks r WHERE r.category_id = c.id) AS risk_tumu
      FROM risk_categories c
      ORDER BY c.sort_order, c.name'
-)->fetchAll();
+);
 
 $val = static function (string $key, $default = '') use ($editing): string {
     if (has_old($key)) {

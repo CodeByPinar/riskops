@@ -143,20 +143,19 @@ $orderSql .= ', r.id DESC';
 /* 4) Say + sayfala                                                    */
 /* ------------------------------------------------------------------ */
 
-$countStmt = db()->prepare(
+$total = (int)db_value(
     "SELECT COUNT(*)
      FROM risks r
      JOIN risk_categories c ON c.id = r.category_id
      JOIN departments     d ON d.id = r.department_id
      JOIN users           u ON u.id = r.owner_id
-     WHERE {$whereSql}"
+     WHERE {$whereSql}",
+    $params
 );
-$countStmt->execute($params);
-$total = (int)$countStmt->fetchColumn();
 
 $page = paginate($total, per_page(), input_int('page', 1) ?? 1);
 
-$listStmt = db()->prepare(
+$rows = db_all(
     "SELECT r.id, r.risk_code, r.title, r.asset_name, r.status, r.target_date,
             r.inherent_score, r.inherent_severity,
             r.residual_score, r.residual_severity,
@@ -170,10 +169,9 @@ $listStmt = db()->prepare(
      JOIN users           u ON u.id = r.owner_id
      WHERE {$whereSql}
      ORDER BY {$orderSql}
-     LIMIT {$page['per_page']} OFFSET {$page['offset']}"
+     LIMIT {$page['per_page']} OFFSET {$page['offset']}",
+    $params
 );
-$listStmt->execute($params);
-$rows = $listStmt->fetchAll();
 
 /* ------------------------------------------------------------------ */
 /* 5) Siralanabilir kolon başlığı                                      */

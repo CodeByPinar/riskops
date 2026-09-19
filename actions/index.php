@@ -102,19 +102,18 @@ $orderSql .= ', a.id DESC';
 /* 4) Say + sayfala                                                    */
 /* ------------------------------------------------------------------ */
 
-$countStmt = db()->prepare(
+$total = (int)db_value(
     "SELECT COUNT(*)
      FROM risk_actions a
      JOIN risks r ON r.id = a.risk_id
      JOIN users u ON u.id = a.owner_id
-     WHERE {$whereSql}"
+     WHERE {$whereSql}",
+    $params
 );
-$countStmt->execute($params);
-$total = (int)$countStmt->fetchColumn();
 
 $page = paginate($total, per_page(), input_int('page', 1) ?? 1);
 
-$listStmt = db()->prepare(
+$rows = db_all(
     "SELECT a.id, a.title, a.priority, a.status, a.due_date, a.completed_at,
             r.id AS risk_id, r.risk_code, r.title AS risk_title,
             u.name AS owner
@@ -123,13 +122,12 @@ $listStmt = db()->prepare(
      JOIN users u ON u.id = a.owner_id
      WHERE {$whereSql}
      ORDER BY {$orderSql}
-     LIMIT {$page['per_page']} OFFSET {$page['offset']}"
+     LIMIT {$page['per_page']} OFFSET {$page['offset']}",
+    $params
 );
-$listStmt->execute($params);
-$rows = $listStmt->fetchAll();
 
 /* Özet sayaçlar - filtreden bağımsız, genel durum */
-$summary = db()->query(
+$summary = db_row(
     "SELECT
         COALESCE(SUM(a.status = 'Open'), 0)        AS acik,
         COALESCE(SUM(a.status = 'In Progress'), 0) AS devam,
@@ -138,7 +136,7 @@ $summary = db()->query(
                  AND a.due_date IS NOT NULL AND a.due_date < CURDATE()), 0) AS geciken
      FROM risk_actions a
      JOIN risks r ON r.id = a.risk_id AND r.deleted_at IS NULL"
-)->fetch();
+);
 
 /* ------------------------------------------------------------------ */
 

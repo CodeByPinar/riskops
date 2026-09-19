@@ -20,10 +20,10 @@ $risk = assessment_find_risk(input_int('risk_id'));
 
 $risks = [];
 if ($risk === null) {
-    $risks = db()->query(
+    $risks = db_all(
         'SELECT id, risk_code, title FROM risks
          WHERE deleted_at IS NULL ORDER BY risk_code DESC'
-    )->fetchAll();
+    );
 
     if ($risks === []) {
         flash('warning', 'Önce en az bir risk kaydı oluşturmalısınız.');

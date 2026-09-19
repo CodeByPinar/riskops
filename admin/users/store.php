@@ -28,12 +28,12 @@ if ($errors !== []) {
 $tempPassword = generate_temp_password();
 
 try {
-    db()->prepare(
+    db_run(
         'INSERT INTO users
             (name, email, password, role, department_id, title, phone,
              status, must_change_password, password_changed_at, created_by)
-         VALUES (:n, :e, :p, :r, :d, :t, :ph, :s, 1, NOW(), :cby)'
-    )->execute([
+         VALUES (:n, :e, :p, :r, :d, :t, :ph, :s, 1, NOW(), :cby)',
+        [
         ':n'   => $data['name'],
         ':e'   => $data['email'],
         ':p'   => password_hash($tempPassword, PASSWORD_DEFAULT),
@@ -43,7 +43,8 @@ try {
         ':ph'  => $data['phone'],
         ':s'   => $data['status'],
         ':cby' => auth_id(),
-    ]);
+    ]
+    );
 
     $newId = (int)db()->lastInsertId();
 } catch (Throwable $ex) {

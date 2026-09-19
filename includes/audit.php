@@ -33,15 +33,13 @@ function audit(
         $userId   = $userId   ?? auth_id();
         $userName = $userName ?? (auth_name() !== '' ? auth_name() : null);
 
-        $stmt = db()->prepare(
+        db_run(
             'INSERT INTO audit_logs
                 (user_id, user_name_snapshot, action, entity_type, entity_id,
                  old_values, new_values, ip_address, user_agent)
              VALUES
-                (:uid, :uname, :action, :etype, :eid, :old, :new, :ip, :ua)'
-        );
-
-        $stmt->execute([
+                (:uid, :uname, :action, :etype, :eid, :old, :new, :ip, :ua)',
+            [
             ':uid'    => $userId,
             ':uname'  => $userName,
             ':action' => $action,
@@ -51,7 +49,8 @@ function audit(
             ':new'    => $newValues === null ? null : audit_json($newValues),
             ':ip'     => client_ip(),
             ':ua'     => client_agent(),
-        ]);
+        ]
+        );
     } catch (Throwable $e) {
         app_log('error', 'Audit log write failed: ' . $e->getMessage(), [
             'action' => $action,

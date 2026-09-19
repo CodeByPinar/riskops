@@ -18,9 +18,9 @@ require_once __DIR__ . '/../../includes/bootstrap.php';
 require_login();
 require_role(ROLE_ADMIN);
 
-$rows = db()->query(
+$rows = db_all(
     "SELECT * FROM settings ORDER BY FIELD(setting_group,'general','risk','security'), sort_order, id"
-)->fetchAll();
+);
 
 $groups = [];
 foreach ($rows as $row) {
@@ -54,7 +54,7 @@ $dateTimeFormats = ['d.m.Y H:i', 'd/m/Y H:i', 'Y-m-d H:i', 'd F Y H:i'];
 $commonZones     = ['Europe/Istanbul', 'Europe/London', 'Europe/Berlin', 'UTC',
                     'America/New_York', 'Asia/Dubai'];
 
-$riskCount = (int)db()->query('SELECT COUNT(*) FROM risks')->fetchColumn();
+$riskCount = (int)db_value('SELECT COUNT(*) FROM risks');
 
 $pageTitle    = 'Ayarlar';
 $pageSubtitle = count($rows) . ' ayar · değişiklikler audit log\'a yazılır';

@@ -201,8 +201,10 @@ function auth_start(array $user): void
 
     if ($handoff['persist'] !== null) {
         try {
-            db()->prepare('UPDATE users SET locale = :l WHERE id = :id')
-                ->execute([':l' => $handoff['persist'], ':id' => (int)$user['id']]);
+            db_run(
+                'UPDATE users SET locale = :l WHERE id = :id',
+                [':l' => $handoff['persist'], ':id' => (int)$user['id']]
+            );
             $_SESSION['user_locale'] = $handoff['persist'];
         } catch (Throwable $e) {
             /* locale kolonu olmayan eski kurulum: oturum içinde çalışır,
@@ -335,12 +337,11 @@ function auth_revalidate(): void
     }
 
     try {
-        $stmt = db()->prepare(
+        $row = db_row(
             'SELECT role, status, must_change_password, password_changed_at
-             FROM users WHERE id = :id LIMIT 1'
+             FROM users WHERE id = :id LIMIT 1',
+            [':id' => auth_id()]
         );
-        $stmt->execute([':id' => auth_id()]);
-        $row = $stmt->fetch();
     } catch (Throwable $e) {
         // Veritabani gecici olarak erisilemezse kullaniciyi disari atma;
         // bir altyapi arizasi toplu oturum kapatmaya donusmemeli.
@@ -360,7 +361,7 @@ function auth_revalidate(): void
         redirect('/auth/login.php');
     };
 
-    if ($row === false) {
+    if ($row === null) {
         $revoke('account_deleted', 'error',
             'Hesabiniz bulunamadi. Lutfen sistem yoneticinizle iletisime gecin.');
     }

@@ -33,7 +33,7 @@ $warnDays = max(1, (int)setting('overdue_warning_days', 7));
 /* Üst kartlar                                                         */
 /* ------------------------------------------------------------------ */
 
-$stats = db()->query(
+$stats = db_row(
     "SELECT
         COUNT(*) AS total,
         COALESCE(SUM(COALESCE(residual_severity, inherent_severity) = 'Critical'), 0) AS critical,
@@ -42,44 +42,44 @@ $stats = db()->query(
         COALESCE(SUM(status = 'Mitigated'), 0)                                        AS mitigated
      FROM risks
      WHERE deleted_at IS NULL"
-)->fetch();
+);
 
-$overdueActions = (int)db()->query(
+$overdueActions = (int)db_value(
     "SELECT COUNT(*)
      FROM risk_actions a
      JOIN risks r ON r.id = a.risk_id AND r.deleted_at IS NULL
      WHERE a.status IN ('Open','In Progress')
        AND a.due_date IS NOT NULL AND a.due_date < CURDATE()"
-)->fetchColumn();
+);
 
 /* ------------------------------------------------------------------ */
 /* Dağılımlar (sunucu tarafında render edilir)                         */
 /* ------------------------------------------------------------------ */
 
 $severityCounts = [];
-foreach (db()->query(
+foreach (db_all(
     "SELECT COALESCE(residual_severity, inherent_severity) AS sev, COUNT(*) AS adet
      FROM risks WHERE deleted_at IS NULL GROUP BY sev"
-)->fetchAll() as $r) {
+) as $r) {
     $severityCounts[$r['sev']] = (int)$r['adet'];
 }
 
 $statusCounts = [];
-foreach (db()->query(
+foreach (db_all(
     "SELECT status, COUNT(*) AS adet FROM risks WHERE deleted_at IS NULL GROUP BY status"
-)->fetchAll() as $r) {
+) as $r) {
     $statusCounts[$r['status']] = (int)$r['adet'];
 }
 
 // 5x5 matris: etkin olasılık / etki kırılımı
 $matrix = [];
-foreach (db()->query(
+foreach (db_all(
     "SELECT COALESCE(residual_likelihood, likelihood) AS l,
             COALESCE(residual_impact, impact)         AS i,
             COUNT(*) AS adet
      FROM risks WHERE deleted_at IS NULL
      GROUP BY l, i"
-)->fetchAll() as $r) {
+) as $r) {
     $matrix[(int)$r['l']][(int)$r['i']] = (int)$r['adet'];
 }
 
@@ -87,7 +87,7 @@ foreach (db()->query(
 /* Listeler                                                            */
 /* ------------------------------------------------------------------ */
 
-$criticalOpen = db()->query(
+$criticalOpen = db_all(
     "SELECT r.id, r.risk_code, r.title, r.target_date, r.status,
             COALESCE(r.residual_severity, r.inherent_severity) AS severity,
             COALESCE(r.residual_score, r.inherent_score)       AS score,
@@ -101,9 +101,9 @@ $criticalOpen = db()->query(
      ORDER BY FIELD(COALESCE(r.residual_severity, r.inherent_severity), 'Critical','High'),
               r.target_date IS NULL, r.target_date ASC
      LIMIT 8"
-)->fetchAll();
+);
 
-$upcomingStmt = db()->prepare(
+$upcoming = db_all(
     "SELECT r.id, r.risk_code, r.title, r.target_date, r.status,
             COALESCE(r.residual_severity, r.inherent_severity) AS severity
      FROM risks r
@@ -112,12 +112,11 @@ $upcomingStmt = db()->prepare(
        AND r.target_date IS NOT NULL
        AND r.target_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL :d DAY)
      ORDER BY r.target_date ASC
-     LIMIT 6"
+     LIMIT 6",
+    [':d' => $warnDays]
 );
-$upcomingStmt->execute([':d' => $warnDays]);
-$upcoming = $upcomingStmt->fetchAll();
 
-$lateActions = db()->query(
+$lateActions = db_all(
     "SELECT a.id, a.title, a.priority, a.status, a.due_date,
             r.id AS risk_id, r.risk_code,
             u.name AS owner
@@ -128,26 +127,24 @@ $lateActions = db()->query(
        AND a.due_date IS NOT NULL AND a.due_date < CURDATE()
      ORDER BY a.due_date ASC
      LIMIT 6"
-)->fetchAll();
+);
 
-$myActionsStmt = db()->prepare(
+$myActions = db_all(
     "SELECT a.id, a.title, a.priority, a.status, a.due_date,
             r.id AS risk_id, r.risk_code
      FROM risk_actions a
      JOIN risks r ON r.id = a.risk_id AND r.deleted_at IS NULL
      WHERE a.owner_id = :me AND a.status IN ('Open','In Progress')
      ORDER BY a.due_date IS NULL, a.due_date ASC
-     LIMIT 6"
+     LIMIT 6",
+    [':me' => $me]
 );
-$myActionsStmt->execute([':me' => $me]);
-$myActions = $myActionsStmt->fetchAll();
 
-$myRiskStmt = db()->prepare(
+$myRiskCount = (int)db_value(
     "SELECT COUNT(*) FROM risks
-     WHERE deleted_at IS NULL AND owner_id = :me AND status IN ({$openList})"
+     WHERE deleted_at IS NULL AND owner_id = :me AND status IN ({$openList})",
+    [':me' => $me]
 );
-$myRiskStmt->execute([':me' => $me]);
-$myRiskCount = (int)$myRiskStmt->fetchColumn();
 
 /* ------------------------------------------------------------------ */
 

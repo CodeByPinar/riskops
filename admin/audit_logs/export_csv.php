@@ -38,9 +38,7 @@ $docCode = 'RO-AUDIT-' . date('Ymd-Hi');
 
 /* Toplam satiri once sayilir: kunye blogunda yazmak icin ve
    islemin buyuklugunu audit'e kaydetmek icin. */
-$countStmt = db()->prepare("SELECT COUNT(*) FROM audit_logs l WHERE {$flt['where']}");
-$countStmt->execute($flt['params']);
-$total = (int)$countStmt->fetchColumn();
+$total = (int)db_value("SELECT COUNT(*) FROM audit_logs l WHERE {$flt['where']}", $flt['params']);
 
 /* DIKKAT: bu islem de denetlenir. Denetim kaydini kimin disari
    aktardigi, denetim kaydinin kendisi kadar onemlidir. */

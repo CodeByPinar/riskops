@@ -252,8 +252,7 @@ function report_run(array $def, ?string $from, ?string $to): array
     }
 
     $sql  = str_replace('%DATE%', $dateSql, $def['sql']);
-    $stmt = db()->prepare($sql);
-    $stmt->execute($params);
+    $stmt = db_stmt($sql, $params);
 
     return ['rows' => $stmt->fetchAll(), 'sql' => $sql];
 }

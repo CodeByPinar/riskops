@@ -44,10 +44,11 @@ if (mb_strlen($body) > 4000) {
 
 /* Tablo ve kolon adlari SABIT kayit defterinden (includes/discussion.php);
    istemciden gelen degerler yalnizca placeholder olarak giriyor. */
-db()->prepare(
+db_run(
     'INSERT INTO ' . $cfg['comments'] . ' (' . $cfg['fk'] . ', user_id, body)'
-    . ' VALUES (:p, :u, :b)'
-)->execute([':p' => $parent['id'], ':u' => auth_id(), ':b' => $body]);
+    . ' VALUES (:p, :u, :b)',
+    [':p' => $parent['id'], ':u' => auth_id(), ':b' => $body]
+);
 
 $commentId = (int)db()->lastInsertId();
 

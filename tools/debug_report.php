@@ -129,7 +129,7 @@ try {
 
     /* PHP ve MySQL aynı ana mı bakıyor? Kaymış olması audit zaman
        damgalarını ve hesap kilidi penceresini bozar. */
-    $mysqlNow = (string)$pdo->query('SELECT NOW()')->fetchColumn();
+    $mysqlNow = (string)db_value('SELECT NOW()');
     $phpNow   = date('Y-m-d H:i:s');
     $drift    = abs(strtotime($mysqlNow) - strtotime($phpNow));
     row('MySQL NOW()', $mysqlNow);
@@ -155,7 +155,7 @@ try {
     foreach ($tables as $table) {
         /* Kesin satır sayısı: information_schema.table_rows InnoDB'de
            tahminîdir, küçük tablolarda 0 gösterebilir. */
-        $count = (int)$pdo->query('SELECT COUNT(*) FROM `' . $table . '`')->fetchColumn();
+        $count = (int)db_value('SELECT COUNT(*) FROM `' . $table . '`');
         $st->execute([$table]);
         $meta = $st->fetch() ?: ['data_length' => 0, 'index_length' => 0];
         printf(

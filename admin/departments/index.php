@@ -18,16 +18,14 @@ $editId = input_int('edit');
 $editing = null;
 
 if ($editId !== null) {
-    $stmt = db()->prepare('SELECT * FROM departments WHERE id = :id LIMIT 1');
-    $stmt->execute([':id' => $editId]);
-    $editing = $stmt->fetch() ?: null;
+    $editing = db_row('SELECT * FROM departments WHERE id = :id LIMIT 1', [':id' => $editId]) ?: null;
     if ($editing === null) {
         flash('error', 'Departman bulunamadı.');
         redirect('/admin/departments/');
     }
 }
 
-$rows = db()->query(
+$rows = db_all(
     'SELECT d.*,
             m.name AS manager_name,
             (SELECT COUNT(*) FROM risks r WHERE r.department_id = d.id AND r.deleted_at IS NULL) AS risk_sayisi,
@@ -35,7 +33,7 @@ $rows = db()->query(
      FROM departments d
      LEFT JOIN users m ON m.id = d.manager_id
      ORDER BY d.sort_order, d.name'
-)->fetchAll();
+);
 
 $val = static function (string $key, $default = '') use ($editing): string {
     if (has_old($key)) {

@@ -21,15 +21,14 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing action id');
 }
 
-$stmt = db()->prepare(
+$action = db_row(
     'SELECT a.* FROM risk_actions a
      JOIN risks r ON r.id = a.risk_id AND r.deleted_at IS NULL
-     WHERE a.id = :id LIMIT 1'
+     WHERE a.id = :id LIMIT 1',
+    [':id' => $id]
 );
-$stmt->execute([':id' => $id]);
-$action = $stmt->fetch();
 
-if ($action === false) {
+if ($action === null) {
     flash('error', 'Aksiyon bulunamadı.');
     redirect('/actions/');
 }
@@ -50,9 +49,10 @@ if ($action['status'] === 'Cancelled') {
 
 $now = date('Y-m-d H:i:s');
 
-db()->prepare(
-    "UPDATE risk_actions SET status = 'Completed', completed_at = :now WHERE id = :id"
-)->execute([':now' => $now, ':id' => $id]);
+db_run(
+    "UPDATE risk_actions SET status = 'Completed', completed_at = :now WHERE id = :id",
+    [':now' => $now, ':id' => $id]
+);
 
 audit('action_completed', 'risk_action', $id,
     ['status' => $action['status'], 'completed_at' => $action['completed_at']],

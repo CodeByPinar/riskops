@@ -19,10 +19,8 @@ $backUrl = '/admin/departments/' . ($isEdit ? '?edit=' . $id : '');
 
 $before = null;
 if ($isEdit) {
-    $stmt = db()->prepare('SELECT * FROM departments WHERE id = :id LIMIT 1');
-    $stmt->execute([':id' => $id]);
-    $before = $stmt->fetch();
-    if ($before === false) {
+    $before = db_row('SELECT * FROM departments WHERE id = :id LIMIT 1', [':id' => $id]);
+    if ($before === null) {
         flash('error', 'Departman bulunamadı.');
         redirect('/admin/departments/');
     }
@@ -56,10 +54,10 @@ foreach ([['name', $name], ['code', $code]] as [$field, $value]) {
     if ($value === null || isset($errors[$field])) {
         continue;
     }
-    $stmt = db()->prepare(
-        "SELECT id FROM departments WHERE {$field} = :v AND (:self IS NULL OR id <> :self2) LIMIT 1"
+    $stmt = db_stmt(
+        "SELECT id FROM departments WHERE {$field} = :v AND (:self IS NULL OR id <> :self2) LIMIT 1",
+        [':v' => $value, ':self' => $isEdit ? $id : null, ':self2' => $id ?? 0]
     );
-    $stmt->execute([':v' => $value, ':self' => $isEdit ? $id : null, ':self2' => $id ?? 0]);
     if ($stmt->fetchColumn() !== false) {
         $errors[$field] = 'Bu ' . ($field === 'name' ? 'ad' : 'kod') . ' zaten kullanılıyor.';
     }
@@ -93,15 +91,16 @@ $data = [
 
 try {
     if ($isEdit) {
-        db()->prepare(
+        db_run(
             'UPDATE departments SET name=:n, code=:c, description=:d,
                     manager_id=:m, sort_order=:s, is_active=:a
-             WHERE id=:id'
-        )->execute([
+             WHERE id=:id',
+            [
             ':n' => $data['name'], ':c' => $data['code'], ':d' => $data['description'],
             ':m' => $data['manager_id'], ':s' => $data['sort_order'],
             ':a' => $data['is_active'], ':id' => $id,
-        ]);
+        ]
+        );
 
         [$oldValues, $newValues] = audit_diff($before, $data);
         if ($oldValues !== []) {
@@ -109,13 +108,14 @@ try {
         }
         flash('success', $data['name'] . ' güncellendi.');
     } else {
-        db()->prepare(
+        db_run(
             'INSERT INTO departments (name, code, description, manager_id, sort_order, is_active)
-             VALUES (:n, :c, :d, :m, :s, :a)'
-        )->execute([
+             VALUES (:n, :c, :d, :m, :s, :a)',
+            [
             ':n' => $data['name'], ':c' => $data['code'], ':d' => $data['description'],
             ':m' => $data['manager_id'], ':s' => $data['sort_order'], ':a' => $data['is_active'],
-        ]);
+        ]
+        );
 
         audit('department_created', 'department', (int)db()->lastInsertId(), null, $data);
         flash('success', $data['name'] . ' eklendi.');

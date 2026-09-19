@@ -47,13 +47,13 @@ final class SchemaTest extends TestCase
         /* risk_score() PHP'de de var ama TEK DOĞRULUK KAYNAĞI
            veritabanıdır: doğrudan SQL ile yazan bir betik bile
            tutarsız skor üretemesin. */
-        $col = self::$pdo->query(
+        $col = db_row(
             "SELECT EXTRA, GENERATION_EXPRESSION
                FROM information_schema.COLUMNS
               WHERE TABLE_SCHEMA = DATABASE()
                 AND TABLE_NAME = 'risks'
                 AND COLUMN_NAME = 'inherent_score'"
-        )->fetch();
+        );
 
         self::assertNotFalse($col, 'risks.inherent_score kolonu yok');
         self::assertStringContainsString('STORED GENERATED', strtoupper((string)$col['EXTRA']));
@@ -62,9 +62,9 @@ final class SchemaTest extends TestCase
     #[Test]
     public function risk_kodu_benzersizdir(): void
     {
-        $idx = self::$pdo->query(
+        $idx = db_all(
             "SHOW INDEX FROM risks WHERE Column_name = 'risk_code'"
-        )->fetchAll();
+        );
 
         self::assertNotEmpty($idx, 'risk_code üzerinde indeks yok');
         self::assertSame(0, (int)$idx[0]['Non_unique'], 'risk_code benzersiz değil');
@@ -92,7 +92,7 @@ final class SchemaTest extends TestCase
     {
         /* STRICT olmadan taşan bir değer sessizce kırpılır; risk
            kaydında bu, veri kaybının fark edilmemesi demektir. */
-        $mode = (string)self::$pdo->query('SELECT @@SESSION.sql_mode')->fetchColumn();
+        $mode = (string)db_value('SELECT @@SESSION.sql_mode');
 
         self::assertStringContainsString('STRICT', strtoupper($mode));
     }
@@ -102,7 +102,7 @@ final class SchemaTest extends TestCase
     {
         /* utf8 (3 bayt) Türkçe için yeter ama emoji ve bazı
            karakterler için yetmez; kullanıcı metni sessizce bozulur. */
-        $charset = (string)self::$pdo->query('SELECT @@SESSION.character_set_connection')->fetchColumn();
+        $charset = (string)db_value('SELECT @@SESSION.character_set_connection');
 
         self::assertSame('utf8mb4', $charset);
     }
@@ -113,7 +113,7 @@ final class SchemaTest extends TestCase
         /* Kayma, audit zaman damgalarını ve hesap kilidi penceresini
            bozar - ölçülmüş bir hata: 3 saatlik fark yüzünden kaba
            kuvvet kilidi hiç devreye girmiyordu. */
-        $mysqlNow = (string)self::$pdo->query('SELECT NOW()')->fetchColumn();
+        $mysqlNow = (string)db_value('SELECT NOW()');
         $drift    = abs(strtotime($mysqlNow) - time());
 
         self::assertLessThanOrEqual(2, $drift, "PHP ile MySQL saatleri {$drift} sn kaymış");

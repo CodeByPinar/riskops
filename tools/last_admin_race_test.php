@@ -34,7 +34,7 @@ function check(string $label, bool $ok, string $note = ''): void
 }
 
 $pdo = db();
-$snapshot = $pdo->query('SELECT id, role, status FROM users ORDER BY id')->fetchAll();
+$snapshot = db_all('SELECT id, role, status FROM users ORDER BY id');
 
 $restore = static function () use ($pdo, $snapshot): void {
     $st = $pdo->prepare('UPDATE users SET role = :r, status = :s WHERE id = :id');
@@ -76,7 +76,7 @@ try {
     /* ---------------------------------------------------------------- */
 
     $pdo->exec("UPDATE users SET role = 'admin', status = 1 WHERE id IN ($a, $b)");
-    $before = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role='admin' AND status=1")->fetchColumn();
+    $before = (int)db_value("SELECT COUNT(*) FROM users WHERE role='admin' AND status=1");
     check('baslangic: tam 2 aktif admin', $before === 2, "$before");
 
     $dir = sys_get_temp_dir() . '/rk-race-' . bin2hex(random_bytes(8));
@@ -124,7 +124,7 @@ PHP;
     echo "     isci A: $ra\n";
     echo "     isci B: $rb\n";
 
-    $after = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role='admin' AND status=1")->fetchColumn();
+    $after = (int)db_value("SELECT COUNT(*) FROM users WHERE role='admin' AND status=1");
     check('YARIS SONRASI: en az 1 aktif admin kaldi (invariant)', $after >= 1, "$after aktif admin");
     check('tam olarak 1 isci guncelledi', substr_count($ra . $rb, '"updated":true') === 1);
 
@@ -132,7 +132,7 @@ PHP;
     rmdir($dir);
 } finally {
     $restore();
-    $now = $pdo->query('SELECT id, role, status FROM users ORDER BY id')->fetchAll();
+    $now = db_all('SELECT id, role, status FROM users ORDER BY id');
     check('users tablosu geri yuklendi', $now == $snapshot);
 }
 

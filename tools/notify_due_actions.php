@@ -86,7 +86,7 @@ $log('Termin bildirimi basliyor (' . $daysAhead . ' gun ileriye bakiliyor)'
 /* aksiyonu da gundemde degildir.                                       */
 /* ------------------------------------------------------------------ */
 
-$stmt = db()->prepare(
+$rows = db_all(
     "SELECT a.id, a.title, a.due_date, a.priority, a.status,
             a.owner_id, u.name AS owner_name, u.email AS owner_email,
             r.id AS risk_id, r.risk_code, r.title AS risk_title,
@@ -97,10 +97,9 @@ $stmt = db()->prepare(
       WHERE a.status NOT IN ('Completed', 'Cancelled')
         AND a.due_date IS NOT NULL
         AND a.due_date <= DATE_ADD(CURDATE(), INTERVAL :days DAY)
-      ORDER BY u.id, a.due_date ASC"
+      ORDER BY u.id, a.due_date ASC",
+    [':days' => $daysAhead]
 );
-$stmt->execute([':days' => $daysAhead]);
-$rows = $stmt->fetchAll();
 
 if ($rows === []) {
     $log('Bildirilecek aksiyon yok.');

@@ -235,12 +235,15 @@ function risk_recalculate_severities(?PDO $pdo = null): array
     settings_all(true);   // eşikler önbellekten değil, veritabanından
 
     $riskCount = 0;
-    $updRisk = $pdo->prepare(
-        'UPDATE risks SET inherent_severity = :i, residual_severity = :r WHERE id = :id'
+    $updRisk = db_prepare(
+        'UPDATE risks SET inherent_severity = :i, residual_severity = :r WHERE id = :id',
+        $pdo
     );
 
-    foreach ($pdo->query(
-        'SELECT id, inherent_score, inherent_severity, residual_score, residual_severity FROM risks'
+    foreach (db_stmt(
+        'SELECT id, inherent_score, inherent_severity, residual_score, residual_severity FROM risks',
+        [],
+        $pdo
     )->fetchAll() as $row) {
         $newInherent = severity_from_score((int)$row['inherent_score']);
         $newResidual = $row['residual_score'] !== null
@@ -258,9 +261,9 @@ function risk_recalculate_severities(?PDO $pdo = null): array
     }
 
     $assessCount = 0;
-    $updAssess = $pdo->prepare('UPDATE risk_assessments SET severity = :s WHERE id = :id');
+    $updAssess = db_prepare('UPDATE risk_assessments SET severity = :s WHERE id = :id', $pdo);
 
-    foreach ($pdo->query('SELECT id, score, severity FROM risk_assessments')->fetchAll() as $row) {
+    foreach (db_stmt('SELECT id, score, severity FROM risk_assessments', [], $pdo)->fetchAll() as $row) {
         $new = severity_from_score((int)$row['score']);
         if ($new !== $row['severity']) {
             $updAssess->execute([':s' => $new, ':id' => (int)$row['id']]);

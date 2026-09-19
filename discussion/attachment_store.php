@@ -29,10 +29,10 @@ $back   = discussion_url($type, (int)$parent['id'], '#ekler');
 
 /* Kayit basina ek sayisi sinirli: sinirsiz birakilirsa tek bir kayit
    uzerinden disk doldurulabilir. */
-$stmt = db()->prepare(
-    'SELECT COUNT(*) FROM ' . $cfg['attachments'] . ' WHERE ' . $cfg['fk'] . ' = :p'
+$stmt = db_stmt(
+    'SELECT COUNT(*) FROM ' . $cfg['attachments'] . ' WHERE ' . $cfg['fk'] . ' = :p',
+    [':p' => $parent['id']]
 );
-$stmt->execute([':p' => $parent['id']]);
 
 if ((int)$stmt->fetchColumn() >= ATTACH_MAX_PER_RISK) {
     flash('error', 'Bir kayda en fazla ' . ATTACH_MAX_PER_RISK . ' ek eklenebilir.');
@@ -54,18 +54,19 @@ if (!$result['ok']) {
 }
 
 try {
-    db()->prepare(
+    db_run(
         'INSERT INTO ' . $cfg['attachments']
         . ' (' . $cfg['fk'] . ', uploaded_by, original_name, stored_name, mime_type, size_bytes)'
-        . ' VALUES (:p, :u, :o, :s, :m, :z)'
-    )->execute([
+        . ' VALUES (:p, :u, :o, :s, :m, :z)',
+        [
         ':p' => $parent['id'],
         ':u' => auth_id(),
         ':o' => $result['original'],
         ':s' => $result['stored'],
         ':m' => $result['mime'],
         ':z' => $result['size'],
-    ]);
+    ]
+    );
 } catch (Throwable $e) {
     /* Veritabani satiri yazilamadiysa diskteki dosya YETIM kalir:
        hicbir ekranda gorunmez ama yer kaplar. */

@@ -61,7 +61,7 @@ section('3. Veritabani');
 
 $pdo = db();
 check('PDO bağlantısı', $pdo instanceof PDO);
-check('SELECT 1 çalışıyor', (int)$pdo->query('SELECT 1')->fetchColumn() === 1);
+check('SELECT 1 çalışıyor', (int)db_value('SELECT 1') === 1);
 check('ERRMODE_EXCEPTION aktif',
     $pdo->getAttribute(PDO::ATTR_ERRMODE) === PDO::ERRMODE_EXCEPTION);
 check('EMULATE_PREPARES kapalı',
@@ -78,7 +78,7 @@ check(count($expected) . ' tablo mevcut', $tables === $expected,
     . ' fazla / ' . implode(', ', array_diff($expected, $tables)) . ' eksik');
 
 // Native int donuyor mu?
-$one = $pdo->query('SELECT COUNT(*) AS c FROM departments')->fetch();
+$one = db_row('SELECT COUNT(*) AS c FROM departments');
 check('INT kolonlar native int', is_int($one['c']), gettype($one['c']));
 
 /* ------------------------------------------------------------------ */
@@ -87,7 +87,7 @@ section('4. Ayarlar ve zaman dilimi');
 $settings = settings_all();
 // Sabit sayı beklemek yanlıştı: yeni ayar eklendiğinde test kırılıyordu.
 // Doğru varsayım: settings tablosundaki her satır belleğe yüklenmiş olmalı.
-$settingsInDb = (int)$pdo->query('SELECT COUNT(*) FROM settings')->fetchColumn();
+$settingsInDb = (int)db_value('SELECT COUNT(*) FROM settings');
 check('settings tamamı yüklendi', count($settings) === $settingsInDb,
     count($settings) . ' / ' . $settingsInDb);
 check('zorunlu anahtarlar mevcut',
@@ -105,7 +105,7 @@ check('simdiki zaman', true, date('Y-m-d H:i:s T'));
    Kaydiginda: tum tarihler yanlis gorunur VE brute-force penceresi,
    parola-degisti karsilastirmasi gibi zamana dayali kontroller sessizce
    calismaz hale gelir. Bu kontrol o regresyonu yakalar. */
-$mysqlNow = (string)$pdo->query('SELECT NOW()')->fetchColumn();
+$mysqlNow = (string)db_value('SELECT NOW()');
 $skew     = abs(strtotime(date('Y-m-d H:i:s')) - strtotime($mysqlNow));
 check('MySQL saat dilimi PHP ile ayni', $skew <= 2,
     'fark ' . $skew . ' sn (PHP ' . date('H:i:s') . ' / MySQL ' . substr($mysqlNow, 11) . ')');
@@ -141,14 +141,14 @@ section('6. Risk kodu üretimi (transaction icinde, geri alınır)');
 // (Tablonun BOS kalmasini beklemek yanlisti: gerçek risk kayıtları
 //  olduğunda o yilin sayac satırı kalici olarak var olur.)
 $seqSql = 'SELECT COALESCE(MAX(last_number), 0) FROM risk_sequences WHERE seq_year = ' . (int)date('Y');
-$seqBefore = (int)$pdo->query($seqSql)->fetchColumn();
+$seqBefore = (int)db_value($seqSql);
 
 $pdo->beginTransaction();
 $c1 = next_risk_code($pdo);
 $c2 = next_risk_code($pdo);
 $pdo->rollBack();
 
-$seqAfter = (int)$pdo->query($seqSql)->fetchColumn();
+$seqAfter = (int)db_value($seqSql);
 
 $year = date('Y');
 check('format RISK-YYYY-NNNN',
@@ -196,19 +196,19 @@ section('9. Audit log yazimi (test kaydı silinir)');
 
 audit('smoke_test', 'system', 0, ['before' => 1], ['after' => 2, 'password' => 'gizli'], 1, 'Smoke Test');
 
-$row = $pdo->query(
+$row = db_row(
     "SELECT * FROM audit_logs WHERE action='smoke_test' ORDER BY id DESC LIMIT 1"
-)->fetch();
+);
 
-check('audit kaydı oluştu', $row !== false);
-if ($row !== false) {
+check('audit kaydı oluştu', $row !== null);
+if ($row !== null) {
     $new = json_decode((string)$row['new_values'], true);
     check('old_values geçerli JSON', json_decode((string)$row['old_values'], true) === ['before' => 1]);
     check('parola maskelendi', ($new['password'] ?? '') === '***');
     check('user_name_snapshot yazıldı', $row['user_name_snapshot'] === 'Smoke Test');
     $pdo->exec("DELETE FROM audit_logs WHERE action='smoke_test'");
 }
-$left = (int)$pdo->query("SELECT COUNT(*) FROM audit_logs WHERE action='smoke_test'")->fetchColumn();
+$left = (int)db_value("SELECT COUNT(*) FROM audit_logs WHERE action='smoke_test'");
 check('test kaydı temizlendi', $left === 0);
 
 /* ------------------------------------------------------------------ */

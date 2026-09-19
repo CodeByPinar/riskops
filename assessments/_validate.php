@@ -46,12 +46,12 @@ function assessment_find_risk(?int $riskId): ?array
     if ($riskId === null || $riskId < 1) {
         return null;
     }
-    $stmt = db()->prepare(
+    $stmt = db_stmt(
         'SELECT id, risk_code, title, status, likelihood, impact, inherent_score,
                 residual_likelihood, residual_impact, residual_score
-         FROM risks WHERE id = :id AND deleted_at IS NULL LIMIT 1'
+         FROM risks WHERE id = :id AND deleted_at IS NULL LIMIT 1',
+        [':id' => $riskId]
     );
-    $stmt->execute([':id' => $riskId]);
     return $stmt->fetch() ?: null;
 }
 

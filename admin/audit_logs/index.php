@@ -31,24 +31,21 @@ $activeFilters = $flt['active'];
 $params        = $flt['params'];
 $whereSql      = $flt['where'];
 
-$countStmt = db()->prepare("SELECT COUNT(*) FROM audit_logs l WHERE {$whereSql}");
-$countStmt->execute($params);
-$total = (int)$countStmt->fetchColumn();
+$total = (int)db_value("SELECT COUNT(*) FROM audit_logs l WHERE {$whereSql}", $params);
 
 $page = paginate($total, per_page(), input_int('page', 1) ?? 1);
 
-$listStmt = db()->prepare(
+$rows = db_all(
     "SELECT l.*, u.name AS current_name
      FROM audit_logs l
      LEFT JOIN users u ON u.id = l.user_id
      WHERE {$whereSql}
      ORDER BY l.id DESC
-     LIMIT {$page['per_page']} OFFSET {$page['offset']}"
+     LIMIT {$page['per_page']} OFFSET {$page['offset']}",
+    $params
 );
-$listStmt->execute($params);
-$rows = $listStmt->fetchAll();
 
-$oldest = db()->query('SELECT MIN(created_at) FROM audit_logs')->fetchColumn();
+$oldest = db_value('SELECT MIN(created_at) FROM audit_logs');
 $retention = (int)setting('audit_retention_days', 730);
 
 /** İşlem adına göre rozet sınıfı: yıkıcı işlemler göze çarpsın. */

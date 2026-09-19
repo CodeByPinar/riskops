@@ -21,18 +21,14 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing category id');
 }
 
-$stmt = db()->prepare('SELECT id, name FROM risk_categories WHERE id = :id LIMIT 1');
-$stmt->execute([':id' => $id]);
-$cat = $stmt->fetch();
+$cat = db_row('SELECT id, name FROM risk_categories WHERE id = :id LIMIT 1', [':id' => $id]);
 
-if ($cat === false) {
+if ($cat === null) {
     flash('error', 'Kategori bulunamadı.');
     redirect('/admin/categories/');
 }
 
-$usage = db()->prepare('SELECT COUNT(*) FROM risks WHERE category_id = :id');
-$usage->execute([':id' => $id]);
-$count = (int)$usage->fetchColumn();
+$count = (int)db_value('SELECT COUNT(*) FROM risks WHERE category_id = :id', [':id' => $id]);
 
 if ($count > 0) {
     flash('error', sprintf(
@@ -42,7 +38,7 @@ if ($count > 0) {
     redirect('/admin/categories/');
 }
 
-db()->prepare('DELETE FROM risk_categories WHERE id = :id')->execute([':id' => $id]);
+db_run('DELETE FROM risk_categories WHERE id = :id', [':id' => $id]);
 
 audit('category_deleted', 'risk_category', $id, ['name' => $cat['name']], null);
 

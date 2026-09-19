@@ -24,18 +24,17 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing risk id');
 }
 
-$stmt = db()->prepare('SELECT * FROM risks WHERE id = :id AND deleted_at IS NULL LIMIT 1');
-$stmt->execute([':id' => $id]);
-$risk = $stmt->fetch();
+$risk = db_row('SELECT * FROM risks WHERE id = :id AND deleted_at IS NULL LIMIT 1', [':id' => $id]);
 
-if ($risk === false) {
+if ($risk === null) {
     flash('error', 'Risk bulunamadı veya zaten silinmiş.');
     redirect('/risks/');
 }
 
-db()->prepare(
-    'UPDATE risks SET deleted_at = NOW(), deleted_by = :by WHERE id = :id'
-)->execute([':by' => auth_id(), ':id' => $id]);
+db_run(
+    'UPDATE risks SET deleted_at = NOW(), deleted_by = :by WHERE id = :id',
+    [':by' => auth_id(), ':id' => $id]
+);
 
 audit('risk_deleted', 'risk', $id, [
     'risk_code' => $risk['risk_code'],

@@ -40,3 +40,4 @@ notuyla işaretlenir.
 | [0008](0008-dosya-eki-guvenligi.md) | Dosya ekleri üç katmanlı doğrulanır | `includes/attachments.php` |
 | [0009](0009-gelistirme-bagimliliklari.md) | Geliştirme bağımlılığı evet, çalışma zamanı hayır | `composer.json`, `phpstan.neon` |
 | [0010](0010-eklenti-sistemi.md) | Eklenti sistemi: kancalar var, kum havuzu yok | `includes/plugins.php`, `plugins/`, `admin/plugins/` |
+| [0011](0011-sorgu-katmani.md) | İnce bir sorgu katmanı — ORM değil | `includes/query.php` |

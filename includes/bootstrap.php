@@ -93,6 +93,7 @@ register_shutdown_function(static function (): void {
  * 2) Cekirdek moduller
  * -------------------------------------------------------------------*/
 require_once INCLUDES_PATH . '/db.php';
+require_once INCLUDES_PATH . '/query.php';
 require_once INCLUDES_PATH . '/settings.php';
 require_once INCLUDES_PATH . '/csrf.php';
 require_once INCLUDES_PATH . '/auth.php';

@@ -41,11 +41,11 @@ function generate_temp_password(int $length = 14): string
  */
 function other_active_admin_exists(int $excludeUserId): bool
 {
-    $stmt = db()->prepare(
+    $stmt = db_stmt(
         "SELECT COUNT(*) FROM users
-         WHERE role = 'admin' AND status = 1 AND id <> :id"
+         WHERE role = 'admin' AND status = 1 AND id <> :id",
+        [':id' => $excludeUserId]
     );
-    $stmt->execute([':id' => $excludeUserId]);
     return (int)$stmt->fetchColumn() > 0;
 }
 
@@ -123,10 +123,10 @@ function user_collect_input(?int $selfId = null): array
     } elseif (mb_strlen($email) > 150) {
         $errors['email'] = 'E-posta en fazla 150 karakter olabilir.';
     } else {
-        $stmt = db()->prepare(
-            'SELECT id FROM users WHERE email = :e AND (:self IS NULL OR id <> :self2) LIMIT 1'
+        $stmt = db_stmt(
+            'SELECT id FROM users WHERE email = :e AND (:self IS NULL OR id <> :self2) LIMIT 1',
+            [':e' => $email, ':self' => $selfId, ':self2' => $selfId ?? 0]
         );
-        $stmt->execute([':e' => $email, ':self' => $selfId, ':self2' => $selfId ?? 0]);
         if ($stmt->fetchColumn() !== false) {
             $errors['email'] = 'Bu e-posta adresi zaten kayıtlı.';
         }
@@ -168,11 +168,9 @@ function user_collect_input(?int $selfId = null): array
 
     /* --- Son aktif admin koruması ----------------------------------- */
     if ($selfId !== null && !isset($errors['role']) && !isset($errors['status'])) {
-        $stmt = db()->prepare('SELECT role, status FROM users WHERE id = :id LIMIT 1');
-        $stmt->execute([':id' => $selfId]);
-        $current = $stmt->fetch();
+        $current = db_row('SELECT role, status FROM users WHERE id = :id LIMIT 1', [':id' => $selfId]);
 
-        $wasActiveAdmin = $current !== false
+        $wasActiveAdmin = $current !== null
             && $current['role'] === ROLE_ADMIN && (int)$current['status'] === 1;
         $staysActiveAdmin = $role === ROLE_ADMIN && $status === 1;
 

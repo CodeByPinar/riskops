@@ -20,9 +20,9 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 require_login();
 require_role(ROLE_ADMIN);
 
-$total = (int)db()->query(
+$total = (int)db_value(
     'SELECT COUNT(*) FROM risks WHERE deleted_at IS NOT NULL'
-)->fetchColumn();
+);
 
 $perPage = per_page();
 $page    = paginate($total, $perPage, input_int('page', 1) ?? 1);
@@ -30,7 +30,7 @@ $offset  = $page['offset'];
 
 /* LIMIT/OFFSET tamsayı olarak bağlanamaz (MySQL prepared statement
    kısıtı); değerler yukarıda int'e zorlandığı için doğrudan gömülüyor. */
-$rows = db()->query(
+$rows = db_all(
     "SELECT r.id, r.risk_code, r.title, r.status, r.inherent_severity,
             r.inherent_score, r.deleted_at,
             d.name  AS department_name,
@@ -43,7 +43,7 @@ $rows = db()->query(
       WHERE r.deleted_at IS NOT NULL
       ORDER BY r.deleted_at DESC
       LIMIT {$perPage} OFFSET {$offset}"
-)->fetchAll();
+);
 
 $pageTitle    = t('Silinen Riskler');
 $pageSubtitle = $total . ' silinmiş kayıt · geri alınabilir';

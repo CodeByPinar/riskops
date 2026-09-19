@@ -25,14 +25,13 @@ function action_find_risk(?int $riskId): ?array
     if ($riskId === null || $riskId < 1) {
         return null;
     }
-    $stmt = db()->prepare(
+    $row = db_row(
         'SELECT id, risk_code, title, status FROM risks
-         WHERE id = :id AND deleted_at IS NULL LIMIT 1'
+         WHERE id = :id AND deleted_at IS NULL LIMIT 1',
+        [':id' => $riskId]
     );
-    $stmt->execute([':id' => $riskId]);
-    $row = $stmt->fetch();
 
-    return $row === false ? null : $row;
+    return $row === null ? null : $row;
 }
 
 /**

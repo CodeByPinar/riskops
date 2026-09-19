@@ -354,6 +354,7 @@ sonuçlar, **kabul edilen maliyet** ve **değerlendirilen alternatifler**.
 | [0008](docs/architecture/0008-dosya-eki-guvenligi.md) | Dosya ekleri üç katmanlı doğrulanır | Ne sunucuda çalıştırılabilir ne tarayıcıda yorumlanabilir |
 | [0009](docs/architecture/0009-gelistirme-bagimliliklari.md) | Geliştirme bağımlılığı evet, çalışma zamanı hayır | PHPUnit/php-cs-fixer/PHPStan alındı; Doctrine alınmadı, gerekçesiyle |
 | [0010](docs/architecture/0010-eklenti-sistemi.md) | Eklenti sistemi: kancalar var, kum havuzu yok | Web'den yükleme YOK — admin hesabı uzaktan kod çalıştırmaya dönüşmesin |
+| [0011](docs/architecture/0011-sorgu-katmani.md) | İnce bir sorgu katmanı — ORM değil | SQL çağrı yerinde kalıyor; tekrarlanan prepare/execute/fetch tek yere indi |
 
 Bu kayıtlar önce kaynak dosyaların başındaki uzun yorum bloklarındaydı.
 İki sorun vardı: bir karar tek bir dosyaya ait değildi (CSP kararı dört

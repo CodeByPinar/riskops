@@ -28,11 +28,11 @@ final class RiskCodeSequenceTest extends TestCase
     {
         self::$pdo = db();
 
-        $row = self::$pdo->query(
+        $row = db_row(
             'SELECT last_number FROM risk_sequences WHERE seq_year = YEAR(CURDATE())'
-        )->fetch();
+        );
 
-        self::$before = $row === false ? 0 : (int)$row['last_number'];
+        self::$before = $row === null ? 0 : (int)$row['last_number'];
     }
 
     public static function tearDownAfterClass(): void

@@ -21,9 +21,9 @@ function audit_filters(): array
        turu eklendiginde sessizce eskir. */
     /* Iki bicim de gerekiyor: duz liste input_enum dogrulamasi icin,
        sayimli liste acilir menude "(12)" gostermek icin. */
-    $actionCounts = db()->query(
+    $actionCounts = db_all(
         'SELECT action, COUNT(*) AS adet FROM audit_logs GROUP BY action ORDER BY action'
-    )->fetchAll();
+    );
     $actionOptions = array_column($actionCounts, 'action');
 
     $entityOptions = db()->query(

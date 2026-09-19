@@ -77,19 +77,18 @@ $sort = input_enum('sort', array_keys($sortMap), 'date');
 $dir  = input_enum('dir', ['asc', 'desc'], 'desc');
 $orderSql = $sortMap[$sort] . ' ' . strtoupper($dir) . ', a.id DESC';
 
-$countStmt = db()->prepare(
+$total = (int)db_value(
     "SELECT COUNT(*)
      FROM risk_assessments a
      JOIN risks r ON r.id = a.risk_id
      JOIN users u ON u.id = a.assessed_by
-     WHERE {$whereSql}"
+     WHERE {$whereSql}",
+    $params
 );
-$countStmt->execute($params);
-$total = (int)$countStmt->fetchColumn();
 
 $page = paginate($total, per_page(), input_int('page', 1) ?? 1);
 
-$listStmt = db()->prepare(
+$rows = db_all(
     "SELECT a.id, a.assessment_type, a.likelihood, a.impact, a.score, a.severity,
             a.notes, a.assessed_at,
             r.id AS risk_id, r.risk_code, r.title AS risk_title,
@@ -99,13 +98,12 @@ $listStmt = db()->prepare(
      JOIN users u ON u.id = a.assessed_by
      WHERE {$whereSql}
      ORDER BY {$orderSql}
-     LIMIT {$page['per_page']} OFFSET {$page['offset']}"
+     LIMIT {$page['per_page']} OFFSET {$page['offset']}",
+    $params
 );
-$listStmt->execute($params);
-$rows = $listStmt->fetchAll();
 
 /* Özet: son 30 günde kaç risk değerlendirildi, kaçı hiç gözden geçirilmedi */
-$summary = db()->query(
+$summary = db_row(
     "SELECT
         (SELECT COUNT(*) FROM risk_assessments a2
          JOIN risks r2 ON r2.id = a2.risk_id AND r2.deleted_at IS NULL
@@ -114,7 +112,7 @@ $summary = db()->query(
         (SELECT COUNT(*) FROM risks r4 WHERE r4.deleted_at IS NULL
          AND NOT EXISTS (SELECT 1 FROM risk_assessments a4
                          WHERE a4.risk_id = r4.id AND a4.assessment_type <> 'initial')) AS hic_gozden_gecirilmemis"
-)->fetch();
+);
 
 $th = static function (string $key, string $label) use ($sort, $dir): string {
     $nextDir = ($sort === $key && $dir === 'asc') ? 'desc' : 'asc';

@@ -243,8 +243,7 @@ $before = count(debug_store()['queries']);
 
 /* Gerçek bir sorgu çalıştır; kip açıksa kaydedilmeli, kapalıysa
    hiçbir şey birikmemeli. */
-$st = db()->prepare('SELECT COUNT(*) FROM risks WHERE id > ?');
-$st->execute([0]);
+$st = db_stmt('SELECT COUNT(*) FROM risks WHERE id > ?', [0]);
 $st->fetchColumn();
 
 $after   = count(debug_store()['queries']);

@@ -214,8 +214,7 @@ function i18n_handle_switch(): void
     /* Giris yapmis kullanicinin tercihi kalici olsun. */
     if (auth_check()) {
         try {
-            db()->prepare('UPDATE users SET locale = :l WHERE id = :id')
-                ->execute([':l' => $code, ':id' => auth_id()]);
+            db_run('UPDATE users SET locale = :l WHERE id = :id', [':l' => $code, ':id' => auth_id()]);
             $_SESSION['user_locale'] = $code;
         } catch (Throwable $e) {
             /* locale kolonu yoksa (eski kurulum) oturum icinde calisir. */

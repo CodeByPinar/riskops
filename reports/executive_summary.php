@@ -18,7 +18,7 @@ require_can('report.view');
 $open   = "'" . implode("','", risk_open_statuses()) . "'";
 $effSev = 'COALESCE(residual_severity, inherent_severity)';
 
-$stats = db()->query(
+$stats = db_row(
     "SELECT
         COUNT(*) AS toplam,
         COALESCE(SUM({$effSev}='Critical'),0) AS kritik,
@@ -34,9 +34,9 @@ $stats = db()->query(
                  AND target_date < CURDATE()),0) AS geciken_risk,
         ROUND(AVG(COALESCE(residual_score, inherent_score)),1) AS ort_skor
      FROM risks WHERE deleted_at IS NULL"
-)->fetch();
+);
 
-$actions = db()->query(
+$actions = db_row(
     "SELECT
         COUNT(*) AS toplam,
         COALESCE(SUM(a.status='Open'),0)        AS acik,
@@ -47,9 +47,9 @@ $actions = db()->query(
                  AND a.due_date < CURDATE()),0) AS geciken
      FROM risk_actions a
      JOIN risks r ON r.id = a.risk_id AND r.deleted_at IS NULL"
-)->fetch();
+);
 
-$topRisks = db()->query(
+$topRisks = db_all(
     "SELECT r.risk_code, r.title, d.name AS departman, u.name AS sahip,
             COALESCE(r.residual_score, r.inherent_score) AS skor,
             {$effSev} AS seviye, r.status, r.target_date,
@@ -62,9 +62,9 @@ $topRisks = db()->query(
      ORDER BY FIELD({$effSev},'Critical','High','Medium','Low'),
               COALESCE(r.residual_score, r.inherent_score) DESC
      LIMIT 10"
-)->fetchAll();
+);
 
-$byDept = db()->query(
+$byDept = db_all(
     "SELECT d.name AS departman, COUNT(r.id) AS toplam,
             COALESCE(SUM({$effSev} IN ('Critical','High')),0) AS onemli
      FROM departments d
@@ -72,9 +72,9 @@ $byDept = db()->query(
      GROUP BY d.id, d.name
      HAVING toplam > 0
      ORDER BY onemli DESC, toplam DESC"
-)->fetchAll();
+);
 
-$byCat = db()->query(
+$byCat = db_all(
     "SELECT c.name AS kategori, COUNT(r.id) AS toplam,
             COALESCE(SUM({$effSev} IN ('Critical','High')),0) AS onemli
      FROM risk_categories c
@@ -83,7 +83,7 @@ $byCat = db()->query(
      HAVING toplam > 0
      ORDER BY onemli DESC, toplam DESC
      LIMIT 8"
-)->fetchAll();
+);
 
 /* Son 6 ay: açılan ve kapanan */
 /* Ayni gun-tasmasi hatasi burada da vardi: 6 aylik tablo ayin
@@ -97,28 +97,30 @@ foreach ($monthKeys as $key) {
 
 $since = $monthKeys[0] . '-01';
 
-$q = db()->prepare("SELECT DATE_FORMAT(created_at,'%Y-%m') AS ay, COUNT(*) AS n
-                    FROM risks WHERE deleted_at IS NULL AND created_at >= :s GROUP BY ay");
-$q->execute([':s' => $since]);
+$q = db_stmt("SELECT DATE_FORMAT(created_at,'%Y-%m') AS ay, COUNT(*) AS n
+                    FROM risks WHERE deleted_at IS NULL AND created_at >= :s GROUP BY ay",
+    [':s' => $since]
+);
 foreach ($q->fetchAll() as $r) {
     if (isset($trend[$r['ay']])) {
     $trend[$r['ay']]['acilan'] = (int)$r['n'];
     }
 }
-$q = db()->prepare("SELECT DATE_FORMAT(closed_at,'%Y-%m') AS ay, COUNT(*) AS n
-                    FROM risks WHERE deleted_at IS NULL AND closed_at >= :s GROUP BY ay");
-$q->execute([':s' => $since]);
+$q = db_stmt("SELECT DATE_FORMAT(closed_at,'%Y-%m') AS ay, COUNT(*) AS n
+                    FROM risks WHERE deleted_at IS NULL AND closed_at >= :s GROUP BY ay",
+    [':s' => $since]
+);
 foreach ($q->fetchAll() as $r) {
     if (isset($trend[$r['ay']])) {
     $trend[$r['ay']]['kapanan'] = (int)$r['n'];
     }
 }
 
-$neverReviewed = (int)db()->query(
+$neverReviewed = (int)db_value(
     "SELECT COUNT(*) FROM risks r WHERE r.deleted_at IS NULL
      AND NOT EXISTS (SELECT 1 FROM risk_assessments a
                      WHERE a.risk_id = r.id AND a.assessment_type <> 'initial')"
-)->fetchColumn();
+);
 
 $total = max(1, (int)$stats['toplam']);
 

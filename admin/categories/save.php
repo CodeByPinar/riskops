@@ -19,10 +19,8 @@ $backUrl = '/admin/categories/' . ($isEdit ? '?edit=' . $id : '');
 
 $before = null;
 if ($isEdit) {
-    $stmt = db()->prepare('SELECT * FROM risk_categories WHERE id = :id LIMIT 1');
-    $stmt->execute([':id' => $id]);
-    $before = $stmt->fetch();
-    if ($before === false) {
+    $before = db_row('SELECT * FROM risk_categories WHERE id = :id LIMIT 1', [':id' => $id]);
+    if ($before === null) {
         flash('error', 'Kategori bulunamadı.');
         redirect('/admin/categories/');
     }
@@ -53,10 +51,10 @@ foreach ([['name', $name], ['code', $code]] as [$field, $value]) {
     if ($value === null || isset($errors[$field])) {
         continue;
     }
-    $stmt = db()->prepare(
-        "SELECT id FROM risk_categories WHERE {$field} = :v AND (:self IS NULL OR id <> :self2) LIMIT 1"
+    $stmt = db_stmt(
+        "SELECT id FROM risk_categories WHERE {$field} = :v AND (:self IS NULL OR id <> :self2) LIMIT 1",
+        [':v' => $value, ':self' => $isEdit ? $id : null, ':self2' => $id ?? 0]
     );
-    $stmt->execute([':v' => $value, ':self' => $isEdit ? $id : null, ':self2' => $id ?? 0]);
     if ($stmt->fetchColumn() !== false) {
         $errors[$field] = 'Bu ' . ($field === 'name' ? 'ad' : 'kod') . ' zaten kullanılıyor.';
     }
@@ -92,11 +90,11 @@ $data = [
 
 try {
     if ($isEdit) {
-        db()->prepare(
+        db_run(
             'UPDATE risk_categories SET name=:n, code=:c, description=:d,
                     color=:col, sort_order=:s, is_active=:a
-             WHERE id=:id'
-        )->execute([
+             WHERE id=:id',
+            [
             ':n'   => $data['name'],
             ':c'   => $data['code'],
             ':d'   => $data['description'],
@@ -104,7 +102,8 @@ try {
             ':s'   => $data['sort_order'],
             ':a'   => $data['is_active'],
             ':id'  => $id,
-        ]);
+        ]
+        );
 
         [$oldValues, $newValues] = audit_diff($before, $data);
         if ($oldValues !== []) {
@@ -112,17 +111,18 @@ try {
         }
         flash('success', $data['name'] . ' güncellendi.');
     } else {
-        db()->prepare(
+        db_run(
             'INSERT INTO risk_categories (name, code, description, color, sort_order, is_active)
-             VALUES (:n, :c, :d, :col, :s, :a)'
-        )->execute([
+             VALUES (:n, :c, :d, :col, :s, :a)',
+            [
             ':n'   => $data['name'],
             ':c'   => $data['code'],
             ':d'   => $data['description'],
             ':col' => $data['color'],
             ':s'   => $data['sort_order'],
             ':a'   => $data['is_active'],
-        ]);
+        ]
+        );
 
         audit('category_created', 'risk_category', (int)db()->lastInsertId(), null, $data);
         flash('success', $data['name'] . ' eklendi.');

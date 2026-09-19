@@ -18,7 +18,7 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing risk id');
 }
 
-$stmt = db()->prepare(
+$risk = db_row(
     'SELECT r.*,
             c.name AS category, c.color AS category_color,
             d.name AS department,
@@ -32,48 +32,45 @@ $stmt = db()->prepare(
      JOIN users           cb ON cb.id = r.created_by
      LEFT JOIN users      db2 ON db2.id = r.deleted_by
      WHERE r.id = :id AND r.deleted_at IS NULL
-     LIMIT 1'
+     LIMIT 1',
+    [':id' => $id]
 );
-$stmt->execute([':id' => $id]);
-$risk = $stmt->fetch();
 
-if ($risk === false) {
+if ($risk === null) {
     app_abort(404, 'Risk not found: ' . $id);
 }
 
 /* --- İlişkili kayıtlar ------------------------------------------------ */
 
-$actionsStmt = db()->prepare(
+$actions = db_all(
     'SELECT a.*, u.name AS owner_name
      FROM risk_actions a
      JOIN users u ON u.id = a.owner_id
      WHERE a.risk_id = :id
      ORDER BY FIELD(a.status, :s1, :s2, :s3, :s4),
-              a.due_date IS NULL, a.due_date ASC, a.id DESC'
-);
-$actionsStmt->execute([
+              a.due_date IS NULL, a.due_date ASC, a.id DESC',
+    [
     ':id' => $id, ':s1' => 'Open', ':s2' => 'In Progress',
     ':s3' => 'Completed', ':s4' => 'Cancelled',
-]);
-$actions = $actionsStmt->fetchAll();
+]
+);
 
-$assessStmt = db()->prepare(
+$assessments = db_all(
     'SELECT a.*, u.name AS assessor
      FROM risk_assessments a
      JOIN users u ON u.id = a.assessed_by
      WHERE a.risk_id = :id
-     ORDER BY a.assessed_at DESC, a.id DESC'
+     ORDER BY a.assessed_at DESC, a.id DESC',
+    [':id' => $id]
 );
-$assessStmt->execute([':id' => $id]);
-$assessments = $assessStmt->fetchAll();
 
-$auditStmt = db()->prepare(
+$auditStmt = db_stmt(
     'SELECT * FROM audit_logs
      WHERE entity_type = :t AND entity_id = :id
      ORDER BY id DESC
-     LIMIT 100'
+     LIMIT 100',
+    [':t' => 'risk', ':id' => $id]
 );
-$auditStmt->execute([':t' => 'risk', ':id' => $id]);
 $auditRows = can('audit.view') || auth_role() === ROLE_ADMIN ? $auditStmt->fetchAll() : [];
 
 /* Yorum ve ekler ortak katmandan gelir (includes/discussion.php):

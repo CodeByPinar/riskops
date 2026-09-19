@@ -22,11 +22,9 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing risk id');
 }
 
-$stmt = db()->prepare('SELECT * FROM risks WHERE id = :id AND deleted_at IS NULL LIMIT 1');
-$stmt->execute([':id' => $id]);
-$before = $stmt->fetch();
+$before = db_row('SELECT * FROM risks WHERE id = :id AND deleted_at IS NULL LIMIT 1', [':id' => $id]);
 
-if ($before === false) {
+if ($before === null) {
     flash('error', 'Risk bulunamadı.');
     redirect('/risks/');
 }

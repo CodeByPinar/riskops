@@ -18,19 +18,16 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing category id');
 }
 
-$stmt = db()->prepare('SELECT id, name, is_active FROM risk_categories WHERE id = :id LIMIT 1');
-$stmt->execute([':id' => $id]);
-$cat = $stmt->fetch();
+$cat = db_row('SELECT id, name, is_active FROM risk_categories WHERE id = :id LIMIT 1', [':id' => $id]);
 
-if ($cat === false) {
+if ($cat === null) {
     flash('error', 'Kategori bulunamadı.');
     redirect('/admin/categories/');
 }
 
 $newState = (int)$cat['is_active'] === 1 ? 0 : 1;
 
-db()->prepare('UPDATE risk_categories SET is_active = :a WHERE id = :id')
-    ->execute([':a' => $newState, ':id' => $id]);
+db_run('UPDATE risk_categories SET is_active = :a WHERE id = :id', [':a' => $newState, ':id' => $id]);
 
 audit('category_updated', 'risk_category', $id,
     ['is_active' => (int)$cat['is_active']],

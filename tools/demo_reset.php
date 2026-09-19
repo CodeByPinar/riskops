@@ -80,19 +80,20 @@ $log('Ornek veri yeniden kuruldu');
 
 $hash = password_hash(DEMO_PASSWORD, PASSWORD_DEFAULT);
 
-db()->prepare(
+db_run(
     'INSERT INTO users (name, email, password, role, status, must_change_password,
                         password_changed_at, created_at)
      VALUES (:n, :e, :p, :r, 1, 0, NOW(), NOW())
      ON DUPLICATE KEY UPDATE
         name = :n2, password = :p2, role = :r2, status = 1,
-        must_change_password = 0, password_changed_at = NOW()'
-)->execute([
+        must_change_password = 0, password_changed_at = NOW()',
+    [
     ':n'  => 'Demo Kullanıcı', ':n2' => 'Demo Kullanıcı',
     ':e'  => DEMO_EMAIL,
     ':p'  => $hash,            ':p2' => $hash,
     ':r'  => ROLE_VIEWER,      ':r2' => ROLE_VIEWER,
-]);
+]
+);
 
 $log('Deneme hesabi hazir: ' . DEMO_EMAIL . ' (viewer)');
 

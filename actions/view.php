@@ -24,7 +24,7 @@ if ($id === null || $id < 1) {
 
 /* Silinmis riskin aksiyonu gosterilmez: risk kayittan kaldirilmissa
    aksiyonu da gundemde degildir. */
-$stmt = db()->prepare(
+$action = db_row(
     'SELECT a.*,
             r.risk_code, r.title AS risk_title, r.id AS risk_id,
             o.name AS owner_name, o.email AS owner_email,
@@ -35,12 +35,11 @@ $stmt = db()->prepare(
        LEFT JOIN users o  ON o.id = a.owner_id
        LEFT JOIN users cb ON cb.id = a.created_by
       WHERE a.id = :id
-      LIMIT 1'
+      LIMIT 1',
+    [':id' => $id]
 );
-$stmt->execute([':id' => $id]);
-$action = $stmt->fetch();
 
-if ($action === false) {
+if ($action === null) {
     flash('error', 'Aksiyon bulunamadı.');
     redirect('/actions/');
 }

@@ -23,25 +23,23 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing user id');
 }
 
-$stmt = db()->prepare('SELECT id, name, email FROM users WHERE id = :id LIMIT 1');
-$stmt->execute([':id' => $id]);
-$user = $stmt->fetch();
+$user = db_row('SELECT id, name, email FROM users WHERE id = :id LIMIT 1', [':id' => $id]);
 
-if ($user === false) {
+if ($user === null) {
     flash('error', 'Kullanıcı bulunamadı.');
     redirect('/admin/users/');
 }
 
 $tempPassword = generate_temp_password();
 
-db()->prepare(
+db_run(
     'UPDATE users SET password = :p, must_change_password = 1, password_changed_at = NOW()
-     WHERE id = :id'
-)->execute([':p' => password_hash($tempPassword, PASSWORD_DEFAULT), ':id' => $id]);
+     WHERE id = :id',
+    [':p' => password_hash($tempPassword, PASSWORD_DEFAULT), ':id' => $id]
+);
 
 // Başarısız giriş sayaçlarını da temizle
-db()->prepare('DELETE FROM login_attempts WHERE email = :e AND success = 0')
-    ->execute([':e' => $user['email']]);
+db_run('DELETE FROM login_attempts WHERE email = :e AND success = 0', [':e' => $user['email']]);
 
 audit('user_password_reset', 'user', $id, null, ['by' => auth_id()]);
 

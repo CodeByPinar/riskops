@@ -38,18 +38,17 @@ if ($id === null || $id < 1) {
 
 /* JOIN ile ust tablo: silinmis bir riskin eki indirilemez. Ek kaydi
    dursa bile risk soft-delete edilmisse erisim kapanmalidir. */
-$stmt = db()->prepare(
+$att = db_row(
     'SELECT a.stored_name, a.original_name
        FROM ' . $cfg['attachments'] . ' a
        JOIN ' . $cfg['parent'] . ' p ON p.id = a.' . $cfg['fk']
     . ' AND ' . str_replace('deleted_at', 'p.deleted_at', $cfg['alive']) . '
       WHERE a.id = :id
-      LIMIT 1'
+      LIMIT 1',
+    [':id' => $id]
 );
-$stmt->execute([':id' => $id]);
-$att = $stmt->fetch();
 
-if ($att === false) {
+if ($att === null) {
     app_abort(404, 'Attachment not found');
 }
 

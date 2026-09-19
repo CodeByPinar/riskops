@@ -24,11 +24,9 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing action id');
 }
 
-$stmt = db()->prepare('SELECT * FROM risk_actions WHERE id = :id LIMIT 1');
-$stmt->execute([':id' => $id]);
-$action = $stmt->fetch();
+$action = db_row('SELECT * FROM risk_actions WHERE id = :id LIMIT 1', [':id' => $id]);
 
-if ($action === false) {
+if ($action === null) {
     flash('error', 'Aksiyon bulunamadı veya zaten silinmiş.');
     redirect('/actions/');
 }
@@ -37,7 +35,7 @@ $returnTo = input('return') === 'risk'
     ? '/risks/view.php?id=' . (int)$action['risk_id']
     : '/actions/';
 
-db()->prepare('DELETE FROM risk_actions WHERE id = :id')->execute([':id' => $id]);
+db_run('DELETE FROM risk_actions WHERE id = :id', [':id' => $id]);
 
 audit('action_deleted', 'risk_action', $id, [
     'risk_id'  => (int)$action['risk_id'],

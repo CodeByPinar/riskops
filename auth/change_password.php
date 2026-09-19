@@ -48,9 +48,7 @@ if (is_post()) {
 
     $errors = [];
 
-    $stmt = db()->prepare('SELECT password FROM users WHERE id = :id LIMIT 1');
-    $stmt->execute([':id' => auth_id()]);
-    $hash = (string)$stmt->fetchColumn();
+    $hash = (string)db_value('SELECT password FROM users WHERE id = :id LIMIT 1', [':id' => auth_id()]);
 
     if ($current === '' || !password_verify($current, $hash)) {
         $errors['current_password'] = 'Mevcut parolanız hatalı.';
@@ -74,10 +72,11 @@ if (is_post()) {
         redirect('/auth/change_password.php');
     }
 
-    db()->prepare(
+    db_run(
         'UPDATE users SET password = :p, must_change_password = 0, password_changed_at = NOW()
-         WHERE id = :id'
-    )->execute([':p' => password_hash($new, PASSWORD_DEFAULT), ':id' => auth_id()]);
+         WHERE id = :id',
+        [':p' => password_hash($new, PASSWORD_DEFAULT), ':id' => auth_id()]
+    );
 
     unset($_SESSION['must_change_password']);
 

@@ -74,7 +74,7 @@ $log('Gozden gecirme hatirlatmasi (' . $staleDays . ' gun esigi)'
 /* "gozden gecirin" demek, bildirimlere olan guveni bitirir.            */
 /* ------------------------------------------------------------------ */
 
-$stmt = db()->prepare(
+$rows = db_all(
     "SELECT r.id, r.risk_code, r.title, r.status,
             r.inherent_severity, r.residual_severity,
             COALESCE(r.residual_score, r.inherent_score) AS effective_score,
@@ -88,10 +88,9 @@ $stmt = db()->prepare(
         AND r.status NOT IN ('Closed', 'Transferred')
       GROUP BY r.id
      HAVING days_stale >= :days
-      ORDER BY u.id, days_stale DESC"
+      ORDER BY u.id, days_stale DESC",
+    [':days' => $staleDays]
 );
-$stmt->execute([':days' => $staleDays]);
-$rows = $stmt->fetchAll();
 
 if ($rows === []) {
     $log('Gozden gecirilmesi gereken risk yok.');

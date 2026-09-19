@@ -26,16 +26,15 @@ if ($id === null || $id < 1) {
 
 /* deleted_at IS NOT NULL sarti onemli: zaten aktif bir kaydi "geri
    almak" anlamsizdir ve audit log'a yaniltici bir satir yazardi. */
-$stmt = db()->prepare(
+$risk = db_row(
     'SELECT id, risk_code, title, status, deleted_at
        FROM risks
       WHERE id = :id AND deleted_at IS NOT NULL
-      LIMIT 1'
+      LIMIT 1',
+    [':id' => $id]
 );
-$stmt->execute([':id' => $id]);
-$risk = $stmt->fetch();
 
-if ($risk === false) {
+if ($risk === null) {
     flash('error', 'Kayıt bulunamadı veya zaten aktif.');
     redirect('/risks/deleted.php');
 }
@@ -44,12 +43,12 @@ if ($risk === false) {
    olusturulmus olabilir; o durumda geri alma UNIQUE kisitini ihlal
    eder. Once kontrol et, kullaniciya anlasilir bir mesaj ver -
    veritabani hatasiyla 500'e dusurme. */
-$clash = db()->prepare(
+$clash = db_stmt(
     'SELECT id FROM risks
       WHERE risk_code = :code AND id <> :id AND deleted_at IS NULL
-      LIMIT 1'
+      LIMIT 1',
+    [':code' => $risk['risk_code'], ':id' => $id]
 );
-$clash->execute([':code' => $risk['risk_code'], ':id' => $id]);
 
 if ($clash->fetch() !== false) {
     flash('error', $risk['risk_code'] . ' kodu şu anda başka bir aktif risk '
@@ -57,9 +56,10 @@ if ($clash->fetch() !== false) {
     redirect('/risks/deleted.php');
 }
 
-db()->prepare(
-    'UPDATE risks SET deleted_at = NULL, deleted_by = NULL WHERE id = :id'
-)->execute([':id' => $id]);
+db_run(
+    'UPDATE risks SET deleted_at = NULL, deleted_by = NULL WHERE id = :id',
+    [':id' => $id]
+);
 
 audit('risk_restored', 'risk', $id,
     ['deleted_at' => $risk['deleted_at']],

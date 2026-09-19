@@ -163,8 +163,7 @@ if ($weak !== []) {
 $demoEmails = ['manager@riskops.local', 'analyst@riskops.local',
                'analyst2@riskops.local', 'viewer@riskops.local'];
 $ph = implode(',', array_fill(0, count($demoEmails), '?'));
-$stmt = db()->prepare("SELECT email FROM users WHERE email IN ({$ph})");
-$stmt->execute($demoEmails);
+$stmt = db_stmt("SELECT email FROM users WHERE email IN ({$ph})", $demoEmails);
 $foundDemo = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
 if ($foundDemo !== []) {
@@ -181,14 +180,14 @@ result($mustChange > 0 ? 'WARN' : 'OK', 'Parola değiştirmesi bekleyen', $mustC
 /* ------------------------------------------------------------------ */
 section('3. Demo verisi');
 
-$demoTitles = db()->query(
+$demoTitles = db_value(
     "SELECT COUNT(*) FROM risks WHERE title LIKE 'İnternete açık RDP%'
         OR title LIKE 'Ayrıcalıklı hesaplarda MFA%'
         OR title LIKE 'Siber sigorta kapsamının%'"
-)->fetchColumn();
+);
 
 if ((int)$demoTitles > 0) {
-    $total = (int)db()->query('SELECT COUNT(*) FROM risks WHERE deleted_at IS NULL')->fetchColumn();
+    $total = (int)db_value('SELECT COUNT(*) FROM risks WHERE deleted_at IS NULL');
     result('WARN', 'Örnek risk verisi', $total . ' risk (demo işaretleri bulundu)',
         'Temizlemek için: php tools/seed_demo.php --purge --yes');
 } else {
@@ -248,12 +247,12 @@ result('WARN', 'HTTPS', 'uygulama HTTP üzerinden sunuluyor',
 /* ------------------------------------------------------------------ */
 section('6. Veritabanı ve şema');
 
-$live = (int)db()->query(
+$live = (int)db_value(
     "SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE()"
-)->fetchColumn();
+);
 result($live === 10 ? 'OK' : 'WARN', 'Tablo sayısı', $live . ' (beklenen 10)');
 
-$liveSettings = (int)db()->query('SELECT COUNT(*) FROM settings')->fetchColumn();
+$liveSettings = (int)db_value('SELECT COUNT(*) FROM settings');
 $seedFile     = APP_ROOT . '/database/seed.sql';
 $seedSettings = is_file($seedFile)
     ? preg_match_all("/^\('[a-z_]+',/m", file_get_contents($seedFile))
@@ -262,13 +261,13 @@ result($seedSettings >= $liveSettings ? 'OK' : 'FAIL',
     'seed.sql ayar kapsaması', $seedSettings . ' / ' . $liveSettings . ' canlı',
     $seedSettings < $liveSettings ? 'Sıfırdan kurulumda ayar eksik kalır' : '');
 
-$badCollation = (int)db()->query(
+$badCollation = (int)db_value(
     "SELECT COUNT(*) FROM information_schema.TABLES
      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_COLLATION <> 'utf8mb4_unicode_ci'"
-)->fetchColumn();
+);
 result($badCollation === 0 ? 'OK' : 'FAIL', 'Karakter kümesi', $badCollation . ' tablo farklı');
 
-$softDeleted = (int)db()->query('SELECT COUNT(*) FROM risks WHERE deleted_at IS NOT NULL')->fetchColumn();
+$softDeleted = (int)db_value('SELECT COUNT(*) FROM risks WHERE deleted_at IS NOT NULL');
 result($softDeleted > 0 ? 'WARN' : 'OK', 'Soft-delete edilmiş risk', (string)$softDeleted,
     $softDeleted > 0 ? 'Arayüzde geri alma ekranı henüz yok' : '');
 
@@ -285,7 +284,7 @@ result($hasRevalidate ? 'OK' : 'FAIL', 'Oturum gecersizlestirme',
 
 $skew = 0;
 try {
-    $mysqlNow = (string)db()->query('SELECT NOW()')->fetchColumn();
+    $mysqlNow = (string)db_value('SELECT NOW()');
     $skew = abs(strtotime(date('Y-m-d H:i:s')) - strtotime($mysqlNow));
 } catch (Throwable $e) {
 $skew = 9999;
@@ -298,8 +297,8 @@ result($retention > 0 ? 'OK' : 'WARN', 'Audit saklama süresi',
     $retention > 0 ? $retention . ' gün' : 'sınırsız',
     $retention > 0 ? 'Arşivleme görevi henüz otomatik değil' : '');
 
-$oldestAudit = db()->query('SELECT MIN(created_at) FROM audit_logs')->fetchColumn();
-$auditCount  = (int)db()->query('SELECT COUNT(*) FROM audit_logs')->fetchColumn();
+$oldestAudit = db_value('SELECT MIN(created_at) FROM audit_logs');
+$auditCount  = (int)db_value('SELECT COUNT(*) FROM audit_logs');
 result('OK', 'Audit kaydı', $auditCount . ' kayıt, en eski: ' . ($oldestAudit ?: '—'));
 
 /* ------------------------------------------------------------------ */

@@ -18,16 +18,15 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing action id');
 }
 
-$stmt = db()->prepare(
+$action = db_row(
     'SELECT a.*, r.risk_code, r.title AS risk_title
      FROM risk_actions a
      JOIN risks r ON r.id = a.risk_id AND r.deleted_at IS NULL
-     WHERE a.id = :id LIMIT 1'
+     WHERE a.id = :id LIMIT 1',
+    [':id' => $id]
 );
-$stmt->execute([':id' => $id]);
-$action = $stmt->fetch();
 
-if ($action === false) {
+if ($action === null) {
     app_abort(404, 'Action not found: ' . $id);
 }
 

@@ -19,15 +19,14 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing action id');
 }
 
-$stmt = db()->prepare(
+$before = db_row(
     'SELECT a.* FROM risk_actions a
      JOIN risks r ON r.id = a.risk_id AND r.deleted_at IS NULL
-     WHERE a.id = :id LIMIT 1'
+     WHERE a.id = :id LIMIT 1',
+    [':id' => $id]
 );
-$stmt->execute([':id' => $id]);
-$before = $stmt->fetch();
 
-if ($before === false) {
+if ($before === null) {
     flash('error', 'Aksiyon bulunamadı.');
     redirect('/actions/');
 }
@@ -49,7 +48,7 @@ $completedAt   = action_completed_at(
 );
 
 try {
-    db()->prepare(
+    db_run(
         'UPDATE risk_actions SET
             title = :title,
             description = :desc,
@@ -58,8 +57,8 @@ try {
             status = :status,
             due_date = :due,
             completed_at = :done
-         WHERE id = :id'
-    )->execute([
+         WHERE id = :id',
+        [
         ':title'  => $data['title'],
         ':desc'   => $data['description'],
         ':owner'  => $data['owner_id'],
@@ -68,7 +67,8 @@ try {
         ':due'    => $data['due_date'],
         ':done'   => $completedAt,
         ':id'     => $id,
-    ]);
+    ]
+    );
 } catch (Throwable $ex) {
     app_log('error', 'Action update failed: ' . $ex->getMessage(), ['action' => $id, 'user' => auth_id()]);
     old_set($_POST);

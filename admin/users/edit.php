@@ -17,11 +17,9 @@ if ($id === null || $id < 1) {
     app_abort(400, 'Missing user id');
 }
 
-$stmt = db()->prepare('SELECT * FROM users WHERE id = :id LIMIT 1');
-$stmt->execute([':id' => $id]);
-$user = $stmt->fetch();
+$user = db_row('SELECT * FROM users WHERE id = :id LIMIT 1', [':id' => $id]);
 
-if ($user === false) {
+if ($user === null) {
     app_abort(404, 'User not found: ' . $id);
 }
 

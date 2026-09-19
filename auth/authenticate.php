@@ -33,11 +33,11 @@ $failAndRedirect = static function (string $message, string $email, string $ip,
                                     string $auditAction = 'login_failed',
                                     ?int $userId = null): never {
     try {
-        $stmt = db()->prepare(
+        db_run(
             'INSERT INTO login_attempts (email, ip_address, success, user_agent, attempted_at)
-             VALUES (:e, :ip, 0, :ua, NOW())'
+             VALUES (:e, :ip, 0, :ua, NOW())',
+            [':e' => mb_substr($email, 0, 150), ':ip' => $ip, ':ua' => client_agent()]
         );
-        $stmt->execute([':e' => mb_substr($email, 0, 150), ':ip' => $ip, ':ua' => client_agent()]);
     } catch (Throwable $e) {
         app_log('error', 'login_attempts write failed: ' . $e->getMessage());
     }
@@ -61,15 +61,14 @@ $maxAttempts = max(1, (int)setting('max_login_attempts', 5));
 $lockout     = max(60, (int)setting('lockout_duration', 900));
 $since       = date('Y-m-d H:i:s', time() - $lockout);
 
-$stmt = db()->prepare(
+$attempts = db_row(
     'SELECT
         COALESCE(SUM(email = :email), 0)   AS by_email,
         COALESCE(SUM(ip_address = :ip), 0) AS by_ip
      FROM login_attempts
-     WHERE success = 0 AND attempted_at > :since'
-);
-$stmt->execute([':email' => $email, ':ip' => $ip, ':since' => $since]);
-$attempts = $stmt->fetch() ?: ['by_email' => 0, 'by_ip' => 0];
+     WHERE success = 0 AND attempted_at > :since',
+    [':email' => $email, ':ip' => $ip, ':since' => $since]
+) ?: ['by_email' => 0, 'by_ip' => 0];
 
 // E-posta bazlı kilit: hedefli saldırıyı durdurur.
 // IP bazlı kilit daha genis tutulur ki ortak NAT arkasindaki
@@ -96,14 +95,13 @@ if ($emailLocked || $ipLocked) {
 /* 3) Kullanıcıyı bul ve parolayı dogrula                              */
 /* ------------------------------------------------------------------ */
 
-$stmt = db()->prepare(
+$user = db_row(
     'SELECT id, name, email, password, role, status, department_id, must_change_password, locale
      FROM users
      WHERE email = :email
-     LIMIT 1'
+     LIMIT 1',
+    [':email' => $email]
 );
-$stmt->execute([':email' => $email]);
-$user = $stmt->fetch();
 
 // Kullanıcı yoksa da password_verify çalıştırılır: "kullanıcı var mi yok mu"
 // bilgisinin yanıt süresinden sızmasını engeller.
@@ -144,8 +142,10 @@ if ((int)$user['status'] !== 1) {
 // Parola eski bir algoritma/maliyetle hashlenmisse sessizce güncelle
 if (password_needs_rehash($hash, PASSWORD_DEFAULT)) {
     try {
-        $upd = db()->prepare('UPDATE users SET password = :p, password_changed_at = NOW() WHERE id = :id');
-        $upd->execute([':p' => password_hash($password, PASSWORD_DEFAULT), ':id' => (int)$user['id']]);
+        db_run(
+            'UPDATE users SET password = :p, password_changed_at = NOW() WHERE id = :id',
+            [':p' => password_hash($password, PASSWORD_DEFAULT), ':id' => (int)$user['id']]
+        );
         app_log('info', 'Password rehashed', ['user' => (int)$user['id']]);
     } catch (Throwable $e) {
         app_log('error', 'Password rehash failed: ' . $e->getMessage());
@@ -169,17 +169,16 @@ auth_start([
 ]);
 
 try {
-    db()->prepare('UPDATE users SET last_login_at = NOW() WHERE id = :id')
-        ->execute([':id' => (int)$user['id']]);
+    db_run('UPDATE users SET last_login_at = NOW() WHERE id = :id', [':id' => (int)$user['id']]);
 
     // Başarılı denemeyi kaydet ve bu e-postanin kilidini kaldir
-    db()->prepare(
+    db_run(
         'INSERT INTO login_attempts (email, ip_address, success, user_agent, attempted_at)
-         VALUES (:e, :ip, 1, :ua, NOW())'
-    )->execute([':e' => $email, ':ip' => $ip, ':ua' => client_agent()]);
+         VALUES (:e, :ip, 1, :ua, NOW())',
+        [':e' => $email, ':ip' => $ip, ':ua' => client_agent()]
+    );
 
-    db()->prepare('DELETE FROM login_attempts WHERE email = :e AND success = 0')
-        ->execute([':e' => $email]);
+    db_run('DELETE FROM login_attempts WHERE email = :e AND success = 0', [':e' => $email]);
 } catch (Throwable $e) {
     // Giriş başarılı oldu; bu yan işlemlerin hatası kullanıcıyı engellememelidir.
     app_log('error', 'Post-login bookkeeping failed: ' . $e->getMessage());

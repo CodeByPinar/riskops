@@ -121,14 +121,13 @@ function discussion_parent(string $type, ?int $id): array
 
     /* Tablo adi ve kolonlar SABIT kayit defterinden; istemciden gelen
        tek deger :id ve o da placeholder. */
-    $stmt = db()->prepare(
+    $row = db_row(
         'SELECT ' . $cols . ' FROM ' . $cfg['parent']
-        . ' WHERE id = :id AND ' . $cfg['alive'] . ' LIMIT 1'
+        . ' WHERE id = :id AND ' . $cfg['alive'] . ' LIMIT 1',
+        [':id' => $id]
     );
-    $stmt->execute([':id' => $id]);
-    $row = $stmt->fetch();
 
-    if ($row === false) {
+    if ($row === null) {
         flash('error', ucfirst($cfg['parent_label']) . ' bulunamadı.');
         redirect($type === 'risk' ? '/risks/' : '/actions/');
     }
@@ -151,14 +150,14 @@ function discussion_comments(string $type, int $parentId): array
 {
     $cfg = discussion_config($type);
 
-    $stmt = db()->prepare(
+    $stmt = db_stmt(
         'SELECT c.id, c.body, c.created_at, c.user_id, u.name AS author_name
            FROM ' . $cfg['comments'] . ' c
            LEFT JOIN users u ON u.id = c.user_id
           WHERE c.' . $cfg['fk'] . ' = :id
-          ORDER BY c.created_at DESC'
+          ORDER BY c.created_at DESC',
+        [':id' => $parentId]
     );
-    $stmt->execute([':id' => $parentId]);
 
     return $stmt->fetchAll();
 }
@@ -172,15 +171,15 @@ function discussion_attachments(string $type, int $parentId): array
 {
     $cfg = discussion_config($type);
 
-    $stmt = db()->prepare(
+    $stmt = db_stmt(
         'SELECT a.id, a.original_name, a.mime_type, a.size_bytes, a.created_at,
                 a.uploaded_by, u.name AS uploader_name
            FROM ' . $cfg['attachments'] . ' a
            LEFT JOIN users u ON u.id = a.uploaded_by
           WHERE a.' . $cfg['fk'] . ' = :id
-          ORDER BY a.created_at DESC'
+          ORDER BY a.created_at DESC',
+        [':id' => $parentId]
     );
-    $stmt->execute([':id' => $parentId]);
 
     return $stmt->fetchAll();
 }

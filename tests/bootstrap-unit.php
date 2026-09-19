@@ -45,6 +45,13 @@ function db_sync_timezone(?PDO $pdo = null): void
     // Birim testlerinde yapacak bir şey yok.
 }
 
+/* Sorgu katmani YUKLENIYOR: yalnizca fonksiyon tanimi iceriyor, kendisi
+   baglanmiyor. Her biri yukaridaki db() tuzagindan gectigi icin bir
+   birim testi yanlislikla db_all() cagirirsa ayni acik istisnayi alir.
+   PHPStan de bu on yukleyiciyi kullaniyor; buraya konmazsa katman
+   cozumleme sirasinda gorunmez olurdu. */
+require_once INCLUDES_PATH . '/query.php';
+
 /* ---------------------------------------------------------------------
  * AYARLAR
  *

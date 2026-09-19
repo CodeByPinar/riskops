@@ -96,13 +96,13 @@ foreach ($months as $key => $vals) {
 /*    kimlik etiketten gelir, renk yalnizca buyuklugu tasir)           */
 /* ------------------------------------------------------------------ */
 
-$category = $pdo->query(
+$category = db_all(
     "SELECT c.name AS ad, COUNT(r.id) AS adet
      FROM risk_categories c
      JOIN risks r ON r.category_id = c.id AND r.deleted_at IS NULL
      GROUP BY c.id, c.name
      ORDER BY adet DESC, c.name"
-)->fetchAll();
+);
 
 /* ------------------------------------------------------------------ */
 /* 3) Departmana gore - toplam + (kritik|yuksek) sayisi                */
@@ -110,7 +110,7 @@ $category = $pdo->query(
 /*    renkleri (warning/serious) yalnizca hue ile ayrilirdi.           */
 /* ------------------------------------------------------------------ */
 
-$department = $pdo->query(
+$department = db_all(
     "SELECT d.name AS ad,
             COUNT(r.id) AS adet,
             COALESCE(SUM(COALESCE(r.residual_severity, r.inherent_severity)
@@ -119,16 +119,16 @@ $department = $pdo->query(
      JOIN risks r ON r.department_id = d.id AND r.deleted_at IS NULL
      GROUP BY d.id, d.name
      ORDER BY onemli DESC, adet DESC"
-)->fetchAll();
+);
 
 /* ------------------------------------------------------------------ */
 /* 4) Duruma gore                                                      */
 /* ------------------------------------------------------------------ */
 
 $statusRaw = [];
-foreach ($pdo->query(
+foreach (db_all(
     "SELECT status, COUNT(*) AS adet FROM risks WHERE deleted_at IS NULL GROUP BY status"
-)->fetchAll() as $r) {
+) as $r) {
     $statusRaw[$r['status']] = (int)$r['adet'];
 }
 

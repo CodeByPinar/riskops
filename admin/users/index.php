@@ -60,17 +60,16 @@ $sort = input_enum('sort', array_keys($sortMap), 'name');
 $dir  = input_enum('dir', ['asc', 'desc'], 'asc');
 $orderSql = $sortMap[$sort] . ' ' . strtoupper($dir) . ', u.id ASC';
 
-$countStmt = db()->prepare(
+$total = (int)db_value(
     "SELECT COUNT(*) FROM users u
      LEFT JOIN departments d ON d.id = u.department_id
-     WHERE {$whereSql}"
+     WHERE {$whereSql}",
+    $params
 );
-$countStmt->execute($params);
-$total = (int)$countStmt->fetchColumn();
 
 $page = paginate($total, per_page(), input_int('page', 1) ?? 1);
 
-$listStmt = db()->prepare(
+$rows = db_all(
     "SELECT u.id, u.name, u.email, u.role, u.status, u.title,
             u.last_login_at, u.must_change_password, u.created_at,
             d.name AS department,
@@ -80,18 +79,17 @@ $listStmt = db()->prepare(
      LEFT JOIN departments d ON d.id = u.department_id
      WHERE {$whereSql}
      ORDER BY {$orderSql}
-     LIMIT {$page['per_page']} OFFSET {$page['offset']}"
+     LIMIT {$page['per_page']} OFFSET {$page['offset']}",
+    $params
 );
-$listStmt->execute($params);
-$rows = $listStmt->fetchAll();
 
-$counts = db()->query(
+$counts = db_row(
     "SELECT
         COUNT(*) AS toplam,
         COALESCE(SUM(status = 1), 0) AS aktif,
         COALESCE(SUM(role = 'admin' AND status = 1), 0) AS admin_sayisi
      FROM users"
-)->fetch();
+);
 
 $th = static function (string $key, string $label) use ($sort, $dir): string {
     $nextDir = ($sort === $key && $dir === 'asc') ? 'desc' : 'asc';

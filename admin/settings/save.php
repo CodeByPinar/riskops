@@ -28,7 +28,7 @@ const SETTING_INT_RANGES = [
     'audit_retention_days' => [0, 3650],
 ];
 
-$rows = db()->query('SELECT * FROM settings WHERE is_editable = 1')->fetchAll();
+$rows = db_all('SELECT * FROM settings WHERE is_editable = 1');
 
 $errors  = [];
 $changes = [];   // key => [eski, yeni]
