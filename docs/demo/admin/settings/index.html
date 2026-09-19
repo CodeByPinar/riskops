@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Ayarlar - RiskOps</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/riskops/demo/assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/riskops/demo/assets/img/favicon-16.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/riskops/demo/assets/img/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+<link rel="stylesheet" href="/riskops/demo/assets/css/app.css?v=20260912b">
+<style nonce="statik-onizleme">.rk-cat-default{background:var(--rk-muted-light)}.rk-cat-b91c1c{background:#b91c1c}.rk-cat-c2410c{background:#c2410c}.rk-cat-a16207{background:#a16207}.rk-cat-1d4ed8{background:#1d4ed8}.rk-cat-6d28d9{background:#6d28d9}.rk-cat-0f766e{background:#0f766e}.rk-cat-0369a1{background:#0369a1}.rk-cat-9f1239{background:#9f1239}.rk-cat-4338ca{background:#4338ca}.rk-cat-7c2d12{background:#7c2d12}.rk-cat-475569{background:#475569}.rk-cat-166534{background:#166534}.rk-cat-64748b{background:#64748b}</style><link rel="stylesheet" media="print" href="/riskops/demo/assets/css/print.css?v=20260912b">
+  <link rel="stylesheet" href="/riskops/demo/demo.css">
+</head>
+<body class="rk-body">
+<div class="rk-demo-bar"><span class="rk-demo-dot"></span><strong>Statik önizleme</strong><span class="rk-demo-sep">·</span>gerçek uygulamadan alınmış çıktı, demo verisiyle<span class="rk-demo-sep">·</span>kaydetme ve filtreleme çalışmaz<a class="rk-demo-home" href="/riskops/">← tanıtım</a><a class="rk-demo-repo" href="https://github.com/CodeByPinar/riskops">GitHub</a></div>
+
+<aside class="rk-sidebar" id="rkSidebar">
+
+    <div class="rk-brand">
+        <a class="rk-brand-link" href="/riskops/demo/dashboard/"
+           aria-label="RiskOps - Panel">
+            <img class="rk-wordmark-light" src="/riskops/demo/assets/img/logo-wordmark-light.png" srcset="/assets/img/logo-wordmark-light.png 1x, /assets/img/logo-wordmark-light@2x.png 2x" alt="RiskOps" decoding="async">        </a>
+    </div>
+
+    <nav class="rk-nav">
+        <a class="rk-nav-link" href="/riskops/demo/dashboard/"><i class="bi bi-speedometer2"></i><span>Panel</span></a><div class="rk-nav-section">Risk Yönetimi</div><a class="rk-nav-link" href="/riskops/demo/risks/"><i class="bi bi-list-columns-reverse"></i><span>Risk Kaydı</span></a><a class="rk-nav-link" href="/riskops/demo/risks/create.php"><i class="bi bi-plus-square"></i><span>Yeni Risk</span></a><a class="rk-nav-link" href="/riskops/demo/assessments/"><i class="bi bi-clipboard-data"></i><span>Değerlendirmeler</span></a><a class="rk-nav-link" href="/riskops/demo/actions/"><i class="bi bi-check2-square"></i><span>Aksiyon Planları</span></a><div class="rk-nav-section">Analiz</div><a class="rk-nav-link" href="/riskops/demo/reports/"><i class="bi bi-bar-chart-line"></i><span>Raporlar</span></a><div class="rk-nav-section">Yönetim</div><a class="rk-nav-link" href="/riskops/demo/admin/users/"><i class="bi bi-people"></i><span>Kullanıcılar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/departments/"><i class="bi bi-diagram-3"></i><span>Departmanlar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/categories/"><i class="bi bi-tags"></i><span>Kategoriler</span></a><a class="rk-nav-link" href="/riskops/demo/risks/deleted.php"><i class="bi bi-trash3"></i><span>Silinen Riskler</span></a><a class="rk-nav-link" href="/riskops/demo/admin/audit_logs/"><i class="bi bi-journal-text"></i><span>Denetim Kaydı</span></a><a class="rk-nav-link active" href="/riskops/demo/admin/settings/"><i class="bi bi-gear"></i><span>Ayarlar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/plugins/"><i class="bi bi-puzzle"></i><span>Eklentiler</span></a><a class="rk-nav-link" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"><i class="bi bi-bug"></i><span>Hata Ayıklama</span></a>    </nav>
+
+                <div class="rk-side-locale">
+                    <a class="rk-locale-btn is-active"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="Türkçe">TR</a>
+                    <a class="rk-locale-btn"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="English">EN</a>
+            </div>
+    
+    <div class="rk-side-user">
+                <a class="rk-side-user-link" href="/riskops/demo/profile/" title="Profilim">
+            <div class="rk-avatar">RA</div>
+            <div class="rk-side-user-info">
+                <div class="rk-side-user-name">RiskOps Administrator</div>
+                <div class="rk-side-user-role">Sistem Yöneticisi</div>
+            </div>
+        </a>
+                        <a class="rk-logout-btn" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+           title="Parola değiştir" aria-label="Parola değiştir">
+            <i class="bi bi-key"></i>
+        </a>
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" class="m-0">
+            <input type="hidden" name="_token" value="">            <button type="submit" class="rk-logout-btn" title="Çıkış yap" aria-label="Çıkış yap">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+    
+</aside>
+
+<div class="rk-backdrop" data-rk-sidebar-close></div>
+
+<div class="rk-main">
+
+    <header class="rk-topbar">
+
+    <button type="button" class="rk-burger" data-rk-sidebar-toggle aria-label="Menüyü aç/kapat">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <form class="rk-search" method="get" action="/riskops/demo/risks/" role="search">
+        <i class="bi bi-search"></i>
+        <input type="search" name="q" autocomplete="off"
+               value=""
+               placeholder="Risk kodu, başlık veya varlık ara...">
+    </form>
+
+    <div class="rk-topbar-right">
+                    <span class="rk-env-tag" title="APP_ENV = development">development</span>
+        
+                    <a class="rk-btn rk-btn-primary rk-btn-sm" href="/riskops/demo/risks/create.php">
+                <i class="bi bi-plus-lg"></i> Yeni Risk            </a>
+            </div>
+
+</header>
+
+    <main class="rk-content">
+
+                <div class="rk-page-head">
+            <div>
+                <h1 class="rk-page-title">Ayarlar</h1>
+                                    <p class="rk-page-sub">23 ayar · değişiklikler audit log&#039;a yazılır</p>
+                            </div>
+                    </div>
+        
+        
+<!-- Sınıflandırma bandı: belgenin en üstünde, akışın içinde -->
+<div class="rk-print-only rk-class-band">
+    <span>RiskOps — Ayarlar</span>
+    <span>RO-SETT-20260919-1623</span>
+            <span class="rk-class-tag">Kuruma Özel</span>
+    </div>
+
+<!-- Belgenin başındaki antet -->
+<div class="rk-print-only rk-letterhead">
+    <div class="rk-lh-top">
+        <div class="rk-lh-brand">
+            <img class="rk-wordmark" src="/riskops/demo/assets/img/logo-wordmark.png" srcset="/assets/img/logo-wordmark.png 1x, /assets/img/logo-wordmark@2x.png 2x" alt="RiskOps" decoding="async">        </div>
+                    <div class="rk-lh-class">Kuruma Özel</div>
+            </div>
+
+    <div class="rk-lh-title">
+        <h1>Ayarlar</h1>
+            </div>
+
+    <table class="rk-lh-meta">
+        <tbody>
+            <tr>
+                <th>Rapor tarihi</th>
+                <td>19.09.2026 16:23</td>
+                <th>Belge no</th>
+                <td>RO-SETT-20260919-1623</td>
+            </tr>
+            <tr>
+                <th>Hazırlayan</th>
+                <td>RiskOps Administrator</td>
+                <th>Sistem</th>
+                <td>RiskOps — IT &amp; Cyber Risk Management</td>
+            </tr>
+                    </tbody>
+    </table>
+</div>
+        
+<form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" novalidate>
+    <input type="hidden" name="_token" value="">
+        <div class="rk-card">
+        <div class="rk-card-head">
+            <h2 class="rk-card-title"><i class="bi bi-sliders"></i> Notify</h2>
+            <div class="rk-card-tools"><span class="rk-help"></span></div>
+        </div>
+        <div class="rk-card-body">
+
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_notify_enabled">Termin Bildirimi</label>
+                    <code>notify_enabled</code>
+                                            <div class="rk-help">Acik oldugunda termini yaklasan aksiyonlar sahiplerine e-posta ile bildirilir.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <label class="rk-check">
+                            <input type="checkbox" id="s_notify_enabled" name="notify_enabled" value="1"
+                                   checked>
+                            <span>Etkin</span>
+                        </label>
+                        
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_notify_days_ahead">Kac Gun Once</label>
+                    <code>notify_days_ahead</code>
+                                            <div class="rk-help">Termine bu kadar gun kala bildirim baslar. Gecikmis aksiyonlar her zaman dahildir.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="number"
+                               id="s_notify_days_ahead" name="notify_days_ahead" value="7">
+                        
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_notify_from_email">Gonderen Adresi</label>
+                    <code>notify_from_email</code>
+                                            <div class="rk-help">Bildirim e-postalarinin From adresi. Bos birakilirsa bildirim gonderilmez.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="text" maxlength="255"
+                               id="s_notify_from_email" name="notify_from_email" value="piinartp@gmail.com">
+                                                            </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_notify_from_name">Gonderen Adi</label>
+                    <code>notify_from_name</code>
+                                            <div class="rk-help">Bildirim e-postalarinda gorunen gonderen adi.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="text" maxlength="255"
+                               id="s_notify_from_name" name="notify_from_name" value="RiskOps">
+                                                            </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_notify_stale_days">Gozden Gecirme Esigi (gun)</label>
+                    <code>notify_stale_days</code>
+                                            <div class="rk-help">Bir risk bu kadar gundur gozden gecirilmediyse sahibine hatirlatilir.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="number"
+                               id="s_notify_stale_days" name="notify_stale_days" value="180">
+                        
+                                    </div>
+            </div>
+            
+        </div>
+    </div>
+        <div class="rk-card">
+        <div class="rk-card-head">
+            <h2 class="rk-card-title"><i class="bi bi-gear"></i> Genel</h2>
+            <div class="rk-card-tools"><span class="rk-help">Uygulama kimliği, tarih biçimleri ve liste davranışı</span></div>
+        </div>
+        <div class="rk-card-body">
+
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_application_name">Uygulama Adi</label>
+                    <code>application_name</code>
+                                            <div class="rk-help">Sidebar ve sayfa basliklarinda gorunur.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="text" maxlength="255"
+                               id="s_application_name" name="application_name" value="RiskOps">
+                                                            </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_company_name">Kurum Adi</label>
+                    <code>company_name</code>
+                                            <div class="rk-help">Raporlarin ustunde gorunur.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="text" maxlength="255"
+                               id="s_company_name" name="company_name" value="">
+                                                            </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_timezone">Saat Dilimi</label>
+                    <code>timezone</code>
+                                            <div class="rk-help">PHP date_default_timezone_set() icin gecerli bir deger olmalidir.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="text"
+                               id="s_timezone" name="timezone"
+                               value="Europe/Istanbul" list="rkZones">
+                        <datalist id="rkZones">
+                                                            <option value="Europe/Istanbul"></option>
+                                                            <option value="Europe/London"></option>
+                                                            <option value="Europe/Berlin"></option>
+                                                            <option value="UTC"></option>
+                                                            <option value="America/New_York"></option>
+                                                            <option value="Asia/Dubai"></option>
+                                                    </datalist>
+                                                <div class="rk-help">Şu an: 19.09.2026 16:23 +03</div>
+
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_date_format">Tarih Formati</label>
+                    <code>date_format</code>
+                                            <div class="rk-help">PHP date() formati.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                                                    <select class="rk-select" id="s_date_format" name="date_format">
+                                                            <option value="d.m.Y" selected>
+                                    d.m.Y &nbsp;—&nbsp; 19.09.2026                                </option>
+                                                            <option value="d/m/Y" >
+                                    d/m/Y &nbsp;—&nbsp; 19/09/2026                                </option>
+                                                            <option value="Y-m-d" >
+                                    Y-m-d &nbsp;—&nbsp; 2026-09-19                                </option>
+                                                            <option value="d F Y" >
+                                    d F Y &nbsp;—&nbsp; 19 September 2026                                </option>
+                                                            <option value="j M Y" >
+                                    j M Y &nbsp;—&nbsp; 19 Sep 2026                                </option>
+                                                                                </select>
+                        
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_datetime_format">Tarih-Saat Formati</label>
+                    <code>datetime_format</code>
+                                            <div class="rk-help">PHP date() formati.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                                                    <select class="rk-select" id="s_datetime_format" name="datetime_format">
+                                                            <option value="d.m.Y H:i" selected>
+                                    d.m.Y H:i &nbsp;—&nbsp; 19.09.2026 16:23                                </option>
+                                                            <option value="d/m/Y H:i" >
+                                    d/m/Y H:i &nbsp;—&nbsp; 19/09/2026 16:23                                </option>
+                                                            <option value="Y-m-d H:i" >
+                                    Y-m-d H:i &nbsp;—&nbsp; 2026-09-19 16:23                                </option>
+                                                            <option value="d F Y H:i" >
+                                    d F Y H:i &nbsp;—&nbsp; 19 September 2026 16:23                                </option>
+                                                                                </select>
+                        
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_items_per_page">Sayfa Basina Kayit</label>
+                    <code>items_per_page</code>
+                                            <div class="rk-help">Liste ekranlarinda varsayilan sayfalama boyutu.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="number"
+                               id="s_items_per_page" name="items_per_page" value="25">
+                        
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_default_locale">Varsayilan Dil</label>
+                    <code>default_locale</code>
+                                            <div class="rk-help">Kullanici kendi tercihini belirlemediyse kullanilacak arayuz dili (tr / en).</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="text" maxlength="255"
+                               id="s_default_locale" name="default_locale" value="tr">
+                                                            </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_report_classification">Rapor Gizlilik İbaresi</label>
+                    <code>report_classification</code>
+                                            <div class="rk-help">Yazdırılan raporların üst ve alt bilgisinde görünür. Boş bırakılırsa gösterilmez.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="text" maxlength="255"
+                               id="s_report_classification" name="report_classification" value="Kuruma Özel">
+                                                            </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_report_footer_note">Rapor Alt Not</label>
+                    <code>report_footer_note</code>
+                                            <div class="rk-help">Yazdırılan raporların altında görünen açıklama satırı.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="text" maxlength="255"
+                               id="s_report_footer_note" name="report_footer_note" value="Bu rapor RiskOps tarafından otomatik üretilmiştir.">
+                                                            </div>
+            </div>
+            
+        </div>
+    </div>
+        <div class="rk-card">
+        <div class="rk-card-head">
+            <h2 class="rk-card-title"><i class="bi bi-shield-exclamation"></i> Risk</h2>
+            <div class="rk-card-tools"><span class="rk-help">Risk skorlama ve termin uyarıları</span></div>
+        </div>
+        <div class="rk-card-body">
+
+                        <div class="rk-setting-row is-locked">
+                <div class="rk-setting-label">
+                    <label for="s_risk_matrix_size">Risk Matrisi Boyutu</label>
+                    <code>risk_matrix_size</code>
+                                            <div class="rk-help">Su an yalnizca 5x5 desteklenmektedir.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="text" value="5" disabled>
+                        <div class="rk-help"><i class="bi bi-lock"></i> Kod tarafından yönetilir.</div>
+
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_severity_thresholds">Severity Esikleri</label>
+                    <code>severity_thresholds</code>
+                                            <div class="rk-help">Risk skorunun hangi araliklarda hangi seviyeye karsilik geldigi.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <div class="rk-threshold-editor" id="rkThresholds" data-rk-threshold-editor="rkThresholdPreview">
+                                                            <div class="rk-threshold-row">
+                                    <span class="rk-badge sev-low">Low</span>
+                                    <input class="rk-input" type="number" min="1" max="25"
+                                           name="threshold_Low_min"
+                                           value="1"
+                                           data-rk-threshold aria-label="Low alt sınır">
+                                    <span class="rk-threshold-dash">—</span>
+                                    <input class="rk-input" type="number" min="1" max="25"
+                                           name="threshold_Low_max"
+                                           value="4"
+                                           data-rk-threshold aria-label="Low üst sınır">
+                                </div>
+                                                            <div class="rk-threshold-row">
+                                    <span class="rk-badge sev-medium">Medium</span>
+                                    <input class="rk-input" type="number" min="1" max="25"
+                                           name="threshold_Medium_min"
+                                           value="5"
+                                           data-rk-threshold aria-label="Medium alt sınır">
+                                    <span class="rk-threshold-dash">—</span>
+                                    <input class="rk-input" type="number" min="1" max="25"
+                                           name="threshold_Medium_max"
+                                           value="9"
+                                           data-rk-threshold aria-label="Medium üst sınır">
+                                </div>
+                                                            <div class="rk-threshold-row">
+                                    <span class="rk-badge sev-high">High</span>
+                                    <input class="rk-input" type="number" min="1" max="25"
+                                           name="threshold_High_min"
+                                           value="10"
+                                           data-rk-threshold aria-label="High alt sınır">
+                                    <span class="rk-threshold-dash">—</span>
+                                    <input class="rk-input" type="number" min="1" max="25"
+                                           name="threshold_High_max"
+                                           value="16"
+                                           data-rk-threshold aria-label="High üst sınır">
+                                </div>
+                                                            <div class="rk-threshold-row">
+                                    <span class="rk-badge sev-critical">Critical</span>
+                                    <input class="rk-input" type="number" min="1" max="25"
+                                           name="threshold_Critical_min"
+                                           value="17"
+                                           data-rk-threshold aria-label="Critical alt sınır">
+                                    <span class="rk-threshold-dash">—</span>
+                                    <input class="rk-input" type="number" min="1" max="25"
+                                           name="threshold_Critical_max"
+                                           value="25"
+                                           data-rk-threshold aria-label="Critical üst sınır">
+                                </div>
+                                                    </div>
+                                                <div class="rk-help">
+                            Dört bant 1–25 aralığını <strong>boşluksuz ve çakışmasız</strong> kapatmalıdır.
+                            Skor = olasılık × etki.
+                        </div>
+
+                        <div class="rk-threshold-preview" id="rkThresholdPreview">
+                            <div class="rk-help rk-u-mb6">Önizleme (5×5 matris)</div>
+                            <table class="rk-matrix rk-matrix-mini">
+                                <tbody>
+                                                                    <tr>
+                                        <th>5</th>
+                                                                                    <td><div class="rk-mx-cell sev-medium"
+                                                     data-score="5">5</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-high"
+                                                     data-score="10">10</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-high"
+                                                     data-score="15">15</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-critical"
+                                                     data-score="20">20</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-critical"
+                                                     data-score="25">25</div></td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <th>4</th>
+                                                                                    <td><div class="rk-mx-cell sev-low"
+                                                     data-score="4">4</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-medium"
+                                                     data-score="8">8</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-high"
+                                                     data-score="12">12</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-high"
+                                                     data-score="16">16</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-critical"
+                                                     data-score="20">20</div></td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <th>3</th>
+                                                                                    <td><div class="rk-mx-cell sev-low"
+                                                     data-score="3">3</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-medium"
+                                                     data-score="6">6</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-medium"
+                                                     data-score="9">9</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-high"
+                                                     data-score="12">12</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-high"
+                                                     data-score="15">15</div></td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <th>2</th>
+                                                                                    <td><div class="rk-mx-cell sev-low"
+                                                     data-score="2">2</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-low"
+                                                     data-score="4">4</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-medium"
+                                                     data-score="6">6</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-medium"
+                                                     data-score="8">8</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-high"
+                                                     data-score="10">10</div></td>
+                                                                            </tr>
+                                                                    <tr>
+                                        <th>1</th>
+                                                                                    <td><div class="rk-mx-cell sev-low"
+                                                     data-score="1">1</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-low"
+                                                     data-score="2">2</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-low"
+                                                     data-score="3">3</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-low"
+                                                     data-score="4">4</div></td>
+                                                                                    <td><div class="rk-mx-cell sev-medium"
+                                                     data-score="5">5</div></td>
+                                                                            </tr>
+                                                                <tr class="rk-matrix-foot">
+                                    <th></th>
+                                    <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_risk_code_prefix">Risk Kodu Oneki</label>
+                    <code>risk_code_prefix</code>
+                                            <div class="rk-help">Uretilecek kod formati: ONEK-YYYY-0001</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="text" maxlength="255"
+                               id="s_risk_code_prefix" name="risk_code_prefix" value="RISK">
+                                                            </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_overdue_warning_days">Yaklasan Termin Esigi (gun)</label>
+                    <code>overdue_warning_days</code>
+                                            <div class="rk-help">Dashboard &quot;Upcoming Deadlines&quot; kartinda kac gun ileriye bakilacagi.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="number"
+                               id="s_overdue_warning_days" name="overdue_warning_days" value="7">
+                        
+                                    </div>
+            </div>
+            
+        </div>
+    </div>
+        <div class="rk-card">
+        <div class="rk-card-head">
+            <h2 class="rk-card-title"><i class="bi bi-lock"></i> Güvenlik</h2>
+            <div class="rk-card-tools"><span class="rk-help">Oturum, giriş denemeleri ve parola politikası</span></div>
+        </div>
+        <div class="rk-card-body">
+
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_session_lifetime">Oturum Suresi (saniye)</label>
+                    <code>session_lifetime</code>
+                                            <div class="rk-help">Hareketsizlik sonrasi oturumun sonlanma suresi.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="number"
+                               id="s_session_lifetime" name="session_lifetime" value="3600">
+                        
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_max_login_attempts">Maksimum Basarisiz Giris</label>
+                    <code>max_login_attempts</code>
+                                            <div class="rk-help">Bu sayiya ulasildiginda hesap gecici olarak kilitlenir.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="number"
+                               id="s_max_login_attempts" name="max_login_attempts" value="5">
+                        
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_lockout_duration">Kilitlenme Suresi (saniye)</label>
+                    <code>lockout_duration</code>
+                                            <div class="rk-help">Basarisiz giris limiti asildiginda beklenmesi gereken sure.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="number"
+                               id="s_lockout_duration" name="lockout_duration" value="900">
+                        
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_password_min_length">Minimum Parola Uzunlugu</label>
+                    <code>password_min_length</code>
+                                            <div class="rk-help">Yeni parolalar icin zorunlu minimum karakter sayisi.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="number"
+                               id="s_password_min_length" name="password_min_length" value="10">
+                        
+                                    </div>
+            </div>
+                        <div class="rk-setting-row">
+                <div class="rk-setting-label">
+                    <label for="s_audit_retention_days">Audit Log Saklama (gun)</label>
+                    <code>audit_retention_days</code>
+                                            <div class="rk-help">Bu sureden eski audit kayitlari arsivlenebilir. 0 = sinirsiz.</div>
+                                    </div>
+
+                <div class="rk-setting-control">
+                                            <input class="rk-input" type="number"
+                               id="s_audit_retention_days" name="audit_retention_days" value="730">
+                        
+                                    </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <div class="rk-card">
+        <div class="rk-card-body">
+                        <label class="rk-check rk-u-mb12">
+                <input type="checkbox" name="recalculate" value="1" checked>
+                <span>
+                    Eşikler değişirse <strong>21 riskin</strong> ve
+                    değerlendirme geçmişinin seviye etiketlerini yeniden hesapla
+                </span>
+            </label>
+            <div class="rk-alert rk-alert-warning">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <div>
+                    Bu kutuyu <strong>işaretsiz bırakırsanız</strong> mevcut riskler eski
+                    eşiklere göre etiketlenmiş kalır ve liste ile matris birbiriyle çelişir.
+                    Skorlar hiçbir durumda değişmez — yalnızca etiketler tazelenir.
+                </div>
+            </div>
+            
+            <button type="submit" class="rk-btn rk-btn-primary">
+                <i class="bi bi-check-lg"></i> Ayarları Kaydet            </button>
+            <a class="rk-btn" href="/riskops/demo/admin/settings/">Sıfırla</a>
+        </div>
+    </div>
+</form>
+        
+<!-- Belgenin sonundaki kapanış notu -->
+<div class="rk-print-only rk-print-closing">
+    <p class="rk-closing-id">
+        RiskOps        &middot; Ayarlar                    &middot; RO-SETT-20260919-1623                &middot; 19.09.2026 16:23    </p>
+            <p>Bu rapor RiskOps tarafından otomatik üretilmiştir.</p>
+                <p class="rk-print-classline">
+            Bu belge <strong>Kuruma Özel</strong> sınıfındadır.
+            Yetkisiz kişilerle paylaşılmamalıdır.
+        </p>
+    </div>
+    </main><!-- /.rk-content -->
+
+    <footer class="text-center text-muted rk-u-foot-note">
+        RiskOps                &middot; 2026    </footer>
+
+</div><!-- /.rk-main -->
+
+<script src="/riskops/demo/assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/riskops/demo/assets/js/app.js?v=20260912b"></script>
+</body>
+</html>

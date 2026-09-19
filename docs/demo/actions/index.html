@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Aksiyon Planları - RiskOps</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/riskops/demo/assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/riskops/demo/assets/img/favicon-16.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/riskops/demo/assets/img/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+<link rel="stylesheet" href="/riskops/demo/assets/css/app.css?v=20260912b">
+<style nonce="statik-onizleme">.rk-cat-default{background:var(--rk-muted-light)}.rk-cat-b91c1c{background:#b91c1c}.rk-cat-c2410c{background:#c2410c}.rk-cat-a16207{background:#a16207}.rk-cat-1d4ed8{background:#1d4ed8}.rk-cat-6d28d9{background:#6d28d9}.rk-cat-0f766e{background:#0f766e}.rk-cat-0369a1{background:#0369a1}.rk-cat-9f1239{background:#9f1239}.rk-cat-4338ca{background:#4338ca}.rk-cat-7c2d12{background:#7c2d12}.rk-cat-475569{background:#475569}.rk-cat-166534{background:#166534}.rk-cat-64748b{background:#64748b}</style><link rel="stylesheet" media="print" href="/riskops/demo/assets/css/print.css?v=20260912b">
+  <link rel="stylesheet" href="/riskops/demo/demo.css">
+</head>
+<body class="rk-body">
+<div class="rk-demo-bar"><span class="rk-demo-dot"></span><strong>Statik önizleme</strong><span class="rk-demo-sep">·</span>gerçek uygulamadan alınmış çıktı, demo verisiyle<span class="rk-demo-sep">·</span>kaydetme ve filtreleme çalışmaz<a class="rk-demo-home" href="/riskops/">← tanıtım</a><a class="rk-demo-repo" href="https://github.com/CodeByPinar/riskops">GitHub</a></div>
+
+<aside class="rk-sidebar" id="rkSidebar">
+
+    <div class="rk-brand">
+        <a class="rk-brand-link" href="/riskops/demo/dashboard/"
+           aria-label="RiskOps - Panel">
+            <img class="rk-wordmark-light" src="/riskops/demo/assets/img/logo-wordmark-light.png" srcset="/assets/img/logo-wordmark-light.png 1x, /assets/img/logo-wordmark-light@2x.png 2x" alt="RiskOps" decoding="async">        </a>
+    </div>
+
+    <nav class="rk-nav">
+        <a class="rk-nav-link" href="/riskops/demo/dashboard/"><i class="bi bi-speedometer2"></i><span>Panel</span></a><div class="rk-nav-section">Risk Yönetimi</div><a class="rk-nav-link" href="/riskops/demo/risks/"><i class="bi bi-list-columns-reverse"></i><span>Risk Kaydı</span></a><a class="rk-nav-link" href="/riskops/demo/risks/create.php"><i class="bi bi-plus-square"></i><span>Yeni Risk</span></a><a class="rk-nav-link" href="/riskops/demo/assessments/"><i class="bi bi-clipboard-data"></i><span>Değerlendirmeler</span></a><a class="rk-nav-link active" href="/riskops/demo/actions/"><i class="bi bi-check2-square"></i><span>Aksiyon Planları</span></a><div class="rk-nav-section">Analiz</div><a class="rk-nav-link" href="/riskops/demo/reports/"><i class="bi bi-bar-chart-line"></i><span>Raporlar</span></a><div class="rk-nav-section">Yönetim</div><a class="rk-nav-link" href="/riskops/demo/admin/users/"><i class="bi bi-people"></i><span>Kullanıcılar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/departments/"><i class="bi bi-diagram-3"></i><span>Departmanlar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/categories/"><i class="bi bi-tags"></i><span>Kategoriler</span></a><a class="rk-nav-link" href="/riskops/demo/risks/deleted.php"><i class="bi bi-trash3"></i><span>Silinen Riskler</span></a><a class="rk-nav-link" href="/riskops/demo/admin/audit_logs/"><i class="bi bi-journal-text"></i><span>Denetim Kaydı</span></a><a class="rk-nav-link" href="/riskops/demo/admin/settings/"><i class="bi bi-gear"></i><span>Ayarlar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/plugins/"><i class="bi bi-puzzle"></i><span>Eklentiler</span></a><a class="rk-nav-link" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"><i class="bi bi-bug"></i><span>Hata Ayıklama</span></a>    </nav>
+
+                <div class="rk-side-locale">
+                    <a class="rk-locale-btn is-active"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="Türkçe">TR</a>
+                    <a class="rk-locale-btn"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="English">EN</a>
+            </div>
+    
+    <div class="rk-side-user">
+                <a class="rk-side-user-link" href="/riskops/demo/profile/" title="Profilim">
+            <div class="rk-avatar">RA</div>
+            <div class="rk-side-user-info">
+                <div class="rk-side-user-name">RiskOps Administrator</div>
+                <div class="rk-side-user-role">Sistem Yöneticisi</div>
+            </div>
+        </a>
+                        <a class="rk-logout-btn" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+           title="Parola değiştir" aria-label="Parola değiştir">
+            <i class="bi bi-key"></i>
+        </a>
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" class="m-0">
+            <input type="hidden" name="_token" value="">            <button type="submit" class="rk-logout-btn" title="Çıkış yap" aria-label="Çıkış yap">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+    
+</aside>
+
+<div class="rk-backdrop" data-rk-sidebar-close></div>
+
+<div class="rk-main">
+
+    <header class="rk-topbar">
+
+    <button type="button" class="rk-burger" data-rk-sidebar-toggle aria-label="Menüyü aç/kapat">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <form class="rk-search" method="get" action="/riskops/demo/risks/" role="search">
+        <i class="bi bi-search"></i>
+        <input type="search" name="q" autocomplete="off"
+               value=""
+               placeholder="Risk kodu, başlık veya varlık ara...">
+    </form>
+
+    <div class="rk-topbar-right">
+                    <span class="rk-env-tag" title="APP_ENV = development">development</span>
+        
+                    <a class="rk-btn rk-btn-primary rk-btn-sm" href="/riskops/demo/risks/create.php">
+                <i class="bi bi-plus-lg"></i> Yeni Risk            </a>
+            </div>
+
+</header>
+
+    <main class="rk-content">
+
+                <div class="rk-page-head">
+            <div>
+                <h1 class="rk-page-title">Aksiyon Planları</h1>
+                                    <p class="rk-page-sub">21 aksiyon</p>
+                            </div>
+                            <div class="rk-page-actions"><a class="rk-btn rk-btn-primary" href="/riskops/demo/actions/create.php"><i class="bi bi-plus-lg"></i> Yeni Aksiyon</a></div>
+                    </div>
+        
+        
+<!-- Sınıflandırma bandı: belgenin en üstünde, akışın içinde -->
+<div class="rk-print-only rk-class-band">
+    <span>RiskOps — Aksiyon Planları</span>
+    <span>RO-ACTI-20260919-1623</span>
+            <span class="rk-class-tag">Kuruma Özel</span>
+    </div>
+
+<!-- Belgenin başındaki antet -->
+<div class="rk-print-only rk-letterhead">
+    <div class="rk-lh-top">
+        <div class="rk-lh-brand">
+            <img class="rk-wordmark" src="/riskops/demo/assets/img/logo-wordmark.png" srcset="/assets/img/logo-wordmark.png 1x, /assets/img/logo-wordmark@2x.png 2x" alt="RiskOps" decoding="async">        </div>
+                    <div class="rk-lh-class">Kuruma Özel</div>
+            </div>
+
+    <div class="rk-lh-title">
+        <h1>Aksiyon Planları</h1>
+            </div>
+
+    <table class="rk-lh-meta">
+        <tbody>
+            <tr>
+                <th>Rapor tarihi</th>
+                <td>19.09.2026 16:23</td>
+                <th>Belge no</th>
+                <td>RO-ACTI-20260919-1623</td>
+            </tr>
+            <tr>
+                <th>Hazırlayan</th>
+                <td>RiskOps Administrator</td>
+                <th>Sistem</th>
+                <td>RiskOps — IT &amp; Cyber Risk Management</td>
+            </tr>
+                    </tbody>
+    </table>
+</div>
+        
+<div class="rk-stats">
+    <a class="rk-stat is-neutral" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+        <div class="rk-stat-icon"><i class="bi bi-circle"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">10</div>
+            <div class="rk-stat-label">Açık</div>
+        </div>
+    </a>
+    <a class="rk-stat is-primary" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+        <div class="rk-stat-icon"><i class="bi bi-hourglass-split"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">5</div>
+            <div class="rk-stat-label">Devam Ediyor</div>
+        </div>
+    </a>
+    <a class="rk-stat is-critical"
+       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+        <div class="rk-stat-icon"><i class="bi bi-clock-history"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">4</div>
+            <div class="rk-stat-label">Geciken</div>
+        </div>
+    </a>
+    <a class="rk-stat is-low" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+        <div class="rk-stat-icon"><i class="bi bi-check2-circle"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">6</div>
+            <div class="rk-stat-label">Tamamlanan</div>
+        </div>
+    </a>
+    <a class="rk-stat is-primary" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+        <div class="rk-stat-icon"><i class="bi bi-person-check"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value"><i class="bi bi-arrow-right-short"></i></div>
+            <div class="rk-stat-label">Bana Atananlar</div>
+        </div>
+    </a>
+</div>
+
+<form method="get" class="rk-card rk-filters">
+    <div class="rk-card-body">
+        <div class="rk-filter-grid">
+            <div class="rk-field rk-filter-wide">
+                <label class="rk-label" for="q">Arama</label>
+                <input class="rk-input" type="search" id="q" name="q"
+                       value=""
+                       placeholder="Aksiyon başlığı, açıklama veya risk kodu">
+            </div>
+
+            <div class="rk-field">
+                <label class="rk-label" for="status">Durum</label>
+                <select class="rk-select" id="status" name="status">
+                    <option value="">Tümü</option>
+                    <option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option>                </select>
+            </div>
+
+            <div class="rk-field">
+                <label class="rk-label" for="priority">Öncelik</label>
+                <select class="rk-select" id="priority" name="priority">
+                    <option value="">Tümü</option>
+                    <option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option><option value="Critical">Critical</option>                </select>
+            </div>
+
+            <div class="rk-field">
+                <label class="rk-label" for="owner">Sorumlu</label>
+                <select class="rk-select" id="owner" name="owner">
+                    <option value="">Tümü</option>
+                    <option value="5">Burak Demir</option><option value="7">Demo Kullanıcı</option><option value="4">Elif Kaya</option><option value="3">Mert Yilmaz</option><option value="1">RiskOps Administrator</option><option value="2">Test Viewer</option>                </select>
+            </div>
+        </div>
+
+        <div class="rk-filter-actions">
+            <label class="rk-check">
+                <input type="checkbox" name="overdue" value="1" >
+                <span>Yalnızca gecikenler</span>
+            </label>
+
+            <input type="hidden" name="sort" value="due">
+            <input type="hidden" name="dir" value="asc">
+            
+            <div class="ms-auto d-flex gap-2">
+                                <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> Filtrele</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="rk-card">
+    <div class="rk-card-body is-flush">
+                <div class="rk-table-wrap">
+            <table class="rk-table">
+                <thead>
+                    <tr>
+                        <th><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Risk <i class="bi bi-arrow-down-up rk-u-dim"></i></a></th>                        <th><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Aksiyon <i class="bi bi-arrow-down-up rk-u-dim"></i></a></th>                        <th><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Sorumlu <i class="bi bi-arrow-down-up rk-u-dim"></i></a></th>                        <th><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Öncelik <i class="bi bi-arrow-down-up rk-u-dim"></i></a></th>                        <th><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Durum <i class="bi bi-arrow-down-up rk-u-dim"></i></a></th>                        <th><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Termin <i class="bi bi-arrow-up"></i></a></th>                        <th class="rk-u-shrink"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/71/"
+                               title="Değişiklik yönetimi sürecinin uygulanmaması">RISK-2026-0015</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Değişiklik onay akışını devreye alma</span>
+                                                            <div class="rk-cell-sub">
+                                    <i class="bi bi-check2"></i> 21.07.2026 16:32                                </div>
+                                                    </td>
+                        <td>Burak Demir</td>
+                        <td><span class="rk-badge pr-medium">Orta</span></td>
+                        <td><span class="rk-badge st-none">Tamamlandı</span></td>
+                        <td>23.07.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/89/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="89">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/61/"
+                               title="Web uygulamasında SQL injection açıklığı">RISK-2026-0005</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Tüm sorguları prepared statement hâline getirme</span>
+                                                            <div class="rk-cell-sub">
+                                    <i class="bi bi-check2"></i> 26.07.2026 16:32                                </div>
+                                                    </td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-badge pr-critical">Kritik</span></td>
+                        <td><span class="rk-badge st-none">Tamamlandı</span></td>
+                        <td>28.07.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/78/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="78">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/64/"
+                               title="Bulut depolama kovalarının herkese açık olması">RISK-2026-0008</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Kova erişim politikalarını düzeltme</span>
+                                                            <div class="rk-cell-sub">
+                                    <i class="bi bi-check2"></i> 05.08.2026 16:32                                </div>
+                                                    </td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-badge pr-critical">Kritik</span></td>
+                        <td><span class="rk-badge st-none">Tamamlandı</span></td>
+                        <td>07.08.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/82/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="82">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/58/"
+                               title="Ayrıcalıklı hesaplarda MFA eksikliği">RISK-2026-0002</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Ayrıcalıklı hesap envanterini çıkarma</span>
+                                                            <div class="rk-cell-sub">
+                                    <i class="bi bi-check2"></i> 20.08.2026 16:32                                </div>
+                                                    </td>
+                        <td>Burak Demir</td>
+                        <td><span class="rk-badge pr-high">Yüksek</span></td>
+                        <td><span class="rk-badge st-none">Tamamlandı</span></td>
+                        <td>22.08.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/73/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="73">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/61/"
+                               title="Web uygulamasında SQL injection açıklığı">RISK-2026-0005</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Doğrulama amaçlı sızma testi yaptırma</span>
+                                                            <div class="rk-cell-sub">
+                                    <i class="bi bi-check2"></i> 25.08.2026 16:32                                </div>
+                                                    </td>
+                        <td>Mert Yilmaz</td>
+                        <td><span class="rk-badge pr-high">Yüksek</span></td>
+                        <td><span class="rk-badge st-none">Tamamlandı</span></td>
+                        <td>27.08.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/79/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="79">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/59/"
+                               title="Yedeklerin geri dönüş testinin yapılmaması">RISK-2026-0003</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Aylık geri yükleme testi prosedürünü yazma</span>
+                                                    </td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-badge pr-high">Yüksek</span></td>
+                        <td><span class="rk-badge st-open">Açık</span></td>
+                        <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 03.09.2026 <small>(16 gün gecikti)</small></span></td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="74">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/74/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="74">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/59/"
+                               title="Yedeklerin geri dönüş testinin yapılmaması">RISK-2026-0003</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">İlk tam geri yükleme tatbikatını gerçekleştirme</span>
+                                                    </td>
+                        <td>Mert Yilmaz</td>
+                        <td><span class="rk-badge pr-critical">Kritik</span></td>
+                        <td><span class="rk-badge st-open">Açık</span></td>
+                        <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 08.09.2026 <small>(11 gün gecikti)</small></span></td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="75">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/75/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="75">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/69/"
+                               title="ISO 27001 denetim bulgularının kapatılmaması">RISK-2026-0013</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Açık bulgular için düzeltici faaliyet planı</span>
+                                                    </td>
+                        <td>Elif Kaya</td>
+                        <td><span class="rk-badge pr-high">Yüksek</span></td>
+                        <td><span class="rk-badge st-progress">Devam ediyor</span></td>
+                        <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 09.09.2026 <small>(10 gün gecikti)</small></span></td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="88">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/88/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="88">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/60/"
+                               title="Kritik sunucularda eksik güvenlik yamaları">RISK-2026-0004</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Kritik sunucular için acil yama penceresi açma</span>
+                                                    </td>
+                        <td>Elif Kaya</td>
+                        <td><span class="rk-badge pr-critical">Kritik</span></td>
+                        <td><span class="rk-badge st-progress">Devam ediyor</span></td>
+                        <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 18.09.2026 <small>(1 gün gecikti)</small></span></td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="76">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/76/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="76">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/58/"
+                               title="Ayrıcalıklı hesaplarda MFA eksikliği">RISK-2026-0002</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Domain Admin hesaplarına MFA tanımlama</span>
+                                                    </td>
+                        <td>Elif Kaya</td>
+                        <td><span class="rk-badge pr-critical">Kritik</span></td>
+                        <td><span class="rk-badge st-progress">Devam ediyor</span></td>
+                        <td>21.09.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="72">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/72/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="72">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/57/"
+                               title="İnternete açık RDP servisleri üzerinden yetkisiz erişim">RISK-2026-0001</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">RDP erişimini VPN arkasına alma</span>
+                                                            <div class="rk-cell-sub">
+                                    <i class="bi bi-check2"></i> 12.09.2026 15:50                                </div>
+                                                    </td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-badge pr-critical">Kritik</span></td>
+                        <td><span class="rk-badge st-none">Tamamlandı</span></td>
+                        <td>26.09.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/70/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="70">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/67/"
+                               title="Çalışanların oltalama farkındalığının düşük olması">RISK-2026-0011</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Aylık oltalama simülasyonu yürütme</span>
+                                                    </td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-badge pr-medium">Orta</span></td>
+                        <td><span class="rk-badge st-open">Açık</span></td>
+                        <td>06.10.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="86">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/86/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="86">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/67/"
+                               title="Çalışanların oltalama farkındalığının düşük olması">RISK-2026-0011</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Çeyreklik farkındalık eğitimi programı kurma</span>
+                                                    </td>
+                        <td>Burak Demir</td>
+                        <td><span class="rk-badge pr-medium">Orta</span></td>
+                        <td><span class="rk-badge st-progress">Devam ediyor</span></td>
+                        <td>11.10.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="85">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/85/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="85">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/57/"
+                               title="İnternete açık RDP servisleri üzerinden yetkisiz erişim">RISK-2026-0001</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Tüm RDP hesaplarına MFA zorunluluğu getirme</span>
+                                                    </td>
+                        <td>Mert Yilmaz</td>
+                        <td><span class="rk-badge pr-critical">Kritik</span></td>
+                        <td><span class="rk-badge st-open">Açık</span></td>
+                        <td>11.10.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="71">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/71/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="71">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/62/"
+                               title="Kişisel verilerin şifrelenmeden saklanması">RISK-2026-0006</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Hassas kolonlar için şifreleme tasarımı</span>
+                                                    </td>
+                        <td>Elif Kaya</td>
+                        <td><span class="rk-badge pr-high">Yüksek</span></td>
+                        <td><span class="rk-badge st-open">Açık</span></td>
+                        <td>26.10.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="80">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/80/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="80">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/68/"
+                               title="Veri merkezi fiziksel erişim kontrolünün zayıflığı">RISK-2026-0012</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Ziyaretçi kayıt defteri ve refakat kuralı</span>
+                                                    </td>
+                        <td>Mert Yilmaz</td>
+                        <td><span class="rk-badge pr-medium">Orta</span></td>
+                        <td><span class="rk-badge st-open">Açık</span></td>
+                        <td>10.11.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="87">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/87/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="87">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/63/"
+                               title="Tedarikçi uzak erişiminin denetlenmemesi">RISK-2026-0007</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Tedarikçi erişimlerini süreli hâle getirme</span>
+                                                    </td>
+                        <td>Burak Demir</td>
+                        <td><span class="rk-badge pr-high">Yüksek</span></td>
+                        <td><span class="rk-badge st-progress">Devam ediyor</span></td>
+                        <td>10.11.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="81">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/81/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="81">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/73/"
+                               title="Mobil cihazlarda MDM çözümünün bulunmaması">RISK-2026-0017</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">MDM çözümü pilot uygulaması başlatma</span>
+                                                    </td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-badge pr-medium">Orta</span></td>
+                        <td><span class="rk-badge st-open">Açık</span></td>
+                        <td>30.11.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="90">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/90/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="90">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/60/"
+                               title="Kritik sunucularda eksik güvenlik yamaları">RISK-2026-0004</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">Otomatik yama yönetimi çözümü değerlendirme</span>
+                                                    </td>
+                        <td>Burak Demir</td>
+                        <td><span class="rk-badge pr-medium">Orta</span></td>
+                        <td><span class="rk-badge st-open">Açık</span></td>
+                        <td>10.12.2026</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="77">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/77/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="77">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/66/"
+                               title="Güvenlik olay izleme (SIEM) çözümünün bulunmaması">RISK-2026-0010</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">SIEM ürün seçimi ve kavram doğrulama (PoC)</span>
+                                                    </td>
+                        <td>Elif Kaya</td>
+                        <td><span class="rk-badge pr-high">Yüksek</span></td>
+                        <td><span class="rk-badge st-open">Açık</span></td>
+                        <td>09.01.2027</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="84">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/84/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="84">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">
+                            <a href="/riskops/demo/risks/view/65/"
+                               title="Ağ segmentasyonunun yetersizliği">RISK-2026-0009</a>
+                        </td>
+                        <td>
+                            <span class="rk-link-strong">VLAN tasarımı ve geçiş planı hazırlama</span>
+                                                    </td>
+                        <td>Mert Yilmaz</td>
+                        <td><span class="rk-badge pr-high">Yüksek</span></td>
+                        <td><span class="rk-badge st-open">Açık</span></td>
+                        <td>08.02.2027</td>
+                        <td>
+                            <div class="rk-row-actions">
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon tamamlandı olarak işaretlenecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="83">
+                                        <button type="submit" class="rk-icon-btn is-good" title="Tamamla">
+                                            <i class="bi bi-check2"></i>
+                                        </button>
+                                    </form>
+                                
+                                                                    <a class="rk-btn rk-btn-icon" title="Detay"
+                                       href="/riskops/demo/actions/view/83/">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="rk-icon-btn" title="Düzenle"
+                                       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                
+                                                                    <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+                                          class="d-inline"
+                                          data-rk-confirm="Bu aksiyon kalıcı olarak silinecek. Onaylıyor musunuz?">
+                                        <input type="hidden" name="_token" value="">                                        <input type="hidden" name="id" value="83">
+                                        <button type="submit" class="rk-icon-btn is-danger" title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                                            </div>
+                        </td>
+                    </tr>
+                                </tbody>
+            </table>
+        </div>
+            </div>
+
+    </div>
+
+        
+<!-- Belgenin sonundaki kapanış notu -->
+<div class="rk-print-only rk-print-closing">
+    <p class="rk-closing-id">
+        RiskOps        &middot; Aksiyon Planları                    &middot; RO-ACTI-20260919-1623                &middot; 19.09.2026 16:23    </p>
+            <p>Bu rapor RiskOps tarafından otomatik üretilmiştir.</p>
+                <p class="rk-print-classline">
+            Bu belge <strong>Kuruma Özel</strong> sınıfındadır.
+            Yetkisiz kişilerle paylaşılmamalıdır.
+        </p>
+    </div>
+    </main><!-- /.rk-content -->
+
+    <footer class="text-center text-muted rk-u-foot-note">
+        RiskOps                &middot; 2026    </footer>
+
+</div><!-- /.rk-main -->
+
+<script src="/riskops/demo/assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/riskops/demo/assets/js/app.js?v=20260912b"></script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RiskOps — BT ve Siber Güvenlik Risk Yönetimi Platformu</title>
+<meta name="description" content="Kurumsal risk envanteri, 5×5 değerlendirme, aksiyon takibi ve yönetim raporlaması. PHP 8.3 + MariaDB, çerçevesiz, CDN'siz. Çalışan uygulamayı tarayıcıdan gezin.">
+<meta name="color-scheme" content="dark">
+
+<meta property="og:title" content="RiskOps — BT ve Siber Risk Yönetimi">
+<meta property="og:description" content="Çalışan uygulamayı tarayıcıdan gezin. Kurumsal risk envanteri, 5×5 matris, aksiyon takibi, yönetim raporu.">
+<meta property="og:image" content="https://codebypinar.github.io/riskops/assets/hero.svg">
+<meta property="og:type" content="website">
+
+<link rel="icon" href="demo/assets/img/favicon-32.png" sizes="32x32">
+
+<style>
+/* =====================================================================
+   RiskOps tanıtım sayfası
+
+   Uygulamanın kendi paletiyle (assets/css/app.css) aynı değişkenler.
+   Tek dosya, dış bağımlılık yok — projenin geri kalanıyla tutarlı.
+   ===================================================================*/
+
+:root {
+    --navy:      #041f3c;
+    --navy-mid:  #0b356d;
+    --navy-soft: #072a52;
+    --blue:      #016ccc;
+    --blue-lt:   #23b0f8;
+    --fg:        #eaf3ff;
+    --fg-soft:   #9fb8d4;
+    --fg-muted:  #6685a8;
+    --line:      rgba(255, 255, 255, .09);
+    --card:      rgba(255, 255, 255, .045);
+
+    --low:   #16a34a;
+    --med:   #ca8a04;
+    --high:  #ea580c;
+    --crit:  #b91c1c;
+
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+            'Helvetica Neue', Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--navy);
+    color: var(--fg);
+    font: 16px/1.65 var(--font);
+    -webkit-font-smoothing: antialiased;
+    background-image:
+        radial-gradient(900px 480px at 78% -8%, rgba(35,176,248,.16), transparent 60%),
+        radial-gradient(700px 420px at 8% 8%, rgba(1,108,204,.12), transparent 60%);
+    background-repeat: no-repeat;
+}
+
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 20px; }
+
+a { color: var(--blue-lt); }
+
+/* ------------------------------------------------------------- başlık */
+
+.top {
+    position: sticky; top: 0; z-index: 20;
+    backdrop-filter: blur(10px);
+    background: rgba(4, 31, 60, .82);
+    border-bottom: 1px solid var(--line);
+}
+.top .wrap {
+    display: flex; align-items: center; gap: 18px;
+    height: 58px;
+}
+.brand {
+    font-weight: 800; letter-spacing: -.4px; font-size: 17px;
+    color: var(--fg); text-decoration: none;
+}
+.brand span { color: var(--blue-lt); }
+.top nav { margin-left: auto; display: flex; gap: 20px; align-items: center; }
+.top nav a {
+    color: var(--fg-soft); text-decoration: none; font-size: 14px; font-weight: 500;
+}
+.top nav a:hover { color: var(--fg); }
+
+.btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px; border-radius: 10px;
+    font-weight: 650; font-size: 14px; text-decoration: none;
+    border: 1px solid transparent; white-space: nowrap;
+}
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover { background: #0b7ce0; }
+.btn-ghost { border-color: var(--line); color: var(--fg); background: var(--card); }
+.btn-ghost:hover { border-color: rgba(255,255,255,.22); }
+
+/* --------------------------------------------------------------- hero */
+
+/* padding-block, padding DEGIL: bu elemanlar ayni zamanda .wrap ve
+   kisayol yazmak .wrap'in yan bosluklarini SIFIRLIYOR - sayfa dar
+   ekranda kenara yapisiyordu. */
+.hero { padding-block: 46px 8px; }
+.hero-svg { display: block; width: 100%; border-radius: 18px; }
+
+/* DAR EKRANDA AFIS DEGISIYOR
+   hero.svg sabit kompozisyonlu (1000x320). 375px genislikte 120px
+   yukseklige inip yazilari okunamaz hale geliyor. Telefonda SVG yerine
+   ayni icerigin HTML'i gosteriliyor: her boyutta net, ek dosya yok. */
+.hero-text { display: none; }
+.hero-text .kicker { margin-bottom: 6px; }
+.hero-text h1 {
+    font-size: 44px; font-weight: 800; letter-spacing: -1.5px;
+    margin: 0 0 8px; line-height: 1.05;
+}
+.hero-text p { color: var(--fg-soft); margin: 0 0 18px; font-size: 15.5px; }
+.hero-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.hero-stats div {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 12px 14px;
+}
+.hero-stats b { display: block; font-size: 20px; font-weight: 750; }
+.hero-stats span { color: var(--fg-muted); font-size: 12px; }
+
+/* Sema: dar ekranda kucultmek yerine KENDI ICINDE kaydiriliyor.
+   Kucultmek okunmaz yapar; kaydirma en azindan okunur birakir. */
+.scroll-x { overflow-x: auto; border-radius: 14px; }
+.scroll-x img { display: block; min-width: 720px; width: 100%; border-radius: 14px; }
+.hero-cta {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    justify-content: center; margin: 26px 0 8px;
+}
+.hero-note {
+    text-align: center; color: var(--fg-muted);
+    font-size: 13.5px; margin: 0 0 6px;
+}
+
+/* ------------------------------------------------------------ bölümler */
+
+section { padding-block: 54px; border-top: 1px solid var(--line); }
+section:first-of-type { border-top: 0; }
+
+h2 {
+    font-size: 27px; font-weight: 750; letter-spacing: -.5px;
+    margin: 0 0 10px;
+}
+.lead { color: var(--fg-soft); font-size: 16.5px; margin: 0 0 30px; max-width: 70ch; }
+.kicker {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 2.2px;
+    color: var(--blue-lt); margin: 0 0 10px;
+}
+
+.grid { display: grid; gap: 16px; }
+.g2 { grid-template-columns: repeat(2, 1fr); }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+
+.card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 22px;
+}
+.card h3 {
+    margin: 0 0 8px; font-size: 16px; font-weight: 700;
+    display: flex; align-items: center; gap: 9px;
+}
+.card p { margin: 0; color: var(--fg-soft); font-size: 14.5px; line-height: 1.6; }
+.card ul { margin: 10px 0 0; padding-left: 18px; color: var(--fg-soft); font-size: 14.5px; }
+.card li { margin: 5px 0; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+
+/* ------------------------------------------------------- ne değildir */
+
+table.no { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+table.no th, table.no td {
+    text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line);
+    vertical-align: top;
+}
+table.no th { color: var(--fg-muted); font-weight: 650; font-size: 12.5px;
+              letter-spacing: .6px; text-transform: uppercase; }
+table.no td:first-child { color: var(--fg); font-weight: 600; width: 34%; }
+table.no td:last-child { color: var(--fg-soft); }
+
+/* ---------------------------------------------------------- ekranlar */
+
+.shots { display: grid; gap: 14px; grid-template-columns: repeat(2, 1fr); }
+.shot {
+    display: block; border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--line); background: var(--navy-soft);
+    text-decoration: none; color: inherit;
+}
+/* Kaynak ekran goruntulerinin en-boy orani cok farkli (2880x1280 ile
+   2720x3988 arasi). Serbest biraktiginda izgara tirtikli duruyor;
+   ortak bir orana kirpiliyor ve UST kisim gosteriliyor - basliklarin
+   ve ozet kartlarinin oldugu, tanitim icin anlamli olan kisim orasi. */
+.shot img {
+    display: block; width: 100%; height: auto;
+    aspect-ratio: 16 / 10; object-fit: cover; object-position: top center;
+}
+.shot figcaption {
+    padding: 11px 14px; font-size: 13.5px; font-weight: 600;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.shot figcaption span { color: var(--fg-muted); font-weight: 500; font-size: 12.5px; }
+.shot:hover { border-color: rgba(35,176,248,.45); }
+
+/* --------------------------------------------------------- kalite */
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips img { height: 20px; }
+
+.figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.fig {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 16px 18px;
+}
+.fig b { display: block; font-size: 25px; font-weight: 750; letter-spacing: -.5px; }
+.fig span { color: var(--fg-muted); font-size: 12.5px; }
+
+/* ------------------------------------------------------------- alt */
+
+footer {
+    border-top: 1px solid var(--line); padding: 30px 0 48px;
+    color: var(--fg-muted); font-size: 13.5px;
+}
+footer .wrap { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+footer a { color: var(--fg-soft); text-decoration: none; }
+footer a:hover { color: var(--blue-lt); }
+footer .sp { margin-left: auto; }
+
+/* ------------------------------------------------------------ dar ekran */
+
+@media (max-width: 860px) {
+    .g2, .g3, .figures, .shots { grid-template-columns: 1fr; }
+    .top nav a.hide-sm { display: none; }
+    h2 { font-size: 23px; }
+}
+
+@media (max-width: 700px) {
+    .hero-svg { display: none; }
+    .hero-text { display: block; }
+    .hero { padding-block: 30px 4px; }
+    .hero-cta { justify-content: stretch; }
+    .hero-cta .btn { flex: 1; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { scroll-behavior: auto !important; }
+}
+
+html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="./">Risk<span>Ops</span></a>
+    <nav>
+      <a class="hide-sm" href="#nedir">Nedir</a>
+      <a class="hide-sm" href="#ekranlar">Ekranlar</a>
+      <a class="hide-sm" href="#kalite">Kalite</a>
+      <a class="hide-sm" href="#kurulum">Kurulum</a>
+      <a class="btn btn-primary" href="demo/dashboard/">Demoyu gez →</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap hero">
+  <img class="hero-svg" src="assets/hero.svg"
+       alt="RiskOps — BT ve siber güvenlik risk yönetimi platformu">
+
+  <div class="hero-text">
+    <p class="kicker">BT &amp; SİBER RİSK YÖNETİMİ</p>
+    <h1>RiskOps</h1>
+    <p>Risk envanteri · 5×5 değerlendirme · aksiyon takibi</p>
+    <div class="hero-stats">
+      <div><b>8</b><span>PHPStan seviyesi</span></div>
+      <div><b>192</b><span>test</span></div>
+      <div><b>0</b><span>bağımlılık</span></div>
+      <div><b>2</b><span>dil</span></div>
+    </div>
+  </div>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="demo/dashboard/">Çalışan uygulamayı gez →</a>
+    <a class="btn btn-ghost" href="https://github.com/CodeByPinar/riskops">Kaynak kodu</a>
+  </div>
+  <p class="hero-note">
+    Demo, çalışan uygulamadan alınmış gerçek çıktıdır — ekran görüntüsü değil.
+    Gezinme çalışır; kaydetme ve filtreleme çalışmaz.
+  </p>
+</div>
+
+<!-- ================================================================ -->
+<section id="nedir" class="wrap">
+  <p class="kicker">NEDİR</p>
+  <h2>Risk çözülmez, seviyesi düşürülür</h2>
+  <p class="lead">
+    RiskOps, bir kurumun BT ve siber güvenlik risklerini kayıt altına almak,
+    olasılık × etki üzerinden puanlamak, azaltıcı aksiyonları takip etmek ve
+    yönetime sunulabilir belgeler üretmek için yazıldı.
+  </p>
+
+  <div class="scroll-x" style="margin-bottom:26px">
+    <img src="assets/lifecycle.svg"
+         alt="Risk yaşam döngüsü: kayıt, değerlendirme, seviye ataması, aksiyon planı, yeniden değerlendirme">
+  </div>
+
+  <div class="grid g3">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--crit)"></span> Envanter</h3>
+      <p>Otomatik risk kodu, 5×5 matris, yumuşak silme. Skor veritabanında
+         üretilen kolon — uygulama onu hiç hesaplamaz, tutarsızlık imkânsız.</p>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--high)"></span> Aksiyon</h3>
+      <p>Riske bağlı azaltıcı aksiyonlar, sorumlu ve termin. Geciken aksiyonlar
+         panelde ve raporda ayrıca işaretlenir.</p>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--low)"></span> Rapor</h3>
+      <p>Altı hazır rapor ve tek sayfalık Yönetici Özeti: antetli, gizlilik
+         ibareli, imza bloklu yazdırma çıktısı.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section class="wrap">
+  <p class="kicker">SINIR</p>
+  <h2>RiskOps ne değildir</h2>
+  <p class="lead">
+    Bu ayrım projenin en önemli tasarım kararı, bu yüzden gizlenmiyor.
+  </p>
+  <table class="no">
+    <tr><th>Değildir</th><th>Neden önemli</th></tr>
+    <tr><td>Helpdesk / ticket sistemi</td>
+        <td>Burada “kapatılacak talep” yok; süregiden bir risk durumu var.</td></tr>
+    <tr><td>ITSM aracı</td>
+        <td>Varlık envanteri, değişiklik yönetimi ve SLA takibi kapsam dışı.</td></tr>
+    <tr><td>Zafiyet tarayıcı</td>
+        <td>Tarama yapmaz; tarama <em>sonuçlarının yönetildiği</em> yerdir.</td></tr>
+    <tr><td>SIEM</td>
+        <td>Log toplamaz, korelasyon kurmaz.</td></tr>
+  </table>
+</section>
+
+<!-- ================================================================ -->
+<section id="ekranlar" class="wrap">
+  <p class="kicker">EKRANLAR</p>
+  <h2>Gerçek uygulamayı gezin</h2>
+  <p class="lead">
+    Aşağıdaki görseller demonun ilgili ekranına gider. Demo, çalışan
+    kurulumdan indirilmiş HTML’dir: aynı CSS, aynı veri, aynı düzen.
+  </p>
+
+  <div class="shots">
+    <a class="shot" href="demo/dashboard/">
+      <img src="screenshots/dashboard.png" alt="RiskOps paneli" loading="lazy">
+      <figcaption>Panel <span>matris · trend · dağılımlar</span></figcaption>
+    </a>
+    <a class="shot" href="demo/risks/view/57/">
+      <img src="screenshots/risk-detail.png" alt="Risk detay ekranı" loading="lazy">
+      <figcaption>Risk detayı <span>değerlendirme geçmişi · aksiyonlar</span></figcaption>
+    </a>
+    <a class="shot" href="demo/reports/executive_summary/">
+      <img src="screenshots/executive-summary.png" alt="Yönetici özeti raporu" loading="lazy">
+      <figcaption>Yönetici Özeti <span>tek sayfa · yazdırmaya uygun</span></figcaption>
+    </a>
+    <a class="shot" href="demo/admin/plugins/">
+      <img src="screenshots/plugins.png" alt="Eklenti yönetim ekranı" loading="lazy">
+      <figcaption>Eklentiler <span>kancalar · kum havuzu yok</span></figcaption>
+    </a>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="kalite" class="wrap">
+  <p class="kicker">KALİTE</p>
+  <h2>Ölçülen, iddia edilmeyen</h2>
+  <p class="lead">
+    Sayılar depodaki araçların çıktısıdır; her sürüm CI’da yeniden ölçülür.
+  </p>
+
+  <div class="figures">
+    <div class="fig"><b>8</b><span>PHPStan seviyesi, baseline yok</span></div>
+    <div class="fig"><b>192</b><span>birim + entegrasyon testi</span></div>
+    <div class="fig"><b>0</b><span>çalışma zamanı bağımlılığı</span></div>
+    <div class="fig"><b>12</b><span>mimari karar kaydı (ADR)</span></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h3>Güvenlik varsayılanı</h3>
+      <ul>
+        <li>Parolalar <code>password_hash()</code>, her POST’ta CSRF</li>
+        <li>Yetki kontrolü sunucu tarafında; arayüz yalnızca gizler</li>
+        <li>Silme yalnızca POST + CSRF + yetki ile</li>
+        <li>CSP’de <code>unsafe-inline</code> yok — satır içi script yok</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Kararlar yazılı</h3>
+      <p>Neden çerçeve yok, neden çeviri anahtarı Türkçe metnin kendisi,
+         neden eklentiler için kum havuzu iddia edilmiyor — hepsi gerekçesiyle
+         <a href="https://github.com/CodeByPinar/riskops/tree/main/docs/architecture">ADR’lerde</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="kurulum" class="wrap">
+  <p class="kicker">KURULUM</p>
+  <h2>İki komut</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Docker ile</h3>
+      <p style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:var(--fg)">
+        git clone https://github.com/CodeByPinar/riskops.git<br>
+        cd riskops &amp;&amp; docker compose up
+      </p>
+      <p style="margin-top:10px">Tarayıcıda <code>localhost:8080</code>. Demo verisi
+         isteğe bağlı olarak tek komutla yüklenir.</p>
+    </div>
+    <div class="card">
+      <h3>Docker’sız</h3>
+      <p>Ubuntu 24.04 · PHP 8.3 · MariaDB 10.11 · Apache 2.4.
+         Şema tek dosya, iki kez yüklenebilir (idempotent).
+         Adımlar <a href="https://github.com/CodeByPinar/riskops#kurulum-dockersız">README’de</a>.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>RiskOps · MIT lisansı</span>
+    <a href="https://github.com/CodeByPinar/riskops">GitHub</a>
+    <a href="https://github.com/CodeByPinar/riskops/tree/main/docs/architecture">Mimari kararlar</a>
+    <a href="demo/dashboard/">Demo</a>
+    <span class="sp">Demo verisi kurgudur; gerçek kurum verisi içermez.</span>
+  </div>
+</footer>
+
+</body>
+</html>

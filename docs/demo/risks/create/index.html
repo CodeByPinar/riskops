@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Yeni Risk - RiskOps</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/riskops/demo/assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/riskops/demo/assets/img/favicon-16.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/riskops/demo/assets/img/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+<link rel="stylesheet" href="/riskops/demo/assets/css/app.css?v=20260912b">
+<style nonce="statik-onizleme">.rk-cat-default{background:var(--rk-muted-light)}.rk-cat-b91c1c{background:#b91c1c}.rk-cat-c2410c{background:#c2410c}.rk-cat-a16207{background:#a16207}.rk-cat-1d4ed8{background:#1d4ed8}.rk-cat-6d28d9{background:#6d28d9}.rk-cat-0f766e{background:#0f766e}.rk-cat-0369a1{background:#0369a1}.rk-cat-9f1239{background:#9f1239}.rk-cat-4338ca{background:#4338ca}.rk-cat-7c2d12{background:#7c2d12}.rk-cat-475569{background:#475569}.rk-cat-166534{background:#166534}.rk-cat-64748b{background:#64748b}</style><link rel="stylesheet" media="print" href="/riskops/demo/assets/css/print.css?v=20260912b">
+  <link rel="stylesheet" href="/riskops/demo/demo.css">
+</head>
+<body class="rk-body">
+<div class="rk-demo-bar"><span class="rk-demo-dot"></span><strong>Statik önizleme</strong><span class="rk-demo-sep">·</span>gerçek uygulamadan alınmış çıktı, demo verisiyle<span class="rk-demo-sep">·</span>kaydetme ve filtreleme çalışmaz<a class="rk-demo-home" href="/riskops/">← tanıtım</a><a class="rk-demo-repo" href="https://github.com/CodeByPinar/riskops">GitHub</a></div>
+
+<aside class="rk-sidebar" id="rkSidebar">
+
+    <div class="rk-brand">
+        <a class="rk-brand-link" href="/riskops/demo/dashboard/"
+           aria-label="RiskOps - Panel">
+            <img class="rk-wordmark-light" src="/riskops/demo/assets/img/logo-wordmark-light.png" srcset="/assets/img/logo-wordmark-light.png 1x, /assets/img/logo-wordmark-light@2x.png 2x" alt="RiskOps" decoding="async">        </a>
+    </div>
+
+    <nav class="rk-nav">
+        <a class="rk-nav-link" href="/riskops/demo/dashboard/"><i class="bi bi-speedometer2"></i><span>Panel</span></a><div class="rk-nav-section">Risk Yönetimi</div><a class="rk-nav-link active" href="/riskops/demo/risks/"><i class="bi bi-list-columns-reverse"></i><span>Risk Kaydı</span></a><a class="rk-nav-link active" href="/riskops/demo/risks/create.php"><i class="bi bi-plus-square"></i><span>Yeni Risk</span></a><a class="rk-nav-link" href="/riskops/demo/assessments/"><i class="bi bi-clipboard-data"></i><span>Değerlendirmeler</span></a><a class="rk-nav-link" href="/riskops/demo/actions/"><i class="bi bi-check2-square"></i><span>Aksiyon Planları</span></a><div class="rk-nav-section">Analiz</div><a class="rk-nav-link" href="/riskops/demo/reports/"><i class="bi bi-bar-chart-line"></i><span>Raporlar</span></a><div class="rk-nav-section">Yönetim</div><a class="rk-nav-link" href="/riskops/demo/admin/users/"><i class="bi bi-people"></i><span>Kullanıcılar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/departments/"><i class="bi bi-diagram-3"></i><span>Departmanlar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/categories/"><i class="bi bi-tags"></i><span>Kategoriler</span></a><a class="rk-nav-link" href="/riskops/demo/risks/deleted.php"><i class="bi bi-trash3"></i><span>Silinen Riskler</span></a><a class="rk-nav-link" href="/riskops/demo/admin/audit_logs/"><i class="bi bi-journal-text"></i><span>Denetim Kaydı</span></a><a class="rk-nav-link" href="/riskops/demo/admin/settings/"><i class="bi bi-gear"></i><span>Ayarlar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/plugins/"><i class="bi bi-puzzle"></i><span>Eklentiler</span></a><a class="rk-nav-link" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"><i class="bi bi-bug"></i><span>Hata Ayıklama</span></a>    </nav>
+
+                <div class="rk-side-locale">
+                    <a class="rk-locale-btn is-active"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="Türkçe">TR</a>
+                    <a class="rk-locale-btn"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="English">EN</a>
+            </div>
+    
+    <div class="rk-side-user">
+                <a class="rk-side-user-link" href="/riskops/demo/profile/" title="Profilim">
+            <div class="rk-avatar">RA</div>
+            <div class="rk-side-user-info">
+                <div class="rk-side-user-name">RiskOps Administrator</div>
+                <div class="rk-side-user-role">Sistem Yöneticisi</div>
+            </div>
+        </a>
+                        <a class="rk-logout-btn" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+           title="Parola değiştir" aria-label="Parola değiştir">
+            <i class="bi bi-key"></i>
+        </a>
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" class="m-0">
+            <input type="hidden" name="_token" value="">            <button type="submit" class="rk-logout-btn" title="Çıkış yap" aria-label="Çıkış yap">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+    
+</aside>
+
+<div class="rk-backdrop" data-rk-sidebar-close></div>
+
+<div class="rk-main">
+
+    <header class="rk-topbar">
+
+    <button type="button" class="rk-burger" data-rk-sidebar-toggle aria-label="Menüyü aç/kapat">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <form class="rk-search" method="get" action="/riskops/demo/risks/" role="search">
+        <i class="bi bi-search"></i>
+        <input type="search" name="q" autocomplete="off"
+               value=""
+               placeholder="Risk kodu, başlık veya varlık ara...">
+    </form>
+
+    <div class="rk-topbar-right">
+                    <span class="rk-env-tag" title="APP_ENV = development">development</span>
+        
+                    <a class="rk-btn rk-btn-primary rk-btn-sm" href="/riskops/demo/risks/create.php">
+                <i class="bi bi-plus-lg"></i> Yeni Risk            </a>
+            </div>
+
+</header>
+
+    <main class="rk-content">
+
+                <div class="rk-page-head">
+            <div>
+                <h1 class="rk-page-title">Yeni Risk</h1>
+                                    <p class="rk-page-sub">Risk kodu kayıt sırasında otomatik üretilecek</p>
+                            </div>
+                    </div>
+        
+        
+<!-- Sınıflandırma bandı: belgenin en üstünde, akışın içinde -->
+<div class="rk-print-only rk-class-band">
+    <span>RiskOps — Yeni Risk</span>
+    <span>RO-CREA-20260919-1623</span>
+            <span class="rk-class-tag">Kuruma Özel</span>
+    </div>
+
+<!-- Belgenin başındaki antet -->
+<div class="rk-print-only rk-letterhead">
+    <div class="rk-lh-top">
+        <div class="rk-lh-brand">
+            <img class="rk-wordmark" src="/riskops/demo/assets/img/logo-wordmark.png" srcset="/assets/img/logo-wordmark.png 1x, /assets/img/logo-wordmark@2x.png 2x" alt="RiskOps" decoding="async">        </div>
+                    <div class="rk-lh-class">Kuruma Özel</div>
+            </div>
+
+    <div class="rk-lh-title">
+        <h1>Yeni Risk</h1>
+            </div>
+
+    <table class="rk-lh-meta">
+        <tbody>
+            <tr>
+                <th>Rapor tarihi</th>
+                <td>19.09.2026 16:23</td>
+                <th>Belge no</th>
+                <td>RO-CREA-20260919-1623</td>
+            </tr>
+            <tr>
+                <th>Hazırlayan</th>
+                <td>RiskOps Administrator</td>
+                <th>Sistem</th>
+                <td>RiskOps — IT &amp; Cyber Risk Management</td>
+            </tr>
+                    </tbody>
+    </table>
+</div>
+        <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" novalidate>
+    <input type="hidden" name="_token" value="">    
+    <div class="row g-3">
+
+        <!-- ============================ Tanım ============================ -->
+        <div class="col-12 col-xl-8">
+            <div class="rk-card">
+                <div class="rk-card-head">
+                    <h2 class="rk-card-title"><i class="bi bi-file-text"></i> Risk Tanımı</h2>
+                </div>
+                <div class="rk-card-body">
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="title">Başlık <span class="req">*</span></label>
+                        <input class="rk-input" type="text" id="title" name="title"
+                               maxlength="200" required
+                               value=""
+                               placeholder="Örn: Internete açık RDP servisleri üzerinden yetkisiz erişim">
+                                            </div>
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="description">Açıklama</label>
+                        <textarea class="rk-textarea" id="description" name="description" rows="4"
+                                  placeholder="Riskin ne olduğu, hangi koşullarda gerçekleşebileceği"></textarea>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <div class="rk-field">
+                                <label class="rk-label" for="threat">Tehdit</label>
+                                <textarea class="rk-textarea" id="threat" name="threat" rows="3"
+                                          placeholder="Tehdit kaynağı / aktörü"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="rk-field">
+                                <label class="rk-label" for="vulnerability">Zafiyet</label>
+                                <textarea class="rk-textarea" id="vulnerability" name="vulnerability" rows="3"
+                                          placeholder="İstismar edilebilecek zayıflık"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="asset_name">Etkilenen Varlık / Sistem</label>
+                        <input class="rk-input" type="text" id="asset_name" name="asset_name" maxlength="200"
+                               value=""
+                               placeholder="Örn: SRV-DC01, Müşteri Portalı, Yedekleme altyapısı">
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ======================= Değerlendirme ======================= -->
+            <div class="rk-card">
+                <div class="rk-card-head">
+                    <h2 class="rk-card-title"><i class="bi bi-calculator"></i> Risk Değerlendirmesi</h2>
+                </div>
+                <div class="rk-card-body">
+
+                    <p class="rk-help mb-3">
+                        <strong>Inherent risk</strong>, hiçbir kontrol uygulanmadığı varsayımıyla hesaplanan ham risktir.
+                        Skor = Olasılık &times; Etki (5&times;5 matris).
+                    </p>
+
+                    <div class="rk-score-row" data-rk-score-scope>
+                        <div class="rk-field">
+                            <label class="rk-label" for="likelihood">Olasılık <span class="req">*</span></label>
+                            <select class="rk-select" id="likelihood"
+                                    name="likelihood" data-rk-score="likelihood" required>
+                                <option value="">Seçiniz</option>
+                                <option value="1">1 - Rare</option><option value="2">2 - Unlikely</option><option value="3">3 - Possible</option><option value="4">4 - Likely</option><option value="5">5 - Almost Certain</option>                            </select>
+                                                    </div>
+
+                        <div class="rk-field">
+                            <label class="rk-label" for="impact">Etki <span class="req">*</span></label>
+                            <select class="rk-select" id="impact"
+                                    name="impact" data-rk-score="impact" required>
+                                <option value="">Seçiniz</option>
+                                <option value="1">1 - Insignificant</option><option value="2">2 - Minor</option><option value="3">3 - Moderate</option><option value="4">4 - Major</option><option value="5">5 - Severe</option>                            </select>
+                                                    </div>
+
+                        <div class="rk-score-out">
+                            <span class="rk-label">Inherent Skor</span>
+                            <span class="rk-score sev-none" data-rk-score-out
+                                  data-rk-thresholds='{&quot;Low&quot;:[1,4],&quot;Medium&quot;:[5,9],&quot;High&quot;:[10,16],&quot;Critical&quot;:[17,25]}'>-</span>
+                        </div>
+                    </div>
+
+                    <hr class="rk-sep">
+
+                    <p class="rk-help mb-3">
+                        <strong>Residual risk</strong>, kontroller ve aksiyonlar uygulandıktan sonra kalan risktir.
+                        Henüz aksiyon planlanmadıysa boş bırakın &mdash; sonradan doldurabilirsiniz.
+                    </p>
+
+                    <div class="rk-field rk-u-maxw320">
+                        <label class="rk-label" for="treatment_strategy">Treatment Strategy</label>
+                        <select class="rk-select" id="treatment_strategy" name="treatment_strategy">
+                            <option value="">Belirlenmedi</option>
+                            <option value="Avoid">Avoid</option><option value="Mitigate">Mitigate</option><option value="Transfer">Transfer</option><option value="Accept">Accept</option>                        </select>
+                    </div>
+
+                    <div class="rk-score-row" data-rk-score-scope>
+                        <div class="rk-field">
+                            <label class="rk-label" for="residual_likelihood">Residual Olasılık</label>
+                            <select class="rk-select"
+                                    id="residual_likelihood" name="residual_likelihood" data-rk-score="likelihood">
+                                <option value="">-</option>
+                                <option value="1">1 - Rare</option><option value="2">2 - Unlikely</option><option value="3">3 - Possible</option><option value="4">4 - Likely</option><option value="5">5 - Almost Certain</option>                            </select>
+                                                    </div>
+
+                        <div class="rk-field">
+                            <label class="rk-label" for="residual_impact">Residual Etki</label>
+                            <select class="rk-select"
+                                    id="residual_impact" name="residual_impact" data-rk-score="impact">
+                                <option value="">-</option>
+                                <option value="1">1 - Insignificant</option><option value="2">2 - Minor</option><option value="3">3 - Moderate</option><option value="4">4 - Major</option><option value="5">5 - Severe</option>                            </select>
+                                                    </div>
+
+                        <div class="rk-score-out">
+                            <span class="rk-label">Residual Skor</span>
+                            <span class="rk-score sev-none" data-rk-score-out
+                                  data-rk-thresholds='{&quot;Low&quot;:[1,4],&quot;Medium&quot;:[5,9],&quot;High&quot;:[10,16],&quot;Critical&quot;:[17,25]}'>-</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================== Sınıflandırma ======================== -->
+        <div class="col-12 col-xl-4">
+            <div class="rk-card">
+                <div class="rk-card-head">
+                    <h2 class="rk-card-title"><i class="bi bi-tags"></i> Sınıflandırma</h2>
+                </div>
+                <div class="rk-card-body">
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="category_id">Kategori <span class="req">*</span></label>
+                        <select class="rk-select" id="category_id" name="category_id" required>
+                            <option value="">Seçiniz</option>
+                            <option value="1">Cyber Security</option><option value="2">Network Security</option><option value="3">Application Security</option><option value="4">Data Protection</option><option value="5">Access Control</option><option value="6">Infrastructure</option><option value="7">Cloud</option><option value="8">Business Continuity</option><option value="9">Compliance</option><option value="10">Third Party</option><option value="11">Operational IT</option><option value="12">Physical Security</option><option value="13">Other</option>                        </select>
+                                            </div>
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="department_id">Departman <span class="req">*</span></label>
+                        <select class="rk-select" id="department_id" name="department_id" required>
+                            <option value="">Seçiniz</option>
+                            <option value="1" selected>IT</option><option value="2">Cyber Security</option><option value="3">Finance</option><option value="4">Human Resources</option><option value="5">Operations</option><option value="6">Management</option><option value="7">Sales</option><option value="8">Legal</option>                        </select>
+                                            </div>
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="owner_id">Risk Sahibi <span class="req">*</span></label>
+                        <select class="rk-select" id="owner_id" name="owner_id" required>
+                            <option value="">Seçiniz</option>
+                            <option value="5">Burak Demir</option><option value="7">Demo Kullanıcı</option><option value="4">Elif Kaya</option><option value="3">Mert Yilmaz</option><option value="1" selected>RiskOps Administrator</option><option value="2">Test Viewer</option>                        </select>
+                                                <div class="rk-help">Riskin takibinden sorumlu kişi.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="rk-card">
+                <div class="rk-card-head">
+                    <h2 class="rk-card-title"><i class="bi bi-flag"></i> Durum &amp; Termin</h2>
+                </div>
+                <div class="rk-card-body">
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="status">Durum <span class="req">*</span></label>
+                        <select class="rk-select" id="status" name="status" required>
+                            <option value="Open" selected>Open</option><option value="Under Review">Under Review</option><option value="In Progress">In Progress</option><option value="Mitigated">Mitigated</option><option value="Accepted">Accepted</option><option value="Transferred">Transferred</option><option value="Closed">Closed</option>                        </select>
+                                            </div>
+
+                    <div class="rk-field">
+                        <label class="rk-label" for="target_date">Hedef Tarih</label>
+                        <input class="rk-input" type="date"
+                               id="target_date" name="target_date" value="">
+                                                <div class="rk-help">Riskin kapatılması hedeflenen tarih.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="rk-form-actions">
+                <button type="submit" class="rk-btn rk-btn-primary">
+                    <i class="bi bi-check-lg"></i> Riski Oluştur                </button>
+                <a class="rk-btn" href="/riskops/demo/risks/">Vazgeç</a>
+            </div>
+        </div>
+
+    </div>
+</form>
+        
+<!-- Belgenin sonundaki kapanış notu -->
+<div class="rk-print-only rk-print-closing">
+    <p class="rk-closing-id">
+        RiskOps        &middot; Yeni Risk                    &middot; RO-CREA-20260919-1623                &middot; 19.09.2026 16:23    </p>
+            <p>Bu rapor RiskOps tarafından otomatik üretilmiştir.</p>
+                <p class="rk-print-classline">
+            Bu belge <strong>Kuruma Özel</strong> sınıfındadır.
+            Yetkisiz kişilerle paylaşılmamalıdır.
+        </p>
+    </div>
+    </main><!-- /.rk-content -->
+
+    <footer class="text-center text-muted rk-u-foot-note">
+        RiskOps                &middot; 2026    </footer>
+
+</div><!-- /.rk-main -->
+
+<script src="/riskops/demo/assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/riskops/demo/assets/js/app.js?v=20260912b"></script>
+</body>
+</html>

@@ -6,6 +6,16 @@
   <strong>Kurumsal risk envanteri · 5×5 değerlendirme · aksiyon takibi · yönetim raporlaması</strong>
 </p>
 
+<p align="center">
+  <a href="https://codebypinar.github.io/riskops/demo/dashboard/"><img src="docs/assets/nav/demoyu-gez.svg" alt="Çalışan uygulamayı gez"></a>
+  <a href="https://codebypinar.github.io/riskops/"><img src="docs/assets/nav/tanitim-sayfasi.svg" alt="Tanıtım sayfası"></a>
+</p>
+
+<p align="center">
+  <sub>Demo, çalışan kurulumdan indirilmiş <b>gerçek HTML</b>'dir — ekran görüntüsü değil.
+  Gezinme çalışır; kaydetme ve filtreleme çalışmaz.</sub>
+</p>
+
 <!-- Rozetlerin cogu docs/assets/badge/ altinda, DEPODA duruyor;
      ureteci docs/assets/generate.py. Uzerinde "CDN yok" yazan bir
      rozetin bir CDN'den gelmesi tuhaf olurdu.
@@ -90,6 +100,9 @@ silinmez — böylece "bu risk 6 ayda nereden nereye geldi" sorusu cevaplanabili
 ---
 
 ## Ekran görüntüleri
+
+> **Bunlar durağan görüntüler.** Aynı ekranları tıklayarak gezmek için:
+> [codebypinar.github.io/riskops/demo](https://codebypinar.github.io/riskops/demo/dashboard/)
 
 | Panel | Risk Kaydı |
 |---|---|

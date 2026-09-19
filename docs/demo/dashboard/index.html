@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel - RiskOps</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/riskops/demo/assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/riskops/demo/assets/img/favicon-16.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/riskops/demo/assets/img/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+<link rel="stylesheet" href="/riskops/demo/assets/css/app.css?v=20260912b">
+<style nonce="statik-onizleme">.rk-cat-default{background:var(--rk-muted-light)}.rk-cat-b91c1c{background:#b91c1c}.rk-cat-c2410c{background:#c2410c}.rk-cat-a16207{background:#a16207}.rk-cat-1d4ed8{background:#1d4ed8}.rk-cat-6d28d9{background:#6d28d9}.rk-cat-0f766e{background:#0f766e}.rk-cat-0369a1{background:#0369a1}.rk-cat-9f1239{background:#9f1239}.rk-cat-4338ca{background:#4338ca}.rk-cat-7c2d12{background:#7c2d12}.rk-cat-475569{background:#475569}.rk-cat-166534{background:#166534}.rk-cat-64748b{background:#64748b}</style><link rel="stylesheet" media="print" href="/riskops/demo/assets/css/print.css?v=20260912b">
+  <link rel="stylesheet" href="/riskops/demo/demo.css">
+</head>
+<body class="rk-body">
+<div class="rk-demo-bar"><span class="rk-demo-dot"></span><strong>Statik önizleme</strong><span class="rk-demo-sep">·</span>gerçek uygulamadan alınmış çıktı, demo verisiyle<span class="rk-demo-sep">·</span>kaydetme ve filtreleme çalışmaz<a class="rk-demo-home" href="/riskops/">← tanıtım</a><a class="rk-demo-repo" href="https://github.com/CodeByPinar/riskops">GitHub</a></div>
+
+<aside class="rk-sidebar" id="rkSidebar">
+
+    <div class="rk-brand">
+        <a class="rk-brand-link" href="/riskops/demo/dashboard/"
+           aria-label="RiskOps - Panel">
+            <img class="rk-wordmark-light" src="/riskops/demo/assets/img/logo-wordmark-light.png" srcset="/assets/img/logo-wordmark-light.png 1x, /assets/img/logo-wordmark-light@2x.png 2x" alt="RiskOps" decoding="async">        </a>
+    </div>
+
+    <nav class="rk-nav">
+        <a class="rk-nav-link active" href="/riskops/demo/dashboard/"><i class="bi bi-speedometer2"></i><span>Panel</span></a><div class="rk-nav-section">Risk Yönetimi</div><a class="rk-nav-link" href="/riskops/demo/risks/"><i class="bi bi-list-columns-reverse"></i><span>Risk Kaydı</span></a><a class="rk-nav-link" href="/riskops/demo/risks/create.php"><i class="bi bi-plus-square"></i><span>Yeni Risk</span></a><a class="rk-nav-link" href="/riskops/demo/assessments/"><i class="bi bi-clipboard-data"></i><span>Değerlendirmeler</span></a><a class="rk-nav-link" href="/riskops/demo/actions/"><i class="bi bi-check2-square"></i><span>Aksiyon Planları</span></a><div class="rk-nav-section">Analiz</div><a class="rk-nav-link" href="/riskops/demo/reports/"><i class="bi bi-bar-chart-line"></i><span>Raporlar</span></a><div class="rk-nav-section">Yönetim</div><a class="rk-nav-link" href="/riskops/demo/admin/users/"><i class="bi bi-people"></i><span>Kullanıcılar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/departments/"><i class="bi bi-diagram-3"></i><span>Departmanlar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/categories/"><i class="bi bi-tags"></i><span>Kategoriler</span></a><a class="rk-nav-link" href="/riskops/demo/risks/deleted.php"><i class="bi bi-trash3"></i><span>Silinen Riskler</span></a><a class="rk-nav-link" href="/riskops/demo/admin/audit_logs/"><i class="bi bi-journal-text"></i><span>Denetim Kaydı</span></a><a class="rk-nav-link" href="/riskops/demo/admin/settings/"><i class="bi bi-gear"></i><span>Ayarlar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/plugins/"><i class="bi bi-puzzle"></i><span>Eklentiler</span></a><a class="rk-nav-link" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"><i class="bi bi-bug"></i><span>Hata Ayıklama</span></a>    </nav>
+
+                <div class="rk-side-locale">
+                    <a class="rk-locale-btn is-active"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="Türkçe">TR</a>
+                    <a class="rk-locale-btn"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="English">EN</a>
+            </div>
+    
+    <div class="rk-side-user">
+                <a class="rk-side-user-link" href="/riskops/demo/profile/" title="Profilim">
+            <div class="rk-avatar">RA</div>
+            <div class="rk-side-user-info">
+                <div class="rk-side-user-name">RiskOps Administrator</div>
+                <div class="rk-side-user-role">Sistem Yöneticisi</div>
+            </div>
+        </a>
+                        <a class="rk-logout-btn" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+           title="Parola değiştir" aria-label="Parola değiştir">
+            <i class="bi bi-key"></i>
+        </a>
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" class="m-0">
+            <input type="hidden" name="_token" value="">            <button type="submit" class="rk-logout-btn" title="Çıkış yap" aria-label="Çıkış yap">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+    
+</aside>
+
+<div class="rk-backdrop" data-rk-sidebar-close></div>
+
+<div class="rk-main">
+
+    <header class="rk-topbar">
+
+    <button type="button" class="rk-burger" data-rk-sidebar-toggle aria-label="Menüyü aç/kapat">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <form class="rk-search" method="get" action="/riskops/demo/risks/" role="search">
+        <i class="bi bi-search"></i>
+        <input type="search" name="q" autocomplete="off"
+               value=""
+               placeholder="Risk kodu, başlık veya varlık ara...">
+    </form>
+
+    <div class="rk-topbar-right">
+                    <span class="rk-env-tag" title="APP_ENV = development">development</span>
+        
+                    <a class="rk-btn rk-btn-primary rk-btn-sm" href="/riskops/demo/risks/create.php">
+                <i class="bi bi-plus-lg"></i> Yeni Risk            </a>
+            </div>
+
+</header>
+
+    <main class="rk-content">
+
+                <div class="rk-page-head">
+            <div>
+                <h1 class="rk-page-title">Panel</h1>
+                                    <p class="rk-page-sub">Kurumsal IT ve siber risk durumu — 19.09.2026 16:23</p>
+                            </div>
+                    </div>
+        
+        
+<!-- Sınıflandırma bandı: belgenin en üstünde, akışın içinde -->
+<div class="rk-print-only rk-class-band">
+    <span>RiskOps — Panel</span>
+    <span>RO-DASH-20260919-1623</span>
+            <span class="rk-class-tag">Kuruma Özel</span>
+    </div>
+
+<!-- Belgenin başındaki antet -->
+<div class="rk-print-only rk-letterhead">
+    <div class="rk-lh-top">
+        <div class="rk-lh-brand">
+            <img class="rk-wordmark" src="/riskops/demo/assets/img/logo-wordmark.png" srcset="/assets/img/logo-wordmark.png 1x, /assets/img/logo-wordmark@2x.png 2x" alt="RiskOps" decoding="async">        </div>
+                    <div class="rk-lh-class">Kuruma Özel</div>
+            </div>
+
+    <div class="rk-lh-title">
+        <h1>Panel</h1>
+            </div>
+
+    <table class="rk-lh-meta">
+        <tbody>
+            <tr>
+                <th>Rapor tarihi</th>
+                <td>19.09.2026 16:23</td>
+                <th>Belge no</th>
+                <td>RO-DASH-20260919-1623</td>
+            </tr>
+            <tr>
+                <th>Hazırlayan</th>
+                <td>RiskOps Administrator</td>
+                <th>Sistem</th>
+                <td>RiskOps — IT &amp; Cyber Risk Management</td>
+            </tr>
+                    </tbody>
+    </table>
+</div>
+            <div class="rk-alert rk-alert-success" role="alert">
+        <i class="bi bi-check-circle-fill"></i>
+        <div>Hoş geldiniz, RiskOps Administrator.</div>
+        <button type="button" class="btn-close" aria-label="Kapat" data-rk-dismiss></button>
+    </div>
+    
+<div id="rkDashboard" data-endpoint="/riskops/demo/api/dashboard_charts.json">
+
+<!-- ===================== Üst kartlar ===================== -->
+<div class="rk-stats">
+    <a class="rk-stat is-primary" href="/riskops/demo/risks/">
+        <div class="rk-stat-icon"><i class="bi bi-collection"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">17</div>
+            <div class="rk-stat-label">Toplam Risk</div>
+        </div>
+    </a>
+
+    <a class="rk-stat is-critical" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+        <div class="rk-stat-icon"><i class="bi bi-exclamation-octagon-fill"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">2</div>
+            <div class="rk-stat-label">Kritik</div>
+        </div>
+    </a>
+
+    <a class="rk-stat is-high" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+        <div class="rk-stat-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">3</div>
+            <div class="rk-stat-label">Yüksek</div>
+        </div>
+    </a>
+
+    <a class="rk-stat is-neutral" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+        <div class="rk-stat-icon"><i class="bi bi-folder2-open"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">12</div>
+            <div class="rk-stat-label">Açık Risk</div>
+        </div>
+    </a>
+
+    <a class="rk-stat is-critical"
+       href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+        <div class="rk-stat-icon"><i class="bi bi-clock-history"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">4</div>
+            <div class="rk-stat-label">Geciken Aksiyon</div>
+        </div>
+    </a>
+
+    <a class="rk-stat is-low" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+        <div class="rk-stat-icon"><i class="bi bi-shield-check"></i></div>
+        <div class="rk-stat-body">
+            <div class="rk-stat-value">3</div>
+            <div class="rk-stat-label">Azaltılmış</div>
+        </div>
+    </a>
+</div>
+
+<div class="row g-3">
+
+    <!-- ===================== 5x5 Risk Matrisi ===================== -->
+    <div class="col-12 col-xl-7">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-grid-3x3"></i> Risk Matrisi (5&times;5)</h2>
+                <div class="rk-card-tools"><span class="rk-help">Etkin olasılık &times; etki</span></div>
+            </div>
+            <div class="rk-card-body">
+                <div class="rk-matrix-wrap">
+                    <div class="rk-matrix-yaxis"><span>Etki</span></div>
+                    <table class="rk-matrix">
+                        <tbody>
+                                                    <tr>
+                                <th scope="row" title="Severe">5</th>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-medium"
+                                             title="Olasılık 1 (Rare) × Etki 5 (Severe) = 5 · Medium · 1 risk">
+                                            <span class="rk-mx-count">1</span>
+                                            <span class="rk-mx-score">5</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-high is-empty"
+                                             title="Olasılık 2 (Unlikely) × Etki 5 (Severe) = 10 · High · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">10</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-high is-empty"
+                                             title="Olasılık 3 (Possible) × Etki 5 (Severe) = 15 · High · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">15</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-critical"
+                                             title="Olasılık 4 (Likely) × Etki 5 (Severe) = 20 · Critical · 2 risk">
+                                            <span class="rk-mx-count">2</span>
+                                            <span class="rk-mx-score">20</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-critical is-empty"
+                                             title="Olasılık 5 (Almost Certain) × Etki 5 (Severe) = 25 · Critical · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">25</span>
+                                        </div>
+                                    </td>
+                                                            </tr>
+                                                    <tr>
+                                <th scope="row" title="Major">4</th>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-low"
+                                             title="Olasılık 1 (Rare) × Etki 4 (Major) = 4 · Low · 2 risk">
+                                            <span class="rk-mx-count">2</span>
+                                            <span class="rk-mx-score">4</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-medium"
+                                             title="Olasılık 2 (Unlikely) × Etki 4 (Major) = 8 · Medium · 3 risk">
+                                            <span class="rk-mx-count">3</span>
+                                            <span class="rk-mx-score">8</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-high"
+                                             title="Olasılık 3 (Possible) × Etki 4 (Major) = 12 · High · 2 risk">
+                                            <span class="rk-mx-count">2</span>
+                                            <span class="rk-mx-score">12</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-high"
+                                             title="Olasılık 4 (Likely) × Etki 4 (Major) = 16 · High · 1 risk">
+                                            <span class="rk-mx-count">1</span>
+                                            <span class="rk-mx-score">16</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-critical is-empty"
+                                             title="Olasılık 5 (Almost Certain) × Etki 4 (Major) = 20 · Critical · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">20</span>
+                                        </div>
+                                    </td>
+                                                            </tr>
+                                                    <tr>
+                                <th scope="row" title="Moderate">3</th>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-low is-empty"
+                                             title="Olasılık 1 (Rare) × Etki 3 (Moderate) = 3 · Low · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">3</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-medium"
+                                             title="Olasılık 2 (Unlikely) × Etki 3 (Moderate) = 6 · Medium · 2 risk">
+                                            <span class="rk-mx-count">2</span>
+                                            <span class="rk-mx-score">6</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-medium"
+                                             title="Olasılık 3 (Possible) × Etki 3 (Moderate) = 9 · Medium · 2 risk">
+                                            <span class="rk-mx-count">2</span>
+                                            <span class="rk-mx-score">9</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-high is-empty"
+                                             title="Olasılık 4 (Likely) × Etki 3 (Moderate) = 12 · High · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">12</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-high is-empty"
+                                             title="Olasılık 5 (Almost Certain) × Etki 3 (Moderate) = 15 · High · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">15</span>
+                                        </div>
+                                    </td>
+                                                            </tr>
+                                                    <tr>
+                                <th scope="row" title="Minor">2</th>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-low is-empty"
+                                             title="Olasılık 1 (Rare) × Etki 2 (Minor) = 2 · Low · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">2</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-low"
+                                             title="Olasılık 2 (Unlikely) × Etki 2 (Minor) = 4 · Low · 2 risk">
+                                            <span class="rk-mx-count">2</span>
+                                            <span class="rk-mx-score">4</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-medium is-empty"
+                                             title="Olasılık 3 (Possible) × Etki 2 (Minor) = 6 · Medium · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">6</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-medium is-empty"
+                                             title="Olasılık 4 (Likely) × Etki 2 (Minor) = 8 · Medium · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">8</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-high is-empty"
+                                             title="Olasılık 5 (Almost Certain) × Etki 2 (Minor) = 10 · High · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">10</span>
+                                        </div>
+                                    </td>
+                                                            </tr>
+                                                    <tr>
+                                <th scope="row" title="Insignificant">1</th>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-low is-empty"
+                                             title="Olasılık 1 (Rare) × Etki 1 (Insignificant) = 1 · Low · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">1</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-low is-empty"
+                                             title="Olasılık 2 (Unlikely) × Etki 1 (Insignificant) = 2 · Low · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">2</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-low is-empty"
+                                             title="Olasılık 3 (Possible) × Etki 1 (Insignificant) = 3 · Low · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">3</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-low is-empty"
+                                             title="Olasılık 4 (Likely) × Etki 1 (Insignificant) = 4 · Low · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">4</span>
+                                        </div>
+                                    </td>
+                                                                    <td>
+                                        <div class="rk-mx-cell sev-medium is-empty"
+                                             title="Olasılık 5 (Almost Certain) × Etki 1 (Insignificant) = 5 · Medium · 0 risk">
+                                            <span class="rk-mx-count"></span>
+                                            <span class="rk-mx-score">5</span>
+                                        </div>
+                                    </td>
+                                                            </tr>
+                                                <tr class="rk-matrix-foot">
+                            <th></th>
+                                                            <th scope="col" title="Rare">1</th>
+                                                            <th scope="col" title="Unlikely">2</th>
+                                                            <th scope="col" title="Possible">3</th>
+                                                            <th scope="col" title="Likely">4</th>
+                                                            <th scope="col" title="Almost Certain">5</th>
+                                                    </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="rk-matrix-xaxis">Olasılık</div>
+
+                <div class="rk-matrix-legend">
+                                            <span class="rk-legend-item">
+                            <span class="rk-legend-swatch sev-low"></span>
+                            Low                            <strong>4</strong>
+                        </span>
+                                            <span class="rk-legend-item">
+                            <span class="rk-legend-swatch sev-medium"></span>
+                            Medium                            <strong>8</strong>
+                        </span>
+                                            <span class="rk-legend-item">
+                            <span class="rk-legend-swatch sev-high"></span>
+                            High                            <strong>3</strong>
+                        </span>
+                                            <span class="rk-legend-item">
+                            <span class="rk-legend-swatch sev-critical"></span>
+                            Critical                            <strong>2</strong>
+                        </span>
+                                    </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== Seviye + Durum ===================== -->
+    <div class="col-12 col-xl-5">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-bar-chart-steps"></i> Seviyeye Göre</h2>
+            </div>
+            <div class="rk-card-body">
+                                                            <div class="rk-barrow"><div class="rk-barrow-label"><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Critical</a></div><div class="rk-barrow-track"><div class="rk-barrow-fill sev-critical rk-w-12"></div></div><div class="rk-barrow-value"><strong>2</strong><span class="rk-barrow-pct">%12</span></div></div>                                            <div class="rk-barrow"><div class="rk-barrow-label"><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">High</a></div><div class="rk-barrow-track"><div class="rk-barrow-fill sev-high rk-w-18"></div></div><div class="rk-barrow-value"><strong>3</strong><span class="rk-barrow-pct">%18</span></div></div>                                            <div class="rk-barrow"><div class="rk-barrow-label"><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Medium</a></div><div class="rk-barrow-track"><div class="rk-barrow-fill sev-medium rk-w-47"></div></div><div class="rk-barrow-value"><strong>8</strong><span class="rk-barrow-pct">%47</span></div></div>                                            <div class="rk-barrow"><div class="rk-barrow-label"><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Low</a></div><div class="rk-barrow-track"><div class="rk-barrow-fill sev-low rk-w-24"></div></div><div class="rk-barrow-value"><strong>4</strong><span class="rk-barrow-pct">%24</span></div></div>                                                </div>
+        </div>
+
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-flag"></i> Duruma Göre</h2>
+            </div>
+            <div class="rk-card-body">
+                                    <div class="rk-barrow"><div class="rk-barrow-label"><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Open</a></div><div class="rk-barrow-track"><div class="rk-barrow-fill is-neutral-fill rk-w-41"></div></div><div class="rk-barrow-value"><strong>7</strong><span class="rk-barrow-pct">%41</span></div></div><div class="rk-barrow"><div class="rk-barrow-label"><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Under Review</a></div><div class="rk-barrow-track"><div class="rk-barrow-fill is-neutral-fill rk-w-12"></div></div><div class="rk-barrow-value"><strong>2</strong><span class="rk-barrow-pct">%12</span></div></div><div class="rk-barrow"><div class="rk-barrow-label"><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">In Progress</a></div><div class="rk-barrow-track"><div class="rk-barrow-fill is-neutral-fill rk-w-18"></div></div><div class="rk-barrow-value"><strong>3</strong><span class="rk-barrow-pct">%18</span></div></div><div class="rk-barrow"><div class="rk-barrow-label"><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Mitigated</a></div><div class="rk-barrow-track"><div class="rk-barrow-fill is-neutral-fill rk-w-18"></div></div><div class="rk-barrow-value"><strong>3</strong><span class="rk-barrow-pct">%18</span></div></div><div class="rk-barrow"><div class="rk-barrow-label"><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Accepted</a></div><div class="rk-barrow-track"><div class="rk-barrow-fill is-neutral-fill rk-w-6"></div></div><div class="rk-barrow-value"><strong>1</strong><span class="rk-barrow-pct">%6</span></div></div><div class="rk-barrow"><div class="rk-barrow-label"><a href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Transferred</a></div><div class="rk-barrow-track"><div class="rk-barrow-fill is-neutral-fill rk-w-6"></div></div><div class="rk-barrow-value"><strong>1</strong><span class="rk-barrow-pct">%6</span></div></div>                            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===================== Trend ===================== -->
+<div class="rk-card">
+    <div class="rk-card-head">
+        <h2 class="rk-card-title"><i class="bi bi-graph-up"></i> Risk Trendi</h2>
+        <div class="rk-card-tools"><span class="rk-help">Son 12 ay</span></div>
+    </div>
+    <div class="rk-card-body">
+        <div class="rk-chart rk-chart-lg" data-rk-chart>
+            <canvas id="rkTrendChart" aria-label="Aylara göre açılan ve kapanan risk sayısı"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- ===================== Kategori ===================== -->
+    <div class="col-12 col-xl-6">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-tags"></i> Kategoriye Göre</h2>
+            </div>
+            <div class="rk-card-body">
+                <div class="rk-chart rk-chart-tall" data-rk-chart>
+                    <canvas id="rkCategoryChart" aria-label="Kategoriye göre risk sayısı"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- ===================== Departman ===================== -->
+    <div class="col-12 col-xl-6">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-diagram-3"></i> Departmana Göre</h2>
+                <div class="rk-card-tools"><span class="rk-help">Kritik + Yüksek sayısı ipucunda</span></div>
+            </div>
+            <div class="rk-card-body">
+                <div class="rk-chart rk-chart-tall" data-rk-chart>
+                    <canvas id="rkDepartmentChart" aria-label="Departmana göre risk sayısı"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+<!-- ===================== Acil aksiyon ===================== -->
+<div class="rk-card">
+    <div class="rk-card-head">
+        <h2 class="rk-card-title"><i class="bi bi-exclamation-octagon"></i> Acil Aksiyon Gerektiren Riskler</h2>
+        <div class="rk-card-tools">
+            <a class="rk-btn rk-btn-sm" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Tümü</a>
+        </div>
+    </div>
+    <div class="rk-card-body is-flush">
+                <div class="rk-table-wrap">
+            <table class="rk-table">
+                <thead>
+                    <tr><th>Kod</th><th>Başlık</th><th>Departman</th><th>Sahip</th>
+                        <th>Skor</th><th>Seviye</th><th>Termin</th></tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="rk-code">RISK-2026-0002</td>
+                        <td><a class="rk-link-strong" href="/riskops/demo/risks/view/58/">
+                            Ayrıcalıklı hesaplarda MFA eksikliği</a></td>
+                        <td>Cyber Security</td>
+                        <td>Mert Yilmaz</td>
+                        <td><span class="rk-score sev-critical">20</span></td>
+                        <td><span class="rk-badge sev-critical"><i class="bi bi-exclamation-octagon-fill"></i>Kritik</span></td>
+                        <td>11.10.2026</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">RISK-2026-0001</td>
+                        <td><a class="rk-link-strong" href="/riskops/demo/risks/view/57/">
+                            İnternete açık RDP servisleri üzerinden yetkisiz er...</a></td>
+                        <td>IT</td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-score sev-critical">20</span></td>
+                        <td><span class="rk-badge sev-critical"><i class="bi bi-exclamation-octagon-fill"></i>Kritik</span></td>
+                        <td>26.10.2026</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">RISK-2026-0010</td>
+                        <td><a class="rk-link-strong" href="/riskops/demo/risks/view/66/">
+                            Güvenlik olay izleme (SIEM) çözümünün bulunmaması</a></td>
+                        <td>Cyber Security</td>
+                        <td>Mert Yilmaz</td>
+                        <td><span class="rk-score sev-high">16</span></td>
+                        <td><span class="rk-badge sev-high"><i class="bi bi-exclamation-triangle-fill"></i>Yüksek</span></td>
+                        <td>08.02.2027</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-code">RISK-2026-0009</td>
+                        <td><a class="rk-link-strong" href="/riskops/demo/risks/view/65/">
+                            Ağ segmentasyonunun yetersizliği</a></td>
+                        <td>IT</td>
+                        <td>RiskOps Administrator</td>
+                        <td><span class="rk-score sev-high">12</span></td>
+                        <td><span class="rk-badge sev-high"><i class="bi bi-exclamation-triangle-fill"></i>Yüksek</span></td>
+                        <td>10.03.2027</td>
+                    </tr>
+                                </tbody>
+            </table>
+        </div>
+            </div>
+</div>
+
+<div class="row g-3">
+    <!-- ===================== Yaklaşan terminler ===================== -->
+    <div class="col-12 col-xl-6">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-calendar-event"></i> Yaklaşan Terminler</h2>
+                <div class="rk-card-tools"><span class="rk-help">7 gün içinde</span></div>
+            </div>
+            <div class="rk-card-body is-flush">
+                                    <div class="rk-empty"><i class="bi bi-calendar-check"></i><div class="rk-empty-title">Yaklaşan termin yok</div></div>                            </div>
+        </div>
+    </div>
+
+    <!-- ===================== Geciken aksiyonlar ===================== -->
+    <div class="col-12 col-xl-6">
+        <div class="rk-card">
+            <div class="rk-card-head">
+                <h2 class="rk-card-title"><i class="bi bi-clock-history"></i> Geciken Aksiyonlar</h2>
+            </div>
+            <div class="rk-card-body is-flush">
+                                <table class="rk-table">
+                    <tbody>
+                                            <tr>
+                            <td class="rk-code">RISK-2026-0003</td>
+                            <td><a href="/riskops/demo/risks/view/59/">
+                                Aylık geri yükleme testi prosedürünü ...</a>
+                                <div class="rk-cell-sub">RiskOps Administrator</div></td>
+                            <td><span class="rk-badge pr-high">Yüksek</span></td>
+                            <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 03.09.2026 <small>(16 gün gecikti)</small></span></td>
+                        </tr>
+                                            <tr>
+                            <td class="rk-code">RISK-2026-0003</td>
+                            <td><a href="/riskops/demo/risks/view/59/">
+                                İlk tam geri yükleme tatbikatını gerç...</a>
+                                <div class="rk-cell-sub">Mert Yilmaz</div></td>
+                            <td><span class="rk-badge pr-critical">Kritik</span></td>
+                            <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 08.09.2026 <small>(11 gün gecikti)</small></span></td>
+                        </tr>
+                                            <tr>
+                            <td class="rk-code">RISK-2026-0013</td>
+                            <td><a href="/riskops/demo/risks/view/69/">
+                                Açık bulgular için düzeltici faaliyet...</a>
+                                <div class="rk-cell-sub">Elif Kaya</div></td>
+                            <td><span class="rk-badge pr-high">Yüksek</span></td>
+                            <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 09.09.2026 <small>(10 gün gecikti)</small></span></td>
+                        </tr>
+                                            <tr>
+                            <td class="rk-code">RISK-2026-0004</td>
+                            <td><a href="/riskops/demo/risks/view/60/">
+                                Kritik sunucular için acil yama pence...</a>
+                                <div class="rk-cell-sub">Elif Kaya</div></td>
+                            <td><span class="rk-badge pr-critical">Kritik</span></td>
+                            <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 18.09.2026 <small>(1 gün gecikti)</small></span></td>
+                        </tr>
+                                        </tbody>
+                </table>
+                            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== Bana atananlar ===================== -->
+<div class="rk-card">
+    <div class="rk-card-head">
+        <h2 class="rk-card-title"><i class="bi bi-person-check"></i> Bana Atananlar</h2>
+        <div class="rk-card-tools">
+            <a class="rk-btn rk-btn-sm" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">
+                4 açık risk
+            </a>
+        </div>
+    </div>
+    <div class="rk-card-body is-flush">
+                <table class="rk-table">
+            <thead>
+                <tr><th>Risk</th><th>Aksiyon</th><th>Öncelik</th><th>Durum</th><th>Termin</th></tr>
+            </thead>
+            <tbody>
+                            <tr>
+                    <td class="rk-code">
+                        <a href="/riskops/demo/risks/view/59/">
+                            RISK-2026-0003</a></td>
+                    <td>Aylık geri yükleme testi prosedürünü yazma</td>
+                    <td><span class="rk-badge pr-high">Yüksek</span></td>
+                    <td><span class="rk-badge st-open">Açık</span></td>
+                    <td><span class="rk-overdue"><i class="bi bi-clock-history"></i> 03.09.2026 <small>(16 gün gecikti)</small></span></td>
+                </tr>
+                            <tr>
+                    <td class="rk-code">
+                        <a href="/riskops/demo/risks/view/67/">
+                            RISK-2026-0011</a></td>
+                    <td>Aylık oltalama simülasyonu yürütme</td>
+                    <td><span class="rk-badge pr-medium">Orta</span></td>
+                    <td><span class="rk-badge st-open">Açık</span></td>
+                    <td>06.10.2026</td>
+                </tr>
+                            <tr>
+                    <td class="rk-code">
+                        <a href="/riskops/demo/risks/view/73/">
+                            RISK-2026-0017</a></td>
+                    <td>MDM çözümü pilot uygulaması başlatma</td>
+                    <td><span class="rk-badge pr-medium">Orta</span></td>
+                    <td><span class="rk-badge st-open">Açık</span></td>
+                    <td>30.11.2026</td>
+                </tr>
+                        </tbody>
+        </table>
+            </div>
+</div>
+
+</div><!-- /#rkDashboard -->
+
+        
+<!-- Belgenin sonundaki kapanış notu -->
+<div class="rk-print-only rk-print-closing">
+    <p class="rk-closing-id">
+        RiskOps        &middot; Panel                    &middot; RO-DASH-20260919-1623                &middot; 19.09.2026 16:23    </p>
+            <p>Bu rapor RiskOps tarafından otomatik üretilmiştir.</p>
+                <p class="rk-print-classline">
+            Bu belge <strong>Kuruma Özel</strong> sınıfındadır.
+            Yetkisiz kişilerle paylaşılmamalıdır.
+        </p>
+    </div>
+    </main><!-- /.rk-content -->
+
+    <footer class="text-center text-muted rk-u-foot-note">
+        RiskOps                &middot; 2026    </footer>
+
+</div><!-- /.rk-main -->
+
+<script src="/riskops/demo/assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/riskops/demo/assets/vendor/chartjs/chart.umd.min.js"></script>
+<script src="/riskops/demo/assets/js/app.js?v=20260912b"></script>
+<script src="/riskops/demo/assets/js/dashboard.js?v=20260911n"></script></body>
+</html>

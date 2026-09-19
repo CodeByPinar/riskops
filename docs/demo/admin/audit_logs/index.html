@@ -1,0 +1,1002 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Denetim Kaydı - RiskOps</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/riskops/demo/assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/riskops/demo/assets/img/favicon-16.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/riskops/demo/assets/img/apple-touch-icon.png">
+
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/riskops/demo/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+<link rel="stylesheet" href="/riskops/demo/assets/css/app.css?v=20260912b">
+<style nonce="statik-onizleme">.rk-cat-default{background:var(--rk-muted-light)}.rk-cat-b91c1c{background:#b91c1c}.rk-cat-c2410c{background:#c2410c}.rk-cat-a16207{background:#a16207}.rk-cat-1d4ed8{background:#1d4ed8}.rk-cat-6d28d9{background:#6d28d9}.rk-cat-0f766e{background:#0f766e}.rk-cat-0369a1{background:#0369a1}.rk-cat-9f1239{background:#9f1239}.rk-cat-4338ca{background:#4338ca}.rk-cat-7c2d12{background:#7c2d12}.rk-cat-475569{background:#475569}.rk-cat-166534{background:#166534}.rk-cat-64748b{background:#64748b}</style><link rel="stylesheet" media="print" href="/riskops/demo/assets/css/print.css?v=20260912b">
+  <link rel="stylesheet" href="/riskops/demo/demo.css">
+</head>
+<body class="rk-body">
+<div class="rk-demo-bar"><span class="rk-demo-dot"></span><strong>Statik önizleme</strong><span class="rk-demo-sep">·</span>gerçek uygulamadan alınmış çıktı, demo verisiyle<span class="rk-demo-sep">·</span>kaydetme ve filtreleme çalışmaz<a class="rk-demo-home" href="/riskops/">← tanıtım</a><a class="rk-demo-repo" href="https://github.com/CodeByPinar/riskops">GitHub</a></div>
+
+<aside class="rk-sidebar" id="rkSidebar">
+
+    <div class="rk-brand">
+        <a class="rk-brand-link" href="/riskops/demo/dashboard/"
+           aria-label="RiskOps - Panel">
+            <img class="rk-wordmark-light" src="/riskops/demo/assets/img/logo-wordmark-light.png" srcset="/assets/img/logo-wordmark-light.png 1x, /assets/img/logo-wordmark-light@2x.png 2x" alt="RiskOps" decoding="async">        </a>
+    </div>
+
+    <nav class="rk-nav">
+        <a class="rk-nav-link" href="/riskops/demo/dashboard/"><i class="bi bi-speedometer2"></i><span>Panel</span></a><div class="rk-nav-section">Risk Yönetimi</div><a class="rk-nav-link" href="/riskops/demo/risks/"><i class="bi bi-list-columns-reverse"></i><span>Risk Kaydı</span></a><a class="rk-nav-link" href="/riskops/demo/risks/create.php"><i class="bi bi-plus-square"></i><span>Yeni Risk</span></a><a class="rk-nav-link" href="/riskops/demo/assessments/"><i class="bi bi-clipboard-data"></i><span>Değerlendirmeler</span></a><a class="rk-nav-link" href="/riskops/demo/actions/"><i class="bi bi-check2-square"></i><span>Aksiyon Planları</span></a><div class="rk-nav-section">Analiz</div><a class="rk-nav-link" href="/riskops/demo/reports/"><i class="bi bi-bar-chart-line"></i><span>Raporlar</span></a><div class="rk-nav-section">Yönetim</div><a class="rk-nav-link" href="/riskops/demo/admin/users/"><i class="bi bi-people"></i><span>Kullanıcılar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/departments/"><i class="bi bi-diagram-3"></i><span>Departmanlar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/categories/"><i class="bi bi-tags"></i><span>Kategoriler</span></a><a class="rk-nav-link" href="/riskops/demo/risks/deleted.php"><i class="bi bi-trash3"></i><span>Silinen Riskler</span></a><a class="rk-nav-link active" href="/riskops/demo/admin/audit_logs/"><i class="bi bi-journal-text"></i><span>Denetim Kaydı</span></a><a class="rk-nav-link" href="/riskops/demo/admin/settings/"><i class="bi bi-gear"></i><span>Ayarlar</span></a><a class="rk-nav-link" href="/riskops/demo/admin/plugins/"><i class="bi bi-puzzle"></i><span>Eklentiler</span></a><a class="rk-nav-link" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"><i class="bi bi-bug"></i><span>Hata Ayıklama</span></a>    </nav>
+
+                <div class="rk-side-locale">
+                    <a class="rk-locale-btn is-active"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="Türkçe">TR</a>
+                    <a class="rk-locale-btn"
+               href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+               title="English">EN</a>
+            </div>
+    
+    <div class="rk-side-user">
+                <a class="rk-side-user-link" href="/riskops/demo/profile/" title="Profilim">
+            <div class="rk-avatar">RA</div>
+            <div class="rk-side-user-info">
+                <div class="rk-side-user-name">RiskOps Administrator</div>
+                <div class="rk-side-user-role">Sistem Yöneticisi</div>
+            </div>
+        </a>
+                        <a class="rk-logout-btn" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+           title="Parola değiştir" aria-label="Parola değiştir">
+            <i class="bi bi-key"></i>
+        </a>
+                <form method="post" action="#" class="rk-demo-off" title="Statik önizlemede çalışmaz" class="m-0">
+            <input type="hidden" name="_token" value="">            <button type="submit" class="rk-logout-btn" title="Çıkış yap" aria-label="Çıkış yap">
+                <i class="bi bi-box-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+    
+</aside>
+
+<div class="rk-backdrop" data-rk-sidebar-close></div>
+
+<div class="rk-main">
+
+    <header class="rk-topbar">
+
+    <button type="button" class="rk-burger" data-rk-sidebar-toggle aria-label="Menüyü aç/kapat">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <form class="rk-search" method="get" action="/riskops/demo/risks/" role="search">
+        <i class="bi bi-search"></i>
+        <input type="search" name="q" autocomplete="off"
+               value=""
+               placeholder="Risk kodu, başlık veya varlık ara...">
+    </form>
+
+    <div class="rk-topbar-right">
+                    <span class="rk-env-tag" title="APP_ENV = development">development</span>
+        
+                    <a class="rk-btn rk-btn-primary rk-btn-sm" href="/riskops/demo/risks/create.php">
+                <i class="bi bi-plus-lg"></i> Yeni Risk            </a>
+            </div>
+
+</header>
+
+    <main class="rk-content">
+
+                <div class="rk-page-head">
+            <div>
+                <h1 class="rk-page-title">Denetim Kaydı</h1>
+                                    <p class="rk-page-sub">307 kayıt · en eski: 11.09.2026</p>
+                            </div>
+                    </div>
+        
+        
+<!-- Sınıflandırma bandı: belgenin en üstünde, akışın içinde -->
+<div class="rk-print-only rk-class-band">
+    <span>RiskOps — Denetim Kaydı</span>
+    <span>RO-AUDI-20260919-1623</span>
+            <span class="rk-class-tag">Kuruma Özel</span>
+    </div>
+
+<!-- Belgenin başındaki antet -->
+<div class="rk-print-only rk-letterhead">
+    <div class="rk-lh-top">
+        <div class="rk-lh-brand">
+            <img class="rk-wordmark" src="/riskops/demo/assets/img/logo-wordmark.png" srcset="/assets/img/logo-wordmark.png 1x, /assets/img/logo-wordmark@2x.png 2x" alt="RiskOps" decoding="async">        </div>
+                    <div class="rk-lh-class">Kuruma Özel</div>
+            </div>
+
+    <div class="rk-lh-title">
+        <h1>Denetim Kaydı</h1>
+            </div>
+
+    <table class="rk-lh-meta">
+        <tbody>
+            <tr>
+                <th>Rapor tarihi</th>
+                <td>19.09.2026 16:23</td>
+                <th>Belge no</th>
+                <td>RO-AUDI-20260919-1623</td>
+            </tr>
+            <tr>
+                <th>Hazırlayan</th>
+                <td>RiskOps Administrator</td>
+                <th>Sistem</th>
+                <td>RiskOps — IT &amp; Cyber Risk Management</td>
+            </tr>
+                    </tbody>
+    </table>
+</div>
+        
+<div class="rk-page-actions">
+    <a class="rk-btn" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+       title="Türkçe Excel'de çift tıkla açılır">
+        <i class="bi bi-file-earmark-excel"></i> Excel    </a>
+    <a class="rk-btn" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz"
+       title="RFC 4180 — sistem entegrasyonu için">
+        <i class="bi bi-filetype-csv"></i> Ham CSV    </a>
+    <span class="rk-help rk-u-m0">
+        Dışa aktarma, ekrandaki filtrelerin aynısını kullanır ve
+        <strong>audit log'a yazılır</strong>.
+    </span>
+</div>
+
+<form method="get" class="rk-card rk-filters">
+    <div class="rk-card-body">
+        <div class="rk-filter-grid">
+            <div class="rk-field rk-filter-wide">
+                <label class="rk-label" for="q">Arama</label>
+                <input class="rk-input" type="search" id="q" name="q" value=""
+                       placeholder="Kullanıcı adı, IP veya değişen değer">
+            </div>
+            <div class="rk-field">
+                <label class="rk-label" for="action">İşlem</label>
+                <select class="rk-select" id="action" name="action">
+                    <option value="">Tümü</option>
+                                            <option value="action_completed" >
+                            action_completed (1)
+                        </option>
+                                            <option value="action_created" >
+                            action_created (6)
+                        </option>
+                                            <option value="debug.disable" >
+                            debug.disable (6)
+                        </option>
+                                            <option value="debug.enable" >
+                            debug.enable (12)
+                        </option>
+                                            <option value="login" >
+                            login (120)
+                        </option>
+                                            <option value="login_failed" >
+                            login_failed (26)
+                        </option>
+                                            <option value="logout" >
+                            logout (12)
+                        </option>
+                                            <option value="plugin.disable" >
+                            plugin.disable (15)
+                        </option>
+                                            <option value="plugin.enable" >
+                            plugin.enable (18)
+                        </option>
+                                            <option value="profile_updated" >
+                            profile_updated (1)
+                        </option>
+                                            <option value="report_exported" >
+                            report_exported (2)
+                        </option>
+                                            <option value="risk_assessed" >
+                            risk_assessed (5)
+                        </option>
+                                            <option value="risk_comment_added" >
+                            risk_comment_added (6)
+                        </option>
+                                            <option value="risk_created" >
+                            risk_created (30)
+                        </option>
+                                            <option value="risk_deleted" >
+                            risk_deleted (16)
+                        </option>
+                                            <option value="risk_restored" >
+                            risk_restored (9)
+                        </option>
+                                            <option value="risk_status_changed" >
+                            risk_status_changed (6)
+                        </option>
+                                            <option value="risk_updated" >
+                            risk_updated (6)
+                        </option>
+                                            <option value="settings_updated" >
+                            settings_updated (5)
+                        </option>
+                                            <option value="severity_recalculated" >
+                            severity_recalculated (2)
+                        </option>
+                                            <option value="user_password_changed" >
+                            user_password_changed (3)
+                        </option>
+                                    </select>
+            </div>
+            <div class="rk-field">
+                <label class="rk-label" for="entity">Varlık</label>
+                <select class="rk-select" id="entity" name="entity">
+                    <option value="">Tümü</option>
+                                            <option value="plugin" >
+                            plugin                        </option>
+                                            <option value="report" >
+                            report                        </option>
+                                            <option value="risk" >
+                            risk                        </option>
+                                            <option value="risk_action" >
+                            risk_action                        </option>
+                                            <option value="settings" >
+                            settings                        </option>
+                                            <option value="system" >
+                            system                        </option>
+                                            <option value="user" >
+                            user                        </option>
+                                    </select>
+            </div>
+            <div class="rk-field">
+                <label class="rk-label" for="user">Kullanıcı</label>
+                <select class="rk-select" id="user" name="user">
+                    <option value="">Tümü</option>
+                    <option value="5">Burak Demir</option><option value="7">Demo Kullanıcı</option><option value="4">Elif Kaya</option><option value="3">Mert Yilmaz</option><option value="1">RiskOps Administrator</option><option value="2">Test Viewer</option>                </select>
+            </div>
+            <div class="rk-field">
+                <label class="rk-label" for="from">Başlangıç</label>
+                <input class="rk-input" type="date" id="from" name="from" value="">
+            </div>
+            <div class="rk-field">
+                <label class="rk-label" for="to">Bitiş</label>
+                <input class="rk-input" type="date" id="to" name="to" value="">
+            </div>
+        </div>
+        <div class="rk-filter-actions">
+            <span class="rk-help">
+                <i class="bi bi-lock"></i> Salt okunur — audit kayıtları arayüzden değiştirilemez.            </span>
+            <div class="ms-auto d-flex gap-2">
+                                <button type="submit" class="rk-btn rk-btn-primary"><i class="bi bi-funnel"></i> Filtrele</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="rk-card">
+    <div class="rk-card-body is-flush">
+                <div class="rk-table-wrap">
+            <table class="rk-table">
+                <thead>
+                    <tr><th>Zaman</th><th>Kullanıcı</th><th>İşlem</th><th>Varlık</th>
+                        <th>Değişiklik</th><th>IP</th></tr>
+                </thead>
+                <tbody>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:23</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:23</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:21</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">10.0.2.2</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:18</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:18</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:17</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:17</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:17</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:14</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:14</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:13</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:13</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 16:12</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-critical">
+                            risk_deleted</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">risk</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#98</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>risk_code</code>:
+                                                                                    <span class="rk-diff-old">RISK-2026-0030</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">—</span>
+                                    </li>
+                                                                    <li>
+                                        <code>title</code>:
+                                                                                    <span class="rk-diff-old">Katman testi 1789809735 g...</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">—</span>
+                                    </li>
+                                                                    <li>
+                                        <code>status</code>:
+                                                                                    <span class="rk-diff-old">Under Review</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">—</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            risk_restored</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">risk</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#98</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>deleted_at</code>:
+                                                                                    <span class="rk-diff-old">2026-09-19 12:22:15</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">null</span>
+                                    </li>
+                                                                    <li>
+                                        <code>risk_code</code>:
+                                                                                <span class="rk-diff-new">RISK-2026-0030</span>
+                                    </li>
+                                                                    <li>
+                                        <code>title</code>:
+                                                                                <span class="rk-diff-new">Katman testi 1789809735 g...</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-critical">
+                            risk_deleted</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">risk</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#98</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>risk_code</code>:
+                                                                                    <span class="rk-diff-old">RISK-2026-0030</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">—</span>
+                                    </li>
+                                                                    <li>
+                                        <code>title</code>:
+                                                                                    <span class="rk-diff-old">Katman testi 1789809735 g...</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">—</span>
+                                    </li>
+                                                                    <li>
+                                        <code>status</code>:
+                                                                                    <span class="rk-diff-old">Under Review</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">—</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            risk_comment_added</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">risk</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#98</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>comment_id</code>:
+                                                                                <span class="rk-diff-new">10</span>
+                                    </li>
+                                                                    <li>
+                                        <code>length</code>:
+                                                                                <span class="rk-diff-new">24</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            risk_assessed</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">risk</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#98</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>score</code>:
+                                                                                    <span class="rk-diff-old">25</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">6</span>
+                                    </li>
+                                                                    <li>
+                                        <code>assessment_id</code>:
+                                                                                <span class="rk-diff-new">150</span>
+                                    </li>
+                                                                    <li>
+                                        <code>type</code>:
+                                                                                <span class="rk-diff-new">review</span>
+                                    </li>
+                                                                    <li>
+                                        <code>severity</code>:
+                                                                                <span class="rk-diff-new">Medium</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-low">
+                            action_created</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">risk_action</span>
+                                                                    <span class="rk-code">#97</span>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>risk_id</code>:
+                                                                                <span class="rk-diff-new">98</span>
+                                    </li>
+                                                                    <li>
+                                        <code>title</code>:
+                                                                                <span class="rk-diff-new">Katman aksiyonu</span>
+                                    </li>
+                                                                    <li>
+                                        <code>description</code>:
+                                                                                <span class="rk-diff-new">deneme</span>
+                                    </li>
+                                                                    <li>
+                                        <code>owner_id</code>:
+                                                                                <span class="rk-diff-new">1</span>
+                                    </li>
+                                                                                                    <li class="text-muted">+3 alan daha</li>
+                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-medium">
+                            risk_status_changed</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">risk</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#98</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>status</code>:
+                                                                                    <span class="rk-diff-old">Open</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">Under Review</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            risk_updated</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">risk</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#98</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>title</code>:
+                                                                                    <span class="rk-diff-old">Katman testi 1789809735</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">Katman testi 1789809735 g...</span>
+                                    </li>
+                                                                    <li>
+                                        <code>description</code>:
+                                                                                    <span class="rk-diff-old">sorgu katmani dogrulamasi</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">guncellendi</span>
+                                    </li>
+                                                                    <li>
+                                        <code>likelihood</code>:
+                                                                                    <span class="rk-diff-old">3</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">5</span>
+                                    </li>
+                                                                    <li>
+                                        <code>impact</code>:
+                                                                                    <span class="rk-diff-old">4</span>
+                                            <i class="bi bi-arrow-right"></i>
+                                                                                <span class="rk-diff-new">5</span>
+                                    </li>
+                                                                                                    <li class="text-muted">+2 alan daha</li>
+                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-low">
+                            risk_created</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">risk</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#98</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>risk_code</code>:
+                                                                                <span class="rk-diff-new">RISK-2026-0030</span>
+                                    </li>
+                                                                    <li>
+                                        <code>title</code>:
+                                                                                <span class="rk-diff-new">Katman testi 1789809735</span>
+                                    </li>
+                                                                    <li>
+                                        <code>description</code>:
+                                                                                <span class="rk-diff-new">sorgu katmani dogrulamasi</span>
+                                    </li>
+                                                                    <li>
+                                        <code>category_id</code>:
+                                                                                <span class="rk-diff-new">1</span>
+                                    </li>
+                                                                                                    <li class="text-muted">+14 alan daha</li>
+                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                    <tr>
+                        <td class="rk-u-nowrap">19.09.2026 12:22</td>
+                        <td>
+                            RiskOps Administrator                                                    </td>
+                        <td><span class="rk-badge sev-none">
+                            login</span></td>
+                        <td>
+                                                            <span class="rk-cell-sub">user</span>
+                                                                    <a class="rk-code" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">#1</a>
+                                                                                    </td>
+                        <td>
+                                                            <ul class="rk-diff">
+                                                                    <li>
+                                        <code>email</code>:
+                                                                                <span class="rk-diff-new">admin@riskops.local</span>
+                                    </li>
+                                                                    <li>
+                                        <code>role</code>:
+                                                                                <span class="rk-diff-new">admin</span>
+                                    </li>
+                                                                                                </ul>
+                                                    </td>
+                        <td class="rk-code">127.0.0.1</td>
+                    </tr>
+                                </tbody>
+            </table>
+        </div>
+            </div>
+
+        <div class="rk-pagination">
+        <div class="rk-pagination-info">1-25 / 307 kayıt</div>
+        <div class="rk-pagination-links">
+                                        <a class="rk-btn rk-btn-sm is-current"
+                   href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">1</a>
+                            <a class="rk-btn rk-btn-sm"
+                   href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">2</a>
+                            <a class="rk-btn rk-btn-sm"
+                   href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">3</a>
+                            <a class="rk-btn rk-btn-sm"
+                   href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">4</a>
+                            <a class="rk-btn rk-btn-sm"
+                   href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">5</a>
+                                        <a class="rk-btn rk-btn-sm" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">Sonraki</a>
+                <a class="rk-btn rk-btn-sm" href="#" class="rk-demo-off" title="Statik önizlemede çalışmaz">&raquo;</a>
+                    </div>
+    </div>
+    </div>
+
+<div class="rk-alert rk-alert-info">
+    <i class="bi bi-info-circle-fill"></i>
+    <div>
+        Saklama süresi ayarlarda <strong>730 gün</strong>
+        olarak tanımlı. Kullanıcı silindiğinde kaydı kaybolmaz: <code>user_id</code> boşalır
+        ama <code>user_name_snapshot</code> alanında adı korunur.
+    </div>
+</div>
+
+        
+<!-- Belgenin sonundaki kapanış notu -->
+<div class="rk-print-only rk-print-closing">
+    <p class="rk-closing-id">
+        RiskOps        &middot; Denetim Kaydı                    &middot; RO-AUDI-20260919-1623                &middot; 19.09.2026 16:23    </p>
+            <p>Bu rapor RiskOps tarafından otomatik üretilmiştir.</p>
+                <p class="rk-print-classline">
+            Bu belge <strong>Kuruma Özel</strong> sınıfındadır.
+            Yetkisiz kişilerle paylaşılmamalıdır.
+        </p>
+    </div>
+    </main><!-- /.rk-content -->
+
+    <footer class="text-center text-muted rk-u-foot-note">
+        RiskOps                &middot; 2026    </footer>
+
+</div><!-- /.rk-main -->
+
+<script src="/riskops/demo/assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/riskops/demo/assets/js/app.js?v=20260912b"></script>
+</body>
+</html>

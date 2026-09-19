@@ -1,0 +1,29 @@
+/* RiskOps statik önizleme — yalnızca demo sitesine özgü.
+   Uygulamanın kendi CSS'i değiştirilmez: demo, ürünü kirletmemeli. */
+
+.rk-demo-bar {
+    position: sticky; top: 0; z-index: 1080;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 8px 16px;
+    background: #041f3c; color: #b6c9de;
+    font: 500 12.5px/1.4 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    border-bottom: 1px solid #0b356d;
+}
+.rk-demo-bar strong { color: #eaf3ff; font-weight: 700; }
+.rk-demo-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #23b0f8; box-shadow: 0 0 0 3px rgba(35,176,248,.18);
+}
+.rk-demo-sep { color: #40597a; }
+.rk-demo-home, .rk-demo-repo {
+    margin-left: auto; color: #23b0f8; text-decoration: none; font-weight: 600;
+}
+.rk-demo-repo { margin-left: 14px; }
+.rk-demo-home:hover, .rk-demo-repo:hover { text-decoration: underline; }
+
+/* Statik sitede çalışmayan bağlantılar: gizlenmiyor, İŞARETLENİYOR.
+   Gizlemek arayüzü yalan söyletirdi; burada "var ama bu önizlemede
+   çalışmıyor" demek daha dürüst. */
+a.rk-demo-off,
+button.rk-demo-off { opacity: .45; cursor: not-allowed; }
+a.rk-demo-off:hover { text-decoration: none; }

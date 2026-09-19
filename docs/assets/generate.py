@@ -472,7 +472,10 @@ BADGES = [
 ]
 
 NAV = ['Nedir', 'Ne değildir', 'Ekranlar', 'Özellikler', 'Güvenlik',
-       'Mimari', 'Kurulum', 'ADR', 'Hata ayıklama', 'Testler', 'Yol haritası']
+       'Mimari', 'Kurulum', 'ADR', 'Hata ayıklama', 'Testler', 'Yol haritası',
+       # README basindaki iki cagri cipi: gezinmeyle ayni olcude ama
+       # vurgulu renkte - "bu bir bolum baglantisi degil, git ve gor".
+       'Demoyu gez', 'Tanıtım sayfası']
 
 NAV_BG = '#0f4a86'          # rozet etiketinden bir ton acik: hiyerarsi
 NAV_FG = '#dceaf9'
@@ -496,10 +499,12 @@ if __name__ == '__main__':
                 'w', encoding='utf-8', newline=chr(10)).write(svg)
 
     # Gezinme
+    CALL = {'Demoyu gez', 'Tanıtım sayfası'}
     for text in NAV:
         d = os.path.join(target, 'nav')
         os.makedirs(d, exist_ok=True)
-        svg = _svg_chip([(text, NAV_BG, NAV_FG)],
+        bg = ACCENT if text in CALL else NAV_BG
+        svg = _svg_chip([(text, bg, '#ffffff' if text in CALL else NAV_FG)],
                         h=26, pad=13, size=12, radius=6, weight=650)
         io.open(os.path.join(d, slugify(text) + '.svg'),
                 'w', encoding='utf-8', newline=chr(10)).write(svg)
