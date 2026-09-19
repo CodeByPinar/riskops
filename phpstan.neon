@@ -37,11 +37,14 @@
 #  yazıldı. Seviye buradan kademeli yükseltilecek - her yükseltme kendi
 #  commit'inde, kendi düzeltmeleriyle.
 #
-#  Sıradaki: seviye 8 (null güvenliği).
+#  Seviye 8'de duruldu. Seviye 9 mixed kullanımını tamamen yasaklıyor
+#  (830 bulgu): veritabanı satırları mixed taşıyor ve her erişimi
+#  is_string/is_int ile sarmalamak, okunurluğu kazandırdığı güvenceden
+#  fazla götürürdü. Gerekçe ADR-0012'de.
 # =====================================================================
 
 parameters:
-    level: 7
+    level: 8
 
     paths:
         - includes

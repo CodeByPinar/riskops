@@ -78,7 +78,7 @@ check(count($expected) . ' tablo mevcut', $tables === $expected,
     . ' fazla / ' . implode(', ', array_diff($expected, $tables)) . ' eksik');
 
 // Native int donuyor mu?
-$one = db_row('SELECT COUNT(*) AS c FROM departments');
+$one = db_row_required('SELECT COUNT(*) AS c FROM departments');
 check('INT kolonlar native int', is_int($one['c']), gettype($one['c']));
 
 /* ------------------------------------------------------------------ */

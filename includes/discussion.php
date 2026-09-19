@@ -33,7 +33,10 @@ declare(strict_types=1);
  * bildirimi bunu yansıtmalı, yoksa çağıran tarafta null kontrolü
  * gereksiz görünür.
  *
- * @return array<string, array<string, string|null>>
+ * @return array<string, array{comments: string, attachments: string, fk: string,
+ *               parent: string, parent_label: string, title_col: string,
+ *               code_col: string|null, ability: string, view_ability: string,
+ *               url: string, alive: string}>
  */
 function discussion_registry(): array
 {
@@ -90,7 +93,14 @@ function discussion_type(): string
 /**
  * Kayıt defteri satırı.
  *
- * @return array<string, string|null>
+ * Şekil alan alan yazılı: `code_col` DIŞINDA hepsi metin. Tek bir
+ * `array<string, string|null>` demek, `require_can($cfg['ability'])`
+ * yazan beş dosyayı olmayan bir null ihtimaliyle uğraştırıyordu.
+ *
+ * @return array{comments: string, attachments: string, fk: string,
+ *               parent: string, parent_label: string, title_col: string,
+ *               code_col: string|null, ability: string, view_ability: string,
+ *               url: string, alive: string}
  */
 function discussion_config(string $type): array
 {

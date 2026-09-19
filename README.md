@@ -355,6 +355,7 @@ sonuçlar, **kabul edilen maliyet** ve **değerlendirilen alternatifler**.
 | [0009](docs/architecture/0009-gelistirme-bagimliliklari.md) | Geliştirme bağımlılığı evet, çalışma zamanı hayır | PHPUnit/php-cs-fixer/PHPStan alındı; Doctrine alınmadı, gerekçesiyle |
 | [0010](docs/architecture/0010-eklenti-sistemi.md) | Eklenti sistemi: kancalar var, kum havuzu yok | Web'den yükleme YOK — admin hesabı uzaktan kod çalıştırmaya dönüşmesin |
 | [0011](docs/architecture/0011-sorgu-katmani.md) | İnce bir sorgu katmanı — ORM değil | SQL çağrı yerinde kalıyor; tekrarlanan prepare/execute/fetch tek yere indi |
+| [0012](docs/architecture/0012-phpstan-seviye-8.md) | PHPStan seviye 8'de durulması | Seviye 9, 830 yerde is_scalar sarmalayicisi isterdi; korudugu senaryo semada zaten sabit |
 
 Bu kayıtlar önce kaynak dosyaların başındaki uzun yorum bloklarındaydı.
 İki sorun vardı: bir karar tek bir dosyaya ait değildi (CSP kararı dört
@@ -486,7 +487,7 @@ Her itmede GitHub Actions dört iş çalıştırır:
 | **Sözdizimi** | PHP 8.2 / 8.3 / 8.4 üzerinde `php -l`, tüm dosyalar |
 | **Birim testleri** | PHPUnit, **veritabanısız**, üç PHP sürümünde |
 | **Entegrasyon** | MariaDB 10.11 ve 11.4; şema SIFIRDAN yüklenir, sonra bir kez daha (yeniden çalıştırılabilirlik), ardından tüm test betikleri |
-| **Kod kalitesi** | php-cs-fixer (biçim), PHPStan seviye 5, `tools/check_conventions.php`, sürüm kontrolüne sır girmemiş mi |
+| **Kod kalitesi** | php-cs-fixer (biçim), PHPStan seviye 8, `tools/check_conventions.php`, sürüm kontrolüne sır girmemiş mi |
 
 ### Test yapısı
 
@@ -560,7 +561,7 @@ sanılıyordu:
 | PHPUnit | 159 birim + 12 entegrasyon |
 | Betik testleri | 59 duman + 109/119 hata ayıklama + 7 kural |
 | Mimari kaydı (ADR) | 10 kayıt |
-| Statik çözümleme | PHPStan seviye 5, temel çizgi (baseline) yok |
+| Statik çözümleme | PHPStan seviye 8, temel çizgi (baseline) yok |
 | Çalışma zamanı bağımlılığı | **0** (PHPUnit yalnızca `require-dev`) |
 
 ---
@@ -602,10 +603,10 @@ Sırada:
       hata buldu (`due_date_cell` sessizce düşen argüman)
 - [x] php-cs-fixer — kod biçimi PSR-12
 - [x] Eklenti sistemi — kancalar, yönetim ekranı, örnek eklenti
-- [ ] PHPStan seviyesini kademeli yükselt (6 → 7 → 8)
-- [ ] İnce bir **repository katmanı** — ORM değil: sorguları tek yerde
-      toplayıp refactor maliyetini düşürmek, SQL kontrolünü bırakmadan
-      (bkz. ADR-0009)
+- [x] PHPStan seviye 6 → 7 → 8 — her seviye kendi commit'inde, kendi
+      düzeltmeleriyle, baseline'sız. Seviye 9 açılmadı (ADR-0012)
+- [x] İnce bir **sorgu katmanı** — ORM değil: `prepare/execute/fetch`
+      üçlüsü tek yere indi, SQL çağrı yerinde kaldı (ADR-0011)
 - [ ] Kalan ekranların çevirisi (mekanik iş; bkz. aşağıdaki tablo)
 
 ### Çok dilli arayüz: durum

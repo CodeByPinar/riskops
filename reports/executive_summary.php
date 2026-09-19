@@ -18,7 +18,7 @@ require_can('report.view');
 $open   = "'" . implode("','", risk_open_statuses()) . "'";
 $effSev = 'COALESCE(residual_severity, inherent_severity)';
 
-$stats = db_row(
+$stats = db_row_required(
     "SELECT
         COUNT(*) AS toplam,
         COALESCE(SUM({$effSev}='Critical'),0) AS kritik,
@@ -36,7 +36,7 @@ $stats = db_row(
      FROM risks WHERE deleted_at IS NULL"
 );
 
-$actions = db_row(
+$actions = db_row_required(
     "SELECT
         COUNT(*) AS toplam,
         COALESCE(SUM(a.status='Open'),0)        AS acik,

@@ -30,7 +30,7 @@ bulunmazlar. Eklenenler:
 |---|---|
 | `phpunit/phpunit` | 128 test (116 birim + 12 entegrasyon) |
 | `friendsofphp/php-cs-fixer` | Kod biçimi PSR-12 |
-| `phpstan/phpstan` | Statik çözümleme, seviye 5 |
+| `phpstan/phpstan` | Statik çözümleme, seviye 8 (bkz. ADR-0012) |
 
 **Çalışma zamanı bağımlılıkları: HAYIR.** ADR-0001 geçerliliğini
 koruyor. Doctrine ve Symfony Components şimdilik alınmadı.

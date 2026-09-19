@@ -49,7 +49,7 @@ final class SchemaTest extends TestCase
         /* risk_score() PHP'de de var ama TEK DOĞRULUK KAYNAĞI
            veritabanıdır: doğrudan SQL ile yazan bir betik bile
            tutarsız skor üretemesin. */
-        $col = db_row(
+        $col = db_row_required(
             "SELECT EXTRA, GENERATION_EXPRESSION
                FROM information_schema.COLUMNS
               WHERE TABLE_SCHEMA = DATABASE()

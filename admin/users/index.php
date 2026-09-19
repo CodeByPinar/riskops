@@ -83,7 +83,7 @@ $rows = db_all(
     $params
 );
 
-$counts = db_row(
+$counts = db_row_required(
     "SELECT
         COUNT(*) AS toplam,
         COALESCE(SUM(status = 1), 0) AS aktif,

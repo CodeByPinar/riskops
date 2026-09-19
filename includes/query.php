@@ -232,3 +232,32 @@ function db_insert(string $sql, array $params = []): int
 
     return (int)db()->lastInsertId();
 }
+
+/**
+ * Tek satır; satır YOKSA istisna.
+ *
+ * NE ZAMAN: sorgunun sıfır satır döndürmesi MÜMKÜN DEĞİLSE, ya da
+ * mümkünse bile bu bir hata sayılıyorsa.
+ *
+ *   GROUP BY'sız bir toplama sorgusu (COUNT, SUM, COALESCE) tablo boş
+ *   olsa bile TEK BİR SATIR döndürür - sayılar sıfır olur. Yani
+ *   `$stats['toplam']` yazan ekran haklıdır; db_row() bunu bilemediği
+ *   için ?array döndürüyor ve çağıran her alan erişiminde null
+ *   ihtimaliyle uğraşmak zorunda kalıyordu.
+ *
+ * NE ZAMAN DEĞİL: "kayıt var mı?" sorusunda. Orada yokluk normaldir
+ * ve cevabı 404'tür, istisna değil - db_row() kullanın.
+ *
+ * @param  array<array-key, mixed> $params
+ * @return array<string, mixed>
+ */
+function db_row_required(string $sql, array $params = []): array
+{
+    $row = db_row($sql, $params);
+
+    if ($row === null) {
+        throw new RuntimeException('Satir donmesi beklenen sorgu bos dondu: ' . $sql);
+    }
+
+    return $row;
+}

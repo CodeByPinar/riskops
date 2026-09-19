@@ -29,7 +29,7 @@ if ($dept === null) {
     redirect('/admin/departments/');
 }
 
-$u = db_row(
+$u = db_row_required(
     'SELECT
         (SELECT COUNT(*) FROM risks WHERE department_id = :id1 AND deleted_at IS NULL) AS risk_sayisi,
         (SELECT COUNT(*) FROM risks WHERE department_id = :id2) AS risk_tumu,

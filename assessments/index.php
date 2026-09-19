@@ -103,7 +103,7 @@ $rows = db_all(
 );
 
 /* Özet: son 30 günde kaç risk değerlendirildi, kaçı hiç gözden geçirilmedi */
-$summary = db_row(
+$summary = db_row_required(
     "SELECT
         (SELECT COUNT(*) FROM risk_assessments a2
          JOIN risks r2 ON r2.id = a2.risk_id AND r2.deleted_at IS NULL

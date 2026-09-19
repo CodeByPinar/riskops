@@ -33,7 +33,7 @@ $warnDays = max(1, (int)setting('overdue_warning_days', 7));
 /* Üst kartlar                                                         */
 /* ------------------------------------------------------------------ */
 
-$stats = db_row(
+$stats = db_row_required(
     "SELECT
         COUNT(*) AS total,
         COALESCE(SUM(COALESCE(residual_severity, inherent_severity) = 'Critical'), 0) AS critical,

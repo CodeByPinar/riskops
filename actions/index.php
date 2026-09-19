@@ -127,7 +127,7 @@ $rows = db_all(
 );
 
 /* Özet sayaçlar - filtreden bağımsız, genel durum */
-$summary = db_row(
+$summary = db_row_required(
     "SELECT
         COALESCE(SUM(a.status = 'Open'), 0)        AS acik,
         COALESCE(SUM(a.status = 'In Progress'), 0) AS devam,
